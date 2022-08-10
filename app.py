@@ -12,11 +12,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'HEAD'])
 def result():
-     print(request.form)
-     for i in request.form:
-         print(i, request.form[i])
-         print(request.get_json())
-     return 'OK'
+     print(request.form['data[FIELDS][ID]'])
 
 
 if __name__ == '__main__':

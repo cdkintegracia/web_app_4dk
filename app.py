@@ -25,9 +25,7 @@ def update_code_1c(_deal_id):
 
     # Получение информации о продукте сделки
 
-    deal_product = requests.get(
-        url=webhook + 'crm.deal.productrows.get.json?id=' + deal_id
-    )
+    deal_product = requests.get(url=webhook + 'crm.deal.productrows.get.json?id=' + deal_id)
 
     # ID продукта сделки
 
@@ -56,7 +54,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
 
 
-schedule.every().day.at("18:00").do(clear_temp_list)
+schedule.every().day.at("16:00").do(clear_temp_list)
 
 
 while True:

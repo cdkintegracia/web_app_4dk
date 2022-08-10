@@ -19,7 +19,7 @@ def result():
 
      return 'OK'
 
-async def update_code_1c(deal_id):
+def update_code_1c(deal_id):
 
     products = b.get_all('crm.deal.productrows.get', {'id': deal_id})  # Получение информации о продукте сделки
 

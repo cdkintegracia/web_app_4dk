@@ -27,9 +27,5 @@ def upd_code_1c(req):
         code_1c = product_fields['PROPERTY_139']['value']  # Получение кода 1С
         b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})  # Запись кода в сделку
 
-        # Лог в задачу
-
-        b.call('task.commentitem.add', ['46759', {'POST_MESSAGE': f'Обновлено поле СлужКод1С в {deal_id}'}])
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

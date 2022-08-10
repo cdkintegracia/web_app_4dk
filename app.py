@@ -35,13 +35,11 @@ def update_code_1c(_deal_id):
     # Получение полей продукта
 
     product_fields = requests.get(url=webhook + 'crm.product.get.json?id=' + id_deal_product)
+    print(product_fields.json())
 
     # Получение кода 1С
 
-    if 'value' in product_fields.json()['result']['PROPERTY_139']:
-        code_1c = product_fields.json()['result']['PROPERTY_139']['value']
-    else:
-        return 'no code'
+    code_1c = product_fields.json()['result']['PROPERTY_139']['value']
 
     # Запись кода в сделку
 

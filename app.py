@@ -15,7 +15,7 @@ def result():
     if request.form['event'] == 'ONCRMDEALUPDATE':
         if request.form['data[FIELDS][ID]'] not in temp_list:
             temp_list.append(request.form['data[FIELDS][ID]'])
-            update_code_1c(request.form)
+            update_code_1c(request.form['data[FIELDS][ID]'])
     print(temp_list)
     return 'OK'
 

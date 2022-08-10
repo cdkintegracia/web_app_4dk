@@ -12,7 +12,14 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'HEAD'])
 def result():
-     print(request.json)
+     print(request.form)
+     print('------------')
+     print(request)
+     print('------------')
+     print(request.data)
+     print('------------')
+     print(request.values)
+     print('------------')
      return 'OK'
 
 

@@ -39,8 +39,8 @@ def update_code_1c(_deal_id):
 
     # Получение кода 1С
 
-    if product_fields.json()['result']['PROPERTY_139']['value'] is None:
-        return
+    if product_fields.json()['result']['PROPERTY_139'] is None:
+        return 'no code'
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
 
     # Запись кода в сделку

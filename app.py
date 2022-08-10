@@ -1,3 +1,4 @@
+import time
 from flask import Flask
 from flask import request
 import requests
@@ -43,6 +44,7 @@ def update_code_1c(_deal_id):
 
     requests.get(url=f"{webhook}crm.deal.update?id=84621&fields[UF_CRM_1655972832]={code_1c}")
 
+    time.sleep(5)
     return f'upd {deal_id}'
 
 

@@ -29,7 +29,7 @@ def update_code_1c(_deal_id):
     deal_product = requests.get(url=webhook + 'crm.deal.productrows.get.json?id=' + deal_id)
 
     # ID продукта сделки
-    print(deal_product.json()['result'])
+
     id_deal_product = str(deal_product.json()['result'][0]['PRODUCT_ID'])
 
     # Получение полей продукта
@@ -47,7 +47,7 @@ def update_code_1c(_deal_id):
     # Запись кода в сделку
 
     requests.get(url=f"{webhook}crm.deal.update?id=84621&fields[UF_CRM_1655972832]={code_1c}")
-
+    print(f'{deal_id} записан код {code_1c}')
     time.sleep(5)
     return f'upd {deal_id}'
 

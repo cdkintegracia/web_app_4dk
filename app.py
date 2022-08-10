@@ -15,6 +15,7 @@ def result():
      print(request.form)
      for i in request.form:
          print(i, request.form[i])
+         print(request.get_json())
      return 'OK'
 
 

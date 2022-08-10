@@ -11,15 +11,7 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
 
-    update_code_1c(request.form)
-
-    return 'OK'
-
-
-def update_code_1c(req):
-
-    deal_id = req['data[FIELDS][ID]']
-    print(deal_id)
+    deal_id = request.form['data[FIELDS][ID]']
 
     # Получение информации о продукте сделки
 
@@ -46,6 +38,7 @@ def update_code_1c(req):
     with open('logs.txt', 'a') as file:
         file.write(f"DEAL_ID: {deal_id} {asctime()}")
 
+    return 'ok'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

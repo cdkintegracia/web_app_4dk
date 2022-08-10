@@ -12,7 +12,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'HEAD'])
 def result():
-     print(request.form['data[FIELDS][ID]'])
+     print(request.form['data[FIELD][ID]'])
+     return 'OK'
 
 
 if __name__ == '__main__':

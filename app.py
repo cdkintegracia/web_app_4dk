@@ -31,11 +31,12 @@ def update_code_1c(deal_id):
         with open('logs.txt', 'a') as file:
             file.write(f"DEAL_ID: {deal_id} {asctime()}")
 
-    return 'upd'
+    return
 
 async def job(deal_id):
 
-    update_code_1c(deal_id)
+    result = await update_code_1c(deal_id)
+
     return 'job is done'
 
 if __name__ == '__main__':

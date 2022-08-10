@@ -23,7 +23,7 @@ def update_code_1c(req):
     deal_id = req['data[FIELDS][ID]']
 
     products = b.get_all('crm.deal.productrows.get', {'id': deal_id})  # Получение информации о продукте сделки
-    print(products)
+    print(products['result'])
     exit()
     for product in products:
         product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})  # Получение полей продукта

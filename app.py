@@ -15,7 +15,7 @@ def result():
 
     if request.form['event'] == 'ONCRMDEALUPDATE':
         deal_id = request.form['data[FIELDS][ID]']
-        if deal_id not in temp_list:
+        if deal_id not in log_dct:
             update_code_1c(deal_id)
     print(log_dct)
     return 'OK'
@@ -53,9 +53,9 @@ def update_code_1c(_deal_id):
 
 
 def clear_temp_list():
-    global temp_list
-    temp_list = []
-    print(f'temp_list is empty')
+    global log_dct
+    log_dct.clear()
+    print(f'log_dct is empty {log_dct}')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

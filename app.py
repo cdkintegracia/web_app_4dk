@@ -1,26 +1,26 @@
-from time import asctime
 from flask import Flask
 from flask import request
 import requests
+import schedule
 
 webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 
 app = Flask(__name__)
 
+temp_list = []
 
 @app.route('/', methods=['POST', 'HEAD'])
 def result():
 
     if request.form['event'] == 'ONCRMDEALUPDATE':
-        print(request.form['data[FIELDS][ID]'])
-        print(update_code_1c(request.form))
-    else:
-        print('neok')
+        if request.form['data[FIELDS][ID]'] not in temp_list:
+            temp_list.append(request.form['data[FIELDS][ID]'])
+            update_code_1c(request.form)
+
     return 'OK'
 
 
 def update_code_1c(req):
-
     deal_id = request.form['data[FIELDS][ID]']
 
     # Получение информации о продукте сделки
@@ -45,8 +45,19 @@ def update_code_1c(req):
 
     requests.get(url=f"{webhook}crm.deal.update?id=84621&fields[UF_CRM_1655972832]={code_1c}")
 
-    return 'upd'
+    return f'upd {deal_id}'
 
+
+def clear_temp_list():
+    global temp_list
+    temp_list = []
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+
+
+schedule.every().day.at("18:00").do(clear_temp_list)
+
+
+while True:
+    schedule.run_pending()

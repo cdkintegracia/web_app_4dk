@@ -11,7 +11,8 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
 
-    print(update_code_1c(request.form))
+    print(request.form)
+    #print(update_code_1c(request.form))
 
     return 'OK'
 

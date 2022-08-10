@@ -6,7 +6,7 @@ from flask import request
 app = Flask(__name__)
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET', 'HEAD'])
 def result():
      print(request.form)
      return 'OK'

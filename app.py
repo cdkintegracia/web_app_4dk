@@ -15,8 +15,9 @@ def result():
      deal_id = request.form['data[FIELDS][ID]']     # ID из POST запроса
      products = b.get_all('crm.deal.productrows.get', {'id': deal_id})    # Получение информации о продукте сделки
      for product in products:
-         pr = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})
-         print(pr)
+         product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})
+         code_1c = product_fields['PROPERTY_139']['value']
+         print(code_1c)
      return 'OK'
 
 

@@ -1,5 +1,5 @@
 from time import asctime
-from flask import Flask
+from aioflask import Flask
 from flask import request
 from fast_bitrix24 import BitrixAsync
 import asyncio

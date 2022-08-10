@@ -1,9 +1,16 @@
+import requests
+import json
 from flask import Flask
+from flask import request
+
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    return "<h1 style='color:blue'>Hello There!</h1>"
 
-if __name__ == "__main__":
+@app.route('/', methods=['POST'])
+def result():
+     print(request.form)
+     return 'OK'
+
+
+if __name__ == '__main__':
     app.run(host='0.0.0.0')

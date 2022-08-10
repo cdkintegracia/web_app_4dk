@@ -11,6 +11,13 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
 
+    print(update_code_1c(request.form))
+
+    return 'OK'
+
+
+def update_code_1c(req):
+
     deal_id = request.form['data[FIELDS][ID]']
 
     # Получение информации о продукте сделки
@@ -35,10 +42,8 @@ def result():
 
     requests.get(url=f"{webhook}crm.deal.update?id=84621&fields[UF_CRM_1655972832]={code_1c}")
 
-    with open('logs.txt', 'a') as file:
-        file.write(f"DEAL_ID: {deal_id} {asctime()}")
+    return 'upd'
 
-    return 'ok'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

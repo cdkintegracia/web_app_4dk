@@ -51,7 +51,7 @@ def update_code_1c(_deal_id):
 
     # Запись кода в сделку
 
-    requests.get(url=f"{webhook}crm.deal.update?id=84621&fields[UF_CRM_1655972832]={code_1c}")
+    requests.get(url=f"{webhook}crm.deal.update?id={deal_id}&fields[UF_CRM_1655972832]={code_1c}")
     return f'upd {deal_id}'
 
 

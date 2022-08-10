@@ -8,16 +8,16 @@ webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 
 app = Flask(__name__)
 
-temp_list = []
+log_dct = {}
 
 @app.route('/', methods=['POST', 'HEAD'])
 def result():
 
     if request.form['event'] == 'ONCRMDEALUPDATE':
-        if request.form['data[FIELDS][ID]'] not in temp_list:
-            temp_list.append(request.form['data[FIELDS][ID]'])
-            update_code_1c(request.form['data[FIELDS][ID]'])
-    print(temp_list)
+        deal_id = request.form['data[FIELDS][ID]']
+        if deal_id not in temp_list:
+            update_code_1c(deal_id)
+    print(log_dct)
     return 'OK'
 
 
@@ -39,9 +39,10 @@ def update_code_1c(_deal_id):
     # Получение кода 1С
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
-        print(f'{deal_id} has no code')
+        log_dct.setdefault(deal_id, 'no code')
         return 'no code'
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
+    log_dct.setdefault(deal_id, code_1c)
 
     # Запись кода в сделку
 

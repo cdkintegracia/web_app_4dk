@@ -18,7 +18,7 @@ def result():
     return 'OK'
 
 
-def update_code_1c(req):
+async def update_code_1c(req):
 
     deal_id = req['data[FIELDS][ID]']
 

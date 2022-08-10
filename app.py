@@ -12,21 +12,24 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
-     deal_id = request.form['data[FIELDS][ID]']     # ID из POST запроса
-     products = b.get_all('crm.deal.productrows.get', {'id': deal_id})    # Получение информации о продукте сделки
 
-     for product in products:
+    upd_code_1c(request.form['data[FIELDS][ID]'])
 
-         product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})   # Получение полей продукта
-         code_1c = product_fields['PROPERTY_139']['value']  # Получение кода 1С
-         b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})   # Запись кода в сделку
+    return 'OK'
 
-         # Лог в задачу
+def upd_code_1c(req):
 
-         b.call('task.commentitem.add', ['46759', {'POST_MESSAGE': f'Обновлено поле СлужКод1С в {deal_id}'}])
+    deal_id = req  # ID из POST запроса
+    products = b.get_all('crm.deal.productrows.get', {'id': deal_id})  # Получение информации о продукте сделки
 
-     return 'OK'
+    for product in products:
+        product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})  # Получение полей продукта
+        code_1c = product_fields['PROPERTY_139']['value']  # Получение кода 1С
+        b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})  # Запись кода в сделку
 
+        # Лог в задачу
+
+        b.call('task.commentitem.add', ['46759', {'POST_MESSAGE': f'Обновлено поле СлужКод1С в {deal_id}'}])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

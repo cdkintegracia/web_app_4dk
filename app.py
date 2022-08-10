@@ -11,9 +11,11 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
 
-    print(request.form)
+    if request.form['event'] == 'ONCRMDEALUPDATE':
+        print('ok')
     #print(update_code_1c(request.form))
-
+    else:
+        print('neok')
     return 'OK'
 
 

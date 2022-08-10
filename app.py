@@ -13,7 +13,7 @@ def result():
 
     if request.form['event'] == 'ONCRMDEALUPDATE':
         print('ok')
-    #print(update_code_1c(request.form))
+        print(update_code_1c(request.form))
     else:
         print('neok')
     return 'OK'

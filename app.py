@@ -11,27 +11,28 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
-def result():
+async def result():
 
-     deal_id = request.form['data[FIELDS][ID]']     # ID из POST запроса
-
-     update_code_1c(deal_id)
+     await update_code_1c(request.form)
 
      return 'OK'
 
-def update_code_1c(deal_id):
+
+def update_code_1c(req):
+
+    deal_id = req['data[FIELDS][ID]']
 
     products = b.get_all('crm.deal.productrows.get', {'id': deal_id})  # Получение информации о продукте сделки
-    print(products)
-    exit()
+
     for product in products:
         product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})  # Получение полей продукта
         code_1c = product_fields['PROPERTY_139']['value']  # Получение кода 1С
-        b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})  # Запись кода в сделку
+        a = b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})  # Запись кода в сделку
 
         with open('logs.txt', 'a') as file:
             file.write(f"DEAL_ID: {deal_id} {asctime()}")
 
+        return(a)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

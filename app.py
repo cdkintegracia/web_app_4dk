@@ -15,7 +15,7 @@ def result():
 
      deal_id = request.form['data[FIELDS][ID]']     # ID из POST запроса
 
-     asyncio.run(update_code_1c(deal_id))
+     update_code_1c(deal_id)
 
      return 'OK'
 
@@ -26,7 +26,7 @@ async def update_code_1c(deal_id):
     for product in products:
         product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})  # Получение полей продукта
         code_1c = product_fields['PROPERTY_139']['value']  # Получение кода 1С
-        task = asyncio.create_task(b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}}))  # Запись кода в сделку
+        asyncio.create_task(b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}}))  # Запись кода в сделку
 
         with open('logs.txt', 'a') as file:
             file.write(f"DEAL_ID: {deal_id} {asctime()}")

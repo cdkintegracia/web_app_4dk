@@ -19,6 +19,7 @@ def result():
 def update_code_1c(req):
 
     deal_id = req['data[FIELDS][ID]']
+    print(deal_id)
 
     # Получение информации о продукте сделки
 

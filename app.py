@@ -8,11 +8,11 @@ webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 app = Flask(__name__)
 
 
-@app.route('/', methods=['POST', 'HEAD', 'GET'])
+@app.route('/', methods=['POST', 'HEAD'])
 def result():
 
     if request.form['event'] == 'ONCRMDEALUPDATE':
-        print('ok')
+        print(request.form['data[FIELDS][ID]'])
         print(update_code_1c(request.form))
     else:
         print('neok')

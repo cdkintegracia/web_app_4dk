@@ -10,7 +10,7 @@ b = Bitrix(webhook)
 app = Flask(__name__)
 
 
-@app.route('/', methods=['POST', 'HEAD'])
+@app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
      print(request.form)
      for i in request.form:

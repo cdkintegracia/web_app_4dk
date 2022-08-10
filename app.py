@@ -15,7 +15,7 @@ def result():
 
     update_code_1c(request.form)
 
-     return 'OK'
+    return 'OK'
 
 
 def update_code_1c(req):

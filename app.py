@@ -12,7 +12,9 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'HEAD'])
 def result():
-     print(request.form['data[FIELD][ID]'])
+     print(request.form)
+     for i in request.form:
+         print(i)
      return 'OK'
 
 

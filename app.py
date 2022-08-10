@@ -14,7 +14,7 @@ app = Flask(__name__)
 def result():
      print(request.form)
      for i in request.form:
-         print(i)
+         print(i, request.form[i])
      return 'OK'
 
 

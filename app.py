@@ -20,8 +20,8 @@ def result():
     return 'OK'
 
 
-def update_code_1c(req):
-    deal_id = request.form['data[FIELDS][ID]']
+def update_code_1c(_deal_id):
+    deal_id = _deal_id
 
     # Получение информации о продукте сделки
 

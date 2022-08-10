@@ -35,11 +35,11 @@ def update_code_1c(_deal_id):
     # Получение полей продукта
 
     product_fields = requests.get(url=webhook + 'crm.product.get.json?id=' + id_deal_product)
-    print(product_fields.json())
 
     # Получение кода 1С
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
+        print(f'{deal_id} has no code')
         return 'no code'
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
 
@@ -54,6 +54,7 @@ def update_code_1c(_deal_id):
 def clear_temp_list():
     global temp_list
     temp_list = []
+    print(f'temp_list is empty')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

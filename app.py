@@ -22,16 +22,16 @@ async def update_code_1c(req):
 
     deal_id = req['data[FIELDS][ID]']
 
-    products = b.get_all('crm.deal.productrows.get', {'id': deal_id})  # Получение информации о продукте сделки
-    print(await products['result'])
-    exit()
+    products = await b.get_all('crm.deal.productrows.get', {'id': deal_id})  # Получение информации о продукте сделки
     for product in products:
         product_fields = b.get_all('crm.product.get', {'id': product['PRODUCT_ID']})  # Получение полей продукта
         code_1c = product_fields['PROPERTY_139']['value']  # Получение кода 1С
-        b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})  # Запись кода в сделку
+        upd = await b.call('crm.deal.update', {'ID': deal_id, 'fields': {'UF_CRM_1655972832': code_1c}})  # Запись кода в сделку
 
         with open('logs.txt', 'a') as file:
             file.write(f"DEAL_ID: {deal_id} {asctime()}")
+
+    return True
 
 
 if __name__ == '__main__':

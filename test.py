@@ -3,6 +3,7 @@ from flask import Flask
 from flask import request
 import requests
 from fast_bitrix24 import Bitrix
+from calendar import monthrange
 
 
 webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
@@ -12,10 +13,24 @@ app = Flask(__name__)
 
 
 def create_task_service(dct):
+    months = {
+        'Январь': 1,
+        'Февраль': 2,
+        'Март': 3,
+        'Апрель': 4,
+        'Май': 5,
+        'Июнь': 6,
+        'Июль': 7,
+        'Август': 8,
+        'Сентябрь': 9,
+        'Октябрь': 10,
+        'Ноябрь': 11,
+        'Декабрь': 12
+    }
     month = dct['month']
     year = dct['year']
-    print(month, year)
-    months = {}
+    date_start = f'01-0{month}-{year}'
+    print(date_start)
     #deals = b.get_all('crm.deal.list')
 
 

@@ -39,10 +39,12 @@ def create_task_service(dct):
         month_start = '12'  # Если месяц январь, то предыдущий - декабрь
     else:
         month_start = str(months[dct['month'] - 1])
-    day_start = monthrange(year, month_start)   # День начала фильтрации
+    day_start = monthrange(year, int(month_start))   # День начала фильтрации
 
-    if len(month) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-        month = '0' + month
+    if len(month_start) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
+        month_start = '0' + month_start
+    if len(month_end) == 1:
+        month_end = '0' + month_end    # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
 
     date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'

@@ -13,7 +13,7 @@ logs = []
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
-    return f'{request.form}, {request}, {request.json}'
+    return f'{request.form}, {request}'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

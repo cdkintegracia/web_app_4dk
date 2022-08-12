@@ -1,6 +1,5 @@
-import schedule
-def ok():
-    print('10101010101010101001100101010110')
-schedule.every(10).minutes.do(ok)
-while True:
-    schedule.run_pending()
+from crontab import CronTab
+cron = CronTab(user='root')
+job = cron.new(command='echo hello_world')
+job.minute.every(1)
+cron.write()

@@ -14,8 +14,9 @@ logs = []
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'POST':
-        if 'create_service_tasls' in request.data:
-            return f"{request.data}"
+        url_data = request.data.decode()
+        if 'create_service_tasls' in url_data:
+            return f"{url_data}"
         else:
             return 'ok'
     else:

@@ -14,7 +14,7 @@ logs = []
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
-            return sorted(logs, reverse=True)
+            return reversed(logs)
     else:
         if request.form['event'] == 'ONCRMDEALUPDATE':
             deal_id = request.form['data[FIELDS][ID]']
@@ -34,7 +34,7 @@ def update_code_1c(_deal_id):
     try:
         id_deal_product = str(deal_product.json()['result'][0]['PRODUCT_ID'])
     except:
-        log = f'ERROR: DEAL: {deal_id} {asctime()}'
+        log = f'ERROR: DEAL: {deal_id} | {asctime()}'
         if log not in logs:
             logs.append(log)
 
@@ -45,7 +45,7 @@ def update_code_1c(_deal_id):
     # Получение кода 1С
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
-        log = f'NO CODE: DEAL: {deal_id} {asctime()}'
+        log = f'NO CODE: DEAL: {deal_id} | {asctime()}'
         if log not in logs:
             logs.append(log)
         return "NO CODE"
@@ -59,7 +59,7 @@ def update_code_1c(_deal_id):
         # Запись кода в сделку
 
         requests.post(url=f"{webhook}crm.deal.update?id={deal_id}&fields[UF_CRM_1655972832]={code_1c}")
-        log = f'UPD: DEAL: {deal_id} OLD_CODE: {deal_1c_code} NEW_CODE: {code_1c} {asctime()}'
+        log = f'UPD: DEAL: {deal_id} | OLD_CODE: {deal_1c_code} | NEW_CODE: {code_1c} | {asctime()}'
         if log not in logs:
             logs.append(log)
         return 'UPD'

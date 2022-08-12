@@ -15,8 +15,8 @@ logs = []
 def result():
     if request.method == 'POST':
         url_data = request.data.decode()
-        if 'create_service_tasls' in url_data:
-            return type(url_data)
+        if 'create_service_tasks' in url_data:
+            return url_data
         else:
             return 'oke'
     else:

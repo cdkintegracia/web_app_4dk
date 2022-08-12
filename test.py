@@ -22,7 +22,7 @@ def result():
     else:
         return 'OK'
 
-def create_task_service:
+def create_task_service():
     pass
 
 

@@ -22,7 +22,7 @@ def result():
     if request.method == 'POST':
         if 'create_task_service' in request.url:
             if 'job' in request.args:
-                print(type(request.args))
+                print(request.args['job'])
                 return 'OK'
         return 'OK'
     else:

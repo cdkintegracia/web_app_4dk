@@ -30,7 +30,8 @@ def create_task_service(dct):
     month = months[dct['month']]
     year = dct['year']
     date_start = f'01-0{month}-{year}'
-    print(date_start)
+    deal = b.call('crm.deal.update', {'ID': '106155', 'fields': {'CLOSEDATE': date_start}})
+    print(deal)
     #deals = b.get_all('crm.deal.list')
 
 

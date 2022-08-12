@@ -14,12 +14,8 @@ logs = []
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'POST':
-        if 'create_service_tasks' in request:
-            print('Подходит')
-            return 'ura'
-        else:
-            print('Не подходит', request)
-            return 'oke'
+        print('Подходит', type(request)
+        return 'OK'
     else:
         return 'OK'
 

@@ -17,7 +17,7 @@ def result():
         logs.append(request.data)
         return f"{request.data}"
     else:
-        return logs
+        return type(logs[0])
 
 
 if __name__ == '__main__':

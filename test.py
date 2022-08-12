@@ -38,6 +38,7 @@ def create_task_service(dct):
     if month == '1':    # Месяц конца фильтрации
         month_start = '12'  # Если месяц январь, то предыдущий - декабрь
     else:
+        print(type(months[dct['month']]))
         month_start = str(months[dct['month'] - 1])
     day_start = monthrange(year, month_start)   # День начала фильтрации
 

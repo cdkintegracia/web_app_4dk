@@ -8,21 +8,25 @@ webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 
 app = Flask(__name__)
 
-logs = []
 
+def create_task_service():
+    print('поехали')
+
+
+
+
+custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'POST':
         if 'create_task_service' in request.url:
             if 'job' in request.args:
-                print(request.args['job'])
+                custom_webhooks[request.args]['job']
+                return 'OK'
         return 'OK'
     else:
         return 'OK'
-
-def create_task_service():
-    pass
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ def result():
     if request.method == 'POST':
         url_data = request.data.decode()
         if 'create_service_tasls' in url_data:
-            return 'ok'
+            return url_data
     else:
         return 'OK'
 

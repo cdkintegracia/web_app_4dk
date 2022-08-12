@@ -17,6 +17,7 @@ def create_task_service(dct):
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
     :return: Создает задачи
     """
+    employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
         'Февраль': 2,
@@ -35,6 +36,7 @@ def create_task_service(dct):
     year = int(dct['year'])
     month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
     month_end = str(months[dct['month']] + 1)   # Месяц начала фильтрации
+
     if month == '1':    # Месяц конца фильтрации
         month_start = '12'  # Если месяц январь, то предыдущий - декабрь
     else:
@@ -59,10 +61,17 @@ def create_task_service(dct):
             }
         }
     )
+
     for deal in deals:
-        print(deal['BEGINDATE'], deal['CLOSEDATE'])
+        employee = deal['ASSIGNED_BY_ID']   # Ответственный
+        if employee not in employees:
+            employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки
+        else:
+            employees[employee].append(deal['ID'])  # Добавление ID сделки к значению dct
 
-
+    """
+    Добавить в фильтр сделок Для справки: Сделки уровня ПРОФ - это сделки всех тех типов, у которых в списке типов установлено значение в стлб “Сервисный выезд” =1  Типы сделок
+    """
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

@@ -14,7 +14,7 @@ logs = []
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'POST':
-        print('Подходит', type(request)
+        print('Подходит', type(request))
         return 'OK'
     else:
         return 'OK'

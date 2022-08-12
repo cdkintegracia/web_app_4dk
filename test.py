@@ -22,7 +22,7 @@ def result():
     if request.method == 'POST':
         if 'create_task_service' in request.url:
             if 'job' in request.args:
-                custom_webhooks[request.args]['job']
+                print(type(request.args))
                 return 'OK'
         return 'OK'
     else:

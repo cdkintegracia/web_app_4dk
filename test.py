@@ -57,6 +57,8 @@ def create_task_service(dct):
             }
         }
     )
+    print(date_start)
+    print(date_end)
     for deal in deals:
         print(deal['BEGINDATE'], deal['CLOSEDATE'])
 

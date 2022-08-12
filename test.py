@@ -14,7 +14,7 @@ logs = []
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'POST':
-        return f"{request.data.split()}"
+        return f"{request.data.split()[0]}"
     else:
         return 'OK'
 

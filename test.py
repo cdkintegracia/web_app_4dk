@@ -13,7 +13,6 @@ logs = []
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
-    print(request.form)
     return request.form
 
 if __name__ == '__main__':

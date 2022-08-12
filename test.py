@@ -27,7 +27,7 @@ def create_task_service(dct):
         'Ноябрь': 11,
         'Декабрь': 12
     }
-    month = dct['month']
+    month = months[dct['month']]
     year = dct['year']
     date_start = f'01-0{month}-{year}'
     print(date_start)

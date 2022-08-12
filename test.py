@@ -17,6 +17,7 @@ def create_task_service(dct):
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
     :return: Создает задачи
     """
+    print(dct)
     months = {
         'Январь': 1,
         'Февраль': 2,

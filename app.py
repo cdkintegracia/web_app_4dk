@@ -8,17 +8,14 @@ webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 
 app = Flask(__name__)
 
-log_dct = {}
-
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
-        return log_dct
+        return 'В разработке'
     else:
         if request.form['event'] == 'ONCRMDEALUPDATE':
             deal_id = request.form['data[FIELDS][ID]']
-            if deal_id not in log_dct:
-                update_code_1c(deal_id)
+            update_code_1c(deal_id)
         return 'OK'
 
 
@@ -33,7 +30,7 @@ def update_code_1c(_deal_id):
     try:
         id_deal_product = str(deal_product.json()['result'][0]['PRODUCT_ID'])
     except:
-        log_dct.setdefault(deal_id, ['error <id_deal_product>', asctime()])
+        print('error')
 
     # Получение полей продукта
 
@@ -42,10 +39,8 @@ def update_code_1c(_deal_id):
     # Получение кода 1С
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
-        log_dct.setdefault(deal_id, ['no code', asctime()])
         return 'no code'
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
-    log_dct.setdefault(deal_id, [code_1c, asctime()])
 
     # Сверка кода 1С продукта и кода в сделке
 

@@ -13,7 +13,11 @@ logs = []
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
-    return f"{request.data}"
+    if request.method == 'POST':
+        logs.append(request.data)
+        return f"{request.data}"
+    else:
+        return logs
 
 
 if __name__ == '__main__':

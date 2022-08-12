@@ -32,7 +32,7 @@ def create_task_service(dct):
         'Декабрь': 12
     }
 
-    year = dct['year']
+    year = int(dct['year'])
     month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
     month_end = str(months[dct['month']] + 1)   # Месяц начала фильтрации
     if month == '1':    # Месяц конца фильтрации

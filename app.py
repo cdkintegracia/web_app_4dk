@@ -13,8 +13,6 @@ logs = []
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
-        for log in logs:
-            print(log)
             return logs
     else:
         if request.form['event'] == 'ONCRMDEALUPDATE':

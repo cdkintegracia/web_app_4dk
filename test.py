@@ -16,7 +16,7 @@ def result():
     if request.method == 'POST':
         url_data = request.data.decode()
         if 'create_service_tasks' in url_data:
-            return url_data
+            return 'ura'
         else:
             return 'oke'
     else:

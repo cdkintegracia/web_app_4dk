@@ -12,9 +12,9 @@ app = Flask(__name__)
 
 
 def create_task_service(dct):
-    print(dct)
     month = dct['month']
     year = dct['year']
+    print(month, year)
     months = {}
     #deals = b.get_all('crm.deal.list')
 

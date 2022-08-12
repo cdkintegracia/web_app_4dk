@@ -19,7 +19,7 @@ def result():
             print('Подходит')
             return 'ura'
         else:
-            print('Не подходит')
+            print('Не подходит', type(url_data), url_data)
             return 'oke'
     else:
         return 'OK'

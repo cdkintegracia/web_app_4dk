@@ -15,11 +15,15 @@ logs = []
 def result():
     if request.method == 'POST':
         if 'create_task_service':
-            print('Подходит', request.url)
+            print('Подходит', request.)
         return 'OK'
     else:
         return 'OK'
 
+def create_task_service:
+    pass
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+

@@ -19,8 +19,6 @@ def result():
             deal_id = request.form['data[FIELDS][ID]']
             if deal_id not in log_dct:
                 update_code_1c(deal_id)
-        if len(log_dct) > 10:
-            log_dct.clear()
         return 'OK'
 
 
@@ -49,9 +47,12 @@ def update_code_1c(_deal_id):
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
     log_dct.setdefault(deal_id, [code_1c, asctime()])
 
+    # Сверка кода 1С продукта и кода в сделке
+
+
     # Запись кода в сделку
 
-    requests.get(url=f"{webhook}crm.deal.update?id={deal_id}&fields[UF_CRM_1655972832]={code_1c}")
+    requests.post(url=f"{webhook}crm.deal.update?id={deal_id}&fields[UF_CRM_1655972832]={code_1c}")
     return f'upd {deal_id}'
 
 

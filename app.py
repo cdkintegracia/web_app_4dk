@@ -8,10 +8,12 @@ webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 
 app = Flask(__name__)
 
+logs = ''
+
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
-        return 'В разработке'
+        return logs
     else:
         if request.form['event'] == 'ONCRMDEALUPDATE':
             deal_id = request.form['data[FIELDS][ID]']
@@ -20,6 +22,7 @@ def result():
 
 
 def update_code_1c(_deal_id):
+    global logs
     deal_id = _deal_id
 
     # Получение информации о продукте сделки
@@ -30,7 +33,7 @@ def update_code_1c(_deal_id):
     try:
         id_deal_product = str(deal_product.json()['result'][0]['PRODUCT_ID'])
     except:
-        print('error')
+        logs += f'ERROR: DEAL: {deal_id} {asctime()}\n'
 
     # Получение полей продукта
 
@@ -39,6 +42,7 @@ def update_code_1c(_deal_id):
     # Получение кода 1С
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
+        logs += f'NO CODE: DEAL: {deal_id} {asctime()}\n'
         return 'no code'
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
 
@@ -50,6 +54,7 @@ def update_code_1c(_deal_id):
         # Запись кода в сделку
 
         requests.post(url=f"{webhook}crm.deal.update?id={deal_id}&fields[UF_CRM_1655972832]={code_1c}")
+        logs += f'UPD: DEAL: {deal_id} OLD_CODE: {deal_1c_code} NEW_CODE: {code_1c} {asctime()}\n'
         return f'upd {deal_id}'
 
 

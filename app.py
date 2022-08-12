@@ -10,10 +10,11 @@ app = Flask(__name__)
 
 logs = []
 
+
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
-            return logs
+            return sorted(logs, reverse=True)
     else:
         if request.form['event'] == 'ONCRMDEALUPDATE':
             deal_id = request.form['data[FIELDS][ID]']

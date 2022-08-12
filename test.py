@@ -11,10 +11,12 @@ b = Bitrix(webhook)
 app = Flask(__name__)
 
 
-def create_task_service():
+def create_task_service(*args):
+    month = args[0]
+    year = args[1]
     months = {}
-    deals = b.get_all('crm.deal.list')
-    print(deals)
+    #deals = b.get_all('crm.deal.list')
+
 
 
 # Словарь возможных функций для вызова из кастомного запроса
@@ -28,6 +30,7 @@ def result():
         if 'create_task_service' in request.url:
             if 'job' in request.args:
                 job = request.args['job']
+                print(request.values)
                 custom_webhooks[job]()
                 return 'OK'
         return 'OK'

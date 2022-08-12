@@ -15,9 +15,8 @@ logs = []
 def result():
     if request.method == 'POST':
         if 'create_task_service' in request.url:
-            print(type(request.args))
-            for i in request.args:
-                print(i)
+            if 'job' in request.args:
+                print(request.args['job'])
         return 'OK'
     else:
         return 'OK'

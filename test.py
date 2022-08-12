@@ -54,11 +54,11 @@ def create_task_service(dct):
             'filter': {
                 '>BEGINDATE': date_start,
                 '<BEGINDATE': date_end,
+                '>CLOSEDATE': date_start,
+                '<CLOSEDATE': date_end,
             }
         }
     )
-    print(date_start)
-    print(date_end)
     for deal in deals:
         print(deal['BEGINDATE'], deal['CLOSEDATE'])
 

@@ -17,7 +17,6 @@ def create_task_service(dct):
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
     :return: Создает задачи
     """
-    print(dct)
     months = {
         'Январь': 1,
         'Февраль': 2,
@@ -60,6 +59,7 @@ def create_task_service(dct):
             }
         }
     )
+    print(deals)
     for deal in deals:
         print(deal['BEGINDATE'], deal['CLOSEDATE'])
 

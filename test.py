@@ -2,20 +2,25 @@ from time import asctime
 from flask import Flask
 from flask import request
 import requests
+from fast_bitrix24 import Bitrix
 
 
 webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
+b = Bitrix(webhook)
 
 app = Flask(__name__)
 
 
 def create_task_service():
-    print('поехали')
+    months = {}
+    deals = b.get_all('crm.deal.list')
+    print(deals)
 
 
-
-
+# Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}
+
+
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():

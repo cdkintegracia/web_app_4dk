@@ -15,12 +15,12 @@ def result():
     if request.method == 'GET':
         for log in logs:
             print(log)
-            return
+            return logs
     else:
         if request.form['event'] == 'ONCRMDEALUPDATE':
             deal_id = request.form['data[FIELDS][ID]']
             update_code_1c(deal_id)
-        return
+        return 'OK'
 
 
 def update_code_1c(_deal_id):
@@ -45,7 +45,7 @@ def update_code_1c(_deal_id):
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
         logs.append(f'NO CODE: DEAL: {deal_id} {asctime()}')
-        return
+        return "NO CODE"
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
 
     # Сверка кода 1С продукта и кода в сделке
@@ -57,7 +57,7 @@ def update_code_1c(_deal_id):
 
         requests.post(url=f"{webhook}crm.deal.update?id={deal_id}&fields[UF_CRM_1655972832]={code_1c}")
         logs.append(f'UPD: DEAL: {deal_id} OLD_CODE: {deal_1c_code} NEW_CODE: {code_1c} {asctime()}')
-        return
+        return 'UPD'
 
 
 if __name__ == '__main__':

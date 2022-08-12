@@ -13,6 +13,10 @@ app = Flask(__name__)
 
 
 def create_task_service(dct):
+    """
+    :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
+    :return: Создает задачи
+    """
     months = {
         'Январь': 1,
         'Февраль': 2,
@@ -27,12 +31,34 @@ def create_task_service(dct):
         'Ноябрь': 11,
         'Декабрь': 12
     }
-    month = months[dct['month']]
+
     year = dct['year']
-    date_start = f'01-0{month}-{year}'
-    deal = b.call('crm.deal.update', {'ID': '106155', 'fields': {'CLOSEDATE': date_start}})
-    print(deal)
-    #deals = b.get_all('crm.deal.list')
+    month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
+    month_end = str(months[dct['month'] + 1])   # Месяц начала фильтрации
+    if month == '1':    # Месяц конца фильтрации
+        month_start = '12'  # Если месяц январь, то предыдущий - декабрь
+    else:
+        month_start = str(months[dct['month'] - 1])
+    day_start = monthrange(year, month_start)   # День начала фильтрации
+
+    if len(month) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
+        month = '0' + month
+
+    date_start = f'{year}-{month_start}-{day_start}'
+    date_end = f'{year}-{month_end}-01'
+
+    deals = b.get_all(
+        'crm.deal.list', {
+            'filter': {
+                '>BEGINDATE': date_start,
+                '<BEGINDATE': date_end,
+                '>CLOSEDATE': date_start,
+                '<CLOSEDATE': date_end,
+            }
+        }
+    )
+    for deal in deals:
+        print(deal['BEGINDATE'], deal['CLOSEDATE'])
 
 
 

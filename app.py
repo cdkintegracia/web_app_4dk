@@ -130,7 +130,6 @@ def create_task_service(dct):
 
     """
 
-    ready_id_employees = []
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
@@ -200,7 +199,7 @@ def create_task_service(dct):
     # Формирование задач
 
     for employee in employees:
-        if employee not in ready_id_employees and employee not in ['None', None]:  # Защите от дублирования задач
+        if employee not in ['None', None]:
 
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
@@ -215,9 +214,6 @@ def create_task_service(dct):
                 }
             }
                           )
-            print(employee)
-
-            ready_id_employees.append(employee)
 
         # Перебор значений выбранного выше ключа
 
@@ -245,6 +241,9 @@ def create_task_service(dct):
                 }
             ], raw=True
                                 )
+        updated_task = b.get_all('tasks.task.get', {'taskId': task['task']['id']})
+        print(updated_task)
+        exit()
 
 
 def update_code_1c(deal_id):

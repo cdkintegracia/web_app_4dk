@@ -28,6 +28,8 @@ def create_task_service(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
+    for i in dct:
+        print(dct)
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
@@ -237,8 +239,6 @@ def result():
                 deal_id = request.form['data[FIELDS][ID]']
                 update_code_1c(deal_id)
         elif 'create_task_service' in request.url:
-            print(request.args['emploies'])
-            exit()
             if 'job' in request.args:
                 job = request.args['job']
                 custom_webhooks[job](request.args)

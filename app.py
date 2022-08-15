@@ -307,7 +307,7 @@ def result():
                 deal_id = request.form['data[FIELDS][ID]']
                 update_code_1c(deal_id)
             elif request.form['event'] in ['ONTASKADD', 'ONTASKUPDATE']:
-                r = requests.post('http://141.8.194.146:5000/root/flask/tasks.php', data=request.data)
+                r = requests.post('http://141.8.194.146:5000/root/flask/text.txt', data=request.data)
                 print(r)
         elif 'create_task_service' in request.url:
             if 'job' in request.args:

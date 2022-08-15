@@ -298,7 +298,7 @@ custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/text.txt', methods=['POST', 'HEAD', 'GET'])
 def text():
-    print(request)
+    print('TEST', request)
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():

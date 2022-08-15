@@ -117,6 +117,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
 def create_task_service(dct):
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
+
     :return: Создает задачи "Сервисный выезд" для сделок уровня ПРОФ для выбранного диапазона дат и с чек-листами,
     где каждый пункт в виде <Название компании> <Название сделки>
     Выборка по датам если выбран сентябрь:
@@ -198,18 +199,11 @@ def create_task_service(dct):
 
     # Формирование задач
 
-    print('employees', employees)
-
     for employee in employees:
-        if employee not in ready_id_employees:  # Защите от дублирования задач
-            '''
-            Есть сделка без ответственного, после ее удаления - можно удалить try
-            '''
-            try:
-                employee_fields = b.get_all('user.get', {"ID": employee})
-                employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-            except:
-                print('ERROR: ', employee, employees[employee])
+        if employee not in ready_id_employees and employee not in ['None', None]:  # Защите от дублирования задач
+
+            employee_fields = b.get_all('user.get', {"ID": employee})
+            employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
 
             task = b.call('tasks.task.add', {
                 'fields': {
@@ -221,6 +215,8 @@ def create_task_service(dct):
                 }
             }
                           )
+            print(employee)
+
             ready_id_employees.append(employee)
 
         # Перебор значений выбранного выше ключа

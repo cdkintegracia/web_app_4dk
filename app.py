@@ -298,8 +298,9 @@ custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/tasks.php', methods=['POST', 'HEAD', 'GET'])
 def text():
-    print('TEST', request)
-    return 'OK'
+    r = requests.post('http://141.8.194.146:5000/tasks.php', data=request.data)
+    print(r)
+    return r
 
 @app.route('/bitrix', methods=['POST', 'HEAD', 'GET'])
 def result():
@@ -310,9 +311,6 @@ def result():
             if request.form['event'] == 'ONCRMDEALUPDATE':
                 deal_id = request.form['data[FIELDS][ID]']
                 update_code_1c(deal_id)
-            elif request.form['event'] in ['ONTASKADD', 'ONTASKUPDATE']:
-                r = requests.post('http://141.8.194.146:5000/root/flask/text.txt', data=request.data)
-                print(r)
         elif 'create_task_service' in request.url:
             if 'job' in request.args:
                 job = request.args['job']

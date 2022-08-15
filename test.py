@@ -142,15 +142,16 @@ def create_task_service(dct):
             """
             if employee in [None, 'None']:
                 continue
-
+            print(task['task']['id'])
+            '''
             add_checklist = b.call('task.checklistitem.add', [
                 task['task']['id'], {
                     'TITLE': deal_id,
                     'IS_COMPLETE': 'N'
                 }
             ]
-                                   )
-            print(task)
+                                )
+            '''
             exit()
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

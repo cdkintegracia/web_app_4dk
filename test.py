@@ -51,28 +51,59 @@ def create_task_service(dct):
     date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'
 
+    # начались в сентябре 2022 и заканчиваются после сентября 2022
+
     deals_start_in_end_after = b.get_all(
         'crm.deal.list', {
             'filter': {
                 '>BEGINDATE': date_start,
                 '<BEGINDATE': date_end,
                 '>CLOSEDATE': date_end,
+                'TYPE_ID': [
+                    'UC_XIYCTV',  # ПРОФ Земля + Помощник
+                    'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
+                    'UC_2SJOEJ',  # ПРОФ Облако+Помощник
+                    'UC_92H9MN',  # Индивидуальный
+                    'UC_7V8HWF',  # Индивидуальный + Облако
+                    'UC_1UPOTU',  # ИТС Бесплатный
+                    'UC_DBLSP5',  # Садовод + Помощник
+                ]
             }
         }
     )
 
-    for deal in deals_start_in_end_after:
+    # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+    deals_start_before_end_in = b.get_all(
+        'crm.deal.list', {
+            'filter': {
+                '<BEGINDATE': date_start,
+                '>CLOSEDATE': date_start,
+                '<CLOSEDATE': date_end,
+                'TYPE_ID': [
+                    'UC_XIYCTV',    # ПРОФ Земля + Помощник
+                    'UC_5T4MAW',    # ПРОФ Земля + Облако + Помощник
+                    'UC_2SJOEJ',    # ПРОФ Облако+Помощник
+                    'UC_92H9MN',    # Индивидуальный
+                    'UC_7V8HWF',    # Индивидуальный + Облако
+                    'UC_1UPOTU',    # ИТС Бесплатный
+                    'UC_DBLSP5',    # Садовод + Помощник
+                ]
+            }
+        }
+    )
+
+    print(type(deals_start_before_end_in))
+
+    '''
+    for deal in deals:
         print(deal['ID'])
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
             employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки
         else:
             employees[employee].append(deal['ID'])  # Добавление ID сделки к значению dct
-    print(employees)
-
-    """
-    Добавить в фильтр сделок Для справки: Сделки уровня ПРОФ - это сделки всех тех типов, у которых в списке типов установлено значение в стлб “Сервисный выезд” =1  Типы сделок
-    """
+    '''
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

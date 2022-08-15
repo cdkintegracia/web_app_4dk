@@ -180,11 +180,9 @@ def create_task_service(dct):
                                 )
 
 
-def update_code_1c(_deal_id):
+def update_code_1c(deal_id):
     global logs
-    print(_deal_id)
-    deal_id = _deal_id
-    print(deal_id, _deal_id)
+    print(deal_id, 'DEAL ID')
 
     # Получение информации о продукте сделки
 

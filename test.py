@@ -144,7 +144,7 @@ def create_task_service(dct):
                 }
             }
                    )
-
+            exit()
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}
 

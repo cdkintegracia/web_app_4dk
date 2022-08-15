@@ -128,6 +128,8 @@ def create_task_service(dct):
             """
             if employee in [None, 'None']:
                 continue
+            print(f"Сервисный выезд {employee_name} {months[dct['month']]}")
+            print(f"{str({year})}-{month}-{current_month_days} 19:00:00")
             b.call('tasks.task.add', {
                 'fields': {
                     'TITLE': f"Сервисный выезд {employee_name} {months[dct['month']]}",

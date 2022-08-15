@@ -51,18 +51,17 @@ def create_task_service(dct):
     date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'
 
-    deals = b.get_all(
+    deals_start_before_end_after = b.get_all(
         'crm.deal.list', {
             'filter': {
-                '>BEGINDATE': date_start,
-                '<BEGINDATE': date_end,
-                '>CLOSEDATE': date_start,
-                '<CLOSEDATE': date_end,
+                '<BEGINDATE': date_start,
+                '>CLOSEDATE': date_end,
             }
         }
     )
-
-    for deal in deals:
+    print(deals_start_before_end_after)
+    exit()
+    for deal in deals_start_before_end_after:
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
             employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки

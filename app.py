@@ -14,6 +14,103 @@ app = Flask(__name__)
 logs = []
 
 
+def get_deals_for_task_service(date_start, date_end, type_deals, employees):
+    """
+    Функция, которая вызывается из функции create_task_service
+
+    :param date_start: Дата начала фильтрации сделок
+    :param date_end: Дата конца фильтрации сделок
+    :param type_deals: Типы сделок для фильтрации
+    :param employees: Сотрудники, для фильтрации сделок
+    :return: Массив найденных сделок по фильтру (состоит из 3 массивов)
+    :return:
+    """
+
+    if employees == '':     # Если не были выбраны сотрудники в параметрах БП
+
+        # Начались в сентябре 2022 и заканчиваются после сентября 2022
+
+        deals_start_in_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '>BEGINDATE': date_start,
+                    '<BEGINDATE': date_end,
+                    '>CLOSEDATE': date_end,
+                    'TYPE_ID': type_deals,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+        deals_start_before_end_in = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_start,
+                    '<CLOSEDATE': date_end,
+                    'TYPE_ID': type_deals,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются после сентября 2022
+
+        deals_start_before_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_end,
+                    'TYPE_ID': type_deals,
+                }
+            }
+        )
+
+    else:   # Если были выбраны сотрудники в параметрах БП
+
+        # Начались в сентябре 2022 и заканчиваются после сентября 2022
+
+        deals_start_in_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '>BEGINDATE': date_start,
+                    '<BEGINDATE': date_end,
+                    '>CLOSEDATE': date_end,
+                    'TYPE_ID': type_deals,
+                    'ASSIGNED_BY_ID': employees,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+        deals_start_before_end_in = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_start,
+                    '<CLOSEDATE': date_end,
+                    'TYPE_ID': type_deals,
+                    'ASSIGNED_BY_ID': employees,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются после сентября 2022
+
+        deals_start_before_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_end,
+                    'TYPE_ID': type_deals,
+                    'ASSIGNED_BY_ID': employees,
+                }
+            }
+        )
+
+    return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
+
 def create_task_service(dct):
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
@@ -28,9 +125,6 @@ def create_task_service(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    for i in dct:
-        print(i)
-    exit()
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
@@ -47,7 +141,7 @@ def create_task_service(dct):
         'Декабрь': 12
     }
 
-    prof_deals = [
+    type_deals = [
                     'UC_XIYCTV',  # ПРОФ Земля + Помощник
                     'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
                     'UC_2SJOEJ',  # ПРОФ Облако+Помощник
@@ -78,45 +172,9 @@ def create_task_service(dct):
     date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'
 
-    # начались в сентябре 2022 и заканчиваются после сентября 2022
+    # Получение массива сделок
 
-    deals_start_in_end_after = b.get_all(
-        'crm.deal.list', {
-            'filter': {
-                '>BEGINDATE': date_start,
-                '<BEGINDATE': date_end,
-                '>CLOSEDATE': date_end,
-                'TYPE_ID': prof_deals,
-            }
-        }
-    )
-
-    # начались до сентября 2022 и заканчиваются в сентябре 2022
-
-    deals_start_before_end_in = b.get_all(
-        'crm.deal.list', {
-            'filter': {
-                '<BEGINDATE': date_start,
-                '>CLOSEDATE': date_start,
-                '<CLOSEDATE': date_end,
-                'TYPE_ID': prof_deals,
-            }
-        }
-    )
-
-    # начались до сентября 2022 и заканчиваются после сентября 2022
-
-    deals_start_before_end_after = b.get_all(
-        'crm.deal.list', {
-            'filter': {
-                '<BEGINDATE': date_start,
-                '>CLOSEDATE': date_end,
-                'TYPE_ID': prof_deals,
-            }
-        }
-    )
-
-    deals = deals_start_before_end_in + deals_start_in_end_after + deals_start_before_end_after
+    deals = get_deals_for_task_service(date_start, date_end, type_deals, dct['employees'])
 
     # Разделение ID сделок по ответственному
 

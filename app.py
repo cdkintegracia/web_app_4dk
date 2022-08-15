@@ -128,7 +128,7 @@ def create_task_service(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    print(dct['employees'])
+
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
@@ -241,7 +241,8 @@ def create_task_service(dct):
 
             b.call('task.checklistitem.add', [
                 task['task']['id'], {
-                    'TITLE': f"{company[0]['TITLE']} {value[1]}",    # <Название компании> <Название сделки>
+                    # <Название компании> <Название сделки> <Ссылка на сделку>
+                    'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
                 }
             ], raw=True
                                 )

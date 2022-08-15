@@ -112,12 +112,18 @@ def create_task_service(dct):
 
     # Формирование задач
 
-    print(employees)
     for employee in employees:
-        print(employee), employees[employee]
-        employee_fields = b.get_all('user.get', {"ID": employee})
-        employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-        print(employee_name)
+        '''
+        Есть сделка без ответственного, после ее удаления - можно удалить try
+        '''
+        try:
+            employee_fields = b.get_all('user.get', {"ID": employee})
+            employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
+        except:
+            print(employee, employees[employee])
+        for tasks_employee in employees:
+            print('TASKS', employees[employee])
+
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

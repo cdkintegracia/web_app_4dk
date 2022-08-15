@@ -121,8 +121,8 @@ def create_task_service(dct):
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
         except:
             print(employee, employees[employee])
-        for tasks_employee in employees:
-            print('TASKS', employees[employee])
+        for deal_id in employees[employee]:
+            print('TASKS', deal_id)
 
 
 # Словарь возможных функций для вызова из кастомного запроса

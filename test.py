@@ -130,8 +130,8 @@ def create_task_service(dct):
             """
             if employee in [None, 'None']:
                 continue
-            print(month)
-            b.call('tasks.task.add', {
+
+            task = b.call('tasks.task.add', {
                 'fields': {
                     'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
@@ -141,6 +141,7 @@ def create_task_service(dct):
                 }
             }
                    )
+            print(task)
             exit()
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

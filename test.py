@@ -33,6 +33,16 @@ def create_task_service(dct):
         'Декабрь': 12
     }
 
+    prof_deals = [
+                    'UC_XIYCTV',  # ПРОФ Земля + Помощник
+                    'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
+                    'UC_2SJOEJ',  # ПРОФ Облако+Помощник
+                    'UC_92H9MN',  # Индивидуальный
+                    'UC_7V8HWF',  # Индивидуальный + Облако
+                    'UC_1UPOTU',  # ИТС Бесплатный
+                    'UC_DBLSP5',  # Садовод + Помощник
+                ]
+
     year = int(dct['year'])
     month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
     month_end = str(months[dct['month']] + 1)   # Месяц начала фильтрации
@@ -59,15 +69,7 @@ def create_task_service(dct):
                 '>BEGINDATE': date_start,
                 '<BEGINDATE': date_end,
                 '>CLOSEDATE': date_end,
-                'TYPE_ID': [
-                    'UC_XIYCTV',  # ПРОФ Земля + Помощник
-                    'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
-                    'UC_2SJOEJ',  # ПРОФ Облако+Помощник
-                    'UC_92H9MN',  # Индивидуальный
-                    'UC_7V8HWF',  # Индивидуальный + Облако
-                    'UC_1UPOTU',  # ИТС Бесплатный
-                    'UC_DBLSP5',  # Садовод + Помощник
-                ]
+                'TYPE_ID': prof_deals,
             }
         }
     )
@@ -80,22 +82,27 @@ def create_task_service(dct):
                 '<BEGINDATE': date_start,
                 '>CLOSEDATE': date_start,
                 '<CLOSEDATE': date_end,
-                'TYPE_ID': [
-                    'UC_XIYCTV',    # ПРОФ Земля + Помощник
-                    'UC_5T4MAW',    # ПРОФ Земля + Облако + Помощник
-                    'UC_2SJOEJ',    # ПРОФ Облако+Помощник
-                    'UC_92H9MN',    # Индивидуальный
-                    'UC_7V8HWF',    # Индивидуальный + Облако
-                    'UC_1UPOTU',    # ИТС Бесплатный
-                    'UC_DBLSP5',    # Садовод + Помощник
-                ]
+                'TYPE_ID': prof_deals,
             }
         }
     )
 
-    deals = deals_start_before_end_in + deals_start_in_end_after
-    print(deals)
-    ''' 
+    # начались до сентября 2022 и заканчиваются после сентября 2022
+
+    deals_start_before_end_after = b.get_all(
+        'crm.deal.list', {
+            'filter': {
+                '<BEGINDATE': date_start,
+                '>CLOSEDATE': date_end,
+                'TYPE_ID': prof_deals,
+            }
+        }
+    )
+
+    deals = deals_start_before_end_in + deals_start_in_end_after + deals_start_before_end_after
+
+    # Разделение ID сделок по ответственному
+
     for deal in deals:
         print(deal['ID'])
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
@@ -103,7 +110,12 @@ def create_task_service(dct):
             employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки
         else:
             employees[employee].append(deal['ID'])  # Добавление ID сделки к значению dct
-    '''
+
+    # Формирование задач
+
+    for employee in employees:
+        employee_name = b.get_by_ID('user.get', {"ID": employee})
+        print(employee_name)
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

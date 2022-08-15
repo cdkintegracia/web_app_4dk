@@ -60,15 +60,15 @@ def create_task_service(dct):
             }
         }
     )
-    print(deals_start_in_end_after)
-    print(date_start, date_end)
-    exit()
+
     for deal in deals_start_in_end_after:
+        print(deal['ID'])
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
             employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки
         else:
             employees[employee].append(deal['ID'])  # Добавление ID сделки к значению dct
+    print(employees)
 
     """
     Добавить в фильтр сделок Для справки: Сделки уровня ПРОФ - это сделки всех тех типов, у которых в списке типов установлено значение в стлб “Сервисный выезд” =1  Типы сделок

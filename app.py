@@ -296,6 +296,9 @@ def update_code_1c(deal_id):
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}
 
+@app.route('/text.txt', methods=['POST', 'HEAD', 'GET'])
+def text():
+    print(request)
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():

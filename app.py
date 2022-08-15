@@ -129,6 +129,7 @@ def create_task_service(dct):
 
     """
 
+    ready_id_employees = []
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
@@ -200,25 +201,27 @@ def create_task_service(dct):
     print('employees', employees)
 
     for employee in employees:
-        '''
-        Есть сделка без ответственного, после ее удаления - можно удалить try
-        '''
-        try:
-            employee_fields = b.get_all('user.get', {"ID": employee})
-            employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-        except:
-            print('ERROR: ', employee, employees[employee])
+        if employee not in ready_id_employees:  # Защите от дублирования задач
+            '''
+            Есть сделка без ответственного, после ее удаления - можно удалить try
+            '''
+            try:
+                employee_fields = b.get_all('user.get', {"ID": employee})
+                employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
+            except:
+                print('ERROR: ', employee, employees[employee])
 
-        task = b.call('tasks.task.add', {
-            'fields': {
-                'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
-                'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                'RESPONSIBLE_ID': '311',
-                'ALLOW_CHANGE_DEADLINE': 'N',
-                'GROUP_ID': '13'
+            task = b.call('tasks.task.add', {
+                'fields': {
+                    'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
+                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                    'RESPONSIBLE_ID': '311',
+                    'ALLOW_CHANGE_DEADLINE': 'N',
+                    'GROUP_ID': '13'
+                }
             }
-        }
-                      )
+                          )
+            ready_id_employees.append(employee)
 
         # Перебор значений выбранного выше ключа
 

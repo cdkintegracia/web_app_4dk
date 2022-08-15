@@ -66,7 +66,7 @@ def create_task_service(dct):
 
     date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'
-
+    print('da')
     # начались в сентябре 2022 и заканчиваются после сентября 2022
 
     deals_start_in_end_after = b.get_all(
@@ -144,7 +144,6 @@ def create_task_service(dct):
                 }
             }
                    )
-            print('da')
             exit()
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

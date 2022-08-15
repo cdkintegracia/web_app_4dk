@@ -122,8 +122,6 @@ def create_task_service(dct):
     # Формирование задач
 
     for employee in employees:
-        print(employee, employees[employee])
-        exit()
         '''
         Есть сделка без ответственного, после ее удаления - можно удалить try
         '''

@@ -237,6 +237,7 @@ def result():
                 deal_id = request.form['data[FIELDS][ID]']
                 update_code_1c(deal_id)
         elif 'create_task_service' in request.url:
+            print(request.args)
             if 'job' in request.args:
                 job = request.args['job']
                 custom_webhooks[job](request.args)

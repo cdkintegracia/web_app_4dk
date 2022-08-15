@@ -13,7 +13,6 @@ app = Flask(__name__)
 
 
 def create_task_service(dct):
-    print('da')
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
     :return: Создает задачи
@@ -145,6 +144,7 @@ def create_task_service(dct):
                 }
             }
                    )
+            print('da')
             exit()
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

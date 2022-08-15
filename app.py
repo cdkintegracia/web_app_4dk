@@ -204,6 +204,7 @@ def update_code_1c(_deal_id):
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
         log = f'NO CODE: DEAL: {deal_id} | {asctime()}'
+        print(log)
         if log not in logs:
             logs.append(log)
         return "NO CODE"
@@ -212,7 +213,7 @@ def update_code_1c(_deal_id):
     # Сверка кода 1С продукта и кода в сделке
 
     deal_1c_code = requests.get(url=f"{webhook}crm.deal.get?id={deal_id}").json()['result']['UF_CRM_1655972832']
-    print(log)
+
     if deal_1c_code != code_1c:
 
         # Запись кода в сделку

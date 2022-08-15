@@ -234,6 +234,7 @@ def result():
     elif request.method == 'POST':
         if 'event' in request.form:
             if request.form['event'] == 'ONCRMDEALUPDATE':
+                print(request.form)
                 deal_id = request.form['data[FIELDS][ID]']
                 update_code_1c(deal_id)
         elif 'create_task_service' in request.url:

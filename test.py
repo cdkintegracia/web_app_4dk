@@ -162,7 +162,7 @@ def create_task_service(dct):
 
             add_checklist = b.call('task.checklistitem.add', [
                 task['task']['id'], {
-                    'TITLE': f"{company['TITLE']} {value['1']}",    # <Название компании> <Название сделки>
+                    'TITLE': f"{company['TITLE']} {value[1]}",    # <Название компании> <Название сделки>
                 }
             ], raw=True
                                 )

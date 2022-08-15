@@ -15,7 +15,16 @@ app = Flask(__name__)
 def create_task_service(dct):
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
-    :return: Создает задачи
+    :return: Создает задачи "Сервисный выезд" для сделок уровня ПРОФ для выбранного диапазона дат и с чек-листами,
+    где каждый пункт в виде <Название компании> <Название сделки>
+    Выборка по датам если выбран сентябрь:
+
+    начались до сентября 2022 и заканчиваются после сентября 2022
+
+    начались в сентябре 2022 и заканчиваются после сентября 2022
+
+    начались до сентября 2022 и заканчиваются в сентябре 2022
+
     """
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
@@ -152,6 +161,7 @@ def create_task_service(dct):
 
             if employee in [None, 'None']:
                 continue
+
             # Создание пунктов чек-листы для созданной задачи на сотрудника
 
             company = b.get_all('crm.company.list', {
@@ -160,17 +170,16 @@ def create_task_service(dct):
                 }
             })
 
-            add_checklist = b.call('task.checklistitem.add', [
+            b.call('task.checklistitem.add', [
                 task['task']['id'], {
                     'TITLE': f"{company[0]['TITLE']} {value[1]}",    # <Название компании> <Название сделки>
                 }
             ], raw=True
                                 )
-        exit()
+
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}
-
 
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
@@ -188,4 +197,3 @@ def result():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-

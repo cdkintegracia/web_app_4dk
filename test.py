@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 
 def create_task_service(dct):
+    print('da')
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
     :return: Создает задачи
@@ -154,7 +155,6 @@ custom_webhooks = {'create_task_service': create_task_service}
 def result():
     if request.method == 'POST':
         if 'create_task_service' in request.url:
-            print('da')
             if 'job' in request.args:
                 job = request.args['job']
                 custom_webhooks[job](request.args)

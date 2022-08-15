@@ -114,6 +114,7 @@ def create_task_service(dct):
     # Формирование задач
 
     for employee in employees:
+        print(employee)
         employee_name = b.get_by_ID('user.get', {"ID": employee})
         print(employee_name)
 

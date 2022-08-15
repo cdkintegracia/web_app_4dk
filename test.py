@@ -124,6 +124,18 @@ def create_task_service(dct):
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
         except:
             print(employee, employees[employee])
+
+        task = b.call('tasks.task.add', {
+            'fields': {
+                'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
+                'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                'RESPONSIBLE_ID': '311',
+                'ALLOW_CHANGE_DEADLINE': 'N',
+
+            }
+        }
+                      )
+
         for deal_id in employees[employee]:
             """
             Можно потом удалить
@@ -131,16 +143,13 @@ def create_task_service(dct):
             if employee in [None, 'None']:
                 continue
 
-            task = b.call('tasks.task.add', {
-                'fields': {
-                    'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
-                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': '311',
-                    'ALLOW_CHANGE_DEADLINE': 'N',
-
+            add_checklist = b.call('task.checklistitem.add', [
+                task['task']['id'], {
+                    'TITLE': deal_id,
+                    'IS_COMPLETE': 'N'
                 }
-            }
-                   )
+            ]
+                                   )
             print(task)
             exit()
 # Словарь возможных функций для вызова из кастомного запроса

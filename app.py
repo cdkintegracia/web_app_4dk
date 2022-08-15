@@ -4,7 +4,7 @@ from flask import request
 import requests
 from calendar import monthrange
 from fast_bitrix24 import Bitrix
-
+import subprocess
 
 webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 b = Bitrix(webhook)
@@ -306,6 +306,9 @@ def result():
             if request.form['event'] == 'ONCRMDEALUPDATE':
                 deal_id = request.form['data[FIELDS][ID]']
                 update_code_1c(deal_id)
+            elif request.form['event'] in ['ONTASKADD', 'ONTASKUPDATE']:
+                print(request.form)
+                subprocess.call("php tasks.php")
         elif 'create_task_service' in request.url:
             if 'job' in request.args:
                 job = request.args['job']

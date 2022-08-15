@@ -133,20 +133,17 @@ def create_task_service(dct):
             """
             if employee in [None, 'None']:
                 continue
-            try:
-                b.call('tasks.task.add', {
-                    'fields': {
-                        'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
-                        'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                        'RESPONSIBLE_ID': '311',
-                        'ALLOW_CHANGE_DEADLINE': 'N',
+            print(month)
+            b.call('tasks.task.add', {
+                'fields': {
+                    'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
+                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                    'RESPONSIBLE_ID': '311',
+                    'ALLOW_CHANGE_DEADLINE': 'N',
 
-                    }
                 }
-                       )
-            except:
-                print(f'Не поставилась задача на {employee_name}, {employee}')
-            exit()
+            }
+                   )
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

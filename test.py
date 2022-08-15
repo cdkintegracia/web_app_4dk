@@ -93,9 +93,9 @@ def create_task_service(dct):
         }
     )
 
-    print(type(deals_start_before_end_in))
-
-    '''
+    deals = deals_start_before_end_in + deals_start_in_end_after
+    print(deals)
+    ''' 
     for deal in deals:
         print(deal['ID'])
         employee = deal['ASSIGNED_BY_ID']   # Ответственный

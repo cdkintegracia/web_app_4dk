@@ -232,9 +232,10 @@ def result():
     if request.method == 'GET':
         return reversed(logs)
     elif request.method == 'POST':
-        if request.form['event'] == 'ONCRMDEALUPDATE':
-            deal_id = request.form['data[FIELDS][ID]']
-            update_code_1c(deal_id)
+        if 'event' in request.form:
+            if request.form['event'] == 'ONCRMDEALUPDATE':
+                deal_id = request.form['data[FIELDS][ID]']
+                update_code_1c(deal_id)
         elif 'create_task_service' in request.url:
             if 'job' in request.args:
                 job = request.args['job']

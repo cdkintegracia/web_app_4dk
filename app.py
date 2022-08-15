@@ -230,6 +230,7 @@ custom_webhooks = {'create_task_service': create_task_service}
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
+        print(logs)
         return reversed(logs)
     elif request.method == 'POST':
         if 'event' in request.form:

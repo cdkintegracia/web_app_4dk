@@ -113,8 +113,9 @@ def create_task_service(dct):
     # Формирование задач
 
     for employee in employees:
-        print(employee)
-        employee_name = b.get_all('user.get', {"ID": employee})[0]['NAME']
+        print(employee), employees[employee]
+        employee_fields = b.get_all('user.get', {"ID": employee})
+        employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
         print(employee_name)
 
 # Словарь возможных функций для вызова из кастомного запроса

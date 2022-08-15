@@ -182,6 +182,7 @@ def create_task_service(dct):
 
 def update_code_1c(_deal_id):
     global logs
+    print(_deal_id)
     deal_id = _deal_id
     print(deal_id, _deal_id)
 
@@ -239,7 +240,6 @@ def result():
             if request.form['event'] == 'ONCRMDEALUPDATE':
                 print(request.form)
                 deal_id = request.form['data[FIELDS][ID]']
-                print(deal_id, 'TRUE')
                 update_code_1c(deal_id)
         elif 'create_task_service' in request.url:
             if 'job' in request.args:

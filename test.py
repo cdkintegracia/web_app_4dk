@@ -104,7 +104,6 @@ def create_task_service(dct):
     # Разделение ID сделок по ответственному
 
     for deal in deals:
-        print(deal['ID'])
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
             employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки
@@ -115,7 +114,7 @@ def create_task_service(dct):
 
     for employee in employees:
         print(employee)
-        employee_name = b.get_by_ID('user.get', {"ID": employee})
+        employee_name = b.get_all('user.get', {"ID": employee})
         print(employee_name)
 
 # Словарь возможных функций для вызова из кастомного запроса

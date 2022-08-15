@@ -111,6 +111,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
 
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
+
 def create_task_service(dct):
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
@@ -192,6 +193,8 @@ def create_task_service(dct):
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
 
     # Формирование задач
+
+    print('employees', employees)
 
     for employee in employees:
         '''

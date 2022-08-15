@@ -308,7 +308,7 @@ def result():
                 update_code_1c(deal_id)
             elif request.form['event'] in ['ONTASKADD', 'ONTASKUPDATE']:
                 print(request.form)
-                subprocess.call(["php", "tasks.php"])
+                subprocess.call(["/usr/bin/php", "/root/flask/tasks.php"])
         elif 'create_task_service' in request.url:
             if 'job' in request.args:
                 job = request.args['job']

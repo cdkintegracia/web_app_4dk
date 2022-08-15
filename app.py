@@ -67,9 +67,8 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
         )
 
     else:   # Если были выбраны сотрудники в параметрах БП
-        id_employees = employees.split(', ')
-        id_employees = list(map(lambda x: x[5:], id_employees))
-        print(id_employees)
+        id_employees = employees.split(', ')    # Строка с сотрудниками в список
+        id_employees = list(map(lambda x: x[5:], id_employees))     # Очищение списка от "user_"
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
 
@@ -80,7 +79,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_end,
                     '>CLOSEDATE': date_end,
                     'TYPE_ID': type_deals,
-                    'ASSIGNED_BY_ID': employees,
+                    'ASSIGNED_BY_ID': id_employees,
                 }
             }
         )
@@ -94,7 +93,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_start,
                     '<CLOSEDATE': date_end,
                     'TYPE_ID': type_deals,
-                    'ASSIGNED_BY_ID': employees,
+                    'ASSIGNED_BY_ID': id_employees,
                 }
             }
         )
@@ -107,7 +106,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_end,
                     'TYPE_ID': type_deals,
-                    'ASSIGNED_BY_ID': employees,
+                    'ASSIGNED_BY_ID': id_employees,
                 }
             }
         )

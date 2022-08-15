@@ -112,6 +112,7 @@ def create_task_service(dct):
 
     # Формирование задач
 
+    print(employees)
     for employee in employees:
         print(employee), employees[employee]
         employee_fields = b.get_all('user.get', {"ID": employee})

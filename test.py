@@ -109,11 +109,15 @@ def create_task_service(dct):
     for deal in deals:
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
-            employees.setdefault(employee, [deal['ID'], deal['TITLE'], deal['COMPANY_ID']])  # Создание ключа с ID сотрудника и значение - ID сделки
-            print(employees)
-            exit()
+
+            # Создание ключа с ID сотрудника и значение:
+            # 0: ID сделки
+            # 1: Название сделки
+            # 2: ID компании
+            employees.setdefault(employee, [deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
         else:
-            employees[employee].append(deal['ID'])  # Добавление ID сделки к значению dct
+            # Добавление ID сделки к значению dct
+            employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
 
     # Формирование задач
 
@@ -138,7 +142,11 @@ def create_task_service(dct):
         }
                       )
 
-        for deal_id in employees[employee]:
+        # Перебор значений выбранного выше ключа
+
+        for value in employees[employee]:
+            print(value)
+            exit()
             """
             Можно потом удалить
             """

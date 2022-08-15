@@ -145,14 +145,22 @@ def create_task_service(dct):
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
-            print(value)
-            exit()
+
             """
-            Можно потом удалить
+            Можно потом удалить проверку на None
             """
+
             if employee in [None, 'None']:
                 continue
+            # Создание пунктов чек-листы для созданной задачи на сотрудника
 
+            company_name = b.get_all('crm.company.list', {
+                'filter': {
+                    'ID': value[2]
+                }
+            })
+            print(company_name)
+            exit()
             add_checklist = b.call('task.checklistitem.add', [
                 task['task']['id'], {
                     'TITLE': 'test',

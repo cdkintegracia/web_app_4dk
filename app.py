@@ -242,6 +242,8 @@ def create_task_service(dct):
             ], raw=True
                                 )
 
+        # Защита от дублирования задач
+
         updated_task = b.get_all('tasks.task.get', {'taskId': task['task']['id']})
         if len(updated_task['task']['checklist']) == 0:
             b.call('tasks.task.delete', {'taskId': task['task']['id']})

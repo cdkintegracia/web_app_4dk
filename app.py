@@ -182,7 +182,6 @@ def create_task_service(dct):
 
 def update_code_1c(deal_id):
     global logs
-    print(deal_id, 'DEAL ID')
 
     # Получение информации о продукте сделки
 
@@ -204,7 +203,6 @@ def update_code_1c(deal_id):
 
     if product_fields.json()['result']['PROPERTY_139'] is None:
         log = f'NO CODE: DEAL: {deal_id} | {asctime()}'
-        print(log)
         if log not in logs:
             logs.append(log)
         return "NO CODE"
@@ -232,6 +230,8 @@ custom_webhooks = {'create_task_service': create_task_service}
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
+        print(len((logs)))
+        print(type(logs))
         return reversed(logs)
     elif request.method == 'POST':
         if 'event' in request.form:

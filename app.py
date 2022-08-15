@@ -29,7 +29,8 @@ def create_task_service(dct):
 
     """
     for i in dct:
-        print(dct)
+        print(i)
+    exit()
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,

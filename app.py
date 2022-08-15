@@ -298,11 +298,10 @@ custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/tasks.php', methods=['POST', 'HEAD', 'GET'])
 def text():
-    r = requests.post('http://141.8.194.146:5000/tasks.php', data=request.data)
-    print(r)
-    return r
+    php_output = subprocess.check_output(["/usr/bin/php", "/root/flask/tasks.php"])
+    return php_output
 
-@app.route('/bitrix', methods=['POST', 'HEAD', 'GET'])
+@app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'GET':
         return reversed(logs)

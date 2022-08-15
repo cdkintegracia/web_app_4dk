@@ -114,7 +114,7 @@ def create_task_service(dct):
 
     for employee in employees:
         print(employee)
-        employee_name = b.get_all('user.get', {"ID": employee})
+        employee_name = b.get_all('user.get', {"ID": employee})[0]['NAME']
         print(employee_name)
 
 # Словарь возможных функций для вызова из кастомного запроса

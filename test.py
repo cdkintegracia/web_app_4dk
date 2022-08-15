@@ -114,7 +114,7 @@ def create_task_service(dct):
             # 0: ID сделки
             # 1: Название сделки
             # 2: ID компании
-            employees.setdefault(employee, [deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
+            employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID']]])
         else:
             # Добавление ID сделки к значению dct
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID']])

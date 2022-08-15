@@ -152,7 +152,7 @@ def create_task_service(dct):
             }
         }
                       )
-        exit()
+
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:

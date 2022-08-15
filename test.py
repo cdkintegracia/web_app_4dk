@@ -109,7 +109,9 @@ def create_task_service(dct):
     for deal in deals:
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
-            employees.setdefault(employee, [deal['ID'], ])  # Создание ключа с ID сотрудника и значение - ID сделки
+            employees.setdefault(employee, [deal['ID'], deal['TITLE'], deal['COMPANY_ID']])  # Создание ключа с ID сотрудника и значение - ID сделки
+            print(employees)
+            exit()
         else:
             employees[employee].append(deal['ID'])  # Добавление ID сделки к значению dct
 
@@ -123,7 +125,7 @@ def create_task_service(dct):
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
         except:
-            print(employee, employees[employee])
+            print('ERROR: ', employee, employees[employee])
 
         task = b.call('tasks.task.add', {
             'fields': {

@@ -59,6 +59,11 @@ def create_task_service(dct):
     if len(month_end) == 1:
         month_end = '0' + month_end    # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
 
+    if len(month) == 1:  # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
+        month_start = '0' + month_start
+    if len(month) == 1:
+        month_end = '0' + month_end  # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
+
     date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'
 
@@ -128,18 +133,19 @@ def create_task_service(dct):
             """
             if employee in [None, 'None']:
                 continue
-            print(f"Сервисный выезд {employee_name} {months[dct['month']]}")
-            print(f"{str(year)}-{month}-{current_month_days} 19:00:00")
-            b.call('tasks.task.add', {
-                'fields': {
-                    'TITLE': f"Сервисный выезд {employee_name} {months[dct['month']]}",
-                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': '311',
-                    'ALLOW_CHANGE_DEADLINE': 'N',
+            try:
+                b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
+                        'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                        'RESPONSIBLE_ID': '311',
+                        'ALLOW_CHANGE_DEADLINE': 'N',
 
+                    }
                 }
-            }
-                   )
+                       )
+            except:
+                print(f'Не поставилась задача на {employee_name}, {employee}')
             exit()
 
 # Словарь возможных функций для вызова из кастомного запроса

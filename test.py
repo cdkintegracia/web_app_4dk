@@ -52,6 +52,7 @@ def create_task_service(dct):
     else:
         month_start = str(months[dct['month']] - 1)
     day_start = monthrange(year, int(month_start))[1]   # День начала фильтрации
+    current_month_days = monthrange(year, int(month))[1]    # Количество дней в выбранном месяце
 
     if len(month_start) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
         month_start = '0' + month_start
@@ -122,8 +123,21 @@ def create_task_service(dct):
         except:
             print(employee, employees[employee])
         for deal_id in employees[employee]:
-            print('TASKS', deal_id)
+            """
+            Можно потом удалить
+            """
+            if employee in [None, 'None']:
+                continue
+            b.call('tasks.task.add',), {
+                'fields': {
+                    'TITLE': f"Сервисный выезд {employee_name} {months[dct['month']]}",
+                    'DEADLINE': f"{str({year})}-{month}-{current_month_days} 19:00:00",
+                    'RESPONSIBLE_ID': '311',
+                    'ALLOW_CHANGE_DEADLINE': 'N',
 
+                }
+            }
+            exit()
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

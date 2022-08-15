@@ -210,8 +210,9 @@ def update_code_1c(_deal_id):
     code_1c = product_fields.json()['result']['PROPERTY_139']['value']
 
     # Сверка кода 1С продукта и кода в сделке
-    print(deal_id)
+
     deal_1c_code = requests.get(url=f"{webhook}crm.deal.get?id={deal_id}").json()['result']['UF_CRM_1655972832']
+    print(log)
     if deal_1c_code != code_1c:
 
         # Запись кода в сделку

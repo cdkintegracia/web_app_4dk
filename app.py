@@ -298,8 +298,8 @@ custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/tasks.php', methods=['POST', 'HEAD', 'GET'])
 def text():
-    php_output = subprocess.check_output(["/usr/bin/php", "/root/flask/tasks.php", request.data])
-    return php_output
+    php = subprocess.run(["/usr/bin/php", "/root/flask/tasks.php", request.data])
+    return php
 
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():

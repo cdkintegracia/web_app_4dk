@@ -153,8 +153,8 @@ custom_webhooks = {'create_task_service': create_task_service}
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
     if request.method == 'POST':
-        print('POST запрос')
         if 'create_task_service' in request.url:
+            print('da')
             if 'job' in request.args:
                 job = request.args['job']
                 custom_webhooks[job](request.args)

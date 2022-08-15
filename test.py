@@ -56,11 +56,12 @@ def create_task_service(dct):
             'filter': {
                 '>BEGINDATE': date_start,
                 '<BEGINDATE': date_end,
-                '>CLOSEDATE': date_start,
+                '>CLOSEDATE': date_end,
             }
         }
     )
     print(deals_start_in_end_after)
+    print(date_start, date_end)
     exit()
     for deal in deals_start_in_end_after:
         employee = deal['ASSIGNED_BY_ID']   # Ответственный

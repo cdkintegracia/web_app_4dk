@@ -154,20 +154,19 @@ def create_task_service(dct):
                 continue
             # Создание пунктов чек-листы для созданной задачи на сотрудника
 
-            company_name = b.get_all('crm.company.list', {
+            company = b.get_all('crm.company.list', {
                 'filter': {
                     'ID': value[2]
                 }
             })
-            print(company_name)
-            exit()
+
             add_checklist = b.call('task.checklistitem.add', [
                 task['task']['id'], {
-                    'TITLE': 'test',
+                    'TITLE': f"{company['TITLE']} {value['1']}",    # <Название компании> <Название сделки>
                 }
             ], raw=True
                                 )
-            exit()
+        exit()
 
 # Словарь возможных функций для вызова из кастомного запроса
 custom_webhooks = {'create_task_service': create_task_service}

@@ -67,6 +67,9 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
         )
 
     else:   # Если были выбраны сотрудники в параметрах БП
+        id_employees = []
+        for employee in employees:
+            print(employee)
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
 

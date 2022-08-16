@@ -294,6 +294,7 @@ def update_code_1c(deal_id):
 
 
 # Словарь возможных функций для вызова из кастомного запроса
+
 custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/tasks.php', methods=['POST', 'HEAD', 'GET'])
@@ -302,23 +303,30 @@ def text():
     print(request.get_data())
     return 'OK'
 
+
+# Обработчик стандартных вебхуков Битрикс
+
+@app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
+def deafult_webhook():
+    if request.form['event'] == 'ONCRMDEALUPDATE':
+        deal_id = request.form['data[FIELDS][ID]']
+        update_code_1c(deal_id)
+        return 'OK'
+
+
+# Обработчик кастомных вебхуков Битрикс
+
+@app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
+def custom_webhook():
+    job = request.args['job']
+    custom_webhooks[job](request.args)
+    return 'OK'
+
+
 @app.route('/', methods=['POST', 'HEAD', 'GET'])
 def result():
-    if request.method == 'GET':
-        return reversed(logs)
-    elif request.method == 'POST':
-        if 'event' in request.form:
-            if request.form['event'] == 'ONCRMDEALUPDATE':
-                deal_id = request.form['data[FIELDS][ID]']
-                update_code_1c(deal_id)
-        elif 'create_task_service' in request.url:
-            if 'job' in request.args:
-                job = request.args['job']
-                custom_webhooks[job](request.args)
-                return 'OK'
-        return 'OK'
-    else:
-        print('Неизвестный метод запроса Http')
+    return 'OK'
+
 
 
 if __name__ == '__main__':

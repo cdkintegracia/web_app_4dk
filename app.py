@@ -303,7 +303,7 @@ def update_company_value(deal_id):
     bp = b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1031',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentCompany', company_id],
-        'PARAMETERS': {'process': 'Удаление', 'src': deal_id}, 'new_value': 1
+        'PARAMETERS': {'process': 'Удаление', 'src': deal_id, 'new_value': '1'}
     }
            )
 

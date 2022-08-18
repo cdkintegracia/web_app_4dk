@@ -294,22 +294,19 @@ def update_code_1c(deal_id):
 
 
 def update_company_value(deal_id):
-    print(deal_id)
     company = b.get_all(
         'crm.company.list', {
             'filter': {'UF_CRM_1660824010': deal_id}
         }
     )[0]['ID']
-    print(company)
     company_id = f'COMPANY_{company}'
-    print(company_id)
     bp = b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1031',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentCompany', company_id],
-        'PARAMETERS': {'process': 'Удаление', 'src': deal_id}, 'new_value': '1'
+        'PARAMETERS': {'process': 'Удаление', 'src': deal_id}, 'new_value': 1
     }
            )
-    print(bp)
+
 
 # Словарь возможных функций для вызова из кастомного запроса
 

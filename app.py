@@ -301,13 +301,14 @@ def update_company_value(deal_id):
         }
     )[0]['ID']
     company_id = f'COMPANY_{company}'
-    b.call('bizproc.workflow.start', {
+    print(company_id)
+    bp = b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1031',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentCompany', company_id],
         'PARAMETERS': {'process': 'Удаление', 'src': deal_id}, 'new_value': '1'
     }
            )
-
+    print(bp)
 
 # Словарь возможных функций для вызова из кастомного запроса
 

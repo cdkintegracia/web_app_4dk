@@ -297,7 +297,7 @@ def update_company_value(deal_id):
     company = b.get_all(
         'crm.company.list', {
             'select': ['DEAL_ID'],
-            'filter': {'UF_CRM_1660824010': '102857'}
+            'filter': {'UF_CRM_1660824010': deal_id}
         }
     )[0]['ID']
     company_id = f'COMPANY_{company}'

@@ -332,6 +332,7 @@ def default_webhook():
         return 'OK'
     elif request.form['event'] == 'ONCRMDEALDELETE':
         deal_id = request.form['data[FIELDS][ID]']
+        update_company_value(deal_id)
     return 'OK'
 
 # Обработчик кастомных вебхуков Битрикс

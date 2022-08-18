@@ -321,7 +321,7 @@ def default_webhook():
         update_company_value(deal_id)
         print(request.form)
         print(request.data)
-
+    return 'ok'
 
 # Обработчик кастомных вебхуков Битрикс
 

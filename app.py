@@ -294,7 +294,8 @@ def update_code_1c(deal_id):
 
 
 def update_company_value(deal_id):
-    pass
+    deal = b.get_all('crm.deal.list', {'filter': {'ID': deal_id}})
+    print('ID сделки', deal)
 
 
 # Словарь возможных функций для вызова из кастомного запроса
@@ -320,7 +321,6 @@ def default_webhook():
         deal_id = request.form['data[FIELDS][ID]']
         update_company_value(deal_id)
         print(request.form)
-        print(request.data)
     return 'ok'
 
 # Обработчик кастомных вебхуков Битрикс

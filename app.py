@@ -1,10 +1,10 @@
 from time import asctime
-from flask import Flask
-from flask import request
+from flask import Flask, request, render_template
 import requests
 from calendar import monthrange
 from fast_bitrix24 import Bitrix
 import subprocess
+
 
 webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
 b = Bitrix(webhook)
@@ -293,6 +293,10 @@ def update_code_1c(deal_id):
         return 'UPD'
 
 
+def update_company_value(deal_id):
+    pass
+
+
 # Словарь возможных функций для вызова из кастомного запроса
 
 custom_webhooks = {'create_task_service': create_task_service}
@@ -307,11 +311,16 @@ def text():
 # Обработчик стандартных вебхуков Битрикс
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
-def deafult_webhook():
+def default_webhook():
     if request.form['event'] == 'ONCRMDEALUPDATE':
         deal_id = request.form['data[FIELDS][ID]']
         update_code_1c(deal_id)
         return 'OK'
+    elif request.form['event'] == 'ONCRMDEALDELETE':
+        deal_id = request.form['data[FIELDS][ID]']
+        update_company_value(deal_id)
+        print(request.form)
+        print(request.data)
 
 
 # Обработчик кастомных вебхуков Битрикс
@@ -323,9 +332,9 @@ def custom_webhook():
     return 'OK'
 
 
-@app.route('/', methods=['POST', 'HEAD', 'GET'])
-def result():
-    return 'OK'
+@app.route('/', methods=['HEAD', 'GET'])
+def site():
+    return render_template('index.html')
 
 
 

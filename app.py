@@ -6,7 +6,17 @@ from fast_bitrix24 import Bitrix
 import subprocess
 
 
-webhook = 'https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/'
+# Считывание файла authentication.txt
+
+with open('authentication.txt') as file:
+    lines = file.readlines()
+    authentication = {}
+    for line in lines:
+        lst = line.strip(': ')
+        authentication.setdefault(lst[0], lst[1].strip())
+
+
+webhook = authentication['Bitrix']
 b = Bitrix(webhook)
 
 app = Flask(__name__)

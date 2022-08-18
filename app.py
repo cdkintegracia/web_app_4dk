@@ -12,7 +12,7 @@ with open('authentication.txt') as file:
     lines = file.readlines()
     authentication = {}
     for line in lines:
-        lst = line.strip(': ')
+        lst = line.split(': ')
         authentication.setdefault(lst[0], lst[1].strip())
 
 
@@ -351,6 +351,7 @@ def default_webhook():
         deal_id = request.form['data[FIELDS][ID]']
         update_company_value(deal_id)
     return 'OK'
+
 
 # Обработчик кастомных вебхуков Битрикс
 

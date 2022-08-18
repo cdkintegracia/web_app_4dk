@@ -294,8 +294,19 @@ def update_code_1c(deal_id):
 
 
 def update_company_value(deal_id):
-    deal = b.get_all('crm.deal.list', {'filter': {'ID': deal_id}})
-    print('ID сделки', deal)
+    company = b.get_all(
+        'crm.company.list', {
+            'select': ['DEAL_ID'],
+            'filter': {'UF_CRM_1660824010': '102857'}
+        }
+    )[0]['ID']
+    company_id = f'COMPANY_{company}'
+    b.call('bizproc.workflow.start', {
+        'TEMPLATE_ID': '1031',
+        'DOCUMENT_ID': ['crm', 'CCrmDocumentCompany', company_id],
+        'PARAMETERS': {'process': 'Удаление', 'src': deal_id}, 'new_value': '1'
+    }
+           )
 
 
 # Словарь возможных функций для вызова из кастомного запроса
@@ -319,9 +330,7 @@ def default_webhook():
         return 'OK'
     elif request.form['event'] == 'ONCRMDEALDELETE':
         deal_id = request.form['data[FIELDS][ID]']
-        update_company_value(deal_id)
-        print(request.form)
-    return 'ok'
+    return 'OK'
 
 # Обработчик кастомных вебхуков Битрикс
 

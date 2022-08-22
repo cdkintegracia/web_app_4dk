@@ -25,6 +25,7 @@ logs = []
 
 
 def get_deals_for_task_service(date_start, date_end, type_deals, employees):
+    print(employees)
     """
     Функция, которая вызывается из функции create_task_service
 
@@ -331,13 +332,6 @@ def update_company_value(deal_id):
 # Словарь возможных функций для вызова из кастомного запроса
 
 custom_webhooks = {'create_task_service': create_task_service}
-
-@app.route('/tasks.php', methods=['POST', 'HEAD', 'GET'])
-def text():
-    php = subprocess.run(["/usr/bin/php", "/root/flask/tasks.php", request.get_data()])
-    print(request.get_data())
-    return 'OK'
-
 
 # Обработчик стандартных вебхуков Битрикс
 

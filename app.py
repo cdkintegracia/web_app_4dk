@@ -3,8 +3,7 @@ from flask import Flask, request, render_template
 import requests
 from calendar import monthrange
 from fast_bitrix24 import Bitrix
-import subprocess
-
+from flask_sqlalchemy import SQLAlchemy
 
 # Считывание файла authentication.txt
 
@@ -20,8 +19,18 @@ webhook = authentication['Bitrix']
 b = Bitrix(webhook)
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+db = SQLAlchemy(app)
 
 logs = []
+
+class MoneyBox(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    goal = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<User %r>' % self.email
 
 
 def get_deals_for_task_service(date_start, date_end, type_deals, employees):
@@ -355,6 +364,7 @@ def custom_webhook():
 
 @app.route('/', methods=['HEAD', 'GET'])
 def site():
+
     return render_template('index.html')
 
 

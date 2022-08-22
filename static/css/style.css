@@ -1,3 +1,4 @@
+@import "bootstrap";
 body {
     color: blue;
 }
@@ -5,4 +6,8 @@ body {
 .header {
     color: rgb(75, 174, 255);
     font-size: 50px;
+}
+
+.btn-outline-primary {
+background-color: black;
 }

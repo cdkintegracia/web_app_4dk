@@ -60,6 +60,8 @@ def update_call_statistic(client_number, employee_number):
             }
         }
                                   )
+        print('----------------------------------------------------')
+        print(list_elements)
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
         if len(list_elements) == 0:

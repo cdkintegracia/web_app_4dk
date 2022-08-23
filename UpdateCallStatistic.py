@@ -69,7 +69,7 @@ def update_call_statistic(client_number, employee_number):
                 'field': {
                     'NAME': current_date,
                     'PROPERTY_1297': '1',
-                    'PROPERTY_1299': company['ID']
+                    'PROPERTY_1299': company['COMPANY_ID']
                 }
             }
                    )

@@ -19,7 +19,6 @@ employee_numbers = [
 ]
 
 def update_call_statistic(req):
-    print(req)
     if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers:
         return
 
@@ -69,7 +68,7 @@ def update_call_statistic(req):
                 'ELEMENT_CODE': time(),
                 'fields': {
                     'NAME': current_date,
-                    'PROPERTY_1297': '1',
+                    'PROPERTY_1297': call_duration,
                     'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }
@@ -92,3 +91,6 @@ def update_call_statistic(req):
                 }
             }
                    )
+            print('----------------------------')
+            print(call_duration)
+            print('-----------------------------------')

@@ -4,12 +4,6 @@ from time import strftime
 from time import time
 
 
-"""
-call_types:
-1 - входящий
-2 - исходящий
-"""
-
 # Считывание файла authentication.txt
 
 webhook = authentication('Bitrix')
@@ -40,8 +34,6 @@ def update_call_statistic(client_number, employee_number):
         '12': 'Декабрь'
     }
     current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
-
-    # Элементы списка
 
     # ID контакта через номер телефона
 
@@ -76,3 +68,20 @@ def update_call_statistic(client_number, employee_number):
                 }
             }
                    )
+
+        # Если найден элемент - он обновляется
+
+        else:
+            for element in list_elements:
+                print(element)
+                b.call('lists.element.update', {
+                    'IBLOCK_TYPE_ID': 'lists',
+                    'IBLOCK_ID': '175',
+                    'ELEMENT_CODE': element['ELEMENT_CODE'],
+                    'fields': {
+                        'NAME': element['NAME'],
+                        'PROPERTY_1297': '2',
+                        'PROPERTY_1299': company['COMPANY_ID'],
+                    }
+                }
+                       )

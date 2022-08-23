@@ -10,7 +10,8 @@ b = Bitrix(webhook)
 
 logs = []
 
-def update_code_1c(deal_id):
+def update_code_1c(req):
+    deal_id = req.form['data[FIELDS][ID]']
     global logs
 
     # Получение информации о продукте сделки

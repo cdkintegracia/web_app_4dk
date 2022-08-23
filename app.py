@@ -23,26 +23,7 @@ default_webhooks = {
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
-    print(request.form['event'])
-
-    # Обновление сделки
-
-    if request.form['event'] == 'ONCRMDEALUPDATE':
-        deal_id = request.form['data[FIELDS][ID]']
-        update_code_1c(deal_id)
-        return 'OK'
-
-    # Удаление сделки
-
-    elif request.form['event'] == 'ONCRMDEALDELETE':
-        deal_id = request.form['data[FIELDS][ID]']
-        update_company_value(deal_id)
-
-    # Завершение звонка
-
-    elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
-        update_call_statistic(request.form)
-
+    default_webhooks[request.form['event']](request.form)
     return 'OK'
 
 

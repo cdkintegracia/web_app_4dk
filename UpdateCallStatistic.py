@@ -23,7 +23,7 @@ employee_numbers = [
 ]
 
 def update_call_statistic(req):
-    if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers:
+    if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers and req['data[CALL_FAILED_CODE'] == '200':
         print('--------------------------------------------------')
         print(f'Неподходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
         print('--------------------------------------------------')

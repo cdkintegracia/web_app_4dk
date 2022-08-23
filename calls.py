@@ -1,0 +1,2 @@
+def calls():
+    print('call')

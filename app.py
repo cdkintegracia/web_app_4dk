@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 from TaskService import create_task_service
 from UpdateCompanyValue import update_company_value
 from UpdateCode1C import update_code_1c
+from calls import calls
 
 
 app = Flask(__name__)
@@ -13,7 +14,7 @@ logs = []
 
 # Словарь возможных функций для вызова из кастомного запроса
 
-custom_webhooks = {'create_task_service': create_task_service}
+custom_webhooks = {'create_task_service': create_task_service, 'calls': calls}
 
 # Обработчик стандартных вебхуков Битрикс
 

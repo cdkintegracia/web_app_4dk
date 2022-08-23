@@ -19,7 +19,7 @@ employee_numbers = [
 ]
 
 def update_call_statistic(req):
-    print('Заход в функцию')
+    print(req)
     if req['data[CALL_TYPE]'] not in ['1']:
         return
 
@@ -61,7 +61,6 @@ def update_call_statistic(req):
                                   )
 
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
-        print('Новый элемент')
         if len(list_elements) == 0:
             b.call('lists.element.add', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -78,11 +77,9 @@ def update_call_statistic(req):
         # Если найден элемент - он обновляется
 
         else:
-            print('Старый элемент')
             for element in list_elements:
                 for field_value in element['PROPERTY_1297']:
-                    element_duration = field_value
-            print(element)
+                    element_duration = element[field_value]
             b.call('lists.element.update', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',

@@ -8,11 +8,14 @@ from UpdateCallStatistic import update_call_statistic
 app = Flask(__name__)
 
 
-# Словарь возможных функций для вызова из кастомного запроса
+# Словарь функций для вызова из кастомного запроса
 
 custom_webhooks = {
     'create_task_service': create_task_service,
 }
+
+# Словарь функций для вызова из запроса с стандартным методом
+
 default_webhooks = {
     'ONCRMDEALUPDATE': update_code_1c,
     'ONCRMDEALDELETE': update_company_value,
@@ -23,9 +26,9 @@ default_webhooks = {
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
+    print(request.form)
     default_webhooks[request.form['event']](request.form)
     return 'OK'
-
 
 # Обработчик кастомных вебхуков Битрикс
 

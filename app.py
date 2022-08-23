@@ -17,18 +17,29 @@ custom_webhooks = {'create_task_service': create_task_service}
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
+
+    # Обновление сделки
+
     if request.form['event'] == 'ONCRMDEALUPDATE':
         deal_id = request.form['data[FIELDS][ID]']
         update_code_1c(deal_id)
         return 'OK'
+
+    # Удаление сделки
+
     elif request.form['event'] == 'ONCRMDEALDELETE':
         deal_id = request.form['data[FIELDS][ID]']
         update_company_value(deal_id)
+
+    # Завершение звонка
+
     elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
         client_number = request.form['data[PHONE_NUMBER]']
         employee_number = request.form['data[PORTAL_NUMBER]']
         if request.form['data[CALL_TYPE]'] in ['1']:
+            print(request.form)
             update_call_statistic(client_number, employee_number)
+
     return 'OK'
 
 

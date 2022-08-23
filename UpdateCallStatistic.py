@@ -89,8 +89,8 @@ def update_call_statistic(req):
 
         else:
             for element in list_elements:
-                for field_value in element['PROPERTY_1297']:
-                    element_duration = element['PROPERTY_1297'][field_value]
+                for field_value in element['PROPERTY_1303']:
+                    element_duration = element['PROPERTY_1303'][field_value]
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 

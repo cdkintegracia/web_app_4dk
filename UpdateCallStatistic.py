@@ -1,6 +1,7 @@
 from authentication import authentication
 from fast_bitrix24 import Bitrix
 from time import strftime
+from time import time
 
 
 """
@@ -67,10 +68,11 @@ def update_call_statistic(client_number, employee_number):
             b.call('lists.element.add', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',
+                'ELEMENT_CODE': time(),
                 'fields': {
                     'NAME': current_date,
                     'PROPERTY_1297': '1',
-                    'PROPERTY_1299': company['COMPANY_ID']
+                    'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }
                    )

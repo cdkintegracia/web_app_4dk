@@ -3,7 +3,8 @@ from fast_bitrix24 import Bitrix
 from time import strftime
 from time import time
 from time import gmtime
-
+from time import strptime
+from datetime import timedelta
 
 # Считывание файла authentication.txt
 
@@ -18,6 +19,7 @@ employee_numbers = [
     '+79991174812',     # Мария Боцула
     '+79522806626',     # МОЙ
     '+79991174813',     # Любовь Корсунова
+    '+79991174826',     # Борис
 ]
 
 def update_call_statistic(req):
@@ -30,8 +32,8 @@ def update_call_statistic(req):
 
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']
-    call_duration = gmtime(req['data[CALL_DURATION]'])
-    call_duration = strftime("%H:%M:%S", call_duration)
+    call_duration_seconds = req['data[CALL_DURATION]']
+    call_duration = gmtime(int(req['data[CALL_DURATION]']))
     month_string = {
         '01': 'Январь',
         '02': 'Февраль',
@@ -75,7 +77,7 @@ def update_call_statistic(req):
                 'ELEMENT_CODE': time(),
                 'fields': {
                     'NAME': current_date,
-                    'PROPERTY_1297': call_duration,
+                    'PROPERTY_1297': strftime("%H:%M:%S", call_duration),
                     'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }
@@ -87,17 +89,22 @@ def update_call_statistic(req):
             for element in list_elements:
                 for field_value in element['PROPERTY_1297']:
                     element_duration = element['PROPERTY_1297'][field_value]
+            element_time = strptime(element_duration, "%H:%M:%S")
+            element_seconds = timedelta(
+                hours=element_time.tm_hour,
+                minutes=element_time.tm_min,
+                seconds=element_time.tm_sec
+            ).seconds
+            new_seconds = int(element_seconds) + int(call_duration_seconds)
+            new_time = gmtime(new_seconds)
             b.call('lists.element.update', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',
                 'ELEMENT_ID': element['ID'],
                 'fields': {
                     'NAME': element['NAME'],
-                    'PROPERTY_1297': str(int(element_duration) + int(call_duration)),
+                    'PROPERTY_1297': strftime("%H:%M:%S", new_time),
                     'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }
                    )
-            print('----------------------------')
-            print(call_duration)
-            print('-----------------------------------')

@@ -35,7 +35,7 @@ def update_call_statistic(req):
         return
     print('--------------------------------------------------')
     print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
-    print(req['data[PORTAL_NUMBER]'] in employee_numbers, req['data[CALL_FAILED_CODE]'] == '200')
+    print(req['data[CALL_TYPE]'] not in ['1', ] and req['data[PORTAL_NUMBER]'] not in employee_numbers and req['data[CALL_FAILED_CODE'] != '200')
     print('--------------------------------------------------')
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']

@@ -27,7 +27,8 @@ def default_webhook():
     elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
         client_number = request.form['data[PHONE_NUMBER]']
         employee_number = request.form['data[PORTAL_NUMBER]']
-        print(client_number, employee_number)
+        update_call_statistic(client_number, employee_number)
+        print(request.form)
     return 'OK'
 
 

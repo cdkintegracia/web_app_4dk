@@ -14,7 +14,7 @@ logs = []
 
 # Словарь возможных функций для вызова из кастомного запроса
 
-custom_webhooks = {'create_task_service': create_task_service, 'calls': calls}
+custom_webhooks = {'create_task_service': create_task_service}
 
 # Обработчик стандартных вебхуков Битрикс
 
@@ -27,6 +27,8 @@ def default_webhook():
     elif request.form['event'] == 'ONCRMDEALDELETE':
         deal_id = request.form['data[FIELDS][ID]']
         update_company_value(deal_id)
+    elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
+        calls()
     return 'OK'
 
 

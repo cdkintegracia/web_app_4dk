@@ -2,14 +2,11 @@ from flask import Flask, request, render_template
 from TaskService import create_task_service
 from UpdateCompanyValue import update_company_value
 from UpdateCode1C import update_code_1c
-from calls import calls
+from UpdateCallStatistic import update_call_statistic
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.sqlite3'
-
-
-logs = []
 
 
 # Словарь возможных функций для вызова из кастомного запроса
@@ -28,7 +25,9 @@ def default_webhook():
         deal_id = request.form['data[FIELDS][ID]']
         update_company_value(deal_id)
     elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
-        print(request.form)
+        client_number = request.form['data[PHONE_NUMBER]']
+        employee_number = request.form['data[PORTAL_NUMBER]']
+        print(client_number, employee_number)
     return 'OK'
 
 

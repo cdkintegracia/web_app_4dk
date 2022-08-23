@@ -8,6 +8,7 @@ from time import asctime
 webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
+logs = []
 
 def update_code_1c(deal_id):
     global logs

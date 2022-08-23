@@ -1,2 +1,0 @@
-def calls():
-    print('call')

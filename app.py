@@ -6,17 +6,24 @@ from UpdateCallStatistic import update_call_statistic
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.sqlite3'
 
 
 # Словарь возможных функций для вызова из кастомного запроса
 
-custom_webhooks = {'create_task_service': create_task_service}
+custom_webhooks = {
+    'create_task_service': create_task_service,
+}
+default_webhooks = {
+    'ONCRMDEALUPDATE': update_code_1c,
+    'ONCRMDEALDELETE': update_company_value,
+    'ONVOXIMPLANTCALLEND': update_call_statistic,
+}
 
 # Обработчик стандартных вебхуков Битрикс
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
+    print(request.form)
 
     # Обновление сделки
 
@@ -34,11 +41,7 @@ def default_webhook():
     # Завершение звонка
 
     elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
-        client_number = request.form['data[PHONE_NUMBER]']
-        employee_number = request.form['data[PORTAL_NUMBER]']
-        if request.form['data[CALL_TYPE]'] in ['1']:
-            print(request.form)
-            update_call_statistic(client_number, employee_number)
+        update_call_statistic(request.form)
 
     return 'OK'
 
@@ -54,7 +57,6 @@ def custom_webhook():
 
 @app.route('/', methods=['HEAD', 'GET'])
 def site():
-
     return render_template('index.html')
 
 

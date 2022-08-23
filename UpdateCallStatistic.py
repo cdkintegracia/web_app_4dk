@@ -18,7 +18,12 @@ employee_numbers = [
     '+79522806626',     # МОЙ
 ]
 
-def update_call_statistic(client_number, employee_number):
+def update_call_statistic(req):
+    if req['data[CALL_TYPE]'] != ['1']:
+        return
+
+    client_number = req['data[PHONE_NUMBER]']
+    employee_number = req['data[PORTAL_NUMBER]']
     month_string = {
         '01': 'Январь',
         '02': 'Февраль',
@@ -73,15 +78,17 @@ def update_call_statistic(client_number, employee_number):
 
         else:
             for element in list_elements:
-                print(element)
-                b.call('lists.element.update', {
-                    'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '175',
-                    'ELEMENT_CODE': element['ELEMENT_CODE'],
-                    'fields': {
-                        'NAME': element['NAME'],
-                        'PROPERTY_1297': '2',
-                        'PROPERTY_1299': company['COMPANY_ID'],
-                    }
+                for field_value in element['PROPERTY_1297']:
+                    element_duration = field_value
+            print(element)
+            b.call('lists.element.update', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '175',
+                'ELEMENT_CODE': element['ELEMENT_CODE'],
+                'fields': {
+                    'NAME': element['NAME'],
+                    'PROPERTY_1297': str(int(element_duration) + int(1)),
+                    'PROPERTY_1299': company['COMPANY_ID'],
                 }
-                       )
+            }
+                   )

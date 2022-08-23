@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/UpdateCode1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/UpdateCode1C.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UpdateCompanyValue.py" beforeDir="false" afterPath="$PROJECT_DIR$/UpdateCompanyValue.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UpdateCallStatistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/UpdateCallStatistic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -244,7 +243,7 @@
       <workItem from="1661167730813" duration="1790000" />
       <workItem from="1661176714530" duration="6809000" />
       <workItem from="1661238967040" duration="187000" />
-      <workItem from="1661248421982" duration="10357000" />
+      <workItem from="1661248421982" duration="10716000" />
     </task>
     <servers />
   </component>

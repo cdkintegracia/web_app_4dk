@@ -86,6 +86,7 @@ def update_call_statistic(req):
             b.call('lists.element.update', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',
+                'ELEMENT_ID': element['ID'],
                 'fields': {
                     'NAME': element['NAME'],
                     'PROPERTY_1297': str(int(element_duration) + int(1)),

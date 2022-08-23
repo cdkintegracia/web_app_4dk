@@ -2,6 +2,7 @@ from authentication import authentication
 from fast_bitrix24 import Bitrix
 from time import strftime
 from time import time
+from time import gmtime
 
 
 # Считывание файла authentication.txt
@@ -20,6 +21,7 @@ employee_numbers = [
 ]
 
 def update_call_statistic(req):
+    print(req)
     if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers:
         print('--------------------------------------------------')
         print(f'Неподходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
@@ -28,7 +30,8 @@ def update_call_statistic(req):
 
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']
-    call_duration = req['data[CALL_DURATION]']
+    call_duration = gmtime(req['data[CALL_DURATION]'])
+    call_duration = strftime("%H:%M:%S", call_duration)
     month_string = {
         '01': 'Январь',
         '02': 'Февраль',

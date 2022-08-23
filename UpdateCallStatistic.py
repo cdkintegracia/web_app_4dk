@@ -51,6 +51,7 @@ def update_call_statistic(client_number, employee_number):
 
     companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
     for company in companies:
+        print(company)
         list_elements = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '175',

@@ -28,7 +28,6 @@ def default_webhook():
         client_number = request.form['data[PHONE_NUMBER]']
         employee_number = request.form['data[PORTAL_NUMBER]']
         if request.form['data[CALL_TYPE]'] in ['1']:
-            print(request.form['data[CALL_TYPE]'])
             update_call_statistic(client_number, employee_number)
     return 'OK'
 

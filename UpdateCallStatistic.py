@@ -25,6 +25,7 @@ def update_call_statistic(req):
 
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']
+    call_duration = req['data[CALL_DURATION]']
     month_string = {
         '01': 'Январь',
         '02': 'Февраль',
@@ -78,7 +79,6 @@ def update_call_statistic(req):
 
         else:
             for element in list_elements:
-                print(element)
                 for field_value in element['PROPERTY_1297']:
                     element_duration = element['PROPERTY_1297'][field_value]
             b.call('lists.element.update', {
@@ -87,7 +87,7 @@ def update_call_statistic(req):
                 'ELEMENT_ID': element['ID'],
                 'fields': {
                     'NAME': element['NAME'],
-                    'PROPERTY_1297': str(int(element_duration) + int(1)),
+                    'PROPERTY_1297': str(int(element_duration) + int(call_duration)),
                     'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }

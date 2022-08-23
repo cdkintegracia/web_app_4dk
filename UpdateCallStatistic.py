@@ -23,13 +23,14 @@ employee_numbers = [
 ]
 
 def update_call_statistic(req):
-    print(req)
     if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers:
         print('--------------------------------------------------')
         print(f'Неподходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
         print('--------------------------------------------------')
         return
-
+    print('--------------------------------------------------')
+    print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
+    print('--------------------------------------------------')
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']
     call_duration_seconds = req['data[CALL_DURATION]']
@@ -70,6 +71,7 @@ def update_call_statistic(req):
                                   )
 
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
+
         if len(list_elements) == 0:
             b.call('lists.element.add', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -89,6 +91,9 @@ def update_call_statistic(req):
             for element in list_elements:
                 for field_value in element['PROPERTY_1297']:
                     element_duration = element['PROPERTY_1297'][field_value]
+
+            # Форматирование времени в секунды и суммирование с длительностью звонка
+
             element_time = strptime(element_duration, "%H:%M:%S")
             element_seconds = timedelta(
                 hours=element_time.tm_hour,
@@ -97,6 +102,7 @@ def update_call_statistic(req):
             ).seconds
             new_seconds = int(element_seconds) + int(call_duration_seconds)
             new_time = gmtime(new_seconds)
+
             b.call('lists.element.update', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',

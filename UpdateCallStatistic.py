@@ -24,11 +24,6 @@ employee_numbers = [
 ]
 
 def update_call_statistic(client_number, employee_number):
-    print(client_number, employee_number)
-    if employee_number in employee_numbers:
-        print('----------------------------------------------------')
-        print('ЗВОНОК В ФИЛТРЕ')
-        print('----------------------------------------------------')
     month_string = {
         '01': 'Январь',
         '02': 'Февраль',
@@ -45,6 +40,8 @@ def update_call_statistic(client_number, employee_number):
     }
     current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
 
+    # Элементы списка
+
     # ID контакта через номер телефона
 
     contact = b.get_all('telephony.externalCall.searchCrmEntities', {'PHONE_NUMBER': client_number})
@@ -54,4 +51,25 @@ def update_call_statistic(client_number, employee_number):
 
     companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
     for company in companies:
-        pass
+        list_elements = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '175',
+            'filter': {
+                'PROPERTY_1299': company['ID'],
+                'NAME': current_date,
+            }
+        }
+                                  )
+        # Если нет элемента списка для компании на текущую дату - создается новый элемент
+
+        if len(list_elements) == 0:
+            b.call('lists.element.add', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '175',
+                'field': {
+                    'NAME': current_date,
+                    'PROPERTY_1297': '1',
+                    'PROPERTY_1299': company['ID']
+                }
+            }
+                   )

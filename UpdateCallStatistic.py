@@ -20,7 +20,7 @@ employee_numbers = [
 
 def update_call_statistic(req):
     print(req)
-    if req['data[CALL_TYPE]'] not in ['1']:
+    if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers:
         return
 
     client_number = req['data[PHONE_NUMBER]']
@@ -78,6 +78,7 @@ def update_call_statistic(req):
 
         else:
             for element in list_elements:
+                print(element)
                 for field_value in element['PROPERTY_1297']:
                     element_duration = element[field_value]
             b.call('lists.element.update', {

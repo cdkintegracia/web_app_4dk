@@ -28,100 +28,99 @@ for employee in allowed_departments:
     allowed_numbers.append(employee['WORK_PHONE'])
 
 def update_call_statistic(req):
-    if req['data[CALL_TYPE]'] not in ['1', ] and req['data[PORTAL_NUMBER]'] not in employee_numbers and req['data[CALL_FAILED_CODE'] != '200':
+    if all(req['data[CALL_TYPE]'] not in ['1', ] and req['data[PORTAL_NUMBER]'] not in employee_numbers and req['data[CALL_FAILED_CODE'] != '200'):
         print('--------------------------------------------------')
         print(f'Неподходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
         print('--------------------------------------------------')
         return
-    else:
-        print('--------------------------------------------------')
-        print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
-        print(req['data[CALL_TYPE]'] not in ['1', ] and req['data[PORTAL_NUMBER]'] not in employee_numbers and req['data[CALL_FAILED_CODE'] != '200')
-        print('--------------------------------------------------')
-        client_number = req['data[PHONE_NUMBER]']
-        employee_number = req['data[PORTAL_NUMBER]']
-        call_duration_seconds = req['data[CALL_DURATION]']
-        call_duration = gmtime(int(req['data[CALL_DURATION]']))
-        month_string = {
-            '01': 'Январь',
-            '02': 'Февраль',
-            '03': 'Март',
-            '04': 'Апрель',
-            '05': 'Май',
-            '06': 'Июнь',
-            '07': 'Июль',
-            '08': 'Август',
-            '09': 'Сентябрь',
-            '10': 'Октябрь',
-            '11': 'Ноябрь',
-            '12': 'Декабрь'
+    print('--------------------------------------------------')
+    print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
+    print(req['data[CALL_TYPE]'] not in ['1', ] and req['data[PORTAL_NUMBER]'] not in employee_numbers and req['data[CALL_FAILED_CODE'] != '200')
+    print('--------------------------------------------------')
+    client_number = req['data[PHONE_NUMBER]']
+    employee_number = req['data[PORTAL_NUMBER]']
+    call_duration_seconds = req['data[CALL_DURATION]']
+    call_duration = gmtime(int(req['data[CALL_DURATION]']))
+    month_string = {
+        '01': 'Январь',
+        '02': 'Февраль',
+        '03': 'Март',
+        '04': 'Апрель',
+        '05': 'Май',
+        '06': 'Июнь',
+        '07': 'Июль',
+        '08': 'Август',
+        '09': 'Сентябрь',
+        '10': 'Октябрь',
+        '11': 'Ноябрь',
+        '12': 'Декабрь'
+    }
+    current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
+
+    # ID контакта через номер телефона
+
+    contact = b.get_all('telephony.externalCall.searchCrmEntities', {'PHONE_NUMBER': client_number})
+    contact_id = contact[0]['CRM_ENTITY_ID']
+
+    # Компании, связанные с контактом | заполнение УС "Статистика звонков"
+
+    companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
+    for company in companies:
+        list_elements = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '175',
+            'filter': {
+                'PROPERTY_1299': company['COMPANY_ID'],
+                'NAME': current_date,
+            }
         }
-        current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
+                                  )
 
-        # ID контакта через номер телефона
+        # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
-        contact = b.get_all('telephony.externalCall.searchCrmEntities', {'PHONE_NUMBER': client_number})
-        contact_id = contact[0]['CRM_ENTITY_ID']
-
-        # Компании, связанные с контактом | заполнение УС "Статистика звонков"
-
-        companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
-        for company in companies:
-            list_elements = b.get_all('lists.element.get', {
+        if len(list_elements) == 0:
+            b.call('lists.element.add', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',
-                'filter': {
-                    'PROPERTY_1299': company['COMPANY_ID'],
-                    'NAME': current_date,
+                'ELEMENT_CODE': time(),
+                'fields': {
+                    'NAME': current_date,   # Название == месяц и год
+                    'PROPERTY_1303': strftime("%H:%M:%S", call_duration),   # Продолжительность звонка
+                    'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
+                    'PROPERTY_1305': '1',    # Количество звонков
                 }
             }
-                                      )
+                   )
 
-            # Если нет элемента списка для компании на текущую дату - создается новый элемент
+        # Если найден элемент - он обновляется
 
-            if len(list_elements) == 0:
-                b.call('lists.element.add', {
-                    'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '175',
-                    'ELEMENT_CODE': time(),
-                    'fields': {
-                        'NAME': current_date,   # Название == месяц и год
-                        'PROPERTY_1303': strftime("%H:%M:%S", call_duration),   # Продолжительность звонка
-                        'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
-                        'PROPERTY_1305': '1',    # Количество звонков
-                    }
+        else:
+            for element in list_elements:
+                for field_value in element['PROPERTY_1303']:
+                    element_duration = element['PROPERTY_1303'][field_value]
+                for field_value in element['PROPERTY_1305']:
+                    element_call_count = element['PROPERTY_1305'][field_value]
+
+            # Форматирование времени в секунды и суммирование с длительностью звонка
+
+            element_time = strptime(element_duration, "%H:%M:%S")
+            element_seconds = timedelta(
+                hours=element_time.tm_hour,
+                minutes=element_time.tm_min,
+                seconds=element_time.tm_sec
+            ).seconds
+            new_seconds = int(element_seconds) + int(call_duration_seconds)
+            new_time = gmtime(new_seconds)
+
+            b.call('lists.element.update', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '175',
+                'ELEMENT_ID': element['ID'],
+                'fields': {
+                    'NAME': element['NAME'],
+                    'PROPERTY_1303': strftime("%H:%M:%S", new_time),    # Продолжительность звонков
+                    'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
+                    'PROPERTY_1305': str(int(element_call_count) + 1)   # Количество звонков
                 }
-                       )
-
-            # Если найден элемент - он обновляется
-
-            else:
-                for element in list_elements:
-                    for field_value in element['PROPERTY_1303']:
-                        element_duration = element['PROPERTY_1303'][field_value]
-                    for field_value in element['PROPERTY_1305']:
-                        element_call_count = element['PROPERTY_1305'][field_value]
-
-                # Форматирование времени в секунды и суммирование с длительностью звонка
-
-                element_time = strptime(element_duration, "%H:%M:%S")
-                element_seconds = timedelta(
-                    hours=element_time.tm_hour,
-                    minutes=element_time.tm_min,
-                    seconds=element_time.tm_sec
-                ).seconds
-                new_seconds = int(element_seconds) + int(call_duration_seconds)
-                new_time = gmtime(new_seconds)
-
-                b.call('lists.element.update', {
-                    'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '175',
-                    'ELEMENT_ID': element['ID'],
-                    'fields': {
-                        'NAME': element['NAME'],
-                        'PROPERTY_1303': strftime("%H:%M:%S", new_time),    # Продолжительность звонков
-                        'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
-                        'PROPERTY_1305': str(int(element_call_count) + 1)   # Количество звонков
-                    }
-                }
-                       )
+            }
+                   )

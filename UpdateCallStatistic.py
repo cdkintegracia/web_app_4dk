@@ -60,15 +60,14 @@ def update_call_statistic(client_number, employee_number):
             }
         }
                                   )
-        print('----------------------------------------------------')
-        print(list_elements)
+
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
         if len(list_elements) == 0:
             b.call('lists.element.add', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',
-                'field': {
+                'fields': {
                     'NAME': current_date,
                     'PROPERTY_1297': '1',
                     'PROPERTY_1299': company['COMPANY_ID']

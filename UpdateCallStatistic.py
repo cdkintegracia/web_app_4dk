@@ -24,6 +24,7 @@ employee_numbers = [
 ]
 
 def update_call_statistic(client_number, employee_number):
+    print(client_number, employee_number)
     if employee_number in employee_numbers:
         print('----------------------------------------------------')
         print('ЗВОНОК В ФИЛТРЕ')

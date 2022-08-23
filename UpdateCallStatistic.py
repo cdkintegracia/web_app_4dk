@@ -30,6 +30,7 @@ def update_call_statistic(req):
         return
     print('--------------------------------------------------')
     print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
+    print(req)
     print('--------------------------------------------------')
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']

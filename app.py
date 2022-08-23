@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template
-from flask_sqlalchemy import SQLAlchemy
 from TaskService import create_task_service
 from UpdateCompanyValue import update_company_value
 from UpdateCode1C import update_code_1c
@@ -7,19 +6,9 @@ from UpdateCode1C import update_code_1c
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.sqlite3'
-db = SQLAlchemy(app)
+
 
 logs = []
-
-class MoneyBox(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    goal = db.Column(db.Integer)
-
-    def __repr__(self):
-        return '<User %r>' % self.email
-
-db.create_all()
 
 
 # Словарь возможных функций для вызова из кастомного запроса

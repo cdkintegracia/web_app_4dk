@@ -16,10 +16,14 @@ employee_numbers = [
     '+79991174818',     # Ольга Цветкова
     '+79991174812',     # Мария Боцула
     '+79522806626',     # МОЙ
+    '+79991174813',     # Любовь Корсунова
 ]
 
 def update_call_statistic(req):
     if req['data[CALL_TYPE]'] not in ['1'] and req['data[PORTAL_NUMBER]'] not in employee_numbers:
+        print('--------------------------------------------------')
+        print(f'Неподходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
+        print('--------------------------------------------------')
         return
 
     client_number = req['data[PHONE_NUMBER]']

@@ -27,8 +27,8 @@ def default_webhook():
     elif request.form['event'] == 'ONCRMDEALDELETE':
         deal_id = request.form['data[FIELDS][ID]']
         update_company_value(deal_id)
-    elif request.form['event'] == 'ONVOXIMPLANTCALLEND':
-        calls()
+    else:
+        print(request.form)
     return 'OK'
 
 

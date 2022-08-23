@@ -80,6 +80,7 @@ def update_call_statistic(req):
             for element in list_elements:
                 print(element)
                 for field_value in element['PROPERTY_1297']:
+                    print(field_value)
                     element_duration = element[field_value]
             b.call('lists.element.update', {
                 'IBLOCK_TYPE_ID': 'lists',

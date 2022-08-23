@@ -79,7 +79,7 @@ def update_call_statistic(req):
                 'ELEMENT_CODE': time(),
                 'fields': {
                     'NAME': current_date,
-                    'PROPERTY_1297': strftime("%H:%M:%S", call_duration),
+                    'PROPERTY_1303': strftime("%H:%M:%S", call_duration),
                     'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }
@@ -109,7 +109,7 @@ def update_call_statistic(req):
                 'ELEMENT_ID': element['ID'],
                 'fields': {
                     'NAME': element['NAME'],
-                    'PROPERTY_1297': strftime("%H:%M:%S", new_time),
+                    'PROPERTY_1303': strftime("%H:%M:%S", new_time),
                     'PROPERTY_1299': company['COMPANY_ID'],
                 }
             }

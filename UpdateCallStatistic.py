@@ -82,6 +82,7 @@ def update_call_statistic(req):
                     'NAME': current_date,
                     'PROPERTY_1303': strftime("%H:%M:%S", call_duration),
                     'PROPERTY_1299': company['COMPANY_ID'],
+                    'PROPERTY_1305': '1'
                 }
             }
                    )
@@ -92,6 +93,8 @@ def update_call_statistic(req):
             for element in list_elements:
                 for field_value in element['PROPERTY_1303']:
                     element_duration = element['PROPERTY_1303'][field_value]
+                for field_value in element['PROPERTY_1305']:
+                    element_call_count = element['PROPERTY_1305'][field_value]
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -112,6 +115,7 @@ def update_call_statistic(req):
                     'NAME': element['NAME'],
                     'PROPERTY_1303': strftime("%H:%M:%S", new_time),
                     'PROPERTY_1299': company['COMPANY_ID'],
+                    'PROPERTY_1305': str(int(element_call_count) + 1)
                 }
             }
                    )

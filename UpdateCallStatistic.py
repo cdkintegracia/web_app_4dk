@@ -30,6 +30,7 @@ def update_call_statistic(req):
         return
     print('--------------------------------------------------')
     print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
+    print(req['data[PORTAL_NUMBER]'] in employee_numbers)
     print(req)
     print('--------------------------------------------------')
     client_number = req['data[PHONE_NUMBER]']
@@ -79,10 +80,10 @@ def update_call_statistic(req):
                 'IBLOCK_ID': '175',
                 'ELEMENT_CODE': time(),
                 'fields': {
-                    'NAME': current_date,
-                    'PROPERTY_1303': strftime("%H:%M:%S", call_duration),
-                    'PROPERTY_1299': company['COMPANY_ID'],
-                    'PROPERTY_1305': '1'
+                    'NAME': current_date,   # Название == месяц и год
+                    'PROPERTY_1303': strftime("%H:%M:%S", call_duration),   # Продолжительность звонка
+                    'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
+                    'PROPERTY_1305': '1',    # Количество звонков
                 }
             }
                    )
@@ -113,9 +114,9 @@ def update_call_statistic(req):
                 'ELEMENT_ID': element['ID'],
                 'fields': {
                     'NAME': element['NAME'],
-                    'PROPERTY_1303': strftime("%H:%M:%S", new_time),
-                    'PROPERTY_1299': company['COMPANY_ID'],
-                    'PROPERTY_1305': str(int(element_call_count) + 1)
+                    'PROPERTY_1303': strftime("%H:%M:%S", new_time),    # Продолжительность звонков
+                    'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
+                    'PROPERTY_1305': str(int(element_call_count) + 1)   # Количество звонков
                 }
             }
                    )

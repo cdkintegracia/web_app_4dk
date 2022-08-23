@@ -43,7 +43,7 @@ def update_call_statistic(client_number, employee_number):
         '12': 'Декабрь'
     }
     current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
-    
+
     # ID контакта через номер телефона
 
     contact = b.get_all('telephony.externalCall.searchCrmEntities', {'PHONE_NUMBER': client_number})

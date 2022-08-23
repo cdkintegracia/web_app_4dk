@@ -23,7 +23,7 @@ default_webhooks = {
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
-    print(request.form)
+    print(request.form['event'])
 
     # Обновление сделки
 

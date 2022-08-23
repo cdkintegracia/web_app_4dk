@@ -8,6 +8,10 @@ b = Bitrix(webhook)
 
 
 def update_company_value(req):
+    """
+    :param req: request.form
+    :return: Обновление поля "Вес сделок" в компании в случае удаления сделки
+    """
     deal_id = req['data[FIELDS][ID]']
     """
     :param deal_id: ID удаленной сделки

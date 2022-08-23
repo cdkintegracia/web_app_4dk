@@ -11,6 +11,10 @@ b = Bitrix(webhook)
 logs = []
 
 def update_code_1c(req):
+    """
+    :param req: request.form
+    :return: Заполнение или обновление поля "Код1С" в сделке
+    """
     deal_id = req['data[FIELDS][ID]']
     global logs
 

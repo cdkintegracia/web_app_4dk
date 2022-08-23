@@ -28,15 +28,16 @@ for employee in allowed_departments:
     allowed_numbers.append(employee['WORK_PHONE'])
 
 def update_call_statistic(req):
-    if req['data[CALL_TYPE]'] not in ['1', ] or req['data[PORTAL_NUMBER]'] not in employee_numbers or req['data[CALL_FAILED_CODE]'] != '200':
-        print('--------------------------------------------------')
-        print(f'Неподходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
-        print('--------------------------------------------------')
+    """
+    :param req: request.form
+    :return: Обновление или создание элемента в УС "Статистика звонков"
+    """
+
+    if req['data[CALL_TYPE]'] not in ['1', ] or\
+            req['data[PORTAL_NUMBER]'] not in employee_numbers or\
+            req['data[CALL_FAILED_CODE]'] != '200':
         return
-    print('--------------------------------------------------')
-    print(f'Подходящий звонок {req["data[CALL_TYPE]"]} {req["data[PORTAL_NUMBER]"]}')
-    print(req['data[CALL_TYPE]'] not in ['1', ], req['data[PORTAL_NUMBER]'] not in employee_numbers, req['data[CALL_FAILED_CODE]'] != '200')
-    print('--------------------------------------------------')
+
     client_number = req['data[PHONE_NUMBER]']
     employee_number = req['data[PORTAL_NUMBER]']
     call_duration_seconds = req['data[CALL_DURATION]']

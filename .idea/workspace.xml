@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/UpdateCallStatistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/UpdateCallStatistic.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -242,7 +244,7 @@
       <workItem from="1661238967040" duration="187000" />
       <workItem from="1661248421982" duration="16535000" />
       <workItem from="1661267637522" duration="1568000" />
-      <workItem from="1661328817796" duration="5452000" />
+      <workItem from="1661328817796" duration="5973000" />
     </task>
     <servers />
   </component>

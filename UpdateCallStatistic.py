@@ -125,14 +125,3 @@ def update_call_statistic(req):
                 }
             }
                    )
-
-            # Если лимит продолжительности звонков превышен - ставится задача
-
-            for field_value in element['PROPERTY_1307']:
-                element_max_duration = element['PROPERTY_1307'][field_value]
-            element_max_duration = strptime(element_max_duration, "%H:%M:%S")
-            element_max_duration = timedelta(
-                hours=element_max_duration.tm_hour,
-                minutes=element_max_duration.tm_min,
-                seconds=element_max_duration.tm_sec
-            ).seconds

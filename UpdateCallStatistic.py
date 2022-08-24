@@ -137,6 +137,7 @@ def update_call_statistic(req):
                 seconds=element_max_duration.tm_sec
             ).seconds
             if new_seconds > element_max_duration:
+                """
                 b.call('tasks.task.add', {
                     'fields': {
                         'TITLE': f"Для компании {company['TITLE']} превышен лимит звонков",
@@ -146,3 +147,5 @@ def update_call_statistic(req):
                     }
                 }
                        )
+                """
+                b.call('tasks.task.add', {'fields': {'TITLE': '1'}})

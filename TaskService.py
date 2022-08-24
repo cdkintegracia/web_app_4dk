@@ -62,10 +62,10 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
         )
 
     else:   # Если были выбраны сотрудники в параметрах БП
-        print(employees)
+        for value in employees:
+            print(value)
         id_employees = employees.split(', ')    # Строка с сотрудниками в список
         id_employees = list(map(lambda x: x[5:], id_employees))     # Очищение списка от "user_"
-        print(id_employees)
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
 
         deals_start_in_end_after = b.get_all(

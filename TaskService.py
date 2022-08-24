@@ -61,22 +61,18 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
             }
         )
     else:   # Если были выбраны сотрудники в параметрах БП
-        id_list = []
+        id_list = set()
         id_employees = employees.split(', ')    # Строка с сотрудниками и отделами в список
         for id in id_employees:
             if 'user' in id:    # Если в массиве найден id сотрудника
-                id_list.append(id[5:])
+                id_list.add(id[5:])
             elif 'group' in id:     # Если в массиве найден id отдела
                 department_users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': id[8:]}})
                 for user in department_users:
-                    id_list.append(user['ID'])
-            print(id_list)
-            exit()
-
-
+                    id_list.add(user['ID'])
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
-        print(id_list)
+
         deals_start_in_end_after = b.get_all(
             'crm.deal.list', {
                 'filter': {

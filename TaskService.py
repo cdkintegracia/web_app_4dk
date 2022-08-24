@@ -71,7 +71,6 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                 for user in department_users:
                     id_list.add(user['ID'])
         id_list = list(id_list)
-        print(id_list)
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
 
@@ -208,7 +207,7 @@ def create_task_service(dct):
 
             task = b.call('tasks.task.add', {
                 'fields': {
-                    'TITLE': f"Сервисный выезд {employee_name} {dct['month']}",
+                    'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
                     'RESPONSIBLE_ID': '311',
                     'ALLOW_CHANGE_DEADLINE': 'N',
@@ -229,7 +228,7 @@ def create_task_service(dct):
             if employee in [None, 'None']:
                 continue
 
-            # Создание пунктов чек-листы для созданной задачи на сотрудника
+            # Создание пунктов чек-листа для созданной задачи на сотрудника
 
             company = b.get_all('crm.company.list', {
                 'filter': {
@@ -244,6 +243,24 @@ def create_task_service(dct):
                 }
             ], raw=True
                                 )
+
+            # Создание подзадачи для основной задачи
+
+            task = b.call('tasks.task.add', {
+                'fields': {
+                    'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                    'RESPONSIBLE_ID': '311',
+                    'ALLOW_CHANGE_DEADLINE': 'N',
+                    'GROUP_ID': '13',
+                    'DESCRIPTION': f"{task_text}\n"
+                                   f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['COMPANY_ID']}/",
+                    'TASK_CONTROL': 'Y',
+                    'UF_CRM_TASK': 'D_' + deal['ID'],
+                    'PARENT_ID': task['task']['id']
+                }
+            }
+                          )
 
         # Защита от дублирования задач
 

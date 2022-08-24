@@ -148,7 +148,7 @@ def update_call_statistic(req):
                         'TITLE': f"Для компании {company_name} превышен лимит звонков",
                         'GROUP_ID': '13',
                         'RESPONSIBLE_ID': '311',
-                        'UF_CRM_TASK': "CO_" + company['COMPANY_ID']
+                        'UF_CRM_TASK': "CO_" + str(company['COMPANY_ID'])
                     }
                 }
                        )

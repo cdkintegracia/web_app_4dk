@@ -204,7 +204,7 @@ def create_task_service(dct):
                     'RESPONSIBLE_ID': '311',
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
-                    'DESCRIPTION':
+                    'DESCRIPTION': 'text'
                 }
             }
                           )

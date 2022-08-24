@@ -148,4 +148,4 @@ def update_call_statistic(req):
                 }
                        )
                 """
-                b.call('tasks.task.add', {'fields': {'TITLE': '1'}})
+                b.call('tasks.task.add', {'fields': {'TITLE': '1', 'RESPONSIBLE_ID': '311'}})

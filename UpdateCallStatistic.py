@@ -34,8 +34,8 @@ def update_call_statistic(req):
     """
 
     if req['data[CALL_TYPE]'] not in ['1', ] or\
-            req['data[PORTAL_NUMBER]'] not in employee_numbers or\
-            req['data[CALL_FAILED_CODE]'] != '200':
+            req['data[PORTAL_NUMBER]'] not in employee_numbers: #or\
+            #req['data[CALL_FAILED_CODE]'] != '200':
         return
 
     client_number = req['data[PHONE_NUMBER]']

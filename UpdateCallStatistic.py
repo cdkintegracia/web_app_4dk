@@ -142,7 +142,7 @@ def update_call_statistic(req):
                     'filter': {'ID': company['COMPANY_ID']
                                }
                 }
-                                      )[0]['TITLE']
+                                      )['TITLE']
                 b.call('tasks.task.add', {
                     'fields': {
                         'TITLE': f"Для компании {company_name} превышен лимит звонков",

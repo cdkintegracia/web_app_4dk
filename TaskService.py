@@ -62,8 +62,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
         )
 
     else:   # Если были выбраны сотрудники в параметрах БП
-        for id in employees.values:
-            print(id)
+        print(employees)
         id_employees = employees.split(', ')    # Строка с сотрудниками в список
         id_employees = list(map(lambda x: x[5:], id_employees))     # Очищение списка от "user_"
         print(id_employees)

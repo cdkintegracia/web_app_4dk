@@ -235,6 +235,7 @@ def create_task_service(dct):
                     'ID': value[2]
                 }
             })
+            print(company)
 
             b.call('task.checklistitem.add', [
                 task['task']['id'], {

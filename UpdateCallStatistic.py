@@ -136,19 +136,3 @@ def update_call_statistic(req):
                 minutes=element_max_duration.tm_min,
                 seconds=element_max_duration.tm_sec
             ).seconds
-            if new_seconds > element_max_duration:
-                company_name = b.call('crm.company.list', {
-                    'select': ['TITLE'],
-                    'filter': {'ID': company['COMPANY_ID']
-                               }
-                }
-                                      )['TITLE']
-                b.call('tasks.task.add', {
-                    'fields': {
-                        'TITLE': f"Для компании {company_name} превышен лимит звонков",
-                        'GROUP_ID': '13',
-                        'RESPONSIBLE_ID': '311',
-                        'DESCRIPTION' : f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company['COMPANY_ID']}/"
-                    }
-                }
-                       )

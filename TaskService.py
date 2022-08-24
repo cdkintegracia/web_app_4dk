@@ -235,7 +235,6 @@ def create_task_service(dct):
                     'ID': value[2]
                 }
             })
-            print(company)
 
             b.call('task.checklistitem.add', [
                 task['task']['id'], {
@@ -247,7 +246,7 @@ def create_task_service(dct):
 
             # Создание подзадачи для основной задачи
 
-            task = b.call('tasks.task.add', {
+            b.call('tasks.task.add', {
                 'fields': {
                     'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",

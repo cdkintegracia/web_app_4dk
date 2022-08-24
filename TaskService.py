@@ -67,9 +67,9 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
             if 'user' in id:    # Если в массиве найден id сотрудника
                 id_list.append(id[5:])
             elif 'group' in id:     # Если в массиве найден id отдела
-                print(id, id[7:])
-                department_users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': id[7:]}})
+                department_users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': id[8:]}})
                 print(department_users)
+                exit()
 
 
 

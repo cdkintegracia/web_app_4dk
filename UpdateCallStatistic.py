@@ -125,3 +125,24 @@ def update_call_statistic(req):
                 }
             }
                    )
+
+            # Если лимит продолжительности звонков превышен - ставится задача
+
+            for field_value in element['PROPERTY_1307']:
+                element_max_duration = element['PROPERTY_1307'][field_value]
+            element_max_duration = strptime(element_max_duration, "%H:%M:%S")
+            element_max_duration = timedelta(
+                hours=element_max_duration.tm_hour,
+                minutes=element_max_duration.tm_min,
+                seconds=element_max_duration.tm_sec
+            ).seconds
+            if new_seconds > element_max_duration:
+                b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': f"Для компании {company['TITLE']} превышен лимит звонков",
+                        'GROUP_ID': '13',
+                        'RESPONSIBLE_ID': '311',
+                        'UF_CRM_TASK': "CO_" + company['COMPANY_ID']
+                    }
+                }
+                       )

@@ -152,6 +152,7 @@ def create_task_service(dct):
     year = int(dct['year'])
     month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
     month_end = str(months[dct['month']] + 1)   # Месяц начала фильтрации
+    task_text = dct['text']
 
     if month == '1':    # Месяц конца фильтрации
         month_start = '12'  # Если месяц январь, то предыдущий - декабрь
@@ -204,7 +205,7 @@ def create_task_service(dct):
                     'RESPONSIBLE_ID': '311',
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
-                    'DESCRIPTION': 'text'
+                    'DESCRIPTION': task_text,
                 }
             }
                           )

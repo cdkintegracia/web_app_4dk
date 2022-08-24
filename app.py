@@ -35,7 +35,6 @@ def default_webhook():
 def custom_webhook():
     job = request.args['job']
     custom_webhooks[job](request.args)
-    print(request.args)
     return 'OK'
 
 

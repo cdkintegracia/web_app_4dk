@@ -74,7 +74,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
 
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
-
+        print(id_list)
         deals_start_in_end_after = b.get_all(
             'crm.deal.list', {
                 'filter': {

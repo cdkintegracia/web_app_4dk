@@ -203,7 +203,8 @@ def create_task_service(dct):
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
                     'RESPONSIBLE_ID': '311',
                     'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '13'
+                    'GROUP_ID': '13',
+                    'DESCRIPTION':
                 }
             }
                           )

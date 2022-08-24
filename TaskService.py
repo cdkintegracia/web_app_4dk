@@ -201,8 +201,6 @@ def create_task_service(dct):
 
     for employee in employees:
         if employee not in ['None', None]:
-            print(employees[employee])
-            exit()
 
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
@@ -222,7 +220,8 @@ def create_task_service(dct):
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
-
+            print(value)
+            exit()
             """
             Можно потом удалить проверку на None
             """

@@ -71,6 +71,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                 for user in department_users:
                     id_list.add(user['ID'])
         id_list = list(id_list)
+        print(id_list)
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
 

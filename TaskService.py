@@ -255,7 +255,7 @@ def create_task_service(dct):
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
                     'DESCRIPTION': f"{task_text}\n"
-                                   f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['COMPANY_ID']}/",
+                                   f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['ID']}/",
                     'TASK_CONTROL': 'Y',
                     'UF_CRM_TASK': 'D_' + deal['ID'],
                     'PARENT_ID': task['task']['id']

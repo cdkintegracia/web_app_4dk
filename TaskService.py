@@ -16,7 +16,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
     :param date_start: Дата начала фильтрации сделок
     :param date_end: Дата конца фильтрации сделок
     :param type_deals: Типы сделок для фильтрации
-    :param employees: Сотрудники, для фильтрации сделок
+    :param employees: Сотрудники и отделы для фильтрации сделок
     :return: Массив найденных сделок по фильтру (состоит из 3 массивов)
     :return:
     """
@@ -62,12 +62,12 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
         )
     else:   # Если были выбраны сотрудники в параметрах БП
         id_list = []
-        id_employees = employees.split(', ')    # Строка с сотрудниками в список
+        id_employees = employees.split(', ')    # Строка с сотрудниками и отделами в список
         for id in id_employees:
             if 'user' in id:    # Если в массиве найден id сотрудника
                 id_list.append(id[5:])
             elif 'group' in id:     # Если в массиве найден id отдела
-                department_users = b.call('user.get', {'filter': {'UF_DEPARTMENT': id[:8]}})
+                department_users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': id[7:]}})
                 print(department_users)
 
 
@@ -81,7 +81,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_end,
                     '>CLOSEDATE': date_end,
                     'TYPE_ID': type_deals,
-                    'ASSIGNED_BY_ID': id_employees,
+                    'ASSIGNED_BY_ID': id_list,
                 }
             }
         )
@@ -95,7 +95,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_start,
                     '<CLOSEDATE': date_end,
                     'TYPE_ID': type_deals,
-                    'ASSIGNED_BY_ID': id_employees,
+                    'ASSIGNED_BY_ID': id_list,
                 }
             }
         )
@@ -108,7 +108,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_end,
                     'TYPE_ID': type_deals,
-                    'ASSIGNED_BY_ID': id_employees,
+                    'ASSIGNED_BY_ID': id_list,
                 }
             }
         )

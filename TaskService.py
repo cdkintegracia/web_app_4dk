@@ -256,7 +256,7 @@ def create_task_service(dct):
                     'DESCRIPTION': f"{task_text}\n"
                                    f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['ID']}/\n"
                                    f"Ссылка на сделку: https://vc4dk.bitrix24.ru/crm/deal/details/{value[3]}/",
-                    'TASK_PARAM_3': 'Y',
+                    #'TASK_PARAM_3': 'Y',
                     'PARENT_ID': task['task']['id'],
                     'UF_CRM_TASK': 'D_' + value[3],
                     'CREATED_BY': '173',

@@ -131,11 +131,7 @@ def create_task_service(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    text = dct['text'].split('_')
-    task_text = ''
-    for s in text:
-        task_text += f"{s}\n"
-        task_text += f"\n"
+    task_text = dct['text']
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,
@@ -260,7 +256,7 @@ def create_task_service(dct):
                     'DESCRIPTION': f"{task_text}\n"
                                    f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['ID']}/\n"
                                    f"Ссылка на сделку: https://vc4dk.bitrix24.ru/crm/deal/details/{value[3]}/",
-                    'TASK_CONTROL': 'Y',
+                    'ADD_IN_REPORT': 'Y',
                     'PARENT_ID': task['task']['id'],
                     'UF_CRM_TASK': 'D_' + value[3],
                     'CREATED_BY': '173',

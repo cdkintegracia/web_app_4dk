@@ -7,7 +7,11 @@ webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 
+
 def check_task_result(dct):
     id = dct['id']
-    task = b.get_all('tasks.task.list', {'params': {'WITH_RESULT_INFO': 'true'}, 'filter': {'ID': id}})
-    print(task)
+    task = b.get_all('tasks.task.list', {'params': {'WITH_RESULT_INFO': 'true'}, 'select': ['ID'], 'filter': {'ID': id}})[0]
+    if task['taskHasResult'] == 'N':
+        b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1117'}})
+    #stageId: '1121'
+    #stageId: '1117'

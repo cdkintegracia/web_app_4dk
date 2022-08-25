@@ -211,7 +211,6 @@ def create_task_service(dct):
                     'RESPONSIBLE_ID': '59',
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
-                    'DESCRIPTION': task_text,
                     'CREATED_BY': '173',
                 }
             }
@@ -263,6 +262,12 @@ def create_task_service(dct):
                 }
             }
                           )
+
+        b.call('tasks.task.update', {
+            'taskId': task['task']['id'],
+            'fields': {
+                'DESCRIPTION': task_text,
+            }})
 
         # Защита от дублирования задач
 

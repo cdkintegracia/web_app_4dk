@@ -131,7 +131,11 @@ def create_task_service(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    print(dct['text'])
+    text = dct['text'].split('_')
+    task_text = ''
+    for s in text:
+        task_text += f"{s}\n"
+    print(task_text)
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     months = {
         'Январь': 1,

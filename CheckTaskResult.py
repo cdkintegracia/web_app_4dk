@@ -8,4 +8,6 @@ b = Bitrix(webhook)
 
 
 def check_task_result(dct):
-    print(dct)
+    id = dct['id']
+    task = b.get_all('tasks.task.list', {'params': {'WITH_RESULT_INFO': 'true'}, 'filter': {'ID': id}})
+    print(task)

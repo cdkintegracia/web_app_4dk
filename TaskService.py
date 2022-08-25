@@ -263,7 +263,7 @@ def create_task_service(dct):
                 }
             }
                           )
-            exit()
+
 
         # Защита от дублирования задач
 

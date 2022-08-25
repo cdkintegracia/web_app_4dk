@@ -1,8 +1,10 @@
 from flask import Flask, request, render_template
+
 from TaskService import create_task_service
 from UpdateCompanyValue import update_company_value
 from UpdateCode1C import update_code_1c
 from UpdateCallStatistic import update_call_statistic
+from CheckTaskResult import check_task_result
 
 
 app = Flask(__name__)
@@ -12,6 +14,7 @@ app = Flask(__name__)
 
 custom_webhooks = {
     'create_task_service': create_task_service,
+    'check_task_result': check_task_result,
 }
 
 # Словарь функций для вызова из запроса с стандартным методом

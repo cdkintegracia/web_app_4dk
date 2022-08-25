@@ -211,6 +211,7 @@ def create_task_service(dct):
                     'RESPONSIBLE_ID': '59',
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
+                    'DESCRIPTION': task_text,
                     'CREATED_BY': '173',
                 }
             }
@@ -255,19 +256,13 @@ def create_task_service(dct):
                     'DESCRIPTION': f"{task_text}\n"
                                    f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['ID']}/\n"
                                    f"Ссылка на сделку: https://vc4dk.bitrix24.ru/crm/deal/details/{value[3]}/",
-                    'ADD_IN_REPORT': 'Y',
+                    'TASK_PARAM_3': 'Y',
                     'PARENT_ID': task['task']['id'],
                     'UF_CRM_TASK': 'D_' + value[3],
                     'CREATED_BY': '173',
                 }
             }
                           )
-
-        b.call('tasks.task.update', {
-            'taskId': task['task']['id'],
-            'fields': {
-                'DESCRIPTION': task_text,
-            }})
 
         # Защита от дублирования задач
 

@@ -1,0 +1,2 @@
+Bitrix: https://vc4dk.bitrix24.ru/rest/311/r1oftpfibric5qym/
+Google Data Studio: bitrix24-data-studio-2278c7bfb1a7.json

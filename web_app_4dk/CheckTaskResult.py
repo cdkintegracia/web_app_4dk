@@ -13,4 +13,5 @@ def check_task_result(dct):
     id = dct['id']
     task = b.get_all('tasks.task.list', {'params': {'WITH_RESULT_INFO': 'true'}, 'select': ['ID'], 'filter': {'ID': id}})[0]
     if task['taskHasResult'] == 'N':
-        b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1117', 'STATUS': '2'}})
+        b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1117'}})
+        b.call('tasks.task.renew', {'taskId': task['id']})

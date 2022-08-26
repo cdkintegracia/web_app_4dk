@@ -1,5 +1,6 @@
 from fast_bitrix24 import Bitrix
-from authentication import authentication
+
+from web_app_4dk.authentication import authentication
 
 # Считывание файла authentication.txt
 
@@ -13,5 +14,3 @@ def check_task_result(dct):
     task = b.get_all('tasks.task.list', {'params': {'WITH_RESULT_INFO': 'true'}, 'select': ['ID'], 'filter': {'ID': id}})[0]
     if task['taskHasResult'] == 'N':
         b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1117'}})
-    #stageId: '1121'
-    #stageId: '1117'

@@ -13,7 +13,7 @@ def authentication(key):
     # Считывание файла authentication.txt
 
     with open('/root/autorun/authentications.txt') as file:
-    #with open('authentications.txt') as file:
+    #with open('C:\\Users\\mok\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\authentications.txt') as file:
         lines = file.readlines()
         dct = {}
         for line in lines:

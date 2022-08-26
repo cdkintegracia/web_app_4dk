@@ -1,10 +1,10 @@
 from flask import Flask, request, render_template
 
-from TaskService import create_task_service
-from UpdateCompanyValue import update_company_value
-from UpdateCode1C import update_code_1c
-from UpdateCallStatistic import update_call_statistic
-from CheckTaskResult import check_task_result
+from web_app_4dk.TaskService import create_task_service
+from web_app_4dk.UpdateCompanyValue import update_company_value
+from web_app_4dk.UpdateCode1C import update_code_1c
+from web_app_4dk.UpdateCallStatistic import update_call_statistic
+from web_app_4dk.CheckTaskResult import check_task_result
 
 
 app = Flask(__name__)

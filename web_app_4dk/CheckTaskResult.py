@@ -15,4 +15,3 @@ def check_task_result(dct):
     print(task)
     if task['taskHasResult'] == 'N':
         b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1117'}})
-        b.call('tasks.task.renew', {'taskId': task['id']})

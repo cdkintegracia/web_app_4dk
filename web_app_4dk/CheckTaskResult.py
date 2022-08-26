@@ -14,7 +14,8 @@ def check_task_result(dct):
     for comment in task:
         if '[USER=333]' in comment['POST_MESSAGE']:
             return
-    b.call('tasks.task.update', {'taskId': id, 'fields': {'STAGE_ID': '1121'}})
+    a = b.call('tasks.task.update', {'taskId': id, 'fields': {'STAGE_ID': '1121'}})
+    print(a)
 
 
 

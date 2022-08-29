@@ -212,7 +212,7 @@ def create_task_service(dct):
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
                     'RESPONSIBLE_ID': employee,
                     'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '13',
+                    'GROUP_ID': '71',
                     'DESCRIPTION': task_text,
                     'CREATED_BY': '173',
                 }
@@ -254,11 +254,10 @@ def create_task_service(dct):
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
                     'RESPONSIBLE_ID': employee,
                     'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '13',
+                    'GROUP_ID': '71',
                     'DESCRIPTION': f"{task_text}\n"
                                    f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['ID']}/\n"
                                    f"Ссылка на сделку: https://vc4dk.bitrix24.ru/crm/deal/details/{value[3]}/",
-                    'taskRequireResult': 'Y',
                     'PARENT_ID': task['task']['id'],
                     'UF_CRM_TASK': 'D_' + value[3],
                     'CREATED_BY': '173',

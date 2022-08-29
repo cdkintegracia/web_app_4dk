@@ -210,7 +210,7 @@ def create_task_service(dct):
                 'fields': {
                     'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': '59',
+                    'RESPONSIBLE_ID': employee,
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
                     'DESCRIPTION': task_text,
@@ -252,7 +252,7 @@ def create_task_service(dct):
                 'fields': {
                     'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
                     'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': '59',
+                    'RESPONSIBLE_ID': employee,
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '13',
                     'DESCRIPTION': f"{task_text}\n"

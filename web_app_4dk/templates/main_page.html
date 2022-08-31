@@ -15,7 +15,7 @@
 		{%  for log in web_app_logs %}
             <li>{{ log[0] }}</li>
             {% for l in log[1] %}
-                {{ l }}
+                {{ l }} <br>
                 {% endfor %}
             {% endfor %}
         </ul>

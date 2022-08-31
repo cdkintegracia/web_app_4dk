@@ -10,7 +10,6 @@ from web_app_4dk.CheckTaskResult import check_task_result
 
 app = Flask(__name__)
 
-web_app_logs = []
 
 # Словарь функций для вызова из кастомного запроса
 
@@ -47,11 +46,17 @@ def custom_webhook():
 
 @app.route('/', methods=['GET'])
 def main_page():
-    return render_template('main_page.html', web_app_logs=web_app_logs.reverse())
+    return render_template('main_page.html', web_app_logs=read_logs().reverse())
 
 
 def update_logs(text):
-    web_app_logs.append(f"{asctime()} | {text}")
+    with open('logs.txt', 'a') as log_file:
+        log_file.write(f"{asctime()} | {text}")
+
+def read_logs():
+    with open('logs.txt', 'r') as log_file:
+        logs = log_file.readlines()
+        return logs
 
 
 if __name__ == '__main__':

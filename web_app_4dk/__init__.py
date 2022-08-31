@@ -66,9 +66,10 @@ def read_logs():
             request_text = s.split('request: ')[1].lstrip('{')
             request_text.rstrip('}')
             request_text = request_text.split(',')
-            print(type(request_text))
-            final_text.append([info_text, request_text])
-        print(final_text[-1][1])
+            temp_dct = {}
+            for pair in request_text:
+                temp_dct.setdefault(pair[0], pair[1])
+            final_text.append([info_text, temp_dct])
         return final_text[::-1]
 
 

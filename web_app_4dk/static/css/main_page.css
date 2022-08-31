@@ -1,9 +1,13 @@
 .log_window {
     overflow: scroll;
-    width: 1000px;
+    width: 800px;
     height: 800px;
 }
 
 .log_list {
     text-align: left;
+}
+
+.li {
+    color: red
 }

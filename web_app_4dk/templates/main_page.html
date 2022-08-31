@@ -12,7 +12,7 @@
       <h2>Логи веб-приложения</h2>
       <div class="log_window">
         <p>
-		{%  for log in web_app_logs %}
+		{%+  for log in web_app_logs +%}
             {{  log }}
             {% endfor %}
         </p>

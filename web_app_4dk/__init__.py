@@ -30,7 +30,7 @@ default_webhooks = {
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
-    update_logs(f"Получен дефолтный вебхук {request.form}")
+    update_logs(f"Получен дефолтный вебхук | {request.form}")
     default_webhooks[request.form['event']](request.form)
     return 'OK'
 
@@ -38,7 +38,7 @@ def default_webhook():
 
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():
-    update_logs(f"Получен кастомный вебхук {request.form}")
+    update_logs(f"Получен кастомный вебхук | {request.form}")
     job = request.args['job']
     custom_webhooks[job](request.args)
     return 'OK'

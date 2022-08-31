@@ -54,7 +54,7 @@ def update_logs(text, req):
     for key in req:
         log_dct.setdefault(key, req[key])
     with open('logs.txt', 'a') as log_file:
-        log_file.write(f"{asctime()} | {text} | request: {log_dct}\n"
+        log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
 
 
 def read_logs():

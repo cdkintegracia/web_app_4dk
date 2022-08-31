@@ -1,0 +1,5 @@
+.log_window {
+    overflow: scroll;
+    width: 500px;
+    height: 500px;
+}

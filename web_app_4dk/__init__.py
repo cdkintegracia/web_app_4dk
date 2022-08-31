@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from time import asctime
 
 from web_app_4dk.TaskService import create_task_service
 from web_app_4dk.UpdateCompanyValue import update_company_value
@@ -9,6 +10,7 @@ from web_app_4dk.CheckTaskResult import check_task_result
 
 app = Flask(__name__)
 
+web_app_logs = []
 
 # Словарь функций для вызова из кастомного запроса
 
@@ -29,6 +31,7 @@ default_webhooks = {
 
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
+    update_logs(f"Получен дефолтный вебхук {request.form}")
     default_webhooks[request.form['event']](request.form)
     return 'OK'
 
@@ -36,10 +39,19 @@ def default_webhook():
 
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():
+    update_logs(f"Получен кастомный вебхук {request.form}")
     job = request.args['job']
     custom_webhooks[job](request.args)
     return 'OK'
 
+
+@app.route('/', methods=['GET'])
+def main_page():
+    return render_template('main_page.html', web_app_logs=web_app_logs.reverse())
+
+
+def update_logs(text):
+    web_app_logs.append(f"{asctime()} | {text}")
 
 
 if __name__ == '__main__':

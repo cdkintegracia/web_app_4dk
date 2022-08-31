@@ -11,11 +11,11 @@
     <div class="logs_block" align="center">
       <h2>Логи веб-приложения</h2>
       <div class="log_window">
-        <p>
-		{%+  for log in web_app_logs +%}
-            {{  log }}
+        <ul>
+		{%  for log in web_app_logs %}
+            <li><{{ log }}/li>
             {% endfor %}
-        </p>
+        </ul>
     </div>
     </div>
   </body>

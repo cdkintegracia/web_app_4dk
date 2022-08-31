@@ -46,6 +46,7 @@ def custom_webhook():
 
 @app.route('/', methods=['GET'])
 def main_page():
+    print(read_logs().reverse())
     return render_template('main_page.html', web_app_logs=read_logs().reverse())
 
 

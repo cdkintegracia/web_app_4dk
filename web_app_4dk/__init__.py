@@ -64,6 +64,7 @@ def read_logs():
         for s in logs:
             info_text = s.split('request: ')[0]
             request_text = s.split('request: ')[1]
+            request_text.split(',')
             final_text.append([info_text, request_text])
         return final_text[::-1]
 

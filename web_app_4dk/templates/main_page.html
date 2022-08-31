@@ -13,7 +13,7 @@
       <div class="log_window">
         <ul class="log_list">
 		{%  for log in web_app_logs %}
-            <li>log[0]</li>
+            <li>{{ log[0] }}</li>
             {% for l in log[1] %}
                 {{ l }}
                 {% endfor %}

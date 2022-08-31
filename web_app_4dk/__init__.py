@@ -49,12 +49,13 @@ def main_page():
     return render_template('main_page.html', web_app_logs=read_logs())
 
 
-def update_logs(text):
-    new_text = {}
-    for i in text:
-        new_text.setdefault(i, text[i])
+def update_logs(text, req):
+    log_dct = {}
+    for key in req:
+        log_dct.setdefault(key, req[key])
     with open('logs.txt', 'a') as log_file:
-        log_file.write(f"{asctime()} | {new_text}\n")
+        log_file.write(f"{asctime()} | {text}\n"
+                       f"{log_dct}\n")
 
 def read_logs():
     with open('logs.txt', 'r') as log_file:

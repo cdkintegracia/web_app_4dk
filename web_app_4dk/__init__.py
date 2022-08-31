@@ -50,8 +50,11 @@ def main_page():
 
 
 def update_logs(text):
+    new_text = {}
+    for i in text:
+        new_text.setdefault(i, text[i])
     with open('logs.txt', 'a') as log_file:
-        log_file.write(f"{asctime()} | {text}\n")
+        log_file.write(f"{asctime()} | {new_text}\n")
 
 def read_logs():
     with open('logs.txt', 'r') as log_file:

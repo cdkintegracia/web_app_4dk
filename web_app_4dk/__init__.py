@@ -57,7 +57,7 @@ def update_logs(text):
 def read_logs():
     with open('logs.txt', 'r') as log_file:
         logs = log_file.readlines()
-        return logs.reverse()
+        return logs[::-1]
 
 
 if __name__ == '__main__':

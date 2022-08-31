@@ -51,7 +51,7 @@ def main_page():
 
 def update_logs(text):
     with open('logs.txt', 'a') as log_file:
-        log_file.write(f"{asctime()} | {text}")
+        log_file.write(f"{asctime()} | {text}\n")
 
 def read_logs():
     with open('logs.txt', 'r') as log_file:

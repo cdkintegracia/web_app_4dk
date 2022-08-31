@@ -69,6 +69,7 @@ def read_logs():
             temp_dct = {}
             for pair in request_text:
                 temp_dct.setdefault(pair[0], pair[1])
+            print(temp_dct)
             final_text.append([info_text, temp_dct])
         return final_text[::-1]
 

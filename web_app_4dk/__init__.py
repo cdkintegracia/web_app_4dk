@@ -67,7 +67,6 @@ def read_logs():
             request_text.rstrip('}"')
             request_text = request_text.split(',')
             final_text.append([info_text, request_text])
-            print(final_text[-1][1])
         return final_text[::-1]
 
 

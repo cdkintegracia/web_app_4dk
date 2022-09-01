@@ -12,7 +12,7 @@ def authentication(key):
 
     # Считывание файла authentication.txt
 
-    with open('/root/web_app_4dk/web_app_4dk/authentications.txt') as file:
+    with open('/root/web_app_4dk/credentials/authentications.txt') as file:
     #with open('C:\\Users\\mok\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\authentications.txt') as file:
         lines = file.readlines()
         dct = {}

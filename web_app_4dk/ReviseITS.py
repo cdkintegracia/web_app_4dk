@@ -165,11 +165,9 @@ def revise_its(req):
                             and str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == deal['UF_CRM_1655972832']:
                         accordance = 'Расхождение (договор у другого партнера)'
 
-                    # Код отличается
-                    else:
-                        if accordance != 'Найден':
-                            extend_info += f"{itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']}" \
-                                           f" {itsContractInfo['description']}; "
+                    if 'Договор оформлен вашей организацией' not in itsContractInfo['description']:
+                                extend_info += f"{itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']}" \
+                                               f" {itsContractInfo['description']}; "
             except:
                 if f"{deal['ID']} {deal['UF_CRM_1640523562691']}" not in errors:
                     errors.append(f"{deal['ID']} {deal['UF_CRM_1640523562691']}")

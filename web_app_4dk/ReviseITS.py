@@ -74,7 +74,7 @@ def send_request(regnumber):
     return response.json()
 
 def revise_its(req):
-    '''
+
     """
     :param
     :return: Создание excel файла с сверкой
@@ -189,7 +189,7 @@ def revise_its(req):
     """
     Google sheets
     """
-    '''
+
     access = gspread.service_account(f"/root/credentials/bitrix24-data-studio-2278c7bfb1a7.json")
     spreadsheet = access.open('Сверка ИТС')
     try:
@@ -198,11 +198,10 @@ def revise_its(req):
         worksheet = spreadsheet.worksheet(worksheet_date)
 
     worksheet.clear()
-    #worksheet.update('A1', data_list)
-    '''
+    worksheet.update('A1', data_list)
+
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1093',
         'DOCUMENT_ID':
             ['lists', 'BizprocDocument', '128035'],
         'PARAMETERS': {'user': req['user'], 'message': f"Сверка ИТС завершена {errors}"}})
-    '''

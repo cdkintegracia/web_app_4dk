@@ -3,13 +3,14 @@ from time import strftime
 import requests
 import gspread
 from fast_bitrix24 import Bitrix
+from authentication import authentication
 '''
 from authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 '''
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+b = Bitrix(authentication('Bitrix'))
 
 month_string = {
         '01': 'Январь',
@@ -194,7 +195,7 @@ def revise_its(req):
     Google sheets
     """
 
-    access = gspread.service_account(filename='bitrix24-data-studio-2278c7bfb1a7.json')
+    access = gspread.service_account(authentication('Google Data Studio'))
     spreadsheet = access.open('Сверка ИТС')
     try:
         worksheet = spreadsheet.add_worksheet(title=worksheet_date, rows=1, cols=1)

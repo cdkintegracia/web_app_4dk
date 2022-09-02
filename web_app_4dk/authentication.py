@@ -1,3 +1,5 @@
+import base64
+
 def authentication(key):
     """
     :param key: Сервис, для которого нужно вернуть аутентификацию.
@@ -17,7 +19,8 @@ def authentication(key):
         lines = file.readlines()
         dct = {}
         for line in lines:
-            lst = line.split(': ')
+            lst = base64.b64decode(line).decode('utf-8').strip().split(': ')
             dct.setdefault(lst[0], lst[1].strip())
+
 
     return dct[key]

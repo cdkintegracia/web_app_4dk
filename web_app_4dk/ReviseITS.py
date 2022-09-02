@@ -148,7 +148,6 @@ def revise_its(req):
                         accordance = 'Найден'
                         date_end_api = itsContractInfo['endDate'].split()
                         date_end_api = f"{date_end_api[2]}.{eng_month_string[date_end_api[1]]}.{date_end_api[-1]}"
-                        extend_info = ''
 
                     # Расхождение (нет такого кода)
                     elif 'Договор оформлен вашей организацией' in itsContractInfo['description'] and \

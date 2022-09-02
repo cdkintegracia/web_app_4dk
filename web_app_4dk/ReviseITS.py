@@ -189,7 +189,7 @@ def revise_its(req):
     Google sheets
     """
 
-    access = gspread.service_account(authentication('Google Data Studio'))
+    access = gspread.service_account(f"/root/credentials/{authentication('Google Data Studio')}")
     spreadsheet = access.open('Сверка ИТС')
     try:
         worksheet = spreadsheet.add_worksheet(title=worksheet_date, rows=1, cols=1)

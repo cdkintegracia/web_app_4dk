@@ -4,11 +4,6 @@ import requests
 import gspread
 from fast_bitrix24 import Bitrix
 from authentication import authentication
-'''
-from authentication import authentication
-
-b = Bitrix(authentication('Bitrix'))
-'''
 
 b = Bitrix(authentication('Bitrix'))
 

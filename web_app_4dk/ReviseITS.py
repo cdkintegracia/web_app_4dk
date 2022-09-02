@@ -120,10 +120,8 @@ def revise_its(req):
         }
     }
                       )
-    count = 0
     errors = []
     for deal in deals:
-        count += 1
         accordance = ''
         date_end_api = ''
         extend_info = ''
@@ -183,8 +181,6 @@ def revise_its(req):
         ]
         )
 
-        print(f"{count} | {len(deals)}")
-
     """
     Google sheets
     """
@@ -199,8 +195,3 @@ def revise_its(req):
     worksheet.clear()
     worksheet.update('A1', data_list)
 
-    b.call('bizproc.workflow.start', {
-        'TEMPLATE_ID': '1093',
-        'DOCUMENT_ID':
-            ['lists', 'BizprocDocument', '128035'],
-        'PARAMETERS': {'user': req['user'], 'message': f"Сверка ИТС завершена {errors}"}})

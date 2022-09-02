@@ -83,7 +83,7 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask\static\img" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ReviseITS">
+  <component name="RunManager" selected="Python.test">
     <configuration name="CheckTaskResult" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -198,9 +198,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.ReviseITS" />
         <item itemvalue="Python.runapp" />
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.CheckTaskResult" />
       </list>
     </recent_temporary>

@@ -41,6 +41,16 @@ eng_month_string = {
     'Dec': '12',
 }
 
+stage_string = {
+    'C1:LOSE': 'Отказ от сопровождения',
+    'C1:NEW': 'Услуга активна',
+    'C1:UC_0KJKTY': 'Счет сформирован',
+    'C1:UC_3J0IH6': 'Счет отправлен клиенту',
+    'C1:UC_KZSOR2': 'Нет оплаты',
+    'C1:UC_VQ5HJD': 'Ждём решения клиента',
+    'C1:WON': 'Услуга завершена',
+}
+
 
 current_day = strftime('%d')
 current_month = month_string[strftime('%m')]
@@ -76,6 +86,7 @@ def revise_its(req):
                   'Код в Б24',
                   'Название Компании в Б24',
                   'ДК сделки в Б24',
+                  'Стадия сделки',
                   'Найдено соответствие',
                   'ДК в АПИ',
                   'Дополнительная информация']]
@@ -86,6 +97,7 @@ def revise_its(req):
             'UF_CRM_1655972832',        # СлужКод1с
             'CLOSEDATE',                # ДК
             'COMPANY_ID',               # ID компании
+            'STAGE_ID',                 # Стадия сделки
         ],
         'filter': {
             'TYPE_ID': [
@@ -142,7 +154,8 @@ def revise_its(req):
 
                     # Расхождение (нет такого кода)
                     elif 'Договор оформлен вашей организацией' in itsContractInfo['description'] and \
-                          str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) != deal['UF_CRM_1655972832']:
+                          str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) != deal['UF_CRM_1655972832']\
+                            and accordance != 'Найден':
                         accordance = 'Расхождение (нет такого кода)'
 
                     # Расхождение (договор у другого партнера)
@@ -168,6 +181,7 @@ def revise_its(req):
             deal['UF_CRM_1655972832'],      # Код в Б24
             company_name,                   # Название Компании в Б24
             date_end_b24,                   # ДК сделки в Б24
+            stage_string[deal['STAGE_ID']], # Стадия сделки
             accordance,                     # Найдено соответствие
             date_end_api,                   # ДК в АПИ
             extend_info,                    # Дополнительная информация
@@ -195,4 +209,3 @@ def revise_its(req):
         'DOCUMENT_ID':
             ['lists', 'BizprocDocument', '128035'],
         'PARAMETERS': {'user': req['user'], 'message': f"Сверка ИТС завершена {errors}"}})
-

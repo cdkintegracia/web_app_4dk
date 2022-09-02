@@ -26,6 +26,21 @@ month_string = {
         '12': 'Декабрь'
     }
 
+eng_month_string = {
+    'Jan': '01',
+    'Feb': '02',
+    'Mar': '03',
+    'Apr': '04',
+    'May': '05',
+    'Jun': '06',
+    'Jul': '07',
+    'Aug': '08',
+    'Sep': '09',
+    'Oct': '10',
+    'Nov': '11',
+    'Dec': '12',
+}
+
 
 current_day = strftime('%d')
 current_month = month_string[strftime('%m')]
@@ -76,15 +91,15 @@ def revise_its(req):
             'TYPE_ID': [
                 'UC_HT9G9H',    # ПРОФ Земля
                 'UC_XIYCTV',    # ПРОФ Земля+Помощник
-                'UC_N113M9',    # ПРОФ Земля+Облако
-                'UC_5T4MAW',    # ПРОФ Земля+Облако+Помощник
+                #'UC_N113M9',    # ПРОФ Земля+Облако
+                #'UC_5T4MAW',    # ПРОФ Земля+Облако+Помощник
                 'UC_AVBW73',    # Базовый Земля
                 'UC_81T8ZR',    # АОВ
                 'UC_92H9MN',    # Индивидуальный
                 'UC_1UPOTU',    # ИТС Бесплатный
                 'UC_K9QJDV',    # ГРМ Бизнес
                 'GOODS',        # ГРМ
-                'UC_J426ZW',    # Садовод
+                #'UC_J426ZW',    # Садовод
                 'UC_DBLSP5',    # Садовод+Помощник
                 'UC_BZYY0D',    # ИТС Отраслевой
             ],
@@ -95,27 +110,71 @@ def revise_its(req):
         }
     }
                       )
+    count = 0
+    errors = []
     for deal in deals:
-        company_name = b.get_all('crm.company.list', {
-            'select': ['TITLE'],
-            'filter': {'ID': deal['COMPANY_ID']}})[0]['TITLE']
+        count += 1
+        accordance = ''
+        date_end_api = ''
+        extend_info = ''
+        date_end_b24 = deal['CLOSEDATE'][:10].split('-')
+        date_end_b24 = f"{date_end_b24[2]}.{date_end_b24[1]}.{date_end_b24[0]}"
+        try:
+            company_name = b.get_all('crm.company.list', {
+                'select': ['TITLE'],
+                'filter': {'ID': deal['COMPANY_ID']}})[0]['TITLE']
+        except:
+            company_name = ''
         request_data = send_request(deal['UF_CRM_1640523562691'])
         for data in request_data:
-            for itsContractInfo in data['itsContractInfo']:
-                print(itsContractInfo)
-                exit()
+
+            try:
+                # Заполнение 'Найдено соответствие '
+                for itsContractInfo in data['itsContractInfo']:
+
+                    # Найден
+                    if 'Договор оформлен вашей организацией' in itsContractInfo['description'] \
+                            and str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == deal['UF_CRM_1655972832']:
+                        accordance = 'Найден'
+                        date_end_api = itsContractInfo['endDate'].split()
+                        date_end_api = f"{date_end_api[2]}.{eng_month_string[date_end_api[1]]}.{date_end_api[-1]}"
+                        extend_info = ''
+
+                    # Расхождение (нет такого кода)
+                    elif 'Договор оформлен вашей организацией' in itsContractInfo['description'] and \
+                          str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) != deal['UF_CRM_1655972832']:
+                        accordance = 'Расхождение (нет такого кода)'
+
+                    # Расхождение (договор у другого партнера)
+                    elif 'Договор оформлен другим партнером' in itsContractInfo['description'] \
+                            and accordance != 'Найден' and accordance != 'Расхождение (нет такого кода)' \
+                            and str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == deal['UF_CRM_1655972832']:
+                        accordance = 'Расхождение (договор у другого партнера)'
+
+                    # Код отличается
+                    else:
+                        if accordance != 'Найден':
+                            extend_info += f"{itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']}" \
+                                           f" {itsContractInfo['description']}; "
+            except:
+                if f"{deal['ID']} {deal['UF_CRM_1640523562691']}" not in errors:
+                    errors.append(f"{deal['ID']} {deal['UF_CRM_1640523562691']}")
+
+            if accordance == '':
+                accordance = 'Отсутствует'
 
         data_list.append([
             deal['UF_CRM_1640523562691'],   # Регномер в Б24
             deal['UF_CRM_1655972832'],      # Код в Б24
             company_name,                   # Название Компании в Б24
-            deal['CLOSEDATE'],              # ДК сделки в Б24
-            1,                              # Найдено соответствие
-            'req_end'                       # ДК в АПИ
-            'test'                          # Дополнительная информация
+            date_end_b24,                   # ДК сделки в Б24
+            accordance,                     # Найдено соответствие
+            date_end_api,                   # ДК в АПИ
+            extend_info,                    # Дополнительная информация
         ]
         )
-        break
+
+        print(f"{count} | {len(deals)}")
 
     """
     Google sheets
@@ -131,8 +190,9 @@ def revise_its(req):
     worksheet.clear()
     worksheet.update('A1', data_list)
 
-
-if __name__ == '__main__':
-    revise_its(1)
-
+    b.call('bizproc.workflow.start', {
+        'TEMPLATE_ID': '1093',
+        'DOCUMENT_ID':
+            ['lists', 'BizprocDocument', '128035'],
+        'PARAMETERS': {'user': req['user'], 'message': f"Сверка ИТС завершена {errors}"}})
 

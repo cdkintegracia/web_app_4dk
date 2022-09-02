@@ -14,7 +14,7 @@ def update_company_value(req):
     :return: Обновление поля "Вес сделок" в компании в случае удаления сделки
     """
     deal_id = req['data[FIELDS][ID]']
-    print(deal_id)
+
     """
     :param deal_id: ID удаленной сделки
     :return: Запуск БП "Вес сделок" с новым значением поля "Вес компании"

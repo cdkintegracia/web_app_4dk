@@ -272,3 +272,5 @@ def create_task_service(dct):
         if len(updated_task['task']['checklist']) == 0:
             b.call('tasks.task.delete', {'taskId': task['task']['id']})
             print('Удалена пустая задача')
+
+    b.call('im.notify.system.add', {'USER_ID': dct['user_id'], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})

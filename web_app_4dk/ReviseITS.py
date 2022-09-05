@@ -196,5 +196,12 @@ def revise_its(req):
     worksheet.clear()
     worksheet.update('A1', data_list)
 
-    b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сверка ИТС завершена. Ссылка на файл: '
-                                                                     f'https://docs.google.com/spreadsheets/d/1vW7u2HhetM6P5FDR9_AWEiwHY9ef-30RdG2i1Tm-C0w/edit#gid=934883478'})
+    if len(errors) == 0:
+        b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сверка ИТС завершена. Ссылка на файл: '
+                                                                         f'https://docs.google.com/spreadsheets/d/1vW7u2HhetM6P5FDR9_AWEiwHY9ef-30RdG2i1Tm-C0w/edit#gid=934883478'})
+    else:
+        b.call('im.notify.system.add',
+               {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сверка ИТС завершена. Ссылка на файл: '
+                                                          f'https://docs.google.com/spreadsheets/d/1vW7u2HhetM6P5FDR9_AWEiwHY9ef-30RdG2i1Tm-C0w/edit#gid=934883478'
+                                                          f'Ошибочные сделки (ID Регномер): '
+                                                          f'{errors}'})

@@ -33,7 +33,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '>BEGINDATE': date_start,
                     '<BEGINDATE': date_end,
                     '>CLOSEDATE': date_end,
-                    'UF_CRM_1662365565770': 'Y',    # Помощник
+                    'UF_CRM_1662365565770': '1',    # Помощник
                 }
             }
         )
@@ -46,7 +46,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_start,
                     '<CLOSEDATE': date_end,
-                    'UF_CRM_1662365565770': 'Y',    # Помощник
+                    'UF_CRM_1662365565770': '1',    # Помощник
                 }
             }
         )
@@ -58,7 +58,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                 'filter': {
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_end,
-                    'UF_CRM_1662365565770': 'Y',    # Помощник
+                    'UF_CRM_1662365565770': '1',    # Помощник
                 }
             }
         )
@@ -82,7 +82,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '>BEGINDATE': date_start,
                     '<BEGINDATE': date_end,
                     '>CLOSEDATE': date_end,
-                    'UF_CRM_1662365565770': 'Y',    # Помощник
+                    'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
                 }
             }
@@ -96,7 +96,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_start,
                     '<CLOSEDATE': date_end,
-                    'UF_CRM_1662365565770': 'Y',    # Помощник
+                    'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
                 }
             }
@@ -109,7 +109,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
                 'filter': {
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_end,
-                    'UF_CRM_1662365565770': 'Y',    # Помощник
+                    'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
                 }
             }

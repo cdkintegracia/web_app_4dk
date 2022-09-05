@@ -273,4 +273,4 @@ def create_task_service(dct):
             b.call('tasks.task.delete', {'taskId': task['task']['id']})
             print('Удалена пустая задача')
 
-    b.call('im.notify.system.add', {'USER_ID': dct['user_id'], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})
+    b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})

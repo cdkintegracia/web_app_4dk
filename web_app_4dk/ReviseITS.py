@@ -143,7 +143,7 @@ def revise_its(req):
                     # Найден
                     if 'Договор оформлен вашей организацией' in itsContractInfo['description'] \
                             and ((str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == deal['UF_CRM_1655972832']) or
-                                 (str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == '130' and deal['UF_CRM_1655972832'] in ['131, 133'])):
+                                 (str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == '130' and deal['UF_CRM_1655972832'] in ['131', '133'])):
                         accordance = 'Найден'
                         date_end_api = itsContractInfo['endDate'].split()
                         date_end_api = f"{date_end_api[2]}.{eng_month_string[date_end_api[1]]}.{date_end_api[-1]}"

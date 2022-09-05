@@ -152,16 +152,17 @@ def revise_its(req):
                           str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) != deal['UF_CRM_1655972832']\
                             and accordance != 'Найден':
                         accordance = 'Расхождение (нет такого кода)'
+                        extend_info += f"{itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']}" \
+                                       f" {itsContractInfo['description']}; "
 
                     # Расхождение (договор у другого партнера)
                     elif 'Договор оформлен другим партнером' in itsContractInfo['description'] \
                             and accordance != 'Найден' and accordance != 'Расхождение (нет такого кода)' \
                             and str(itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']) == deal['UF_CRM_1655972832']:
                         accordance = 'Расхождение (договор у другого партнера)'
+                        extend_info += f"{itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']}" \
+                                       f" {itsContractInfo['description']}; "
 
-                    if 'Договор оформлен вашей организацией' not in itsContractInfo['description']:
-                                extend_info += f"{itsContractInfo['itsContractType']['publicSubscriptionTypeNumber']}" \
-                                               f" {itsContractInfo['description']}; "
             except:
                 if f"{deal['ID']} {deal['UF_CRM_1640523562691']}" not in errors:
                     errors.append(f"{deal['ID']} {deal['UF_CRM_1640523562691']}")
@@ -195,3 +196,5 @@ def revise_its(req):
     worksheet.clear()
     worksheet.update('A1', data_list)
 
+    b.call('im.notify.system.add', {'USER_ID': req['id'], 'MESSAGE': f'Сверка ИТС завершена. Ссылка на файл: '
+                                                                     f'https://docs.google.com/spreadsheets/d/1vW7u2HhetM6P5FDR9_AWEiwHY9ef-30RdG2i1Tm-C0w/edit#gid=934883478'})

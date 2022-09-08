@@ -103,6 +103,12 @@ def update_call_statistic(req):
                     element_duration = element['PROPERTY_1303'][field_value]
                 for field_value in element['PROPERTY_1305']:
                     element_call_count = element['PROPERTY_1305'][field_value]
+                for field_value in element['PROPERTY_1307']:
+                    limit_duration = element['PROPERTY_1307'][field_value]
+                for field_value in element['PROPERTY_1315']:
+                    first_break_limit = element['PROPERTY_1315'][field_value]
+                for field_value in element['PROPERTY_1315']:
+                    second_break_limit = element['PROPERTY_1317'][field_value]
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -123,7 +129,10 @@ def update_call_statistic(req):
                     'NAME': element['NAME'],
                     'PROPERTY_1303': strftime("%H:%M:%S", new_time),    # Продолжительность звонков
                     'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
-                    'PROPERTY_1305': str(int(element_call_count) + 1)   # Количество звонков
+                    'PROPERTY_1305': str(int(element_call_count) + 1),   # Количество звонков
+                    'PROPERTY_1307': limit_duration,    # Лимит продолжительности звонков
+                    'PROPERTY_1315': first_break_limit,     # Превышение лимита
+                    'PROPERTY_1317': second_break_limit,    # Превышение лимита x2
                 }
             }
                    )

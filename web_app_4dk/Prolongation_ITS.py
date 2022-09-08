@@ -27,6 +27,7 @@ def prolongation_its(req):
                 'RESPONSIBLE_ID': deal['ASSIGNED_BY_ID'],
                 'DEADLINE': date_filter_end,
                 'UF_CRM_TASK': 'D_' + deal['ID'],
+                'DESCRIPTION': f'Сделка: https://vc4dk.bitrix24.ru/crm/deal/details/{deal["ID"]}/'
             }
         }
                )

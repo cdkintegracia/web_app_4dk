@@ -9,7 +9,7 @@ from web_app_4dk.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
-def prolongation_its():
+def prolongation_its(req):
     users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': '225'}})
     users_id = list(map(lambda x: x['ID'], users))
     month = strftime('%m')

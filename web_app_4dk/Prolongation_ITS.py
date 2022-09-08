@@ -26,6 +26,7 @@ def prolongation_its(req):
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': deal['ASSIGNED_BY_ID'],
                 'DEADLINE': date_filter_end,
+                'UF_CRM_TASK': 'D_' + deal['ID'],
             }
         }
                )

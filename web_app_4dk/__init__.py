@@ -7,7 +7,7 @@ from web_app_4dk.UpdateCode1C import update_code_1c
 from web_app_4dk.UpdateCallStatistic import update_call_statistic
 from web_app_4dk.CheckTaskResult import check_task_result
 from web_app_4dk.ReviseITS import revise_its
-
+from web_app_4dk.Prolongation_ITS import prolongation_its
 
 app = Flask(__name__)
 
@@ -18,6 +18,7 @@ custom_webhooks = {
     'create_task_service': create_task_service,
     'check_task_result': check_task_result,
     'revise_its': revise_its,
+    'prolongation_its': prolongation_its,
 }
 
 # Словарь функций для вызова из запроса с стандартным методом

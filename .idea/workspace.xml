@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/ReviseITS.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/ReviseITS.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/Prolongation_ITS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +84,7 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask\static\img" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ReviseITS">
+  <component name="RunManager" selected="Python.Prolongation_ITS">
     <configuration name="CheckTaskResult" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -97,6 +99,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="C:\Users\mok\Documents\GitHub\flask\app\CheckTaskResult.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Prolongation_ITS" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="flask" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/Prolongation_ITS.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -195,6 +219,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.Prolongation_ITS" />
       <item itemvalue="Python.CheckTaskResult" />
       <item itemvalue="Python.ReviseITS" />
       <item itemvalue="Python.runapp" />
@@ -202,6 +227,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Prolongation_ITS" />
         <item itemvalue="Python.ReviseITS" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.runapp" />
@@ -272,6 +298,8 @@
       <workItem from="1662363841865" duration="1042000" />
       <workItem from="1662369507863" duration="5365000" />
       <workItem from="1662391960125" duration="1402000" />
+      <workItem from="1662534779063" duration="665000" />
+      <workItem from="1662638057925" duration="3784000" />
     </task>
     <servers />
   </component>
@@ -290,6 +318,7 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/web_app_4dk$Prolongation_ITS.coverage" NAME="Prolongation_ITS Coverage Results" MODIFIED="1662644854950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
     <SUITE FILE_PATH="coverage/web_app_4dk$ReviseITS.coverage" NAME="ReviseITS Coverage Results" MODIFIED="1662375587849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
   </component>
 </project>

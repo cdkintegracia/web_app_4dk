@@ -8,6 +8,7 @@ from web_app_4dk.UpdateCallStatistic import update_call_statistic
 from web_app_4dk.CheckTaskResult import check_task_result
 from web_app_4dk.ReviseITS import revise_its
 from web_app_4dk.Prolongation_ITS import prolongation_its
+from web_app_4dk.CreateDeal import create_deal
 
 app = Flask(__name__)
 
@@ -27,6 +28,7 @@ default_webhooks = {
     'ONCRMDEALUPDATE': update_code_1c,
     'ONCRMDEALDELETE': update_company_value,
     'ONVOXIMPLANTCALLEND': update_call_statistic,
+    'ONCRMDEALAA': create_deal,
 }
 
 # Обработчик стандартных вебхуков Битрикс
@@ -50,6 +52,12 @@ def custom_webhook():
 @app.route('/', methods=['GET'])
 def main_page():
     return render_template('main_page.html', web_app_logs=read_logs())
+
+
+@app.route('/1c-connect', method=['POST'])
+def connect_1c():
+    update_logs("Получен 1с-коннект вебхук", request.form)
+    return 'OK'
 
 
 def update_logs(text, req):

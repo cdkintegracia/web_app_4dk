@@ -54,7 +54,7 @@ def main_page():
     return render_template('main_page.html', web_app_logs=read_logs())
 
 
-@app.route('/1c-connect', method=['POST'])
+@app.route('/1c-connect', methods=['POST'])
 def connect_1c():
     update_logs("Получен 1с-коннект вебхук", request.form)
     return 'OK'

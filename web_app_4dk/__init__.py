@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, render_template
 from time import asctime
 
@@ -56,6 +58,7 @@ def main_page():
 
 @app.route('/1c-connect', methods=['POST'])
 def connect_1c():
+    print(request.json)
     update_logs("Получен 1с-коннект вебхук (json)", request.json)
     return 'OK'
 

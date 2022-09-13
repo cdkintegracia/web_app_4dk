@@ -3,7 +3,7 @@ import json
 from fast_bitrix24 import Bitrix
 import dateutil.parser
 
-from authentication import authentication
+from web_app_4dk.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 

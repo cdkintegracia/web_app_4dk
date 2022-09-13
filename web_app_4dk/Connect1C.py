@@ -58,17 +58,17 @@ connect_codes = {
 }
 
 def connect_1c(req):
-    with open('/static/logs/connect.json', 'r') as file:
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
         data = json.load(file)
         data.append(req)
 
-        with open('/static/logs/connect.json', 'w') as file:
+        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
             json.dump(data, file, indent=4)
 
     if req['message_type'] == '82':
         task_text = ''
         treatment_id = req['treatment_id']
-        with open('/static/logs/connect.json', 'r') as file:
+        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
             data = json.load(file)
             for event in data:
                 if event['treatment_id'] == treatment_id:

@@ -1,5 +1,13 @@
 import json
+
+from fast_bitrix24 import Bitrix
 import dateutil.parser
+
+from authentication import authentication
+
+b = Bitrix(authentication('Bitrix'))
+
+# Словарь кодов 1с-коннект
 
 connect_codes = {
 '1': 'Текстовое сообщение',
@@ -49,16 +57,29 @@ connect_codes = {
 '200': 'Перевод обращения специалистом на бота',
 }
 
-task_text = ''
-with open('connect.json', 'r') as file:
-     data = json.load(file)
-     for event in data:
-          time = dateutil.parser.isoparse(event['message_time'])
-          message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
-          task_text += f"{message_time} {connect_codes[str(event['message_type'])]}\n"
+def connect_1c(req):
+    with open('/static/logs/connect.json', 'r') as file:
+        data = json.load(file)
+        data.append(req)
 
+        with open('/static/logs/connect.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
+    if req['message_type'] == '82':
+        task_text = ''
+        treatment_id = req['treatment_id']
+        with open('/static/logs/connect.json', 'r') as file:
+            data = json.load(file)
+            for event in data:
+                if event['treatment_id'] == treatment_id:
+                    time = dateutil.parser.isoparse(event['message_time'])
+                    message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
+                    task_text += f"{message_time} {connect_codes[str(event['message_type'])]}\n"
 
-
-
-
+        b.call('tasks.task.add', {'fields': {
+            'TITLE': f"Коннект",
+            'DESCRIPTION': task_text,
+            'GROUP_ID': '13',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': '311',
+        }})

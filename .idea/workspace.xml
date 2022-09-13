@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/teeeest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateCallStatistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/UpdateCallStatistic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/connect.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/static/css/main_page.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/static/css/main_page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/teeeest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/templates/main_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/templates/main_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/test json.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/test json.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,8 +88,8 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask\static\img" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.teeeest">
-    <configuration name="CreateDeal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.runapp">
+    <configuration name="runapp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -92,12 +97,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/CreateDeal.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/runapp.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -216,19 +220,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.runapp" />
       <item itemvalue="Python.teeeest" />
       <item itemvalue="Python.test json" />
-      <item itemvalue="Python.CreateDeal" />
       <item itemvalue="Python.test2" />
       <item itemvalue="Python.test" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.teeeest" />
+        <item itemvalue="Python.runapp" />
         <item itemvalue="Python.test json" />
+        <item itemvalue="Python.teeeest" />
         <item itemvalue="Python.test2" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.CreateDeal" />
       </list>
     </recent_temporary>
   </component>

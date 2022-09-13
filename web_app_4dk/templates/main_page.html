@@ -7,8 +7,14 @@
     <title>WebApp 4dk</title>
     <link rel="stylesheet" href="/static/css/main_page.css">
   </head>
-  <body>
-    <div class="logs_block" align="center">
+  <body>    
+  <div class="container">
+      <div class="buttons">
+        <a href="/static/logs/connect.json" download="connect">
+          Логи 1С-Коннект
+        </a>
+      </div>
+      <div class="logs_block" align="center">
       <h2>Логи веб-приложения</h2>
       <div class="log_window">
         <ul class="log_list">
@@ -20,6 +26,7 @@
             {% endfor %}
         </ul>
     </div>
+  </div>
     </div>
   </body>
 </html>

@@ -58,8 +58,8 @@ def main_page():
 
 @app.route('/1c-connect', methods=['POST'])
 def connect_1c():
-    print(request.json)
-    update_logs("Получен 1с-коннект вебхук (json)", request.json)
+    update_logs("Получен 1с-коннект вебхук", request.json)
+    connect_1c(request.json)
     return 'OK'
 
 

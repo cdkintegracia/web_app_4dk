@@ -56,10 +56,6 @@ def main_page():
 
 @app.route('/1c-connect', methods=['POST'])
 def connect_1c():
-    update_logs("Получен 1с-коннект вебхук (values)", request.values)
-    update_logs("Получен 1с-коннект вебхук (args)", request.args)
-    update_logs("Получен 1с-коннект вебхук (form)", request.form)
-    update_logs("Получен 1с-коннект вебхук (data)", request.data)
     update_logs("Получен 1с-коннект вебхук (json)", request.json)
     return 'OK'
 

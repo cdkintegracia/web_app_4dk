@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/test2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +85,7 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask\static\img" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.runapp">
+  <component name="RunManager" selected="Python.test2">
     <configuration name="runapp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -222,10 +225,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test2" />
         <item itemvalue="Python.runapp" />
         <item itemvalue="Python.test json" />
         <item itemvalue="Python.teeeest" />
-        <item itemvalue="Python.test2" />
         <item itemvalue="Python.test" />
       </list>
     </recent_temporary>

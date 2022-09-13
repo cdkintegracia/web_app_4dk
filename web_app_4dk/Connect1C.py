@@ -75,6 +75,13 @@ def connect_1c(req):
                     time = dateutil.parser.isoparse(event['message_time'])
                     message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
                     task_text += f"{message_time} {connect_codes[str(event['message_type'])]}\n"
+                    if 'text' in event:
+                        task_text += f"{event['text']}\n"
+                    if 'duration' in event:
+                        task_text += f"Длительность: {event['duration']} секунд\n"
+                    if 'preview_link' in event:
+                        task_text += f"{event['preview_link']}\n"
+
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",

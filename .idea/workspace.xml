@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/connect.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/static/css/main_page.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/static/css/main_page.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/teeeest.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/templates/main_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/templates/main_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/test json.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/test json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

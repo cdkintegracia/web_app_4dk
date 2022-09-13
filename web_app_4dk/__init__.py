@@ -11,6 +11,7 @@ from web_app_4dk.CheckTaskResult import check_task_result
 from web_app_4dk.ReviseITS import revise_its
 from web_app_4dk.Prolongation_ITS import prolongation_its
 from web_app_4dk.CreateDeal import create_deal
+from web_app_4dk.Connect1C import connect_1c
 
 app = Flask(__name__)
 
@@ -57,7 +58,7 @@ def main_page():
 
 
 @app.route('/1c-connect', methods=['POST'])
-def connect_1c():
+def update_connect_logs():
     update_logs("Получен 1с-коннект вебхук", request.json)
     connect_1c(request.json)
     return 'OK'

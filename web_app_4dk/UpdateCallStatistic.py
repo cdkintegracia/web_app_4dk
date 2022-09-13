@@ -105,10 +105,14 @@ def update_call_statistic(req):
                     element_call_count = element['PROPERTY_1305'][field_value]
                 for field_value in element['PROPERTY_1307']:
                     limit_duration = element['PROPERTY_1307'][field_value]
-                for field_value in element['PROPERTY_1315']:
-                    first_break_limit = element['PROPERTY_1315'][field_value]
-                for field_value in element['PROPERTY_1315']:
-                    second_break_limit = element['PROPERTY_1317'][field_value]
+                try:
+                    for field_value in element['PROPERTY_1315']:
+                        first_break_limit = element['PROPERTY_1315'][field_value]
+                    for field_value in element['PROPERTY_1315']:
+                        second_break_limit = element['PROPERTY_1317'][field_value]
+                except:
+                    first_break_limit = '2207'
+                    second_break_limit = '2209'
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 

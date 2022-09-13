@@ -90,4 +90,5 @@ def connect_1c(req):
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',
         }})
+        print(task_text)
         print(task)

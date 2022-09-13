@@ -63,7 +63,7 @@ def connect_1c(req):
         data.append(req)
 
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
-            json.dump(data, file, indent=4, ensure_ascii=False)
+            json.dump(data[::-1], file, indent=4, ensure_ascii=False)
 
     if req['message_type'] == '82':
         task_text = ''
@@ -83,10 +83,11 @@ def connect_1c(req):
                         task_text += f"{event['preview_link']}\n"
 
 
-        b.call('tasks.task.add', {'fields': {
+        task = b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
             'DESCRIPTION': task_text,
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',
         }})
+        print(task)

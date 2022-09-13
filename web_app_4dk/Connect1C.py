@@ -63,7 +63,7 @@ def connect_1c(req):
         data.append(req)
 
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
-            json.dump(data, file, indent=4)
+            json.dump(data, file, indent=4, ensure_ascii=False)
 
     if req['message_type'] == '82':
         task_text = ''

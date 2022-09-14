@@ -87,7 +87,10 @@ def get_name(user_id):
             for company in companies[1]['Value']['row']:
                 if company_id == company['Value'][0]:
                     inn = company['Value'][4]
-                    company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
+                    try:
+                        company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
+                    except:
+                        company_id = '12'
                     return [user_name, company_id]
 
 

@@ -115,6 +115,8 @@ def connect_1c(req):
                         task_text += f"Длительность: {event['rda']['duration']} секунд\n"
                     if 'preview_link' in event:
                         task_text += f"{event['preview_link']}\n"
+                    task_text += user_info[0]
+                    task_text += support_info[0]
 
 
         b.call('tasks.task.add', {'fields': {

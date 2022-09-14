@@ -60,6 +60,12 @@ connect_codes = {
 200: 'Перевод обращения специалистом на бота',
 }
 
+def get_event_info(event: dict) -> str:
+    if event['message_type'] == 1:
+        return event['text']
+
+
+
 def get_name(user_id):
     session = Session()
     session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
@@ -130,18 +136,18 @@ def connect_1c(req):
                     time = dateutil.parser.isoparse(event['message_time'])
                     message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
                     task_text += f"{message_time} {connect_codes[event['message_type']]}\n"
-                    
+                    task_text += f"{user_info[0]} {support_info[0]}\n"
+                    task_text += f"{get_event_info(event)}"
+
+
         try:
             task_to_update = b.get_all('tasks.task.list', {
                 'select': ['ID', 'RESPONSIBLE_ID'],
                 'filter': {
-                    'UF_AUTO_499889542776': req['treatment_id']
-                }
-            }
-                                       )[0]
+                    'UF_AUTO_499889542776': req['treatment_id']}})[0]
 
             b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STATUS': '3'}})
-            b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': 'test', 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
+            b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
         except:
             pass
 

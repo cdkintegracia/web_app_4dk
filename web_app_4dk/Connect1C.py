@@ -62,7 +62,8 @@ connect_codes = {
 
 def get_event_info(event: dict) -> str:
     if event['message_type'] == 1:
-        return event['text']
+        return f"{event['text']}\n"
+    return f"\n"
 
 
 
@@ -137,7 +138,7 @@ def connect_1c(req):
                     message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
                     task_text += f"{message_time} {connect_codes[event['message_type']]}\n"
                     task_text += f"{user_info[0]} {support_info[0]}\n"
-                    task_text += f"{get_event_info(event)}"
+                    task_text += f"{get_event_info(event)}\n"
 
 
 

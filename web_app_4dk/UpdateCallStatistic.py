@@ -108,10 +108,12 @@ def update_call_statistic(req):
                 try:
                     for field_value in element['PROPERTY_1315']:
                         first_break_limit = element['PROPERTY_1315'][field_value]
+                except:
+                    first_break_limit = '2207'
+                try:
                     for field_value in element['PROPERTY_1315']:
                         second_break_limit = element['PROPERTY_1317'][field_value]
                 except:
-                    first_break_limit = '2207'
                     second_break_limit = '2209'
 
             # Форматирование времени в секунды и суммирование с длительностью звонка

@@ -94,7 +94,7 @@ def connect_1c(req):
             json.dump(data, file, indent=4, ensure_ascii=False)
 
     if req['message_type'] == '1':
-
+        pass
     '''
     if req['message_type'] in [82, 90]:
         task_text = ''

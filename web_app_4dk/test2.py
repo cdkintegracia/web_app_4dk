@@ -12,13 +12,8 @@ session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
 client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
             transport=Transport(session=session))
 
-
-task = b.get_all('tasks.task.list'
-print(task)
-
 s = '<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>'
 
-'''
 headers = {
     'accept': 'application/json',
     # Already added when you pass json= but not when you pass data=
@@ -27,13 +22,10 @@ headers = {
 
 json_data = {
     'type': 'line',
-    'url': 'http://141.8.194.146:5000/1c-connect',
+    'url': 'http://141.8.195.67:5000/1c-connect',
 }
 
 response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers, json=json_data, auth=('bitrix', 'SekXd4'))
 
 
 print(response)
-
-'''
-

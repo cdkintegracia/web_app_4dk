@@ -93,13 +93,15 @@ def connect_1c(req):
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
 
+    # Начало обращения. Создание задачи
     if req['message_type'] == 1:
         user_info = get_name(req['user_id'])
         support_info = get_name(req['author_id'])
+        print(user_info, support_info)
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
-            'DESCRIPTION': f"{user_info[0]} {support_info[0]} {user_info[1]}",
+            'DESCRIPTION': f"{user_info[0]} {support_info[0]}",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',
@@ -107,8 +109,9 @@ def connect_1c(req):
             'UF_AUTO_499889542776': req['treatment_id']
         }})
 
+    # Смена ответственного
 
-
+    # Завершение обращения. Закрытие задачи
     if req['message_type'] in [82, 90]:
         task_text = ''
         treatment_id = req['treatment_id']

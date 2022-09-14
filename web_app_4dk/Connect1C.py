@@ -67,7 +67,7 @@ def get_name(user_id):
                     transport=Transport(session=session))
 
     specialists = client.service.SpecialistRead('Params')
-    for specialist in specialists['Value']['row']:
+    for specialist in specialists[1]['Value']['row']:
         if user_id == specialist['Value'][0]:
             user_name = f"{specialist['Value'][3]} {specialist['Value'][4]}"
             return [user_name]
@@ -90,9 +90,9 @@ def connect_1c(req):
         data.append(req)
 
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
-            json.dump(data[::-1], file, indent=4, ensure_ascii=False)
+            json.dump(data, file, indent=4, ensure_ascii=False)
 
-    if req['message_type'] == 82:
+    if req['message_type'] in [82, 90]:
         task_text = ''
         treatment_id = req['treatment_id']
         user_info = get_name(req['user_id'])

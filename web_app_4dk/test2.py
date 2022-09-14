@@ -12,16 +12,10 @@ company = client.service.ClientRead('Params')
 
 user_companies = client.service.ClientUserRead('Params')
 
-for i in user_companies[1]['Value']['row']:
-    if i['Value'][0] == '1485315e-d77b-4fae-bbb4-618cfb90a5e7':
-        company_id = i['Value'][1]
-        user_name = f"{i['Value'][4]} {i['Value'][5]}"
-        for j in company[1]['Value']['row']:
-            if company_id == j['Value'][0]:
-                inn = j['Value'][4]
-                break
-        break
-print(user_name, inn)
+specialists = client.service.SpecialistRead('Params')
+print(specialists)
+for specialist in specialists['Value']['row']:
+    print(specialist)
 
 '''
 headers = {

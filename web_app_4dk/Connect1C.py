@@ -90,6 +90,7 @@ def get_name(user_id):
                     try:
                         company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
                     except:
+                        print(f"INN COMPANY: {inn}")
                         company_id = '12'
                     return [user_name, company_id]
 

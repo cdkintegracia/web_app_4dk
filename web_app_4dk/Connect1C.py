@@ -108,7 +108,7 @@ def connect_1c(req):
         }})
 
 
-'''
+
     if req['message_type'] in [82, 90]:
         task_text = ''
         treatment_id = req['treatment_id']
@@ -122,7 +122,7 @@ def connect_1c(req):
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
             data = json.load(file)
             for event in data:
-                if event['treatment_id'] == treatment_id:
+                if event['treatment_id'] == treatment_id and event['message_type'] not in [1, 80, 81]:
                     time = dateutil.parser.isoparse(event['message_time'])
                     message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
                     task_text += f"{message_time} {connect_codes[event['message_type']]}\n"
@@ -135,14 +135,18 @@ def connect_1c(req):
                     task_text += user_info[0]
                     task_text += support_info[0]
                     task_text += user_info[1]
+        try:
+            task_to_update = b.get_all('tasks.task.list', {
+                'select': ['ID'],
+                'filter': {
+                    'UF_AUTO_499889542776': req['treatment_id']
+                }
+            }
+                                       )[0]['id']
+
+            b.call('tasks.task.update', {'taskId': task_to_update, 'fields': {'STATUS': '3'}})
+        except:
+            pass
 
 
 
-        b.call('tasks.task.add', {'fields': {
-            'TITLE': f"Коннект",
-            'DESCRIPTION': task_text,
-            'GROUP_ID': '13',
-            'CREATED_BY': '173',
-            'RESPONSIBLE_ID': '311',
-        }})
-        '''

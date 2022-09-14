@@ -13,8 +13,8 @@ client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
             transport=Transport(session=session))
 
 
-f = b.get_all('tasks.task.getFields')
-print(f)
+task = b.get_all('tasks.task.list'
+print(task)
 
 s = '<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>'
 

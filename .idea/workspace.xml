@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/test2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -311,7 +313,7 @@
       <workItem from="1662638057925" duration="5290000" />
       <workItem from="1662660003655" duration="28000" />
       <workItem from="1662970743536" duration="16305000" />
-      <workItem from="1663144025925" duration="6890000" />
+      <workItem from="1663144025925" duration="7506000" />
     </task>
     <servers />
   </component>
@@ -330,7 +332,7 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/web_app_4dk$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1663152978043" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1663154916673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
     <SUITE FILE_PATH="coverage/web_app_4dk$test_json.coverage" NAME="test json Coverage Results" MODIFIED="1663149362167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
   </component>
 </project>

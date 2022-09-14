@@ -117,6 +117,7 @@ def connect_1c(req):
                         task_text += f"{event['preview_link']}\n"
                     task_text += user_info[0]
                     task_text += support_info[0]
+                    task_text += user_info[1]
 
 
 

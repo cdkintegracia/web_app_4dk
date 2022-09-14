@@ -80,7 +80,8 @@ def get_name(user_id):
             for company in companies[1]['Value']['row']:
                 if company_id == company['Value'][0]:
                     inn = company['Value'][4]
-                    return [user_name, inn]
+                    company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716'}})[0]['ID']
+                    return [user_name, company_id]
 
 
 

@@ -119,6 +119,7 @@ def connect_1c(req):
                     task_text += support_info[0]
 
 
+
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
             'DESCRIPTION': task_text,

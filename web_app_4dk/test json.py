@@ -52,10 +52,7 @@ connect_codes = {
 task_text = ''
 with open('connect.json', 'r') as file:
      data = json.load(file)
-     for event in data:
-          time = dateutil.parser.isoparse(event['message_time'])
-          message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
-          task_text += f"{message_time} {connect_codes[str(event['message_type'])]}\n"
+print(data)
 
 
 

@@ -2,73 +2,13 @@
     {
         "event_type": "line",
         "event_source": "line",
-        "message_type": 80,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "f2c5e524-ae33-4802-8164-5238df02b291",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "a353ee88-99ca-4256-9fe6-6cc9c8acd890",
-        "message_time": "2022-09-13T07:04:35.797329448Z",
-        "user_id": "0ed32a0a-2a2e-4d4b-98db-0778f0877ae2",
-        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "bed4effa-4e74-4393-ac86-1a839040125c",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "68d3c076-93ab-4ed8-90ef-1a5d29ed0d86",
+        "message_time": "2022-09-14T07:33:55.294499949Z",
+        "user_id": "8953239d-7757-11e7-80e5-0025904f970f",
+        "text": "Доброе утро. Когда удобно обновиться?"
     },
-    {
-        "event_type": "line",
-        "event_source": "line",
-        "message_type": 80,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "f2c5e524-ae33-4802-8164-5238df02b291",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "a353ee88-99ca-4256-9fe6-6cc9c8acd890",
-        "message_time": "2022-09-13T07:04:35.797329448Z",
-        "user_id": "0ed32a0a-2a2e-4d4b-98db-0778f0877ae2",
-        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
-    },
-    {
-        "event_type": "line",
-        "event_source": "line",
-        "message_type": 80,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "f2c5e524-ae33-4802-8164-5238df02b291",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "a353ee88-99ca-4256-9fe6-6cc9c8acd890",
-        "message_time": "2022-09-13T07:04:35.797329448Z",
-        "user_id": "0ed32a0a-2a2e-4d4b-98db-0778f0877ae2",
-        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
-    },
-    {
-        "event_type": "line",
-        "event_source": "line",
-        "message_type": 80,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "f2c5e524-ae33-4802-8164-5238df02b291",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "a353ee88-99ca-4256-9fe6-6cc9c8acd890",
-        "message_time": "2022-09-13T07:04:35.797329448Z",
-        "user_id": "0ed32a0a-2a2e-4d4b-98db-0778f0877ae2",
-        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
-    },
-    {
-        "event_type": "line",
-        "event_source": "line",
-        "message_type": 80,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "f2c5e524-ae33-4802-8164-5238df02b291",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "a353ee88-99ca-4256-9fe6-6cc9c8acd890",
-        "message_time": "2022-09-13T07:04:35.797329448Z",
-        "user_id": "0ed32a0a-2a2e-4d4b-98db-0778f0877ae2",
-        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
-    },
-    {
-        "event_type": "line",
-        "event_source": "line",
-        "message_type": 80,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "f2c5e524-ae33-4802-8164-5238df02b291",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "a353ee88-99ca-4256-9fe6-6cc9c8acd890",
-        "message_time": "2022-09-13T07:04:35.797329448Z",
-        "user_id": "0ed32a0a-2a2e-4d4b-98db-0778f0877ae2",
-        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
-    }
 ]

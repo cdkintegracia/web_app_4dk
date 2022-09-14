@@ -50,8 +50,12 @@ connect_codes = {
 }
 
 task_text = ''
-with open('connect.json', 'r') as file:
+with open('logs/connect.json', 'r') as file:
      data = json.load(file)
+
+with open('logs/connect.json', 'w') as file:
+     data.append(connect_codes)
+     json.dump(data, file)
 print(data)
 
 

@@ -94,8 +94,21 @@ def connect_1c(req):
             json.dump(data, file, indent=4, ensure_ascii=False)
 
     if req['message_type'] == '1':
-        pass
-    '''
+        user_info = get_name(req['user_id'])
+        support_info = get_name(req['author_id'])
+
+        b.call('tasks.task.add', {'fields': {
+            'TITLE': f"Коннект",
+            'DESCRIPTION': f"{user_info[0]} {support_info[0]} {user_info[1]}",
+            'GROUP_ID': '13',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': '311',
+            'UF_CRM_TASK': 'CO_' + user_info[1],
+            'UF_AUTO_499889542776': req['treatment_id']
+        }})
+        '''
+
+'''
     if req['message_type'] in [82, 90]:
         task_text = ''
         treatment_id = req['treatment_id']

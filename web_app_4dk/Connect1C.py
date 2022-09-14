@@ -140,16 +140,17 @@ def connect_1c(req):
                     task_text += f"{get_event_info(event)}"
 
 
-        try:
-            task_to_update = b.get_all('tasks.task.list', {
-                'select': ['ID', 'RESPONSIBLE_ID'],
-                'filter': {
-                    'UF_AUTO_499889542776': req['treatment_id']}})[0]
 
+        task_to_update = b.get_all('tasks.task.list', {
+            'select': ['ID', 'RESPONSIBLE_ID'],
+            'filter': {
+                'UF_AUTO_499889542776': req['treatment_id']}})
+
+        if task_to_update:
+            task_to_update = task_to_update[0]
             b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STATUS': '3'}})
             b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
-        except:
-            pass
+
 
 
 

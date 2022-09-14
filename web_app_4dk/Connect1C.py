@@ -94,7 +94,7 @@ def connect_1c(req):
             json.dump(data, file, indent=4, ensure_ascii=False)
 
     # Начало обращения. Создание задачи
-    if req['message_type'] == 1:
+    if req['message_type'] in [80, 81]:
         user_info = get_name(req['user_id'])
         support_info = get_name(req['author_id'])
         print(user_info, support_info)
@@ -135,9 +135,6 @@ def connect_1c(req):
                         task_text += f"Длительность: {event['rda']['duration']} секунд\n"
                     if 'preview_link' in event:
                         task_text += f"{event['preview_link']}\n"
-                    task_text += user_info[0]
-                    task_text += support_info[0]
-                    task_text += user_info[1]
         try:
             task_to_update = b.get_all('tasks.task.list', {
                 'select': ['ID'],

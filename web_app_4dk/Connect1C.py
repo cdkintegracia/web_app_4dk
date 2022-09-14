@@ -97,11 +97,10 @@ def connect_1c(req):
     if req['message_type'] in [80, 81]:
         user_info = get_name(req['user_id'])
         support_info = get_name(req['author_id'])
-        print(user_info, support_info)
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
-            'DESCRIPTION': f"{user_info[0]} {support_info[0]}",
+            'DESCRIPTION': f"юзер - {user_info[0]}\nсаппорт - {support_info[0]}",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',
@@ -110,6 +109,8 @@ def connect_1c(req):
         }})
 
     # Смена ответственного
+    if req['message_type'] in [84]:
+        pass
 
     # Завершение обращения. Закрытие задачи
     if req['message_type'] in [82, 90]:
@@ -129,22 +130,18 @@ def connect_1c(req):
                     time = dateutil.parser.isoparse(event['message_time'])
                     message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
                     task_text += f"{message_time} {connect_codes[event['message_type']]}\n"
-                    if 'text' in event:
-                        task_text += f"{event['text']}\n"
-                    if 'rda' in event:
-                        task_text += f"Длительность: {event['rda']['duration']} секунд\n"
-                    if 'preview_link' in event:
-                        task_text += f"{event['preview_link']}\n"
+                    
         try:
             task_to_update = b.get_all('tasks.task.list', {
-                'select': ['ID'],
+                'select': ['ID', 'RESPONSIBLE_ID'],
                 'filter': {
                     'UF_AUTO_499889542776': req['treatment_id']
                 }
             }
-                                       )[0]['id']
+                                       )[0]
 
-            b.call('tasks.task.update', {'taskId': task_to_update, 'fields': {'STATUS': '3'}})
+            b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STATUS': '3'}})
+            b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': 'test', 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
         except:
             pass
 

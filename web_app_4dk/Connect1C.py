@@ -106,7 +106,7 @@ def connect_1c(req):
             'UF_CRM_TASK': 'CO_' + user_info[1],
             'UF_AUTO_499889542776': req['treatment_id']
         }})
-        '''
+
 
 '''
     if req['message_type'] in [82, 90]:

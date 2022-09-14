@@ -3,19 +3,20 @@ from requests.auth import HTTPBasicAuth  # or HTTPDigestAuth, or OAuth1, etc.
 from requests import Session
 from zeep import Client
 from zeep.transports import Transport
+from fast_bitrix24 import Bitrix
+
+b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
 
 session = Session()
 session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
 client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
             transport=Transport(session=session))
-company = client.service.ClientRead('Params')
 
-user_companies = client.service.ClientUserRead('Params')
 
-specialists = client.service.SpecialistRead('Params')
-print(specialists)
-for specialist in specialists['Value']['row']:
-    print(specialist)
+f = b.get_all('tasks.task.getFields')
+print(f)
+
+s = '<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>'
 
 '''
 headers = {

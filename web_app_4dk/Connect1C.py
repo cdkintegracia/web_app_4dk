@@ -80,7 +80,7 @@ def get_name(user_id):
             for company in companies[1]['Value']['row']:
                 if company_id == company['Value'][0]:
                     inn = company['Value'][4]
-                    company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716'}})[0]['ID']
+                    company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
                     return [user_name, company_id]
 
 
@@ -93,6 +93,9 @@ def connect_1c(req):
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
 
+    if req['message_type'] == '1':
+
+    '''
     if req['message_type'] in [82, 90]:
         task_text = ''
         treatment_id = req['treatment_id']
@@ -129,3 +132,4 @@ def connect_1c(req):
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',
         }})
+        '''

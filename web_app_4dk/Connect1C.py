@@ -158,12 +158,8 @@ def connect_1c(req):
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
             data = json.load(file)
             for event in data:
-                if event['treatment_id'] == treatment_id and event['message_type'] not in [1, 80, 81]:
-                    time = dateutil.parser.isoparse(event['message_time'])
-                    message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
-                    task_text += f"{message_time} {connect_codes[event['message_type']]}\n"
-                    task_text += f"{user_info[0]} {support_info[0]}\n"
-                    task_text += f"{get_event_info(event)}\n"
+                if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
+                    task_text += f"{time_handler(event['message_time'])} {user_info[0]}\n{connect_codes[event['message_type']]}\n\n"
 
 
 

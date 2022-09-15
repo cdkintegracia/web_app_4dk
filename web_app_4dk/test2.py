@@ -31,11 +31,7 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 print(response)
 '''
 
-def get_employee_id(name: str) -> str:
-    name = name.split()
-    employee_id = b.get_all('user.get', {'filter': {'NAME': name[0], 'LAST_NAME':name[1]}})
-    return employee_id[0]['ID']
+company_users = client.service.ClientUserRead('Params')
 
-print(get_employee_id('Максим Карпов'))
-
+print(company_users)
 

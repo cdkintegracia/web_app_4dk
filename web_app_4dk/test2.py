@@ -13,8 +13,6 @@ client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
             transport=Transport(session=session))
 
 
-company_users = client.service.ClientRead('Params')
-print(company_users)
 '''
 headers = {
     'accept': 'application/json',
@@ -33,3 +31,6 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 print(response)
 '''
 
+# b.call('tasks.task.add', {'fields': {'UF_CRM_TASK': 'D_11193', 'TITLE': 'TITLE', 'RESPONSIBLE_ID': '311'}})
+t = b.get_all('tasks.task.list', {'select': ['UF_CRM_TASK'], 'filter': {'ID': '57535'}})
+print(t)

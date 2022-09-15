@@ -12,7 +12,9 @@ session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
 client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
             transport=Transport(session=session))
 
-s = '<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>'
+
+company_users = client.service.ClientRead('Params')
+print(company_users)
 '''
 headers = {
     'accept': 'application/json',
@@ -31,30 +33,3 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 print(response)
 '''
 
-list_elements = b.get_all('lists.element.get', {
-            'IBLOCK_TYPE_ID': 'lists',
-            'IBLOCK_ID': '175',
-            'filter': {
-                'ID': '135829'
-            }
-        }
-                                  )
-print(list_elements)
-for element in list_elements:
-    try:
-        for field_value in element['PROPERTY_1315']:
-            first_break_limit = element['PROPERTY_1315'][field_value]
-        for field_value in element['PROPERTY_1315']:
-            second_break_limit = element['PROPERTY_1317'][field_value]
-    except:
-        first_break_limit = '2207'
-        second_break_limit = '2209'
-print(first_break_limit, second_break_limit)
-
-list_elements = b.get_all('lists.element.update', {
-            'IBLOCK_TYPE_ID': 'lists',
-            'IBLOCK_ID': '175',
-            'ELEMENT_ID': '135829',
-    'fields': {'NAME': 'test'}
-        }
-                                  )

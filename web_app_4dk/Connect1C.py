@@ -90,7 +90,6 @@ def get_name(user_id):
                     try:
                         company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
                     except:
-                        print(f"INN COMPANY: {inn}")
                         company_id = '12'
                     return [user_name, company_id]
 
@@ -111,7 +110,7 @@ def connect_1c(req):
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
-            'DESCRIPTION': f"юзер - {user_info[0]}\nсаппорт - {support_info[0]}",
+            'DESCRIPTION': f"юзер - {user_info[0]}\nсаппорт - {support_info[0]} company_id = {user_info[1]}",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',

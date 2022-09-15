@@ -60,10 +60,12 @@ connect_codes = {
 200: 'Перевод обращения специалистом на бота',
 }
 
+
 def time_handler(time: str) -> str:
     time = dateutil.parser.isoparse(time)
     message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
     return message_time
+
 
 def get_employee_id(name: str) -> str:
     name = name.split()
@@ -73,11 +75,15 @@ def get_employee_id(name: str) -> str:
     except:
         return '311'
 
+
 def get_event_info(event: dict) -> str:
     if event['message_type'] == 1:
         return f"{event['text']}\n"
+    if event['message_type'] == 70:
+        return f"{event['file']['file_name']}\n{event['file']['file_path']}\n"
+    if event['message_type'] == 82:
+        return f"Длительность обращения: {event['treatment']['treatment_duration']}\n"
     return f"\n"
-
 
 
 def get_name(user_id):
@@ -150,11 +156,11 @@ def connect_1c(req):
         }})
 
     # Смена ответственного
-    if req['message_type'] in [84]:
+    elif req['message_type'] in [84]:
         pass
 
     # Завершение обращения. Закрытие задачи
-    if req['message_type'] in [82, 90]:
+    elif req['message_type'] in [82, 90]:
         task_text = ''
         treatment_id = req['treatment_id']
         user_info = get_name(req['user_id'])
@@ -166,9 +172,10 @@ def connect_1c(req):
 
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
             data = json.load(file)
-            for event in data:
-                if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
-                    task_text += f"{time_handler(event['message_time'])} {user_info[0]}\n{connect_codes[event['message_type']]}\n\n"
+        for event in data:
+            if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
+                task_text += f"{time_handler(event['message_time'])} {user_info[0]}\n{connect_codes[event['message_type']]}\n\n"
+                task_text += f"{get_event_info(event)}\n"
 
 
 

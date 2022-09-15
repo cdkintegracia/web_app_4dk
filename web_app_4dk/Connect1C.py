@@ -109,6 +109,14 @@ def get_name(user_id):
                     try:
                         company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
                     except:
+                        b.call('tasks.task.add', {
+                            'fields': {
+                                'TITLE': '1С:Коннект Не найдена компания по ИНН',
+                                'DESCRIPTION': f"ID компании: {company_id}\nИНН: {inn}",
+                                'CREATED_BY': '173',
+                                'RESPONSIBLE_ID': '311',
+                                'GROUP_ID': '13',
+                            }})
                         company_id = '12'
                     return [user_name, company_id]
 
@@ -126,14 +134,14 @@ def connect_1c(req):
     if req['message_type'] in [80, 81]:
 
         # Проверка была ли задача уже создана
-        is_task_created = b.get_all()
-        task_text = b.get_all('tasks.task.list', {
+        is_task_created = b.get_all('tasks.task.list', {
             'select': ['ID'],
             'filter': {
                 'UF_AUTO_499889542776': req['treatment_id']}})
         if is_task_created:
             return
 
+        task_text = ''
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
             data = json.load(file)
         for event in data:

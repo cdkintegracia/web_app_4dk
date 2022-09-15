@@ -33,19 +33,17 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 
 print(response)
 '''
-crm_dct = {
-        '1': ['Лид:', 'lead', 'L'],
-        '2': ['Сделка:', 'deal', 'D'],
-        '3': ['Контакт:', 'contact', 'C'],
-        '4': ['Компания', 'company', 'CO']
-    }
-current_date = datetime.utcnow().strftime('%Y %m %d')
-current_date = datetime.strptime(current_date, '%Y %m %d')
-date_filter = current_date - timedelta(days=1)
-date_filter = date_filter.strftime('%Y-%m-%d')
-mails = b.get_all('crm.activity.list', {'filter': {'PROVIDER_TYPE_ID': 'EMAIL', '>=CREATED': date_filter}})
 
-for mail in mails:
-    print(mail)
+companies = b.get_all('crm.company.list', {'select': ['UF_CRM_1662728120980']})
+count = 0
+errors = []
+for company in companies:
+    count += 1
+    try:
+        b.call('bizproc.workflow.start', {'TEMPLATE_ID': '1111', 'DOCUMENT_ID': ['crm', 'CCrmDocumentCompany', 'COMPANY_' + company['ID']]})
+    except:
+        errors.append(company['ID'])
+    print(company['ID'], count, '|', len(companies))
+print(errors)
 
 

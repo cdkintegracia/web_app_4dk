@@ -60,6 +60,11 @@ connect_codes = {
 200: 'Перевод обращения специалистом на бота',
 }
 
+def time_handler(time: str) -> str:
+    time = dateutil.parser.isoparse(time)
+    message_time = f"{time.hour}:{time.minute}:{time.second} {time.day}.{time.month}.{time.year}"
+    return message_time
+
 def get_employee_id(name: str) -> str:
     name = name.split()
     employee_id = b.get_all('user.get', {'filter': {'NAME': name[0], 'LAST_NAME':name[1]}})
@@ -104,22 +109,30 @@ def get_name(user_id):
 
 
 def connect_1c(req):
+    # Запись события в логи
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
         data = json.load(file)
         data.append(req)
-
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
+        task_text = ''
+        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
+            data = json.load(file)
+        for event in data:
+            if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
+                task_text = event['text']
+                break
+        message_time = time_handler(req['message_time'])
         user_info = get_name(req['user_id'])
         support_info = get_name(req['author_id'])
         support_id = get_employee_id(support_info[0])
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
-            'DESCRIPTION': f"юзер - {user_info[0]}\nсаппорт - {support_info[0]} company_id = {user_info[1]}, support_id - {support_id}",
+            'DESCRIPTION': f"{message_time} {user_info[0]}\n{task_text}",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',

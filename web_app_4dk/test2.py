@@ -31,14 +31,11 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 print(response)
 '''
 
-company_users = client.service.ClientUserRead('Params')
+def get_employee_id(name: str) -> str:
+    name = name.split()
+    employee_id = b.get_all('user.get', {'filter': {'NAME': name[0], 'LAST_NAME':name[1]}})
+    return employee_id[0]['ID']
 
-for user in company_users[1]['Value']['row']:
-    with open('users.txt', 'a') as file:
-        try:
-            file.write(f"{' '.join(user['Value'][4:7])}\n")
-        except:
-            file.write(f"{user['Value'][4:7]}\n")
-
+print(get_employee_id('Максим Карпов'))
 
 

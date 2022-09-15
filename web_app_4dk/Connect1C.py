@@ -60,6 +60,14 @@ connect_codes = {
 200: 'Перевод обращения специалистом на бота',
 }
 
+def get_employee_id(name: str) -> str:
+    name = name.split()
+    employee_id = b.get_all('user.get', {'filter': {'NAME': name[0], 'LAST_NAME':name[1]}})
+    try:
+        return employee_id[0]['ID']
+    except:
+        return '311'
+
 def get_event_info(event: dict) -> str:
     if event['message_type'] == 1:
         return f"{event['text']}\n"
@@ -107,14 +115,15 @@ def connect_1c(req):
     if req['message_type'] in [80, 81]:
         user_info = get_name(req['user_id'])
         support_info = get_name(req['author_id'])
+        support_id = get_employee_id(support_info[0])
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"Коннект",
-            'DESCRIPTION': f"юзер - {user_info[0]}\nсаппорт - {support_info[0]} company_id = {user_info[1]}",
+            'DESCRIPTION': f"юзер - {user_info[0]}\nсаппорт - {support_info[0]} company_id = {user_info[1]}, support_id - {support_id}",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '311',
-            'UF_CRM_TASK': 'CO_' + user_info[1],
+            'UF_CRM_TASK': [f"CO_{user_info[1]}"],
             'UF_AUTO_499889542776': req['treatment_id']
         }})
 

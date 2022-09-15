@@ -31,6 +31,4 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 print(response)
 '''
 
-# b.call('tasks.task.add', {'fields': {'UF_CRM_TASK': 'D_11193', 'TITLE': 'TITLE', 'RESPONSIBLE_ID': '311'}})
-t = b.get_all('tasks.task.list', {'select': ['UF_CRM_TASK'], 'filter': {'ID': '57535'}})
-print(t)
+b.call('tasks.task.add', {'fields': {'UF_CRM_TASK': ['CO_11193'], 'TITLE': '11193', 'RESPONSIBLE_ID': '311'}})

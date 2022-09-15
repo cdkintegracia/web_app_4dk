@@ -86,7 +86,7 @@ def get_event_info(event: dict) -> str:
     return f"\n"
 
 
-def get_name(user_id):
+def get_name(user_id: str) -> list:
     session = Session()
     session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
     client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
@@ -122,7 +122,7 @@ def get_name(user_id):
 
 
 
-def connect_1c(req):
+def connect_1c(req: dict):
     # Запись события в логи
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
         data = json.load(file)

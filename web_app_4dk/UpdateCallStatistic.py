@@ -63,6 +63,8 @@ def update_call_statistic(req):
     # ID контакта через номер телефона
 
     contact = b.get_all('telephony.externalCall.searchCrmEntities', {'PHONE_NUMBER': client_number})
+    if not contact:
+        return
     contact_id = contact[0]['CRM_ENTITY_ID']
 
     # Компании, связанные с контактом | заполнение УС "Статистика звонков"

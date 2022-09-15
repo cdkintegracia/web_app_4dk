@@ -255,11 +255,9 @@ def create_task_service(dct):
                     'RESPONSIBLE_ID': employee,
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '71',
-                    'DESCRIPTION': f"{task_text}\n"
-                                   f"Ссылка на компанию: https://vc4dk.bitrix24.ru/crm/company/details/{company[0]['ID']}/\n"
-                                   f"Ссылка на сделку: https://vc4dk.bitrix24.ru/crm/deal/details/{value[3]}/",
+                    'DESCRIPTION': f"{task_text}\n",
                     'PARENT_ID': task['task']['id'],
-                    'UF_CRM_TASK': [f"CO_{company[0]['ID']}"],
+                    'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
                     'CREATED_BY': '173',
                 }
             }

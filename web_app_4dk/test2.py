@@ -31,4 +31,14 @@ response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers
 print(response)
 '''
 
-b.call('tasks.task.add', {'fields': {'UF_CRM_TASK': ['CO_11193'], 'TITLE': '11193', 'RESPONSIBLE_ID': '311'}})
+company_users = client.service.ClientUserRead('Params')
+
+for user in company_users[1]['Value']['row']:
+    with open('users.txt', 'a') as file:
+        try:
+            file.write(f"{' '.join(user['Value'][4:7])}\n")
+        except:
+            file.write(f"{user['Value'][4:7]}\n")
+
+
+

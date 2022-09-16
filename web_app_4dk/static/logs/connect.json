@@ -2,7 +2,7 @@
     {
         "event_type": "line",
         "event_source": "line",
-        "message_type": 1,
+        "message_type": 11,
         "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
         "treatment_id": "bed4effa-4e74-4393-ac86-1a839040125c",
         "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",

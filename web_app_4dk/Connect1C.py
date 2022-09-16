@@ -186,7 +186,7 @@ def connect_1c(req: dict):
                 event_count += 1
                 if event_count < 2:
                     continue
-                task_text += f"{time_handler(event['message_time'])} {user_info[event['author_id']]}\n{connect_codes[event['message_type']]}\n\n"
+                task_text += f"{time_handler(event['message_time'])} {user_names[event['author_id']]}\n{connect_codes[event['message_type']]}\n\n"
                 task_text += f"{get_event_info(event)}\n"
 
 

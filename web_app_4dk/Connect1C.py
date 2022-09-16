@@ -178,7 +178,11 @@ def connect_1c(req: dict):
         }})
 
     # Смена ответственного
-    elif req['message_type'] in [84]:
+    elif req['message_type'] in [89]:
+        '''
+        апдейт задачи (изменить ID обращения на req['data']['line_id']
+        сменить ответственного
+        '''
         pass
 
     # Завершение обращения. Закрытие задачи

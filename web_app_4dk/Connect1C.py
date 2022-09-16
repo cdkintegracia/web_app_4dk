@@ -123,12 +123,14 @@ def get_name(user_id: str) -> list:
 
 
 def connect_1c(req: dict):
+    if req['event_type'] != 'line':
+        return
     # Запись события в логи
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
         data = json.load(file)
         data.append(req)
-        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
-            json.dump(data, file, indent=4, ensure_ascii=False)
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
+        son.dump(data, file, indent=4, ensure_ascii=False)
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:

@@ -170,7 +170,7 @@ def connect_1c(req: dict):
         pass
 
     # Завершение обращения. Закрытие задачи
-    elif req['message_type'] in [82, 90]:
+    elif req['message_type'] in [82, 90, 91, 92, 93]:
         task_text = ''
         treatment_id = req['treatment_id']
         user_info = get_name(req['user_id'])

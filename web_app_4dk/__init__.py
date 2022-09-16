@@ -31,7 +31,7 @@ default_webhooks = {
     'ONCRMDEALUPDATE': update_code_1c,
     'ONCRMDEALDELETE': update_company_value,
     'ONVOXIMPLANTCALLEND': update_call_statistic,
-    'ONCRMDEALAA': create_deal,
+    'ONCRMDEALADD': create_deal,
 }
 
 # Обработчик стандартных вебхуков Битрикс

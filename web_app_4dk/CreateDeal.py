@@ -4,7 +4,7 @@ from web_app_4dk.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
-def create_deal():
+def create_deal(req):
 
     ignore_fields = [
         'ID',

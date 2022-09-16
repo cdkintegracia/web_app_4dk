@@ -7,7 +7,6 @@
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/CreateDeal.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/CreateDeal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,12 +228,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.web_app_4dk" />
       <item itemvalue="Python.runapp" />
       <item itemvalue="Python.teeeest" />
       <item itemvalue="Python.test json" />
       <item itemvalue="Python.test2" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Python.web_app_4dk" />
     </list>
     <recent_temporary>
       <list>

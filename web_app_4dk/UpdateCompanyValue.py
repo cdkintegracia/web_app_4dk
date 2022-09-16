@@ -21,12 +21,14 @@ def update_company_value(req):
     """
 
     # Нахождение компании, к которой привязана сделка
-
-    company = b.get_all(
-        'crm.company.list', {
-            'filter': {'UF_CRM_1660824010': deal_id}
-        }
-    )[0]['ID']
+    try:
+        company = b.get_all(
+            'crm.company.list', {
+                'filter': {'UF_CRM_1660824010': deal_id}
+            }
+        )[0]['ID']
+    except:
+        return
     company_id = f'COMPANY_{company}'
 
     # Запуск БП "Вес сделок"

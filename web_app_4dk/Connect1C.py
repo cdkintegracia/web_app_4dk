@@ -80,6 +80,8 @@ def get_employee_id(name: str) -> str:
 def get_event_info(event: dict) -> str:
     if event['message_type'] == 1:
         return f"{event['text']}\n"
+    if event['message_type'] == 53:
+        return f"Длительность: {event['rda']['duration']}\n"
     if event['message_type'] == 70:
         return f"{event['file']['file_name']}\n{event['file']['file_path']}\n"
     if event['message_type'] == 82:

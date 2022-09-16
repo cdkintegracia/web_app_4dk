@@ -67,7 +67,7 @@ def create_deal(req):
     for field in deal_fields.keys():
         if field not in ignore_fields:
             fields_to_clear.setdefault(field, '')
-    b.call('crm.deal.update', {'ID': '106603', 'fields': fields_to_clear})
+    b.call('crm.deal.update', {'ID': req['data[FIELDS][ID]'], 'fields': fields_to_clear})
 
 
 

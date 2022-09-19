@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/flask.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flask.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" afterDir="false" />
     </list>
@@ -97,6 +99,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -313,6 +316,9 @@
       <workItem from="1662970743536" duration="16305000" />
       <workItem from="1663144025925" duration="17297000" />
       <workItem from="1663227165472" duration="16762000" />
+      <workItem from="1663577369170" duration="64000" />
+      <workItem from="1663587050381" duration="351000" />
+      <workItem from="1663593268329" duration="4738000" />
     </task>
     <servers />
   </component>

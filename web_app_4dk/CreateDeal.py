@@ -7,44 +7,44 @@ b = Bitrix(authentication('Bitrix'))
 def create_deal(req):
 
     ignore_fields = [
-        'ID',
-        'TITLE',
-        'TYPE_ID',
-        'CATEGORY_ID',
-        'STAGE_ID',
-        'STAGE_SEMANTIC_ID',
-        'IS_NEW',
-        'IS_RECURRING',
-        'IS_RETURN_CUSTOMER',
-        'IS_REPEATED_APPROACH',
-        'PROBABILITY',
-        'CURRENCY_ID',
-        'OPPORTUNITY',
+        'ID',       # ID
+        'TITLE',        # Название
+        'TYPE_ID',      # Тип
+        'CATEGORY_ID',      # Направление
+        'STAGE_ID',     # Стадия сделки
+        'STAGE_SEMANTIC_ID',        # Группа стадии
+        'IS_NEW',       # Новая сделка
+        'IS_RECURRING',     # Регулярная сделка
+        'IS_RETURN_CUSTOMER',       # Повторная сделка
+        'IS_REPEATED_APPROACH',     # Повторное обращение
+        'PROBABILITY',      # Вероятность
+        'CURRENCY_ID',      # Валюта
+        'OPPORTUNITY',      # Сумма
         'IS_MANUAL_OPPORTUNITY',
-        'TAX_VALUE',
-        'COMPANY_ID',
-        'CONTACT_IDS',
-        'QUOTE_ID',
-        'BEGINDATE',
-        'CLOSEDATE',
-        'OPENED',
-        'CLOSED',
-        'COMMENTS',
-        'ASSIGNED_BY_ID',
-        'CREATED_BY_ID',
-        'MODIFY_BY_ID',
+        'TAX_VALUE',        # Ставка налога
+        'COMPANY_ID',       # Компания
+        'CONTACT_IDS',      # Контакты
+        'QUOTE_ID',     # Предложение
+        'BEGINDATE',        # Дата начала
+        'CLOSEDATE',        # Дата завершения
+        'OPENED',       # Доступна для всех
+        'CLOSED',       # Закрыта
+        'COMMENTS',     # Комментарий
+        'ASSIGNED_BY_ID',       # Ответственный
+        'CREATED_BY_ID',        # Кем создана
+        'MODIFY_BY_ID',     # Кем изменена
         'MOVED_BY_ID',
-        'DATE_CREATE',
-        'DATE_MODIFY',
+        'DATE_CREATE',      # Дата создания
+        'DATE_MODIFY',      # Дата изменения
         'MOVED_TIME',
-        'SOURCE_ID',
-        'SOURCE_DESCRIPTION',
-        'LEAD_ID',
-        'ADDITIONAL_INFO',
-        'LOCATION_ID',
-        'ORIGINATOR_ID',
-        'ORIGIN_ID',
-        'CONTACT_ID',
+        'SOURCE_ID',        # Источник
+        'SOURCE_DESCRIPTION',       # Дополнительно об источнике
+        'LEAD_ID',      # Лид
+        'ADDITIONAL_INFO',      # Дополнительная информация
+        'LOCATION_ID',      # Местоположение
+        'ORIGINATOR_ID',        # Внешний источник
+        'ORIGIN_ID',        # Идентификатор элемента во внешнем источнике
+        'CONTACT_ID',       # Контакт
         'UTM_SOURCE',
         'UTM_MEDIUM',
         'UTM_CAMPAIGN',

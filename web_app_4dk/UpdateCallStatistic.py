@@ -24,6 +24,26 @@ employee_numbers = [
     '+79991174826',     # Борис
 ]
 
+month_codes = {
+    '01': '2215',
+    '02': '2217',
+    '03': '2219',
+    '04': '2221',
+    '05': '2223',
+    '06': '2225',
+    '07': '2227',
+    '08': '2229',
+    '09': '2231',
+    '10': '2233',
+    '11': '2235',
+    '12': '2237'
+}
+
+year_codes = {
+    '2022': '2239',
+    '2023': '2241'
+}
+
 allowed_departments = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': ['231', ]}})
 allowed_numbers = []
 for employee in allowed_departments:
@@ -93,6 +113,8 @@ def update_call_statistic(req):
                     'PROPERTY_1303': strftime("%H:%M:%S", call_duration),   # Продолжительность звонка
                     'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
                     'PROPERTY_1305': '1',    # Количество звонков
+                    'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
+                    'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
                 }
             }
                    )
@@ -141,6 +163,8 @@ def update_call_statistic(req):
                     'PROPERTY_1307': limit_duration,    # Лимит продолжительности звонков
                     'PROPERTY_1315': first_break_limit,     # Превышение лимита
                     'PROPERTY_1317': second_break_limit,    # Превышение лимита x2
+                    'PROPERTY_1339': month_codes[strftime("%m")],   # Месяц
+                    'PROPERTY_1341': year_codes[strftime('%Y')],    # Год
                 }
             }
                    )

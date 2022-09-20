@@ -58,7 +58,7 @@
     {
         "event_type": "line",
         "event_source": "line",
-        "message_type": 70,
+        "message_type": 701,
         "author_id": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
         "treatment_id": "92275464-7829-4d6c-b2f4-dc7aa5b67654",
         "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",

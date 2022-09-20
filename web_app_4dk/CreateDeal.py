@@ -61,7 +61,9 @@ def create_deal(req):
         'UF_CRM_1644508990370',     # Регномер Фреша
         'UF_CRM_1637933934722',     # Способ обслуживания
         'COMMENTS',
+        'UF_CRM_1640523562691',     # Регномер
     ]
+
     deal_fields = b.get_all('crm.deal.fields')
     fields_to_clear = {}
     for field in deal_fields.keys():

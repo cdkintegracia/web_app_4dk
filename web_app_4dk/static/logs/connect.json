@@ -4229,19 +4229,4 @@
             "preview_link_hi": "https://filetransfer.1c-connect.com/thumbnail/2022/09/19/f4823d4f7e92b01cbb4a842202b70d0a-150631634-preview-hi.jpg"
         }
     },
-    {
-        "event_type": "line",
-        "event_source": "line",
-        "message_type": 89,
-        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
-        "treatment_id": "acb69c8c-f9dc-4221-ab1b-afbb5dca187c",
-        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
-        "message_id": "6c50f8ec-f561-414e-bf90-ed736ffa5fca",
-        "message_time": "2022-09-19T12:10:55.59670108Z",
-        "user_id": "1efeb571-faf8-11e4-80d4-0025904f970f",
-        "data": {
-            "direction": "to",
-            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff"
-        }
-    }
 ]

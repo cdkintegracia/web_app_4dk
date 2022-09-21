@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/flask.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flask.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateCallStatistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/UpdateCallStatistic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateUserStatistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/UpdateUserStatistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/bitrix24-data-studio-2278c7bfb1a7.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/static/logs/connect.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/static/logs/connect.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -321,7 +318,7 @@
       <workItem from="1663577369170" duration="64000" />
       <workItem from="1663587050381" duration="351000" />
       <workItem from="1663593268329" duration="5318000" />
-      <workItem from="1663756655939" duration="3834000" />
+      <workItem from="1663756655939" duration="4160000" />
     </task>
     <servers />
   </component>

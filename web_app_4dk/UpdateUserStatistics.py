@@ -9,7 +9,7 @@ b = Bitrix(webhook)
 
 
 def get_user_name(user_id: str):
-    user_info = b.get_all('user.get', {'filter': {'ID': user_id}})[0]
+    user_info = b.get_all('user.get', {'ID': user_id})[0]
     return f"{user_info['NAME']} {user_info['LAST_NAME']}"
 
 
@@ -57,7 +57,7 @@ def add_mail(req: dict):
     activity_type = b.get_all('crm.activity.list', {'filter': {'ID': req['data[FIELDS][ID]']}})[0]
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
         print(activity_type)
-        return 
+        return
         data_to_write = [req['event'],
                          get_user_name(req['AUTHOR_ID']),
                          time_handler(req['CREATED'])]

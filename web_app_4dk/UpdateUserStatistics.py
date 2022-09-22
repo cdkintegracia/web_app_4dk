@@ -37,7 +37,7 @@ def add_call(req: dict):
     :param req: request.form
     :return:
     """
-    if req['data[CALL_FAILED_CODE]'] == '200':
+    if req['data[CALL_FAILED_CODE]'] != '200':
         return
     user_info = b.get_all('user.get', {'filter': {'ID': req['data[PORTAL_USER_ID]']}})
     data_to_write = [req['event'],
@@ -58,7 +58,6 @@ def update_user_statistics(req: dict):
     :param req: request.form
     :return:
     """
-    print('ФУНКЦИЯ')
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
     }

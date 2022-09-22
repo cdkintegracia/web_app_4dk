@@ -58,6 +58,7 @@ def update_user_statistics(req: dict):
     :param req: request.form
     :return:
     """
+    print('ФУНКЦИЯ')
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
     }

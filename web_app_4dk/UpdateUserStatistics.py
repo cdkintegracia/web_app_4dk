@@ -8,6 +8,11 @@ webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 
+def get_user_name(user_id: str):
+    user_info = b.get_all('user.get', {'filter': {'ID': user_id}})[0]
+    return f"{user_info['NAME']} {user_info['LAST_NAME']}"
+
+
 def write_to_sheet(data: list):
     """
     Запись данных в Google Sheet
@@ -40,9 +45,8 @@ def add_call(req: dict):
 
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
-    user_info = b.get_all('user.get', {'filter': {'ID': req['data[PORTAL_USER_ID]']}})[0]
     data_to_write = [req['event'],
-            f"{user_info['NAME']} {user_info['LAST_NAME']}",
+            get_user_name(req['data[PORTAL_USER_ID]']),
             time_handler(req['data[CALL_START_DATE]']),
             req['data[CALL_TYPE]']]
 
@@ -51,9 +55,11 @@ def add_call(req: dict):
 
 def add_mail(req: dict):
     activity_type = b.get_all('crm.activity.list', {'filter': {'ID': req['data[FIELDS][ID]']}})[0]
-    print(activity_type)
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
-        pass
+        data_to_write = [req['event'],
+                         get_user_name(req['AUTHOR_ID']),
+                         time_handler(req['CREATED'])]
+        write_to_sheet(data_to_write)
 
 
 def update_user_statistics(req: dict):

@@ -64,6 +64,9 @@ def update_user_statistics(req: dict):
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
     }
+    print(funcs)
+    print(funcs[req['event']])
+    print(funcs[req['event']](req))
     funcs[req['event']](req)
 
 

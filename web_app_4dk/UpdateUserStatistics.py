@@ -9,7 +9,7 @@ b = Bitrix(webhook)
 
 
 def get_user_name(user_id: str):
-    user_info = b.get_all('user.get', {'ID': user_id})[0]
+    user_info = b.get_all('user.get', {'ID': user_id})
     return f"{user_info['NAME']} {user_info['LAST_NAME']}"
 
 

@@ -50,7 +50,10 @@ def add_call(req: dict):
 
 
 def add_mail(req: dict):
-    pass
+    activity_type = b.get_all('crm.activity.list', {'ID': req['data[FIELDS][ID]']})[0]
+    print(activity_type)
+    if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
+        pass
 
 
 def update_user_statistics(req: dict):
@@ -61,6 +64,7 @@ def update_user_statistics(req: dict):
     """
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
+        'ONCRMACTIVITYADD': add_mail,
     }
     funcs[req['event']](req)
 

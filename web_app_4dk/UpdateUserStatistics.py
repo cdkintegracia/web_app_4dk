@@ -66,10 +66,5 @@ def update_user_statistics(req: dict):
 
 
 
-if __name__ == '__main__':
-    update_user_statistics()
-
-
-
 
 

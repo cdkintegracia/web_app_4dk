@@ -169,6 +169,6 @@ def update_call_statistic(req):
                 }
             }
                    )
-=
+
     update_user_statistics(req)
 

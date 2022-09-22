@@ -37,6 +37,7 @@ def add_call(req: dict):
     :param req: request.form
     :return:
     """
+    print(req['data[CALL_FAILED_CODE]'])
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
     user_info = b.get_all('user.get', {'filter': {'ID': req['data[PORTAL_USER_ID]']}})

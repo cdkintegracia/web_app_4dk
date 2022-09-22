@@ -26,7 +26,7 @@ custom_webhooks = {
     'prolongation_its': prolongation_its,
 }
 
-# Словарь функций для вызова из запроса с стандартным методом
+# Словарь функций для вызова из запроса со стандартным методом
 
 default_webhooks = {
     'ONCRMDEALUPDATE': update_code_1c,
@@ -58,6 +58,7 @@ def custom_webhook():
 def main_page():
     return render_template('main_page.html', web_app_logs=read_logs())
 
+# Обработчик вебхуков 1С-Коннект
 
 @app.route('/1c-connect', methods=['POST'])
 def update_connect_logs():
@@ -65,7 +66,7 @@ def update_connect_logs():
     connect_1c(request.json)
     return 'OK'
 
-
+# Обновление логов веб-приложения
 def update_logs(text, req):
     log_dct = {}
     for key in req:
@@ -73,7 +74,7 @@ def update_logs(text, req):
     with open('logs.txt', 'a') as log_file:
         log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
 
-
+# Вывод на экран логов веб-приложения
 def read_logs():
     final_text = []
     with open('logs.txt', 'r') as log_file:

@@ -9,7 +9,7 @@ b = Bitrix(webhook)
 
 
 def get_user_name(user_id: str):
-    pass
+    return
     user_info = b.get_all('user.get', {'ID': user_id})[0]
     return f"{user_info['NAME']} {user_info['LAST_NAME']}"
 
@@ -55,7 +55,6 @@ def add_call(req: dict):
 
 
 def add_mail(req: dict):
-    pass
     activity_type = b.get_all('crm.activity.list', {'filter': {'ID': req['data[FIELDS][ID]']}})[0]
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
         return

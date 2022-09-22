@@ -144,13 +144,13 @@ def connect_1c(req: dict):
             with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
                 data = json.load(file)
                 data.append(req)
-                break
+            with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
+                json.dump(data, file, indent=4, ensure_ascii=False)
+            break
         except:
             read_count += 1
             sleep(1)
 
-    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
-        json.dump(data, file, indent=4, ensure_ascii=False)
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:

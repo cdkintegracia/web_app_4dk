@@ -1,4 +1,5 @@
 import json
+from time import sleep
 
 from fast_bitrix24 import Bitrix
 import dateutil.parser
@@ -137,9 +138,17 @@ def connect_1c(req: dict):
     if req['event_type'] != 'line':
         return
     # Запись события в логи
-    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
-        data = json.load(file)
-        data.append(req)
+    read_count = 0
+    while read_count < 100:
+        try:
+            with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
+                data = json.load(file)
+                data.append(req)
+                break
+        except:
+            read_count += 1
+            sleep(1)
+
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
 

@@ -4385,5 +4385,1335 @@
         "message_id": "386415c9-ea3a-d949-8cea-0b70717df1be",
         "message_time": "2022-09-21T14:04:44.131052289Z",
         "user_id": "41806dfa-d570-11e5-80e1-0025904f970d"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "7b8fdd06-fa37-11e4-80d2-0025904f970d",
+        "treatment_id": "45a21744-3032-4334-9141-b9fb86a26ffc",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "c0d57133-c405-5944-89a7-ad1d800d92df",
+        "message_time": "2022-09-21T19:25:25.43917525Z",
+        "user_id": "a3143350-e87d-4cc5-be11-070f114de0c2",
+        "treatment": {
+            "treatment_id": "45a21744-3032-4334-9141-b9fb86a26ffc",
+            "user_id": "a3143350-e87d-4cc5-be11-070f114de0c2",
+            "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-21T14:12:42Z",
+            "treatment_duration": 18763,
+            "current_specialist": "7b8fdd06-fa37-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "5a39f56d-5749-4cb4-9898-793fab8219c8",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "5fdcf308-1df0-4bda-a9ed-5a4a75baf263",
+        "message_time": "2022-09-22T05:57:24.827896747Z",
+        "user_id": "712b82c8-9f84-11e7-80e6-0025904f970f",
+        "treatment": {
+            "treatment_id": "5a39f56d-5749-4cb4-9898-793fab8219c8",
+            "user_id": "712b82c8-9f84-11e7-80e6-0025904f970f",
+            "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-21T07:41:10Z",
+            "treatment_duration": 80174,
+            "current_specialist": "a476405e-59d7-11e4-93f9-e839352bba69"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "0f801b4e-2f6a-4554-984c-e8289b816195",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "1e314e8b-6175-e941-842e-ee2e86cd979a",
+        "message_time": "2022-09-22T06:16:16.26030837Z",
+        "user_id": "32ca7312-20f8-11e7-80e4-0025904f970f",
+        "text": "Добрый день. Простите из-за технического сбоя Ваша заявка была передена техническим специалистам только сегодня. Ожидайте. с Вами свяжутся. Еще раз приносим извинения за задержку с ответом."
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "0f801b4e-2f6a-4554-984c-e8289b816195",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "50e140a1-3e91-e84b-98b1-f3bc8346afb3",
+        "message_time": "2022-09-22T06:16:23.300504823Z",
+        "user_id": "32ca7312-20f8-11e7-80e4-0025904f970f",
+        "treatment": {
+            "treatment_id": "0f801b4e-2f6a-4554-984c-e8289b816195",
+            "user_id": "32ca7312-20f8-11e7-80e4-0025904f970f",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-21T11:26:33Z",
+            "treatment_duration": 67790,
+            "current_specialist": "6efa0ce0-fa13-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "86b4b593-8438-4ffc-8187-322e061be288",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "a924dd23-0ca4-4245-aab2-e74c9301784c",
+        "message_time": "2022-09-22T06:48:51.57672487Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "rda": {
+            "src": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+            "dst": "66607b99-0ff3-434f-929f-1eaeb34825df"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "86b4b593-8438-4ffc-8187-322e061be288",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "32afcefc-3324-413b-8dc7-399031c01436",
+        "message_time": "2022-09-22T07:00:06.389730033Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "rda": {
+            "src": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+            "dst": "66607b99-0ff3-434f-929f-1eaeb34825df",
+            "duration": 666
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "86b4b593-8438-4ffc-8187-322e061be288",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "d8dea227-4c36-6543-b005-9eee28f40357",
+        "message_time": "2022-09-22T07:00:14.355409835Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "treatment": {
+            "treatment_id": "86b4b593-8438-4ffc-8187-322e061be288",
+            "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-22T06:48:51Z",
+            "treatment_duration": 683,
+            "current_specialist": "6efa0ce0-fa13-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "77b09b1c-338c-4703-ac17-d76d19b37f7a",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "7c873250-ccea-d345-925b-93346b66307f",
+        "message_time": "2022-09-22T07:17:21.61967297Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "rda": {
+            "src": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+            "dst": "66607b99-0ff3-434f-929f-1eaeb34825df"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "f1c8823c-e676-d243-81f9-8872ba6182bd",
+        "message_time": "2022-09-22T07:18:27.362162172Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Доброго дня!\nПрошу помочь распаковать документы в ЭДО!"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 80,
+        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "0f1e2f01-1123-492d-a982-4b2ef4a51613",
+        "message_time": "2022-09-22T07:18:30.385213001Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 70,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "862e6f1c-b187-9348-a1e1-881b79beeacb",
+        "message_time": "2022-09-22T07:18:56.993747488Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "file": {
+            "file_id": "862e6f1c-b187-9348-a1e1-881b79beeacb",
+            "file_name": "file_20220922_101858610.jpeg",
+            "file_path": "https://filetransfer.1c-connect.com/partner/api/v1/download/service/2022/09/22/9678314b97f339b1f2138ccfd6e3d12d-101856825",
+            "file_size": 248908,
+            "preview_hi_sizes": "500x281",
+            "preview_link": "https://filetransfer.1c-connect.com/thumbnail/2022/09/22/9678314b97f339b1f2138ccfd6e3d12d-101856825-preview.jpg",
+            "preview_link_hi": "https://filetransfer.1c-connect.com/thumbnail/2022/09/22/9678314b97f339b1f2138ccfd6e3d12d-101856825-preview-hi.jpg"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "f4a07931-83b6-4584-acb8-c5d9efd04652",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "e575764a-a86e-6e45-b8c7-a35a3573ce41",
+        "message_time": "2022-09-22T07:19:08.380206275Z",
+        "user_id": "3c58de35-b0c9-4442-8b69-1546cfb62826",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "3c58de35-b0c9-4442-8b69-1546cfb62826"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "77b09b1c-338c-4703-ac17-d76d19b37f7a",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "9de6194e-c12a-45cb-b052-d810f56872b8",
+        "message_time": "2022-09-22T07:19:23.668415944Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "rda": {
+            "src": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+            "dst": "66607b99-0ff3-434f-929f-1eaeb34825df",
+            "duration": 113
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "6efa0ce0-fa13-11e4-80d2-0025904f970d",
+        "treatment_id": "77b09b1c-338c-4703-ac17-d76d19b37f7a",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "04511cae-8bec-984a-a94d-1a15521fd5dd",
+        "message_time": "2022-09-22T07:19:31.196618888Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "treatment": {
+            "treatment_id": "77b09b1c-338c-4703-ac17-d76d19b37f7a",
+            "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-22T07:17:21Z",
+            "treatment_duration": 130,
+            "current_specialist": "6efa0ce0-fa13-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 17,
+        "author_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "treatment_id": "77b09b1c-338c-4703-ac17-d76d19b37f7a",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "04511cae-8bec-984a-a94d-1a15521fd5dd",
+        "message_time": "2022-09-22T07:19:37.409680801Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "treatment": {
+            "treatment_id": "77b09b1c-338c-4703-ac17-d76d19b37f7a",
+            "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-22T07:17:21.619672Z",
+            "treatment_duration": 130,
+            "quality": 5,
+            "current_specialist": "6efa0ce0-fa13-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+        "treatment_id": "9eed8117-b391-492f-beec-d2869beb043f",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "03ca04f4-8e8f-6247-bd21-5e950bc0b5fc",
+        "message_time": "2022-09-22T07:25:53.290409558Z",
+        "user_id": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+        "text": "Добрый день. подскажите как подключить сертификат ЭП полученный в  ИФНС для обмена документами ЭДО"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 80,
+        "author_id": "2d1dd0bd-fa0f-11e4-80d2-0025904f970d",
+        "treatment_id": "9eed8117-b391-492f-beec-d2869beb043f",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "1d566158-7e1b-4eb3-b4c6-2491274acb10",
+        "message_time": "2022-09-22T07:25:56.316787287Z",
+        "user_id": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+        "text": "<buhphone><name>2d1dd0bd-fa0f-11e4-80d2-0025904f970d</name></buhphone>"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+        "treatment_id": "343b6823-f05c-4e9b-9efe-e0ec14207799",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "8adbb53b-6c69-8e4a-93a7-cf2765149bfb",
+        "message_time": "2022-09-22T07:26:23.906876011Z",
+        "user_id": "16487312-d455-49c9-b20a-7144c0a11910",
+        "rda": {
+            "src": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+            "dst": "16487312-d455-49c9-b20a-7144c0a11910"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "7f690478-f51e-497a-b835-dca0be17bf6e",
+        "message_time": "2022-09-22T07:26:57.336759548Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Добрый день. Давайте подключусь"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "e658f172-ae5f-a541-9186-26ce05864150",
+        "message_time": "2022-09-22T07:30:34.95766308Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Готова"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "90e7b85b-28cb-46b3-9176-04463a3acdab",
+        "message_time": "2022-09-22T07:30:38.870518725Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "rda": {
+            "src": "a476405e-59d7-11e4-93f9-e839352bba69",
+            "dst": "958879a2-7783-11e7-80e5-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+        "treatment_id": "9eed8117-b391-492f-beec-d2869beb043f",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "0d17c39c-6d11-3046-8a13-dd6250b0b1e8",
+        "message_time": "2022-09-22T07:30:42.024566663Z",
+        "user_id": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+            "dst": "f3b7d385-faf9-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 70,
+        "author_id": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+        "treatment_id": "9eed8117-b391-492f-beec-d2869beb043f",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "0628f7b6-66d5-9b43-9c9e-51bec8c35dae",
+        "message_time": "2022-09-22T07:31:02.333411234Z",
+        "user_id": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+        "file": {
+            "file_id": "0628f7b6-66d5-9b43-9c9e-51bec8c35dae",
+            "file_name": "CertFix.exe",
+            "file_path": "https://filetransfer.1c-connect.com/partner/api/v1/download/service/2022/09/22/729581b6a6393643cbc682f30033df53-103102282",
+            "file_size": 565392,
+            "preview_hi_sizes": "",
+            "preview_link": "",
+            "preview_link_hi": ""
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+        "treatment_id": "9eed8117-b391-492f-beec-d2869beb043f",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "2ad1d593-1d67-8640-90f2-8a17dfb0a12e",
+        "message_time": "2022-09-22T07:32:52.093388643Z",
+        "user_id": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+            "dst": "f3b7d385-faf9-11e4-80d4-0025904f970f",
+            "duration": 122
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "f4a07931-83b6-4584-acb8-c5d9efd04652",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "f94837f5-8745-0b4e-b42d-15055a0ae45f",
+        "message_time": "2022-09-22T07:34:56.954412993Z",
+        "user_id": "3c58de35-b0c9-4442-8b69-1546cfb62826",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "3c58de35-b0c9-4442-8b69-1546cfb62826"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "6cbb8ff5-0d74-40cc-8028-b8a87cc117e3",
+        "message_time": "2022-09-22T07:36:59.921951091Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "У Вас ЭДО только в бухгалтерии?"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "68703c22-3d37-7b49-872b-b88fec4ecdba",
+        "message_time": "2022-09-22T07:37:16.140302081Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Верно"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "a497ea67-2c8b-45b5-9b3e-6af97b70dbc3",
+        "message_time": "2022-09-22T07:37:54.698183413Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Пришел запрос на аннулирование документа от контрагента СТК. Но я не нашел ни одного электронного документа с этим контрагентом"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "1dbd568d-0bd3-4453-85df-8ba07ed88755",
+        "message_time": "2022-09-22T07:38:19.490326218Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Вы обменивались документами с этим контрагентом?"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "d6938cb5-2995-9343-8e5f-0ca68afd702f",
+        "message_time": "2022-09-22T07:38:44.270999385Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "нет обмена е быо, но мы приняли онего приглашение"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "f9515517-b26b-4d85-a35e-bba1d7b6f5fe",
+        "message_time": "2022-09-22T07:39:30.252616234Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Я могу удалить этот документ. Но надо уточнить у контрагента, что за запрос об аннулировании он отправляет, если еще не было подписано ни одного документа"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "2d232cad-cbb3-3e45-aec4-f9dea28b23be",
+        "message_time": "2022-09-22T07:40:05.326848814Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Хорошо, удаляйте мы свяжемся с контрагентом."
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "62933c79-fb94-f54c-aa9d-ce8323840aed",
+        "message_time": "2022-09-22T07:40:25.78377682Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "я правильно понимаю распоковать документ не удастся"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "927cf79b-bf39-4fe4-9df6-b4f6c4bbe889",
+        "message_time": "2022-09-22T07:41:00.789857799Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Да, не распаковать. Это запрос на аннулирование документа, а самого документа в базе нет."
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "633af59b-8e0b-9749-ab34-e0f0b60fd11e",
+        "message_time": "2022-09-22T07:41:25.202520914Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "хорошо спасибо. Удаляйте тогла его."
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "3dfdf308-d640-4a92-9fa1-cc302e4c39ee",
+        "message_time": "2022-09-22T07:41:48.449488645Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Готово"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "db5f9501-695c-3345-a2af-52647b0d70a4",
+        "message_time": "2022-09-22T07:42:53.204051414Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "rda": {
+            "src": "a476405e-59d7-11e4-93f9-e839352bba69",
+            "dst": "958879a2-7783-11e7-80e5-0025904f970f",
+            "duration": 724
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "1aa969f0-cd44-bd49-97b2-649638605931",
+        "message_time": "2022-09-22T07:44:45.335643879Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Спасибо!"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "b72f60ce-6909-46c0-844a-3705158a2184",
+        "message_time": "2022-09-22T07:45:00.407691312Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Отключился. Хорошего дня."
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "af3e853e-f022-4a38-8829-17e538848a95",
+        "message_time": "2022-09-22T07:45:02.833849735Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment": {
+            "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+            "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+            "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-22T07:18:27Z",
+            "treatment_duration": 1595,
+            "current_specialist": "a476405e-59d7-11e4-93f9-e839352bba69"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 17,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "af3e853e-f022-4a38-8829-17e538848a95",
+        "message_time": "2022-09-22T07:45:07.209177002Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment": {
+            "treatment_id": "019c1c03-43f2-47ab-8c71-243683edd13e",
+            "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+            "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-22T07:18:27.362162Z",
+            "treatment_duration": 1595,
+            "quality": 5,
+            "current_specialist": "a476405e-59d7-11e4-93f9-e839352bba69"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "treatment_id": "fb78fa92-ff43-4e70-a705-3a6d65a4e424",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "8dec6986-ff79-d54c-abda-63632df97ad9",
+        "message_time": "2022-09-22T07:45:14.968472289Z",
+        "user_id": "958879a2-7783-11e7-80e5-0025904f970f",
+        "text": "Взаимно!"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "018c3d86-6095-5646-8db1-c80ef47c994d",
+        "message_time": "2022-09-22T08:06:07.625408077Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "c0856cf7-987c-11e7-80e6-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "e29747de-517b-7d42-930d-82d64fe58e34",
+        "message_time": "2022-09-22T08:06:39.416938443Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "c0856cf7-987c-11e7-80e6-0025904f970f",
+            "duration": 7
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "5055f566-0d68-534a-95ec-3f8bf5758e00",
+        "message_time": "2022-09-22T08:06:43.982196605Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "c0856cf7-987c-11e7-80e6-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 56,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "fed327bc-3e55-1742-900a-b2d7ff71c131",
+        "message_time": "2022-09-22T08:07:02.699554789Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "c0856cf7-987c-11e7-80e6-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "913dce89-276b-6245-b765-bad2ed1e15aa",
+        "message_time": "2022-09-22T08:07:08.279040028Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "c0856cf7-987c-11e7-80e6-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 56,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "476fe400-66a2-214c-8c3a-0a05c588fdaa",
+        "message_time": "2022-09-22T08:07:26.10559441Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "rda": {
+            "src": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+            "dst": "c0856cf7-987c-11e7-80e6-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "2c815b9f-d1a5-4143-a272-d608512a2811",
+        "message_time": "2022-09-22T08:07:58.139906905Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "text": "Добрый день. Нам надо настроить экспорт выгрузки зарплаты в бухгалтерию, пожалуйста свяжитесь с нами."
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 80,
+        "author_id": "6f59a33e-fadb-11e4-80d4-0025904f970f",
+        "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "a7debc0c-b6b6-434c-858f-8ee47a241783",
+        "message_time": "2022-09-22T08:08:01.167034767Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "text": "<buhphone><name>6f59a33e-fadb-11e4-80d4-0025904f970f</name></buhphone>"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "4a9b2969-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "76c4892e-6003-0e47-8326-2bebed8dde77",
+        "message_time": "2022-09-22T08:09:06.863065067Z",
+        "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+        "treatment": {
+            "treatment_id": "aa7b2b78-953b-41a2-a5c4-bcc03cee5849",
+            "user_id": "c0856cf7-987c-11e7-80e6-0025904f970f",
+            "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-22T08:06:07Z",
+            "treatment_duration": 179,
+            "current_specialist": "4a9b2969-fa3a-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "6f59a33e-fadb-11e4-80d4-0025904f970f",
+        "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "316debb0-3314-4740-a5ab-b212f4fc2bf3",
+        "message_time": "2022-09-22T08:09:39.076670871Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "text": "Здравствуйте, это первичная настройка? ранее синхронизация не производилась?"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 84,
+        "author_id": "6f59a33e-fadb-11e4-80d4-0025904f970f",
+        "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "f121c142-2f63-c747-bce9-9e6ca72dd3f8",
+        "message_time": "2022-09-22T08:10:27.984130547Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "treatment": {
+            "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+            "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+            "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-22T08:07:58Z",
+            "current_specialist": "a476405e-59d7-11e4-93f9-e839352bba69"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "f5bc157c-ae5f-394f-b7fe-a7d8b51c8cd4",
+        "message_time": "2022-09-22T08:11:26.011400533Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "f00d3025-7a04-45e4-83d1-19a944ccf407",
+        "message_time": "2022-09-22T08:11:35.821524527Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "text": "Добрый день. Когда удобно подключиться и настроить?"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 1,
+        "author_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "39ead470-631a-2940-87eb-522854162247",
+        "message_time": "2022-09-22T08:13:33.202825539Z",
+        "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "text": "Добрый день, в УПД в одном месте проставляется фио прошлого гл бухгалтера, как это исправить? прошу мне позвонить 8 914 731 5888"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 80,
+        "author_id": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+        "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "a187a5a5-79de-40eb-a9ab-64ad15455b05",
+        "message_time": "2022-09-22T08:13:36.225666175Z",
+        "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "text": "<buhphone><name>edf1d230-db47-4a0d-a4a1-cd40b92ef78a</name></buhphone>"
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "a476405e-59d7-11e4-93f9-e839352bba69",
+        "treatment_id": "c0066498-ab1e-49bd-a4aa-5f61dadbfca3",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "b41db057-2f9e-4da5-aa65-6ae0468b8402",
+        "message_time": "2022-09-22T08:13:46.158908177Z",
+        "user_id": "66607b99-0ff3-434f-929f-1eaeb34825df",
+        "rda": {
+            "src": "a476405e-59d7-11e4-93f9-e839352bba69",
+            "dst": "66607b99-0ff3-434f-929f-1eaeb34825df"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 17,
+        "author_id": "49a1460c-fafa-11e4-80d4-0025904f970f",
+        "treatment_id": "722fbb3a-e10b-49c2-9fc6-7c1fd6b99dc8",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "07720302-ff7c-7143-aae0-17d071ddfc99",
+        "message_time": "2022-09-22T08:24:43.43153174Z",
+        "user_id": "49a1460c-fafa-11e4-80d4-0025904f970f",
+        "treatment": {
+            "treatment_id": "722fbb3a-e10b-49c2-9fc6-7c1fd6b99dc8",
+            "user_id": "49a1460c-fafa-11e4-80d4-0025904f970f",
+            "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-20T07:49:36.819458Z",
+            "treatment_duration": 9614,
+            "quality": 5,
+            "current_specialist": "4a9b2969-fa3a-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+        "treatment_id": "343b6823-f05c-4e9b-9efe-e0ec14207799",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "cd802143-fe49-0a49-b11b-eb61d5fcab83",
+        "message_time": "2022-09-22T08:29:51.306649762Z",
+        "user_id": "16487312-d455-49c9-b20a-7144c0a11910",
+        "rda": {
+            "src": "f76cadd7-eb61-11e5-80e1-0025904f970d",
+            "dst": "16487312-d455-49c9-b20a-7144c0a11910",
+            "duration": 3782
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+        "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "26bd9b36-a181-3f44-b1d5-bca4645e0b8a",
+        "message_time": "2022-09-22T08:34:53.746280051Z",
+        "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "rda": {
+            "src": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+            "dst": "8ea66974-bf7d-11ea-0291-00505601495b"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+        "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "1c7e4021-c97a-d640-9bfa-6fb01b43db5d",
+        "message_time": "2022-09-22T08:36:34.919230845Z",
+        "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "rda": {
+            "src": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+            "dst": "8ea66974-bf7d-11ea-0291-00505601495b",
+            "duration": 85
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+        "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "5face803-4685-1749-a044-925b85ca4e47",
+        "message_time": "2022-09-22T08:36:40.011564949Z",
+        "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "treatment": {
+            "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+            "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-22T08:13:33Z",
+            "treatment_duration": 1387,
+            "current_specialist": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a",
+        "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "5face803-4685-1749-a044-925b85ca4e47",
+        "message_time": "2022-09-22T08:36:40.011564949Z",
+        "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+        "treatment": {
+            "treatment_id": "59e686b6-0ace-40cd-8183-e23882d1ae04",
+            "user_id": "8ea66974-bf7d-11ea-0291-00505601495b",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-22T08:13:33Z",
+            "treatment_duration": 1387,
+            "current_specialist": "edf1d230-db47-4a0d-a4a1-cd40b92ef78a"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 17,
+        "author_id": "b2febe98-fb00-11e4-80d4-0025904f970f",
+        "treatment_id": "00d07dd2-539c-4b52-a0d4-2f5fcb2db443",
+        "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+        "message_id": "881492f0-2ced-1746-93d9-326aac6dd5b9",
+        "message_time": "2022-09-22T08:42:43.025253856Z",
+        "user_id": "b2febe98-fb00-11e4-80d4-0025904f970f",
+        "treatment": {
+            "treatment_id": "00d07dd2-539c-4b52-a0d4-2f5fcb2db443",
+            "user_id": "b2febe98-fb00-11e4-80d4-0025904f970f",
+            "line_id": "2eff464d-fada-11e4-80d4-0025904f970f",
+            "initialized_at": "2022-09-21T12:57:51.986629Z",
+            "treatment_duration": 1900,
+            "quality": 5,
+            "current_specialist": "4a9b2969-fa3a-11e4-80d2-0025904f970d"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "f20f1c76-1f3e-494d-bca3-6f097f9cd704",
+        "line_id": "327e871d-fee8-11e4-80d4-0025904f970f",
+        "message_id": "793c3bf6-0361-f346-835e-c3c70c842767",
+        "message_time": "2022-09-22T08:43:51.682161675Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+            "dst": "58f5911e-faf9-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "f78a2943-529b-5746-b1d0-10e107b3b7fa",
+        "message_time": "2022-09-22T08:44:02.942772352Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 55,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "f20f1c76-1f3e-494d-bca3-6f097f9cd704",
+        "line_id": "327e871d-fee8-11e4-80d4-0025904f970f",
+        "message_id": "d3b89856-b8ee-2447-86bc-d61670be6096",
+        "message_time": "2022-09-22T08:44:09.245472516Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+            "dst": "58f5911e-faf9-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "f20f1c76-1f3e-494d-bca3-6f097f9cd704",
+        "line_id": "327e871d-fee8-11e4-80d4-0025904f970f",
+        "message_id": "3bbbb3bf-2ada-f74d-b137-457d8a5f685c",
+        "message_time": "2022-09-22T08:45:20.354597645Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+            "dst": "58f5911e-faf9-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 54,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "f20f1c76-1f3e-494d-bca3-6f097f9cd704",
+        "line_id": "327e871d-fee8-11e4-80d4-0025904f970f",
+        "message_id": "bba8b7be-e0fe-5b48-9888-3559547198f8",
+        "message_time": "2022-09-22T08:45:32.653333618Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+            "dst": "58f5911e-faf9-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "750f63c6-a8c7-4b3e-abfb-c9effd8088be",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "e0715cc5-e191-b94d-ab14-c8405434d7d1",
+        "message_time": "2022-09-22T08:47:22.716061907Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+            "dst": "58f5911e-faf9-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "750f63c6-a8c7-4b3e-abfb-c9effd8088be",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "c7c56db6-f5bf-6647-a537-3855614c5722",
+        "message_time": "2022-09-22T08:50:58.27903459Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+            "dst": "58f5911e-faf9-11e4-80d4-0025904f970f",
+            "duration": 206
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 82,
+        "author_id": "88210ff5-6f17-4194-bf2e-e81a3abf0024",
+        "treatment_id": "750f63c6-a8c7-4b3e-abfb-c9effd8088be",
+        "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+        "message_id": "36a1d02e-8a3f-d744-9c68-d0c289544aa7",
+        "message_time": "2022-09-22T08:51:04.375029128Z",
+        "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+        "treatment": {
+            "treatment_id": "750f63c6-a8c7-4b3e-abfb-c9effd8088be",
+            "user_id": "58f5911e-faf9-11e4-80d4-0025904f970f",
+            "line_id": "1afc51dc-3257-11e3-bab7-7054d21ab6ff",
+            "initialized_at": "2022-09-22T08:47:22Z",
+            "treatment_duration": 222,
+            "current_specialist": "88210ff5-6f17-4194-bf2e-e81a3abf0024"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "d8b7f228-5e31-2e43-b554-c9f0721cf03c",
+        "message_time": "2022-09-22T08:52:37.86320664Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+            "duration": 2462
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "0ea43fa8-26bb-e64d-bdb2-a09e69eef1ce",
+        "message_time": "2022-09-22T08:52:42.345130776Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "5ff0dc3f-e3c4-0b4e-9114-9b4ad73c113a",
+        "message_time": "2022-09-22T08:54:05.724482252Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f",
+            "duration": 573
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "d6c87125-0916-4a44-895b-cc955f5c4dff",
+        "message_time": "2022-09-22T08:54:14.120607148Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 56,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "9894579c-e66a-d44e-a092-73f74e6a3505",
+        "message_time": "2022-09-22T08:54:43.66013661Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "0451fbc4-0c00-db47-901c-92a69717a829",
+        "message_time": "2022-09-22T08:54:53.099082374Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "db6c70e7-50fd-0440-91e3-74e125716321",
+        "message_time": "2022-09-22T08:55:02.084663678Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+            "duration": 114
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "8531b41f-5202-7545-831b-4b85ef523392",
+        "message_time": "2022-09-22T08:55:10.237000492Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 56,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "45c0a705-1be0-364a-9709-a2ba7d3ca4c0",
+        "message_time": "2022-09-22T08:55:22.158032479Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+        "treatment_id": "050af5d2-24c9-43b5-a89d-605f09b99721",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "6103e133-248a-9a47-b00f-08ebbb5a9ad8",
+        "message_time": "2022-09-22T08:55:31.269525539Z",
+        "user_id": "99d6042b-faf8-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "63aaa0d1-7276-11e5-80dc-0025904f970f",
+            "dst": "99d6042b-faf8-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 70,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "a7a9e1be-3cb8-0446-ba17-7c8b0b0e372f",
+        "message_time": "2022-09-22T08:57:13.171390174Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "file": {
+            "file_id": "a7a9e1be-3cb8-0446-ba17-7c8b0b0e372f",
+            "file_name": "КриптоПро CSP 5.0.12000 (Kraken) от 24.11.2020.exe",
+            "file_path": "https://filetransfer.1c-connect.com/partner/api/v1/download/service/2022/09/22/1069fa904005f8ec3951ec6fb49dd7b4-115713091",
+            "file_size": 7660672,
+            "preview_hi_sizes": "",
+            "preview_link": "",
+            "preview_link_hi": ""
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "8bf021b4-21d8-1747-aafc-93ad23d488f4",
+        "message_time": "2022-09-22T08:59:16.380201152Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+            "duration": 223
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 51,
+        "author_id": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+        "treatment_id": "defd2785-b4cf-4b52-b2f8-38d052fb2eda",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "cbd37d9b-414c-134b-8c9e-12f892dcf6ac",
+        "message_time": "2022-09-22T09:01:09.932102865Z",
+        "user_id": "fbccebfe-fafb-11e4-80d4-0025904f970f",
+        "rda": {
+            "src": "8da71fab-fa3a-11e4-80d2-0025904f970d",
+            "dst": "fbccebfe-fafb-11e4-80d4-0025904f970f"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 50,
+        "author_id": "7b8fdd06-fa37-11e4-80d2-0025904f970d",
+        "treatment_id": "253da664-6517-4084-91c1-3d377d10dbfa",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "cbf67d74-6c3e-814b-912f-714225d9b295",
+        "message_time": "2022-09-22T09:05:40.570554598Z",
+        "user_id": "a3143350-e87d-4cc5-be11-070f114de0c2",
+        "rda": {
+            "src": "7b8fdd06-fa37-11e4-80d2-0025904f970d",
+            "dst": "a3143350-e87d-4cc5-be11-070f114de0c2"
+        }
+    },
+    {
+        "event_type": "line",
+        "event_source": "line",
+        "message_type": 53,
+        "author_id": "7b8fdd06-fa37-11e4-80d2-0025904f970d",
+        "treatment_id": "253da664-6517-4084-91c1-3d377d10dbfa",
+        "line_id": "50dbbc22-fed0-11e4-80d4-0025904f970f",
+        "message_id": "7b792553-ef52-a346-94a5-80923426d0b2",
+        "message_time": "2022-09-22T09:14:28.017821025Z",
+        "user_id": "a3143350-e87d-4cc5-be11-070f114de0c2",
+        "rda": {
+            "src": "7b8fdd06-fa37-11e4-80d2-0025904f970d",
+            "dst": "a3143350-e87d-4cc5-be11-070f114de0c2",
+            "duration": 521
+        }
     }
 ]

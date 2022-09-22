@@ -169,5 +169,6 @@ def update_call_statistic(req):
                 }
             }
                    )
-
+    print('НАЧАЛО ФУНКЦИИ')
     update_user_statistics(req)
+    print('КОНЕЦ ФУНКЦИИ')

@@ -55,9 +55,9 @@ def add_call(req: dict):
 
 def add_mail(req: dict):
     activity_type = b.get_all('crm.activity.list', {'filter': {'ID': req['data[FIELDS][ID]']}})[0]
-    print(activity_type)
-    return
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
+        print(activity_type)
+        return 
         data_to_write = [req['event'],
                          get_user_name(req['AUTHOR_ID']),
                          time_handler(req['CREATED'])]

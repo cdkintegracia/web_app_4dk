@@ -55,7 +55,7 @@ def update_call_statistic(req):
     :param req: request.form
     :return: Обновление или создание элемента в УС "Статистика звонков"
     """
-    print(req)
+
     update_user_statistics(req)     # Запись в статистику пользователя
 
     if req['data[CALL_TYPE]'] not in ['1', ] or\

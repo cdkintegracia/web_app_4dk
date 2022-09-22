@@ -37,12 +37,10 @@ def add_call(req: dict):
     :param req: request.form
     :return:
     """
-    print('REQ')
-    print(req['data[CALL_FAILED_CODE]'])
-    print('REQ')
+
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
-    user_info = b.get_all('user.get', {'filter': {'ID': req['data[PORTAL_USER_ID]']}})
+    user_info = b.get_all('user.get', {'filter': {'ID': req['data[PORTAL_USER_ID]']}})[0]
     data_to_write = [req['event'],
             f"{user_info['NAME']} {user_info['LAST_NAME']}",
             time_handler(req['CALL_START_DATE']),

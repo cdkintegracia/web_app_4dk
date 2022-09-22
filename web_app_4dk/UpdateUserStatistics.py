@@ -41,10 +41,9 @@ def add_call(req: dict):
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
     user_info = b.get_all('user.get', {'filter': {'ID': req['data[PORTAL_USER_ID]']}})[0]
-    print(req)
     data_to_write = [req['event'],
             f"{user_info['NAME']} {user_info['LAST_NAME']}",
-            time_handler(req['CALL_START_DATE']),
+            time_handler(req['data[CALL_START_DATE]']),
             req['data[CALL_TYPE]']]
 
     write_to_sheet(data_to_write)

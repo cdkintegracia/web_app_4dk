@@ -77,12 +77,8 @@ def add_mail(req: dict):
 
 def add_new_task(req: dict):
     task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
-    if task['task']['status'] not in ['2', '5']:
+    if task['task']['status'] != '2':
         return
-    task_status = {
-        '2': 'В работе',
-        '5': 'Завершена'
-    }
     user_info = requests.post(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
     user_info = user_info['result'][0]
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
@@ -90,14 +86,16 @@ def add_new_task(req: dict):
             'TASK',
                          user_name,
                          time_handler(task['task']['createdDate']),
-                     task_status[task['task']['status']]
-
+                     'В работе'
                      ]
+
     write_to_sheet(data_to_write)
 
 
 def add_old_task(req: dict):
-    pass
+    task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
+    if task['task']['status'] != '2':
+        return
 
 
 def update_user_statistics(req: dict):

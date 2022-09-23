@@ -1,6 +1,7 @@
 from fast_bitrix24 import Bitrix
 import gspread
 import dateutil.parser
+import requests
 
 from web_app_4dk.authentication import authentication
 
@@ -57,8 +58,8 @@ def add_call(req: dict):
 
 
 def add_mail(req: dict):
-    return
-    activity_type = b.get_all('crm.activity.list', {'filter': {'ID': req['data[FIELDS][ID]']}})[0]
+    #activity_type = requests.post(f"{authentication('Bitrix')}'crm.activity.list')
+    activity_type = b.get_all('crm.activity.get', {'ID': req['data[FIELDS][ID]']})
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
         return
         data_to_write = [req['event'],

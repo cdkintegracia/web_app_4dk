@@ -58,7 +58,7 @@ def add_call(req: dict):
 
 
 def add_mail(req: dict):
-    activity_type = requests.post(f"{authentication('Bitrix')}'crm.activity.get'?id={req['data[FIELDS][ID]']}").json()
+    activity_type = requests.post(f"{authentication('Bitrix')}crm.activity.get'?id={req['data[FIELDS][ID]']}").json()
     print(activity_type)
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
         return

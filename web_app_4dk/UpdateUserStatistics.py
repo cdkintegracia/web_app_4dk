@@ -58,8 +58,7 @@ def add_call(req: dict):
 
 
 def add_mail(req: dict):
-    #activity_type = requests.post(f"{authentication('Bitrix')}'crm.activity.list')
-    activity_type = b.get_all('crm.activity.get', {'ID': req['data[FIELDS][ID]']})
+    activity_type = requests.post(f"{authentication('Bitrix')}'crm.activity.get'?id={req['data[FIELDS][ID]']}")
     if activity_type['PROVIDER_TYPE_ID'] == 'EMAIL':
         return
         data_to_write = [req['event'],

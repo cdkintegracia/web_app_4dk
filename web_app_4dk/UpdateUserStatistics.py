@@ -76,7 +76,7 @@ def add_mail(req: dict):
 
 
 def add_task(req: dict):
-    task = b.get_all('tasks.tsk.get', {'ID': req['data[FIELDS_AFTER][ID]']})
+    task = b.get_all('tasks.task.get', {'ID': req['data[FIELDS_AFTER][ID]']})
     print(task)
 
 

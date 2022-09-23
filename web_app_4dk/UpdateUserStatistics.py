@@ -64,7 +64,7 @@ def add_mail(req: dict):
         user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
         data_to_write = ['EMAIL',
                          user_name,
-                         time_handler(req['CREATED'])]
+                         time_handler(activity_type['result']['CREATED'])]
         write_to_sheet(data_to_write)
 
 

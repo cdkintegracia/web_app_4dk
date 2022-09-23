@@ -34,6 +34,8 @@ default_webhooks = {
     'ONVOXIMPLANTCALLEND': update_call_statistic,
     'ONCRMDEALADD': create_deal,
     'ONCRMACTIVITYADD': update_user_statistics,
+    'ONTASKADD': update_user_statistics,
+    'ONTASKUPDATE': update_user_statistics,
 }
 
 # Обработчик стандартных вебхуков Битрикс

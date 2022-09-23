@@ -59,6 +59,11 @@ def add_call(req: dict):
 
 
 def add_mail(req: dict):
+    """
+    Фильтр события по его типу (EMAIL), получение подробной информации по его ID
+    :param req: request.form
+    :return:
+    """
     activity_type = requests.post(f"{authentication('Bitrix')}crm.activity.get?id={req['data[FIELDS][ID]']}").json()
     if activity_type['result']['PROVIDER_TYPE_ID'] == 'EMAIL':
         user_info = b.get_all('user.get', {'ID': activity_type['result']['AUTHOR_ID']})[0]
@@ -70,6 +75,10 @@ def add_mail(req: dict):
         write_to_sheet(data_to_write)
 
 
+def add_task(req: dict):
+    print(req)
+
+
 def update_user_statistics(req: dict):
     """
     Вызывает нужную функция для переданного типа события
@@ -79,6 +88,8 @@ def update_user_statistics(req: dict):
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
         'ONCRMACTIVITYADD': add_mail,
+        'ONTASKADD': add_task,
+        'ONTASKUPDATE': add_task,
     }
     funcs[req['event']](req)
 

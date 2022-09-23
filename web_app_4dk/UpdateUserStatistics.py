@@ -60,11 +60,9 @@ def add_call(req: dict):
 def add_mail(req: dict):
     activity_type = requests.post(f"{authentication('Bitrix')}crm.activity.get?id={req['data[FIELDS][ID]']}").json()
     if activity_type['result']['PROVIDER_TYPE_ID'] == 'EMAIL':
-        print(activity_type)
-        user_info = b.get_all('user.get', {'ID': req['result']['AUTHOR_ID']})[0]
-        user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
+        user = activity_type['result']['EMAIL_META']['from']
         data_to_write = ['EMAIL',
-                         user_name,
+                         user,
                          time_handler(req['CREATED'])]
         write_to_sheet(data_to_write)
 

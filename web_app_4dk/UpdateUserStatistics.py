@@ -93,9 +93,11 @@ def add_new_task(req: dict):
 
 
 def add_old_task(req: dict):
-    task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
-    if task['task']['status'] != '2':
+    task = requests.post(f"{authentication('Bitrix')}tasks.task.get?taskId={req['data[FIELDS_AFTER][ID]']}").json()
+    print(task)
+    if task['result']['task']['status'] != '2':
         return
+
 
 
 def update_user_statistics(req: dict):

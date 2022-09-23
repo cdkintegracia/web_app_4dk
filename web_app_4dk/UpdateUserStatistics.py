@@ -75,7 +75,7 @@ def add_mail(req: dict):
         write_to_sheet(data_to_write)
 
 
-def add_task(req: dict):
+def add_new_task(req: dict):
     task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
     if task['task']['status'] not in ['2', '5']:
         return
@@ -96,6 +96,10 @@ def add_task(req: dict):
     write_to_sheet(data_to_write)
 
 
+def add_old_task(req: dict):
+    pass
+
+
 def update_user_statistics(req: dict):
     """
     Вызывает нужную функция для переданного типа события
@@ -105,8 +109,8 @@ def update_user_statistics(req: dict):
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
         'ONCRMACTIVITYADD': add_mail,
-        'ONTASKADD': add_task,
-        'ONTASKUPDATE': add_task,
+        'ONTASKADD': add_new_task,
+        'ONTASKUPDATE': add_old_task,
     }
     funcs[req['event']](req)
 

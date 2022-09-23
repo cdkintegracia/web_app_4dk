@@ -49,7 +49,7 @@ def add_call(req: dict):
         return
     user_info = b.get_all('user.get', {'ID': req['data[PORTAL_USER_ID]']})[0]
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
-    data_to_write = [req['data[CRM_ACTIVITY_ID]'],
+    data_to_write = [req['data[CALL_ID]'],
         'CALL',
             user_name,
             time_handler(req['data[CALL_START_DATE]']),

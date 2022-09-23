@@ -49,7 +49,7 @@ def add_call(req: dict):
         return
     user_info = b.get_all('user.get', {'ID': req['data[PORTAL_USER_ID]']})[0]
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
-    data_to_write = [req['event'],
+    data_to_write = ['CALL',
             user_name,
             time_handler(req['data[CALL_START_DATE]']),
             req['data[CALL_TYPE]']]
@@ -59,11 +59,11 @@ def add_call(req: dict):
 
 def add_mail(req: dict):
     activity_type = requests.post(f"{authentication('Bitrix')}crm.activity.get?id={req['data[FIELDS][ID]']}").json()
-    print(activity_type)
     if activity_type['result']['PROVIDER_TYPE_ID'] == 'EMAIL':
-        return
-        data_to_write = [req['event'],
-                         get_user_name(req['AUTHOR_ID']),
+        user_info = b.get_all('user.get', {'ID': req['AUTHOR_ID']})[0]
+        user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
+        data_to_write = ['EMAIL',
+                         user_name,
                          time_handler(req['CREATED'])]
         write_to_sheet(data_to_write)
 

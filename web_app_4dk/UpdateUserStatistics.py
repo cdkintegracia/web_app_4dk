@@ -86,13 +86,14 @@ def add_task(req: dict):
     user_info = requests.post(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
     user_info = user_info['result'][0]
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
-    data_to_write = [task['task']['ID'],
+    data_to_write = [task['task']['id'],
             'TASK',
                          user_name,
                          time_handler(task['task']['createdDate']),
                      task_status[task['task']['status']]
 
                      ]
+    write_to_sheet(data_to_write)
 
 
 def update_user_statistics(req: dict):

@@ -77,11 +77,12 @@ def add_mail(req: dict):
 
 def add_task(req: dict):
     task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
-    user = task['task']['responsibleId']
-    user_info = b.get_all('user.get', {'ID': user})[0]
+    user_info = requests.post(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
+    print(user_info)
+    '''
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
     print(user_name)
-
+    '''
 
 def update_user_statistics(req: dict):
     """

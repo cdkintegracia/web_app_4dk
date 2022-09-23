@@ -46,8 +46,10 @@ def add_call(req: dict):
 
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
+    user_info = b.get_all('user.get', {'ID': req['data[PORTAL_USER_ID]']})[0]
+    user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
     data_to_write = [req['event'],
-            get_user_name(req['data[PORTAL_USER_ID]']),
+            user_name,
             time_handler(req['data[CALL_START_DATE]']),
             req['data[CALL_TYPE]']]
 

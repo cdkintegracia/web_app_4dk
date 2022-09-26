@@ -223,7 +223,7 @@ def connect_1c(req: dict):
 
 
     # Завершение обращения. Закрытие задачи
-    elif req['message_type'] in [82, 90, 91, 92, 93]:
+    elif req['message_type'] in [82, 84, 90, 91, 92, 93]:
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}

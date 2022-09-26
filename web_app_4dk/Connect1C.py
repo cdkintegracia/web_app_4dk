@@ -138,34 +138,8 @@ def connect_1c(req: dict):
     if req['event_type'] != 'line':
         return
     # Запись события в логи
-    log = f"{req['message_type']}|{req['author_id']}|{req['treatment_id']}|{req['line_id']}|{get_event_info(req)}\n"
-    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'a') as file:
-        file.write(log)
-
-    logs = []
-    titles = ['message_type', 'author_id', 'treatment_id', 'line_id', 'info']
-    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'r') as file:
-        file = file.readlines()
-    for line in file:
-        log = line.strip('\n').split('|')
-        logs.append(dict(zip(titles, log)))
-    for i in logs:
-        print(i)
-
-    """
-    read_count = 0
-    while read_count < 100:
-        try:
-            with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
-                data = json.load(file)
-                data.append(req)
-            with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'w') as file:
-                json.dump(data, file, indent=4, ensure_ascii=False)
-            break
-        except:
-            read_count += 1
-            sleep(1)
-
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt', 'a') as file:
+        json.dump(req, file)
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
@@ -179,8 +153,10 @@ def connect_1c(req: dict):
             return
 
         task_text = ''
-        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
-            data = json.load(file)
+        data = []
+        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.json') as file:
+            for line in file:
+                data.append(json.loads(line))
 
         # Проверка было ли обращение перенаправлено
             for event in data:
@@ -250,9 +226,10 @@ def connect_1c(req: dict):
             req['user_id']: user_info[0],
             req['author_id']: support_info[0],
         }
-
-        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'r') as file:
-            data = json.load(file)
+        data = []
+        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.json') as file:
+            for line in file:
+                data.append(json.loads(line))
         event_count = 0
         for event in data:
             if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
@@ -271,4 +248,4 @@ def connect_1c(req: dict):
             task_to_update = task_to_update[0]
             b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167'}})
             b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
-            """
+

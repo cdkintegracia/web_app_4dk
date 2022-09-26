@@ -157,6 +157,8 @@ def connect_1c(req: dict):
         with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt') as file:
             for line in file:
                 data.append(json.loads(line))
+        for i in data:
+            print(i)
 
         # Проверка было ли обращение перенаправлено
             for event in data:

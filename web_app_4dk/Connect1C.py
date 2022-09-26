@@ -236,7 +236,7 @@ def connect_1c(req: dict):
                 if event_count < 2:
                     continue
                 if event['author_id'] not in authors:
-                    authors.setdefault(event['author_id'], get_name(event['author_id']))
+                    authors.setdefault(event['author_id'], get_name(event['author_id'][0]))
                 task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 

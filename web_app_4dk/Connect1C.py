@@ -226,7 +226,7 @@ def connect_1c(req: dict):
     elif req['message_type'] in [82, 90, 91, 92, 93]:
         task_text = ''
         treatment_id = req['treatment_id']
-        author = get_name(req['author_id'])
+        authors = {}
 
         data = load_logs()
         event_count = 0
@@ -235,7 +235,9 @@ def connect_1c(req: dict):
                 event_count += 1
                 if event_count < 2:
                     continue
-                task_text += f"{time_handler(event['message_time'])} {author}\n{connect_codes[event['message_type']]}\n"
+                if event['author_id'] not in authors:
+                    authors.setdefault(event['author_id'], get_name(event['author_id']))
+                task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
         task_to_update = b.get_all('tasks.task.list', {

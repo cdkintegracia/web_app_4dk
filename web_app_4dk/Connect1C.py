@@ -230,7 +230,7 @@ def connect_1c(req: dict):
             req['author_id']: support_info[0],
         }
         data = []
-        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.json') as file:
+        with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt') as file:
             for line in file:
                 data.append(json.loads(line))
         event_count = 0

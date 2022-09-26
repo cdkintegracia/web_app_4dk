@@ -166,7 +166,7 @@ def connect_1c(req: dict):
 
         # Проверка было ли обращение перенаправлено
         for event in data:
-            if event['message_type'] == 89:
+            if event['message_type'] in [89, 84]:
                 event_time = dateutil.parser.isoparse(event['message_time'])
                 req_time = dateutil.parser.isoparse(req['message_time'])
                 event_compare_time = f"{event_time.day}.{event_time.month}.{event_time.year}"

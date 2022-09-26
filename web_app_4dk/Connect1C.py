@@ -147,7 +147,7 @@ def connect_1c(req: dict):
         return
     # Запись события в логи
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt', 'a') as file:
-        json.dump(req, file)
+        json.dump(req, file, ensure_ascii=False)
         file.write('\n')
 
     # Начало обращения. Создание задачи

@@ -138,6 +138,11 @@ def connect_1c(req: dict):
     if req['event_type'] != 'line':
         return
     # Запись события в логи
+    log = f"{req['message_type']}|{req['author_id']}|{req['treatment_id']}|{req['line_id']}|{get_event_info(req)}"
+    with open('connect.txt', 'a') as file:
+        file.write(log)
+
+    """
     read_count = 0
     while read_count < 100:
         try:
@@ -256,3 +261,4 @@ def connect_1c(req: dict):
             task_to_update = task_to_update[0]
             b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167'}})
             b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
+            """

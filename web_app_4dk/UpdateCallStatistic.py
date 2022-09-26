@@ -138,7 +138,7 @@ def update_call_statistic(req):
                 except:
                     first_break_limit = '2207'
                 try:
-                    for field_value in element['PROPERTY_1315']:
+                    for field_value in element['PROPERTY_1317']:
                         second_break_limit = element['PROPERTY_1317'][field_value]
                 except:
                     second_break_limit = '2209'

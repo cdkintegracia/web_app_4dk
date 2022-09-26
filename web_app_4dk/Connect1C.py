@@ -150,6 +150,44 @@ def connect_1c(req: dict):
         json.dump(req, file, ensure_ascii=False)
         file.write('\n')
 
+    # Проверка было ли обращение перенаправлено
+    task_text = ''
+    data = load_logs()
+    for event in data:
+        if event['message_type'] == 89:
+            event_time = dateutil.parser.isoparse(event['message_time'])
+            req_time = dateutil.parser.isoparse(req['message_time'])
+            event_compare_time = f"{event_time.day}.{event_time.month}.{event_time.year}"
+            req_compare_time = f"{req_time.day}.{req_time.month}.{req_time.year}"
+
+            if event_compare_time == req_compare_time and event['data']['line_id'] == req['line_id']:
+                print(event_compare_time, req_compare_time, event_compare_time == req_compare_time)
+                print(event['data']['line_id'], req['line_id'], event['data']['line_id'] == req['line_id'])
+                task_to_change = b.get_all('tasks.task.list', {
+                    'select': ['ID', 'RESPONSIBLE_ID'],
+                    'filter': {
+                        'UF_AUTO_499889542776': event['treatment_id']}})
+                if task_to_change:
+                    user_info = get_name(req['user_id'])
+                    support_info = get_name(req['author_id'])
+                    user_names = {
+                        req['user_id']: user_info[0],
+                        req['author_id']: support_info[0],
+                    }
+                    task_text = ''
+                    for text in data:
+                        if text['treatment_id'] == event['treatment_id']:
+                            task_text += f"{time_handler(text['message_time'])} {user_names[text['author_id']]}\n{connect_codes[text['message_type']]}\n"
+                            task_text += f"{get_event_info(text)}\n"
+
+                    b.call('tasks.task.update',
+                           {'taskId': task_to_change['id'],
+                            'fields': {'UF_AUTO_499889542776': req['treatment_id'],
+                                       'DESCRIPTION': f"{task_to_change['description']}\n{task_text}"
+                                       }
+                            }
+                           )
+
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
 
@@ -160,47 +198,6 @@ def connect_1c(req: dict):
                 'UF_AUTO_499889542776': req['treatment_id']}})
         if is_task_created:
             return
-
-        task_text = ''
-        data = load_logs()
-
-        # Проверка было ли обращение перенаправлено
-        for event in data:
-            if event['message_type'] == 89:
-                event_time = dateutil.parser.isoparse(event['message_time'])
-                req_time = dateutil.parser.isoparse(req['message_time'])
-                event_compare_time = f"{event_time.day}.{event_time.month}.{event_time.year}"
-                req_compare_time = f"{req_time.day}.{req_time.month}.{req_time.year}"
-
-                if event_compare_time == req_compare_time and event['data']['line_id'] == req['line_id']:
-                    print(event_compare_time, req_compare_time, event_compare_time == req_compare_time)
-                    print(event['data']['line_id'], req['line_id'], event['data']['line_id'] == req['line_id'])
-                    task_to_change = b.get_all('tasks.task.list', {
-                        'select': ['ID', 'RESPONSIBLE_ID'],
-                        'filter': {
-                            'UF_AUTO_499889542776': event['treatment_id']}})
-
-                    if task_to_change:
-                        user_info = get_name(req['user_id'])
-                        support_info = get_name(req['author_id'])
-                        user_names = {
-                            req['user_id']: user_info[0],
-                            req['author_id']: support_info[0],
-                        }
-                        task_text = ''
-                        for text in data:
-                            if text['treatment_id'] == event['treatment_id']:
-                                task_text += f"{time_handler(text['message_time'])} {user_names[text['author_id']]}\n{connect_codes[text['message_type']]}\n"
-                                task_text += f"{get_event_info(text)}\n"
-
-                        b.call('tasks.task.update',
-                               {'taskId': task_to_change['id'],
-                                'fields': {'UF_AUTO_499889542776': req['treatment_id'],
-                                           'DESCRIPTION': f"{task_to_change['description']}\n{task_text}"
-                                           }
-                                           }
-                               )
-
 
         # Создание задачи с первым сообщением
         for event in data:

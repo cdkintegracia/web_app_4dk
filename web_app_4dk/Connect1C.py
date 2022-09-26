@@ -226,12 +226,7 @@ def connect_1c(req: dict):
     elif req['message_type'] in [82, 90, 91, 92, 93]:
         task_text = ''
         treatment_id = req['treatment_id']
-        user_info = get_name(req['user_id'])
-        support_info = get_name(req['author_id'])
-        user_names = {
-            req['user_id']: user_info[0],
-            req['author_id']: support_info[0],
-        }
+        author = get_name(req['author_id'])
 
         data = load_logs()
         event_count = 0
@@ -240,7 +235,7 @@ def connect_1c(req: dict):
                 event_count += 1
                 if event_count < 2:
                     continue
-                task_text += f"{time_handler(event['message_time'])} {user_names[event['author_id']]}\n{connect_codes[event['message_type']]}\n"
+                task_text += f"{time_handler(event['message_time'])} {author}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
         task_to_update = b.get_all('tasks.task.list', {

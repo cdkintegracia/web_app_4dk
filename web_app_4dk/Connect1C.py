@@ -143,11 +143,14 @@ def connect_1c(req: dict):
         file.write(log)
 
     logs = []
+    titles = ['message_type', 'author_id', 'treatment_id', 'line_id', 'info']
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'r') as file:
         file = file.readlines()
     for line in file:
-        log = line.split('|')
-        print(log)
+        log = line.strip('\n').split('|')
+        logs.append(dict(zip(titles, log)))
+    for i in logs:
+        print(i)
 
     """
     read_count = 0

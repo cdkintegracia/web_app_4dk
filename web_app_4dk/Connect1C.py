@@ -140,6 +140,7 @@ def connect_1c(req: dict):
     # Запись события в логи
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt', 'a') as file:
         json.dump(req, file)
+        file.write('\n')
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:

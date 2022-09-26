@@ -237,7 +237,7 @@ def connect_1c(req: dict):
                     continue
                 if event['author_id'] not in authors:
                     authors.setdefault(event['author_id'], get_name(event['author_id']))
-                task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']]}\n{connect_codes[event['message_type']]}\n"
+                task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
         task_to_update = b.get_all('tasks.task.list', {

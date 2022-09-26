@@ -146,7 +146,8 @@ def connect_1c(req: dict):
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'r') as file:
         file = file.readlines()
     for line in file:
-        print(type(line))
+        log = line.split('|')
+        print(log)
 
     """
     read_count = 0

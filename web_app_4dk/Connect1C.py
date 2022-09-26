@@ -138,7 +138,8 @@ def connect_1c(req: dict):
     if req['event_type'] != 'line':
         return
     # Запись события в логи
-    log = f"{req['message_type']}|{req['author_id']}|{req['treatment_id']}|{req['line_id']}|{get_event_info(req)}"
+    log = f"{req['message_type']}|{req['author_id']}|{req['treatment_id']}|{req['line_id']}|{get_event_info(req)}\n"
+    print(log)
     with open('connect.txt', 'a') as file:
         file.write(log)
 

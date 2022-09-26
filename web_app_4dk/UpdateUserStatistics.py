@@ -44,17 +44,18 @@ def add_call(req: dict):
     :param req: request.form
     :return:
     """
-
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
     user_info = b.get_all('user.get', {'ID': req['data[PORTAL_USER_ID]']})[0]
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
-    data_to_write = [req['data[CALL_ID]'],
+    data_to_write = [
+        req['data[CALL_ID]'],
         'CALL',
-            user_name,
-            time_handler(req['data[CALL_START_DATE]']),
-            req['data[CALL_TYPE]']]
-
+        user_name,
+        time_handler(req['data[CALL_START_DATE]']),
+        req['data[CALL_TYPE]'],
+        req['data[CALL_DURATION]']
+    ]
     write_to_sheet(data_to_write)
 
 

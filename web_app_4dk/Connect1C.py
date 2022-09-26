@@ -142,6 +142,15 @@ def connect_1c(req: dict):
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'a') as file:
         file.write(log)
 
+    logs = []
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'r') as file:
+        file = file.readlines()
+    for line in file:
+        log = log.split('|')
+        logs.append(log)
+    print(logs)
+
+
     """
     read_count = 0
     while read_count < 100:

@@ -139,7 +139,7 @@ def connect_1c(req: dict):
         return
     # Запись события в логи
     log = f"{req['message_type']}|{req['author_id']}|{req['treatment_id']}|{req['line_id']}|{get_event_info(req)}\n"
-    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.json', 'a') as file:
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect.txt', 'a') as file:
         file.write(log)
 
     """

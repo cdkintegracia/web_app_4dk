@@ -160,9 +160,10 @@ def connect_1c(req: dict):
             event_compare_time = f"{event_time.day}.{event_time.month}.{event_time.year}"
             req_compare_time = f"{req_time.day}.{req_time.month}.{req_time.year}"
 
+            print(event_compare_time, req_compare_time, event_compare_time == req_compare_time)
+            print(event['data']['line_id'], req['line_id'], event['data']['line_id'] == req['line_id'])
+
             if event_compare_time == req_compare_time and event['data']['line_id'] == req['line_id']:
-                print(event_compare_time, req_compare_time, event_compare_time == req_compare_time)
-                print(event['data']['line_id'], req['line_id'], event['data']['line_id'] == req['line_id'])
                 task_to_change = b.get_all('tasks.task.list', {
                     'select': ['ID', 'RESPONSIBLE_ID'],
                     'filter': {

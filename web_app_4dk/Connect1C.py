@@ -217,7 +217,7 @@ def connect_1c(req: dict):
         'filter': {
             'UF_AUTO_499889542776': req['treatment_id']}})
     if is_task_created:
-        connect_user_name = get_name(req['author_id'])
+        connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
         if connect_user_id == '0':
             return

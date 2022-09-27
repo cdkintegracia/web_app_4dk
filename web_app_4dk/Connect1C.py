@@ -150,11 +150,12 @@ def connect_1c(req: dict):
         json.dump(req, file, ensure_ascii=False)
         file.write('\n')
 
+    is_task_created = requests.get(
+        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()
+
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
-
         # Проверка была ли задача уже создана
-        is_task_created = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()
         if is_task_created:
             return
 
@@ -209,10 +210,6 @@ def connect_1c(req: dict):
             b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
 
     # Смена ответственного
-    is_task_created = b.get_all('tasks.task.list', {
-        'select': ['ID', 'RESPONSIBLE_ID'],
-        'filter': {
-            'UF_AUTO_499889542776': req['treatment_id']}})
     if is_task_created:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)

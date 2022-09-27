@@ -196,12 +196,15 @@ def connect_1c(req: dict):
         for line in data[::-1]:
             if line['message_type'] == 89 and line['data']['direction'] == 'from' and line['author_id'] == req['author_id']:
                 task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
+                print(task_to_update)
+                print(req['treatment_id'])
                 authors = {}
                 task_text = ''
                 for event in data:
                     if event['treatment_id'] == line['treatment_id']:
                         if event['author_id'] not in authors:
                             authors.setdefault(event['author_id'], get_name(event['author_id']))
+                        print(authors)
                         task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                         task_text += f"{get_event_info(event)}\n"
                 b.call('task.commentitem.add', [task_to_update['tasks'][0]['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['tasks'][0]['responsibleId']}],

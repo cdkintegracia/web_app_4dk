@@ -170,16 +170,25 @@ def connect_1c(req: dict):
         support_info = get_name(req['author_id'], req['treatment_id'])
         support_id = get_employee_id(support_info[0])
 
-        b.call('tasks.task.add', {'fields': {
-            'TITLE': f"1С:Коннект",
-            'DESCRIPTION': f"{message_time} {user_info[0]}\n{task_text}",
-            'GROUP_ID': '75',
-            'CREATED_BY': '173',
-            'RESPONSIBLE_ID': '173',
-            'UF_CRM_TASK': [f"CO_{user_info[1]}"],
-            'UF_AUTO_499889542776': req['treatment_id'],
-            'STAGE_ID': '1165',
-        }})
+        try:
+            b.call('tasks.task.add', {'fields': {
+                'TITLE': f"1С:Коннект",
+                'DESCRIPTION': f"{message_time} {user_info[0]}\n{task_text}",
+                'GROUP_ID': '75',
+                'CREATED_BY': '173',
+                'RESPONSIBLE_ID': '173',
+                'UF_CRM_TASK': [f"CO_{user_info[1]}"],
+                'UF_AUTO_499889542776': req['treatment_id'],
+                'STAGE_ID': '1165',
+            }})
+        # Опять сменился treatment_id заебало
+        except:
+            for line in data[::-1]:
+                if line['message_type'] == 89 and line['data']['direction'] == 'from' and line['data']['line_id'] == req['line_id']:
+                    task_to_update = requests.get(
+                        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={line['treatment_id']}").json()['result']
+                    b.call('tasks.task.update', {'taskId': task_to_update['tasks'][0]['id'],
+                                                 'fields': {'UF_AUTO_499889542776': req['treatment_id']}})
 
     # Смена линии
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':

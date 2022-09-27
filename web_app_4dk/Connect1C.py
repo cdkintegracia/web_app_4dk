@@ -181,6 +181,17 @@ def connect_1c(req: dict):
             'STAGE_ID': '1165',
         }})
 
+    # Смена линии
+    elif req['message_type'] == 89:
+        if 'to' in req['data']:
+            data = load_logs()
+            for line in data[::-1]:
+                if line['message_type'] == 89:
+                    if 'from' in line['data']:
+                        if line['author_id'] == req['author_id']:
+                            task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={line['tratment_id']}").json()['result']
+                            b.call('tasks.task.update', {'taskId': task_to_update['tasks'][0]['id'], 'fields': {'UF_AUTO_499889542776': req['treatment_id']}})
+                            
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 84, 90, 91, 92, 93]:
         task_text = ''
@@ -213,10 +224,9 @@ def connect_1c(req: dict):
     if is_task_created['tasks']:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
-        print(connect_user_name, connect_user_id)
         if connect_user_id == '0':
             return
-        print(is_task_created)
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:
             b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'AUDITORS': [connect_user_id]}})
+

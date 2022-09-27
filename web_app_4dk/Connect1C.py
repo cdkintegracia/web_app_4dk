@@ -196,10 +196,16 @@ def connect_1c(req: dict):
         for line in data[::-1]:
             if line['message_type'] == 89 and line['data']['direction'] == 'from' and line['author_id'] == req['author_id']:
                 task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
-                print(task_to_update)
+                authors = {}
+                for event in data:
+                    if event['treatment_id'] == line['treatment_id']:
+                        if event['author_id'] not in authors:
+                            authors.setdefault(event['author_id'], get_name(event['author_id']))
+                        task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
+                        task_text += f"{get_event_info(event)}\n"
+                b.call('task.commentitem.add', [task_to_update['tasks'][0]['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}],
+                       raw=True)
                 b.call('tasks.task.update', {'taskId': task_to_update['tasks'][0]['id'], 'fields': {'UF_AUTO_499889542776': line['treatment_id']}})
-    elif req['message_type'] == 89 and req['data']['direction'] != 'to':
-        return
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 84, 90, 91, 92, 93]:

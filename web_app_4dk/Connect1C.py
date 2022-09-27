@@ -180,7 +180,7 @@ def connect_1c(req: dict):
             'RESPONSIBLE_ID': '173',
             'UF_CRM_TASK': [f"CO_{user_info[1]}"],
             'UF_AUTO_499889542776': req['treatment_id'],
-            'STAGE_ID': '1165'
+            'STAGE_ID': '1165',
         }})
 
     # Завершение обращения. Закрытие задачи

@@ -197,6 +197,7 @@ def connect_1c(req: dict):
             if line['message_type'] == 89 and line['data']['direction'] == 'from' and line['author_id'] == req['author_id']:
                 task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
                 authors = {}
+                task_text = ''
                 for event in data:
                     if event['treatment_id'] == line['treatment_id']:
                         if event['author_id'] not in authors:

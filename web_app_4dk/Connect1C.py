@@ -183,15 +183,15 @@ def connect_1c(req: dict):
 
     # Смена линии
     elif req['message_type'] == 89:
-        if 'to' in req['data']:
+        if req['data']['direction'] == 'to':
             data = load_logs()
             for line in data[::-1]:
                 if line['message_type'] == 89:
-                    if 'from' in line['data']:
+                    if line['data']['direction'] == 'from':
                         if line['author_id'] == req['author_id']:
                             task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={line['tratment_id']}").json()['result']
                             b.call('tasks.task.update', {'taskId': task_to_update['tasks'][0]['id'], 'fields': {'UF_AUTO_499889542776': req['treatment_id']}})
-                            
+
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 84, 90, 91, 92, 93]:
         task_text = ''

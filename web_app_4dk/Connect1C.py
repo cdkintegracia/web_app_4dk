@@ -215,7 +215,7 @@ def connect_1c(req: dict):
     is_task_created = b.get_all('tasks.task.list', {
         'select': ['ID', 'RESPONSIBLE_ID'],
         'filter': {
-            'UF_AUTO_499889542776': req['treatment_id']}})[0]
+            'UF_AUTO_499889542776': req['treatment_id']}})
     if is_task_created:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
@@ -223,4 +223,4 @@ def connect_1c(req: dict):
             return
         task_user_name = is_task_created[0]['responsible']['name']
         if task_user_name != connect_user_name:
-            b.call('tasks.task.update', {'taskId': is_task_created['ID'], 'fields': {'AUDITORS': [connect_user_id]}})
+            b.call('tasks.task.update', {'taskId': is_task_created[0]['ID'], 'fields': {'AUDITORS': [connect_user_id]}})

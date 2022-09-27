@@ -94,8 +94,9 @@ def add_new_task(req: dict):
 
 
 def add_old_task(req: dict):
+    return
     task = requests.post(f"{authentication('Bitrix')}tasks.task.get?taskId={req['data[FIELDS_AFTER][ID]']}").json()['result']
-    if task[0]['task']['status'] != '5':
+    if task['task']['status'] != '5':
         return
     user_info = requests.post(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
     user_info = user_info['result'][0]

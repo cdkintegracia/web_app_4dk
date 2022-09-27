@@ -217,6 +217,6 @@ def connect_1c(req: dict):
         if connect_user_id == '0':
             return
         print(is_task_created)
-        task_user_name = is_task_created['tasks']['responsible']['name']
+        task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:
             b.call('tasks.task.update', {'taskId': is_task_created['ID'], 'fields': {'AUDITORS': [connect_user_id]}})

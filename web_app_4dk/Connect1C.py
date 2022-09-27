@@ -156,7 +156,7 @@ def connect_1c(req: dict):
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
         # Проверка была ли задача уже создана
-        if is_task_created:
+        if is_task_created['tasks']:
             return
 
         # Создание задачи с первым сообщением
@@ -210,7 +210,7 @@ def connect_1c(req: dict):
             b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
 
     # Смена ответственного
-    if is_task_created:
+    if is_task_created['tasks']:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
         if connect_user_id == '0':

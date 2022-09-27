@@ -1,6 +1,6 @@
 import json
-from time import sleep
 
+import requests
 from fast_bitrix24 import Bitrix
 import dateutil.parser
 from datetime import timedelta
@@ -215,7 +215,7 @@ def connect_1c(req: dict):
     is_task_created = b.get_all('tasks.task.list', {
         'select': ['ID', 'RESPONSIBLE_ID'],
         'filter': {
-            'UF_AUTO_499889542776': req['treatment_id']}})
+            'UF_AUTO_499889542776': req['treatment_id']}})[0]
     if is_task_created:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)

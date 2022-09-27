@@ -160,8 +160,6 @@ def connect_1c(req: dict):
             event_compare_time = f"{event_time.day}.{event_time.month}.{event_time.year}"
             req_compare_time = f"{req_time.day}.{req_time.month}.{req_time.year}"
 
-            print(event['data']['line_id'], req['line_id'], event['data']['line_id'] == req['line_id'])
-
             if event_compare_time == req_compare_time and event['data']['line_id'] == req['line_id']:
                 task_to_change = b.get_all('tasks.task.list', {
                     'select': ['ID', 'RESPONSIBLE_ID'],
@@ -174,7 +172,7 @@ def connect_1c(req: dict):
                     for text in data:
                         if text['treatment_id'] == event['treatment_id']:
                             if text['author_id'] not in authors:
-                                authors.setdefault(event['author_id'], get_name(event['author_id']))
+                                authors.setdefault(text['author_id'], get_name(text['author_id']))
                             task_text += f"{time_handler(text['message_time'])} {authors[text['author_id']]}\n{connect_codes[text['message_type']]}\n"
                             task_text += f"{get_event_info(text)}\n"
 

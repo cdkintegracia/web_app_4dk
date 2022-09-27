@@ -154,10 +154,7 @@ def connect_1c(req: dict):
     if req['message_type'] in [80, 81]:
 
         # Проверка была ли задача уже создана
-        is_task_created = b.get_all('tasks.task.list', {
-            'select': ['ID'],
-            'filter': {
-                'UF_AUTO_499889542776': req['treatment_id']}})
+        is_task_created = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()
         if is_task_created:
             return
 

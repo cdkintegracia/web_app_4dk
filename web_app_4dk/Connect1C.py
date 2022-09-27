@@ -199,6 +199,7 @@ def connect_1c(req: dict):
                 authors = {}
                 task_text = ''
                 for event in data:
+                    print(event['treatment_id'], line['treatment_id'])
                     if event['treatment_id'] == line['treatment_id']:
                         if event['author_id'] not in authors:
                             authors.setdefault(event['author_id'], get_name(event['author_id']))

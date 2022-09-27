@@ -151,7 +151,7 @@ def connect_1c(req: dict):
         file.write('\n')
 
     is_task_created = requests.get(
-        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()
+        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:

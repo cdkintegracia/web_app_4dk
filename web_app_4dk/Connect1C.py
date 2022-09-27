@@ -196,6 +196,8 @@ def connect_1c(req: dict):
         for line in data[::-1]:
             if line['message_type'] == 89 and line['data']['direction'] == 'from' and line['author_id'] == req['author_id']:
                 task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
+                print(task_to_update)
+                print(req['treatment_id'])
                 authors = {}
                 task_text = ''
                 for event in data:

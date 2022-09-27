@@ -189,9 +189,9 @@ def connect_1c(req: dict):
                 if line['message_type'] == 89:
                     if line['data']['direction'] == 'from':
                         if line['author_id'] == req['author_id']:
-                            task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={line['treatment_id']}").json()['result']
+                            task_to_update = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
                             print(task_to_update)
-                            b.call('tasks.task.update', {'taskId': task_to_update['tasks'][0]['id'], 'fields': {'UF_AUTO_499889542776': req['treatment_id']}})
+                            b.call('tasks.task.update', {'taskId': task_to_update['tasks'][0]['id'], 'fields': {'UF_AUTO_499889542776': line['treatment_id']}})
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 84, 90, 91, 92, 93]:

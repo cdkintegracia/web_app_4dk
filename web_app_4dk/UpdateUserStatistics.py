@@ -72,7 +72,8 @@ def add_mail(req: dict):
         data_to_write = [activity_type['result']['ID'],
             'EMAIL',
                          user_name,
-                         time_handler(activity_type['result']['CREATED'])]
+                         time_handler(activity_type['result']['CREATED']),
+                         'Отправлено']
         write_to_sheet(data_to_write)
 
 

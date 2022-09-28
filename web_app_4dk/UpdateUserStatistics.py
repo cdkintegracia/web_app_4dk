@@ -77,6 +77,7 @@ def add_mail(req: dict):
 
 
 def add_new_task(req: dict):
+    return
     task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
     if task['task']['status'] != '2':
         return

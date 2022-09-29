@@ -162,22 +162,20 @@ def connect_1c(req: dict):
 
         # Создание задачи с первым сообщением
         data = load_logs()
-        for event in data:
+        for event in data[::-1]:
             if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
                 task_text = event['text']
                 break
         message_time = time_handler(req['message_time'])
-        user_info = get_name(req['user_id'], req['treatment_id'])
-        support_info = get_name(req['author_id'], req['treatment_id'])
-        support_id = get_employee_id(support_info[0])
+        author_info = get_name(req['author_id'], req['treatment_id'])
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект",
-            'DESCRIPTION': f"{message_time} {user_info[0]}\n{task_text}",
+            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
             'GROUP_ID': '75',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '173',
-            'UF_CRM_TASK': [f"CO_{user_info[1]}"],
+            'UF_CRM_TASK': [f"CO_{author_info[1]}"],
             'UF_AUTO_499889542776': req['treatment_id'],
             'STAGE_ID': '1165',
         }})
@@ -192,6 +190,7 @@ def connect_1c(req: dict):
 
         if not is_task_created:
             return
+        print(is_task_created)
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}

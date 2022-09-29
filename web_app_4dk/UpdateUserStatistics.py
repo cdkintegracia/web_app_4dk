@@ -100,7 +100,7 @@ def add_old_task(req: dict):
     if task:
         if task['task']['status'] != '5':
             return
-    user_info = requests.post(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
+    user_info = requests.get(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
     user_info = user_info['result'][0]
     user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
     data_to_write = [task['task']['id'],

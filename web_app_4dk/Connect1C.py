@@ -215,7 +215,7 @@ def connect_1c(req: dict):
             b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
 
     # Смена ответственного
-    '''
+
     if is_task_created['tasks']:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
@@ -224,4 +224,3 @@ def connect_1c(req: dict):
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:
             b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'AUDITORS': [connect_user_id]}})
-    '''

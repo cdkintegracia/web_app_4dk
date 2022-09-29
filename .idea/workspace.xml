@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -215,12 +218,12 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.web_app_4dk" />
       <item itemvalue="Python.1 (1)" />
       <item itemvalue="Python.1" />
       <item itemvalue="Python.UpdateUserStatistics" />
       <item itemvalue="Python.j" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python.web_app_4dk" />
     </list>
     <recent_temporary>
       <list>

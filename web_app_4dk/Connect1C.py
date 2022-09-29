@@ -151,7 +151,8 @@ def connect_1c(req: dict):
         file.write('\n')
 
     is_task_created = requests.get(
-        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']
+        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()[
+        'result']
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
@@ -204,10 +205,7 @@ def connect_1c(req: dict):
                 task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
-        task_to_update = b.get_all('tasks.task.list', {
-            'select': ['ID', 'RESPONSIBLE_ID'],
-            'filter': {
-                'UF_AUTO_499889542776': req['treatment_id']}})
+        task_to_update = is_task_created['tasks'][0]
 
         if task_to_update:
             task_to_update = task_to_update[0]

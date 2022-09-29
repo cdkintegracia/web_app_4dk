@@ -189,6 +189,9 @@ def connect_1c(req: dict):
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 84, 90, 91, 92, 93]:
+
+        if not is_task_created:
+            return
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}
@@ -207,9 +210,8 @@ def connect_1c(req: dict):
 
         task_to_update = is_task_created['tasks'][0]
 
-        if task_to_update:
-            b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167'}})
-            b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
+        b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167'}})
+        b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
 
     # Смена ответственного
 

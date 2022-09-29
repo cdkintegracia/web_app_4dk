@@ -188,9 +188,8 @@ def connect_1c(req: dict):
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 84, 90, 91, 92, 93]:
 
-        if not is_task_created:
+        if not is_task_created['tasks']:
             return
-        print(is_task_created)
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}

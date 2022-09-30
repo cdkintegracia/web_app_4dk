@@ -12,6 +12,7 @@ def update_contact_photo(req: dict):
     contact_photo = b.get_all('crm.contact.list', {'selecr': ['PHOTO'], 'filter': {'ID': contact_id}})[0]
     companies = b.get_all('crm.contact.company.items.get', {'ID': contact_id})
     if companies and 'PHOTO' in contact_photo:
+        return
         b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': None}})
     elif not companies and 'PHOTO' not in contact_photo:
         with open('/root/web_app_4dk/web_app_4dk/red_square.png', 'rb') as file:

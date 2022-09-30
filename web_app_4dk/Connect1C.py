@@ -168,6 +168,11 @@ def connect_1c(req: dict):
                 break
         message_time = time_handler(req['message_time'])
         author_info = get_name(req['author_id'], req['treatment_id'])
+        user_info = get_name(req['user_id'], req['treatment_id'])
+        if len(author_info) < 2:
+            company_id = user_info[1]
+        else:
+            company_id = author_info[1]
 
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект",
@@ -175,7 +180,7 @@ def connect_1c(req: dict):
             'GROUP_ID': '75',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '173',
-            'UF_CRM_TASK': [f"CO_{author_info[1]}"],
+            'UF_CRM_TASK': [f"CO_{company_id}"],
             'UF_AUTO_499889542776': req['treatment_id'],
             'STAGE_ID': '1165',
         }})

@@ -2,7 +2,7 @@ import base64
 
 from fast_bitrix24 import Bitrix
 
-from authentication import authentication
+from web_app_4dk.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 

@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateContactPhoto.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/UpdateContactPhoto.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +85,7 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.UpdateContactPhoto">
+  <component name="RunManager" selected="Python.test">
     <configuration name="1 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -228,11 +228,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.UpdateContactPhoto" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.1" />
+        <item itemvalue="Python.UpdateContactPhoto" />
         <item itemvalue="Python.1 (1)" />
         <item itemvalue="Python.j" />
-        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -335,8 +335,8 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/web_app_4dk$UpdateContactPhoto.coverage" NAME="UpdateContactPhoto Coverage Results" MODIFIED="1664531816031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$test.coverage" NAME="test Coverage Results" MODIFIED="1663843683875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$UpdateContactPhoto.coverage" NAME="UpdateContactPhoto Coverage Results" MODIFIED="1664532776897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$test.coverage" NAME="test Coverage Results" MODIFIED="1664533094981" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
     <SUITE FILE_PATH="coverage/web_app_4dk$UpdateUserStatistics.coverage" NAME="UpdateUserStatistics Coverage Results" MODIFIED="1663759777218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
   </component>
 </project>

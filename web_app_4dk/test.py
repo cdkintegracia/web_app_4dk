@@ -1,9 +1,18 @@
 from fast_bitrix24 import Bitrix
+from bitrix24 import *
 import requests
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
-contact_id = '11293'
-companies = b.get_all('crm.contact.company.items.get', {'ID': contact_id})
-companies = requests.get(url=f'https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/crm.contact.company.items.get?ID={contact_id}').json()['result']
+bx24 = Bitrix24('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
 
-print(companies)
+contact_id = '11283'
+
+#print(bx24.callMethod('crm.contact.update', ID=contact_id, fields={'NAME': 'test123'}))
+
+data = {'ID': contact_id, 'fields': {'PHOTO': {'id': photo_id, 'remove': 'Y'}}})
+
+requests.post(f"https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/crm.contact.update", json=data)
+
+
+
+
+

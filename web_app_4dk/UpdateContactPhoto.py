@@ -14,7 +14,9 @@ def update_contact_photo(req: dict):
     companies = requests.get(url=f'{authentication("Bitrix")}crm.contact.company.items.get?ID={contact_id}').json()['result']
     if companies and contact['PHOTO'] is not None:
         photo_id = contact['PHOTO']['id']
-        b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': {'id': photo_id, 'remove': 'Y'}}})
+        data = {'ID': contact_id, 'fields': {'PHOTO': {'id': photo_id, 'remove': 'Y'}}}
+        #b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': {'id': photo_id, 'remove': 'Y'}}})
+        requests.post(url=authentication('Bitrix'), json=data)
     elif not companies and contact['PHOTO'] is None:
         with open('/root/web_app_4dk/web_app_4dk/red_square.png', 'rb') as file:
             photo = file.read()

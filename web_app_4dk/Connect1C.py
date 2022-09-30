@@ -167,7 +167,7 @@ def connect_1c(req: dict):
                 task_text = event['text']
                 break
         message_time = time_handler(req['message_time'])
-        author_info = get_name(req['author_id'], req['treatment_id'])
+        author_info = get_name(event['author_id'], req['treatment_id'])
         user_info = get_name(req['user_id'], req['treatment_id'])
         if len(author_info) < 2:
             company_id = user_info[1]

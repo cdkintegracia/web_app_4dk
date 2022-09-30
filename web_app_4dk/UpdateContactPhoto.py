@@ -4,7 +4,8 @@ from fast_bitrix24 import Bitrix
 
 from authentication import authentication
 
-b = authentication('Bitrix')
+b = Bitrix(authentication('Bitrix'))
+
 
 def update_contact_photo(req: dict):
     contact_id = req['data[FIELDS][ID]']

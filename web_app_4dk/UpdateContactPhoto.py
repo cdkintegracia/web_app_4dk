@@ -12,7 +12,6 @@ def update_contact_photo(req: dict):
     contact_photo = b.get_all('crm.contact.list', {'select': ['PHOTO'], 'filter': {'ID': contact_id}})[0]
     companies = b.get_all('crm.contact.company.items.get', {'ID': contact_id})
     if companies and contact_photo['PHOTO'] is not None:
-        print(contact_photo)
         photo_id = contact_photo['PHOTO']['id']
         b.call('crm.contact.update', {'ID': '11293', 'fields': {'PHOTO': {'id': photo_id, 'remove': 'Y'}}})
     elif not companies and 'PHOTO' not in contact_photo:

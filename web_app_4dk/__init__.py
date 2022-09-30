@@ -13,6 +13,7 @@ from web_app_4dk.Prolongation_ITS import prolongation_its
 from web_app_4dk.CreateDeal import create_deal
 from web_app_4dk.Connect1C import connect_1c
 from web_app_4dk.UpdateUserStatistics import update_user_statistics
+from web_app_4dk.UpdateContactPhoto import update_contact_photo
 
 app = Flask(__name__)
 
@@ -36,6 +37,7 @@ default_webhooks = {
     'ONCRMACTIVITYADD': update_user_statistics,
     'ONTASKADD': update_user_statistics,
     'ONTASKUPDATE': update_user_statistics,
+    'ONCRMCONTACTUPDATE': update_contact_photo,
 }
 
 # Обработчик стандартных вебхуков Битрикс

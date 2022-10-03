@@ -22,9 +22,9 @@ def prolongation_its(req):
         b.call('tasks.task.add', {
             'fields':{
                 'TITLE': f'Продление сделки {company_name}',
-                'GROUP_ID': '23',
+                'GROUP_ID': '13',
                 'CREATED_BY': '173',
-                'RESPONSIBLE_ID': deal['ASSIGNED_BY_ID'],
+                'RESPONSIBLE_ID': '311',
                 'DEADLINE': date_filter_end,
                 'UF_CRM_TASK': ['D_' + deal['ID'], 'CO_' + deal['COMPANY_ID']],
             }

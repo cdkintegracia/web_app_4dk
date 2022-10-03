@@ -18,6 +18,8 @@ def prolongation_its(req):
     date_filter_end = f"{year}-{month}-{monthrange(int(year), int(month))[1]}"
     deals = b.get_all('crm.deal.list', {'filter': {'ASSIGNED_BY_ID': users_id, '<=CLOSEDATE': date_filter_end, '>=CLOSEDATE': date_filter_start}})
     for deal in deals:
+        print(len(deals))
+        exit()
         company_name = b.get_all('crm.company.list', {'filter': {'ID': deal['COMPANY_ID']}})[0]['TITLE']
         b.call('tasks.task.add', {
             'fields':{
@@ -26,8 +28,7 @@ def prolongation_its(req):
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': deal['ASSIGNED_BY_ID'],
                 'DEADLINE': date_filter_end,
-                'UF_CRM_TASK': 'D_' + deal['ID'],
-                'DESCRIPTION': f'Сделка: https://vc4dk.bitrix24.ru/crm/deal/details/{deal["ID"]}/'
+                'UF_CRM_TASK': ['D_' + deal['ID'], 'CO_' + deal['COMPANY_ID']],
             }
         }
                )

@@ -15,9 +15,11 @@ def prolongation_its(req):
     month = strftime('%m')
     year = strftime('%Y')
     date_filter_start = f"{year}-{month}-01"
-    date_filter_end = f"{year}-{month}-{monthrange(int(year), int(month))[1]}"
-    deals = b.get_all('crm.deal.list', {'filter': {'ASSIGNED_BY_ID': users_id, '<=CLOSEDATE': date_filter_end, '>=CLOSEDATE': date_filter_start}})
+    #date_filter_end = f"{year}-{month}-{monthrange(int(year), int(month))[1]}"
+    date_filter_end = '2022-11-01'
+    deals = b.get_all('crm.deal.list', {'filter': {'ASSIGNED_BY_ID': users_id, '<CLOSEDATE': date_filter_end, '>=CLOSEDATE': date_filter_start}})
     print(date_filter_end)
+    print(len(deals))
     exit()
     for deal in deals:
         company_name = b.get_all('crm.company.list', {'filter': {'ID': deal['COMPANY_ID']}})[0]['TITLE']

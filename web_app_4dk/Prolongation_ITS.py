@@ -17,9 +17,9 @@ def prolongation_its(req):
     date_filter_start = f"{year}-{month}-01"
     date_filter_end = f"{year}-{month}-{monthrange(int(year), int(month))[1]}"
     deals = b.get_all('crm.deal.list', {'filter': {'ASSIGNED_BY_ID': users_id, '<=CLOSEDATE': date_filter_end, '>=CLOSEDATE': date_filter_start}})
+    print(date_filter_end)
+    exit()
     for deal in deals:
-        print(len(deals))
-        exit()
         company_name = b.get_all('crm.company.list', {'filter': {'ID': deal['COMPANY_ID']}})[0]['TITLE']
         b.call('tasks.task.add', {
             'fields':{
@@ -32,6 +32,6 @@ def prolongation_its(req):
             }
         }
                )
-
+        '''
 if __name__ == '__main__':
     prolongation_its()

@@ -77,6 +77,10 @@ li {
     color: #fff
 }
 
+.modal-body .form-select {
+    margin-top: 25px;
+}
+
 .modal-footer input {
     background-color:#146c43;
     color:#fff;

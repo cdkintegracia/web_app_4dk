@@ -60,7 +60,7 @@ li {
 }
 
 .separate-line { 
-    border-left: 6px solid green;
+    border-left: 2px solid rgb(73, 73, 73);;
 }
 
 .modal-body input {

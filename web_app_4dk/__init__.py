@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash
 from time import asctime
 
 from web_app_4dk.TaskService import create_task_service
@@ -62,7 +62,8 @@ def custom_webhook():
 def main_page():
     if request.method == 'POST':
         new_call_statistic_file = request.form.get('new_call_statistic_file')
-        print(new_call_statistic_file)
+        if not new_call_statistic_file:
+            flash('Необходимо загрузить файл')
     return render_template('main_page.html', web_app_logs=read_logs())
 
 # Обработчик вебхуков 1С-Коннект

@@ -35,7 +35,7 @@ li {
     text-decoration: none;   
 }
 
-.btn-primary {
+.buttons .btn-primary {
     margin-top: 50px!important;
     height: 50px!important;
     width: 250px!important;
@@ -47,6 +47,11 @@ li {
     background-color: rgba(73, 73, 73, 0.7);
     text-decoration: none;
     color: #fff
+}
+
+.modal-body input {
+    background-color:rgb(73, 73, 73);
+    color:#fff
 }
 
 .container {

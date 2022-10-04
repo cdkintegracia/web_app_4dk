@@ -65,6 +65,8 @@ def main_page():
     if request.method == 'POST' and file_check:
         new_call_statistic_file = request.files['new_call_statistic_file']
         new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
+        print(new_call_statistic_file)
+        print('ura')
         with open('new_call_statistic.xlsx', 'r') as file:
             a = file.readlines()
             print(a)

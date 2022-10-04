@@ -56,8 +56,7 @@ li {
 
 .modal-body .text-block {
     text-align: right;
-    background-color: rgb(73, 73, 73);
-    color: #fff
+    color: rgb(160, 0, 0);
 }
 
 .modal-body input {

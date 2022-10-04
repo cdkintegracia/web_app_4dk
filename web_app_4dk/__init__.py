@@ -68,6 +68,9 @@ def main_page():
             flash('Необходимо загрузить файл')
         else:
             new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
+            with open('new_call_statistic.xlsx', 'r') as file:
+                a = file.readlines()
+                print(a)
     return render_template('main_page.html', web_app_logs=read_logs())
 
 # Обработчик вебхуков 1С-Коннект

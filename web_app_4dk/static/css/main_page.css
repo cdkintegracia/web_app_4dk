@@ -85,7 +85,7 @@ li {
 }
 
 .modal-footer input:hover {
-    background-color:rgba(28, 105, 35)
+    background-color:rgba(28, 105, 35);
     transition: 0.2s;
 }
 

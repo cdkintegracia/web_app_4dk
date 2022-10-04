@@ -61,16 +61,17 @@ def custom_webhook():
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    file_check = request.form.get('new_call_statistic_file')
-    print(file_check)
-    if request.method == 'POST' and file_check:
-        new_call_statistic_file = request.files['new_call_statistic_file']
-        new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
-        print(new_call_statistic_file)
-        print('ura')
-        with open('new_call_statistic.xlsx', 'r') as file:
-            a = file.readlines()
-            print(a)
+    try:
+        if request.method == 'POST':
+            new_call_statistic_file = request.files['new_call_statistic_file']
+            new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
+            print(new_call_statistic_file)
+            print('ura')
+            with open('new_call_statistic.xlsx', 'r') as file:
+                a = file.readlines()
+                print(a)
+    except:
+        pass
     return render_template('main_page.html', web_app_logs=read_logs())
 
 # Обработчик вебхуков 1С-Коннект

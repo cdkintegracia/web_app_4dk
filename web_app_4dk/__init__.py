@@ -61,7 +61,8 @@ def custom_webhook():
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    if request.method == 'POST':
+    file_check = request.form.get('new_call_statistic_file')
+    if request.method == 'POST' and file_check:
         new_call_statistic_file = request.files['new_call_statistic_file']
         if not new_call_statistic_file:
             flash('Необходимо загрузить файл')

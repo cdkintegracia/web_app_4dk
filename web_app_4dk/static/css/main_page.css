@@ -35,6 +35,10 @@ li {
     text-decoration: none;   
 }
 
+.button {
+    margin-top: 50px;
+}
+
 .buttons a:hover{
     transition: 0.2s;
     background-color: rgba(73, 73, 73, 0.7);

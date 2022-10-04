@@ -77,14 +77,15 @@ li {
 }
 
 .modal-footer input {
-    background-color:rgb(40, 150, 50);
+    background-color:#146c43;
     color:#000;
     border-radius: 10px;
     transition: 0.2s;
+    border-width: 0px;
 }
 
 .modal-footer input:hover {
-    background-color:rgba(40, 150, 49, 0.80);
+    background-color:rgba(28, 105, 35)
     transition: 0.2s;
 }
 

@@ -53,6 +53,10 @@ li {
     display: flex!important;
 }
 
+.modal-body .text-block {
+    text-align: right;
+}
+
 .modal-body input {
     margin-top: 25px;
 }

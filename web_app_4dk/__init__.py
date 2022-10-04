@@ -58,8 +58,11 @@ def custom_webhook():
     return 'OK'
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def main_page():
+    if request.method == 'POST':
+        new_call_statistic_file = request.form.get('new_call_statistic_file')
+        print(new_call_statistic_file)
     return render_template('main_page.html', web_app_logs=read_logs())
 
 # Обработчик вебхуков 1С-Коннект

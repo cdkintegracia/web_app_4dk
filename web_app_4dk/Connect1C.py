@@ -214,6 +214,10 @@ def connect_1c(req: dict):
         task_to_update = is_task_created['tasks'][0]
 
         b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167'}})
+        task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_to_update["id"]}').json()['result']
+        for comment in task_comments:
+            params = {0: task_to_update['id'], 1: comment['ID']}
+            requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
         b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
 
     # Смена ответственного

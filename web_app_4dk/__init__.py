@@ -16,6 +16,7 @@ from web_app_4dk.UpdateUserStatistics import update_user_statistics
 from web_app_4dk.UpdateContactPhoto import update_contact_photo
 
 app = Flask(__name__)
+app.secret_key = '4dk'
 
 
 # Словарь функций для вызова из кастомного запроса

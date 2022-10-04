@@ -62,11 +62,11 @@ def custom_webhook():
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
     if request.method == 'POST':
-        new_call_statistic_file = request.form.get('new_call_statistic_file')
+        new_call_statistic_file = request.files['new_call_statistic_file']
         if not new_call_statistic_file:
             flash('Необходимо загрузить файл')
         else:
-            new_call_statistic_file.save('/', 'new_call_statistic.xlsx')
+            new_call_statistic_file.save('/')
     return render_template('main_page.html', web_app_logs=read_logs())
 
 # Обработчик вебхуков 1С-Коннект

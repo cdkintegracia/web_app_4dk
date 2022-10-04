@@ -18,7 +18,7 @@ li {
 .buttons {
     display: flex;
     flex-direction: column;
-    padding-top: 500px;
+    padding-top: 250px;
 }
 
 .buttons a {
@@ -28,11 +28,17 @@ li {
     border-radius: 15px;
     color: #fff;   
     margin-top: 50px; 
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center; 
+    text-decoration: none;   
 }
 
 .buttons a:hover{
     transition: 0.2s;
     background-color: rgba(73, 73, 73, 0.7);
+    text-decoration: none;
 }
 
 .container {

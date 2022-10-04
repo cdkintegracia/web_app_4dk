@@ -49,7 +49,7 @@ li {
     color: #fff
 }
 
-.modal-body input {
+.modal-body input#file-upload-button {
     background-color:rgb(73, 73, 73);
     color:#fff
 }

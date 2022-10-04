@@ -49,6 +49,10 @@ li {
     color: #fff
 }
 
+.modal-body {
+    display: flex!important;
+}
+
 .modal-body input {
     margin-top: 25px;
 }

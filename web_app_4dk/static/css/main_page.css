@@ -33,6 +33,7 @@ li {
     text-align: center;
     justify-content: center; 
     text-decoration: none;   
+    transition: 0.3s ease;
 }
 
 .buttons .btn-primary {
@@ -43,7 +44,7 @@ li {
 }
 
 .buttons a:hover{
-    transition: 0.2s;
+    transition: 0.3s ease;
     background-color: rgba(73, 73, 73, 0.7);
     text-decoration: none;
     color: #fff
@@ -66,11 +67,11 @@ li {
     color:#fff;
     border-radius: 10px;
     margin-right: 10px;
-    transition: 0.2s;
+    transition: 0.3s ease;
 }
 
 .modal-body input::file-selector-button:hover {
-    transition: 0.2s;
+    transition: 0.3s ease;
     background-color: rgba(73, 73, 73, 0.7);
     text-decoration: none;
     color: #fff
@@ -80,7 +81,7 @@ li {
     background-color:#146c43;
     color:#fff;
     border-radius: 10px;
-    transition: 0.2s;
+    transition: 0.3s ease;
     border-width: 0px;
     height: 35px;
     width: 175px;
@@ -88,7 +89,7 @@ li {
 
 .modal-footer input:hover {
     background-color:#21ad6c;;
-    transition: 0.2s;
+    transition: 0.3s ease;
     width: 200px;
 }
 

@@ -70,6 +70,7 @@ li {
     transition: 0.3s ease;
     border-width: 0px;
     height: 35px;
+    width: 150px;
 }
 
 .modal-body input::file-selector-button:hover {

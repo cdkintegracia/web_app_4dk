@@ -72,6 +72,8 @@ li {
     border-width: 0px;
     height: 35px;
     width: 150px;
+    border-left: rgb(73, 73, 73);;
+    border-width: 2px;
 }
 
 .modal-body input::file-selector-button:hover {

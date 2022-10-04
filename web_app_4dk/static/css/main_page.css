@@ -49,9 +49,21 @@ li {
     color: #fff
 }
 
+.modal-body input {
+    margin-top: 25px;
+}
+
 .modal-body input::file-selector-button {
     background-color:rgb(73, 73, 73);
-    color:#fff
+    color:#fff;
+    border-radius: 10px;
+}
+
+.modal-body input::file-selector-button:hover {
+    transition: 0.2s;
+    background-color: rgba(73, 73, 73, 0.7);
+    text-decoration: none;
+    color: #fff
 }
 
 .container {

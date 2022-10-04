@@ -65,11 +65,7 @@ def main_page():
         if request.method == 'POST':
             new_call_statistic_file = request.files['new_call_statistic_file']
             new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
-            print(new_call_statistic_file)
-            print('ura')
-            with open('new_call_statistic.xlsx', 'r') as file:
-                a = file.readlines()
-                print(a)
+            update_call_statistic()
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())
@@ -90,6 +86,7 @@ def update_logs(text, req):
     with open('logs.txt', 'a') as log_file:
         log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
 
+
 # Вывод на экран логов веб-приложения
 def read_logs():
     final_text = []
@@ -102,6 +99,9 @@ def read_logs():
             final_text.append([info_text, request_text])
         return final_text[::-1]
 
+
+def update_call_statistic():
+    pass
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

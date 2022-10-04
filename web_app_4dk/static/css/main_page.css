@@ -17,21 +17,15 @@ li {
 
 .buttons {
     display: flex;
+
 }
 
 .buttons a {
     background-color: rgb(73, 73, 73);
     height: 50px;
     width: 250px;
-    margin-right: 50px;
-    margin-left: -400px;
     border-radius: 15px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    
+    color: #fff;    
 }
 
 .buttons a:hover{
@@ -40,11 +34,6 @@ li {
 }
 
 .container {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
 }
 
 body {

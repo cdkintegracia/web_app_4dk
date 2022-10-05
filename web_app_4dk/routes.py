@@ -17,13 +17,6 @@ from web_app_4dk.modules.UpdateUserStatistics import update_user_statistics
 from web_app_4dk.modules.UpdateContactPhoto import update_contact_photo
 from web_app_4dk.modules.RewriteCallStatistic import rewrite_call_statistic
 
-app = Flask(__name__)
-app.secret_key = '4dk'
-login_manager = LoginManager(app)
-db = SQLAlchemy(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase.db'
-app.secret_key = 'some very secret phrase for web_app_4dk'
-
 
 # Словарь функций для вызова из кастомного запроса
 

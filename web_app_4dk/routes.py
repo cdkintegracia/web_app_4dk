@@ -4,6 +4,7 @@ from flask import request, render_template
 from flask_login import LoginManager
 
 from web_app_4dk import app, db
+from web_app_4dk.models import UserAuth
 from web_app_4dk.modules.TaskService import create_task_service
 from web_app_4dk.modules.UpdateCompanyValue import update_company_value
 from web_app_4dk.modules.UpdateCode1C import update_code_1c
@@ -48,8 +49,8 @@ def default_webhook():
     default_webhooks[request.form['event']](request.form)
     return 'OK'
 
-# Обработчик кастомных вебхуков Битрикс
 
+# Обработчик кастомных вебхуков Битрикс
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():
     update_logs("Получен кастомный вебхук", request.args)

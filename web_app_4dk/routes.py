@@ -60,8 +60,13 @@ def custom_webhook():
     return 'OK'
 
 
+@app.route('/login', methods=['GET, POST'])
+def login():
+    return render_template('login.html')
+
 @app.route('/', methods=['GET', 'POST'])
 @login_manager.user_loader
+@login_required
 def main_page():
     try:
         if request.method == 'POST':

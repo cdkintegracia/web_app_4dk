@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/templates/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +17,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Flask Main" />
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>

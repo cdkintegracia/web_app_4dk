@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/create_tables.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_tables.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,11 +78,11 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\modules" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
       <recent name="C:\Users\mok\Documents\GitHub\web_app_4dk\web_app_4dk\static\logs" />
-      <recent name="C:\Users\mok\Documents\GitHub\flask" />
     </key>
   </component>
   <component name="RunManager" selected="Python.create_db">

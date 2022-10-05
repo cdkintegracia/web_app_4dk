@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/create_db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/runapp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/CheckTaskResult.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CheckTaskResult.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/CreateDeal.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateDeal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/Prolongation_ITS.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Prolongation_ITS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/ReviseITS.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/ReviseITS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/RewriteCallStatistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/RewriteCallStatistic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/TaskService.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/TaskService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateCallStatistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateCallStatistic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateCode1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateCode1C.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateCompanyValue.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateCompanyValue.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateContactPhoto.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateContactPhoto.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/UpdateUserStatistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateUserStatistics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/authentication.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,11 +78,11 @@
       <recent name="C:\Users\mok\Documents\GitHub\flask" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\modules" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
       <recent name="C:\Users\mok\Documents\GitHub\web_app_4dk\web_app_4dk\static\logs" />
       <recent name="C:\Users\mok\Documents\GitHub\flask" />
-      <recent name="C:\Users\mok\Documents\GitHub\flask\templates" />
     </key>
   </component>
   <component name="RunManager" selected="Python.runapp">

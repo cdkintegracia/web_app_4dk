@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_login import UserMixin
 
 
 app = Flask(__name__)
@@ -11,9 +12,16 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 
 
-import web_app_4dk.routes, web_app_4dk.create_db
+class UserAuth(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(128), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
 
-with app.app_context():
-    db.create_all()
+
+db.create_all()
+
+
+import web_app_4dk.routes
+
 
 

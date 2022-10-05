@@ -54,6 +54,7 @@ def default_webhook():
 @app.route('/create', methods=['GET'])
 def create():
     c = UserAuth(login='login', password='12345')
+        return render_template('main_page.html', web_app_logs=read_logs())
 
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():

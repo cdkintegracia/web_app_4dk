@@ -62,8 +62,7 @@ def custom_webhook():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-@login_manager.user_loader
-def login(*args):
+def login():
     if request.method == 'POST':
         login = request.form.get('login')
         password = request.form.get('password')

@@ -1,11 +1,12 @@
 from time import asctime
 
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 
 
 from web_app_4dk import app
 from web_app_4dk import login_manager
+from web_app_4dk.models import UserAuth
 from web_app_4dk.modules.TaskService import create_task_service
 from web_app_4dk.modules.UpdateCompanyValue import update_company_value
 from web_app_4dk.modules.UpdateCode1C import update_code_1c
@@ -65,13 +66,20 @@ def login():
     if request.method == 'POST':
         login = request.form.get('login')
         password = request.form.get('password')
-        print(login, password)
+        user = UserAuth.query.filter_by(login=login).first()
+        if user and user.password == password:
+            login_user(user)
+            return redirect(url_for('main_page'))
+
     return render_template('login.html')
+
 
 @app.route('/', methods=['GET', 'POST'])
 @login_manager.user_loader
 @login_required
 def main_page():
+    if not current_user.is_authenticated:
+        redirect(url_for('login'))
     try:
         if request.method == 'POST':
             new_call_statistic_file = request.files['new_call_statistic_file']

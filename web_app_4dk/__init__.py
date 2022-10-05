@@ -12,6 +12,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 
-import web_app_4dk.routes, web_app_4dk.create_db
+import web_app_4dk.routes
 
 

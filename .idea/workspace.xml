@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/create_tables.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/config_db.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/create_db.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

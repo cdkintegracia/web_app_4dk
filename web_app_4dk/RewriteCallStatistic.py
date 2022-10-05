@@ -29,7 +29,7 @@ def rewrite_call_statistic(month, year):
         '2022': '2239',
         '2023': '2241'
     }
-    elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175'})
+    elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
     for element in elements:
         print(element)
         return

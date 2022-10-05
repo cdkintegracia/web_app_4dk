@@ -2,7 +2,7 @@ import json
 from time import asctime
 
 from flask import Flask, request, render_template, flash
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, LoginManager
 
 from web_app_4dk.TaskService import create_task_service
 from web_app_4dk.UpdateCompanyValue import update_company_value
@@ -19,6 +19,7 @@ from web_app_4dk.RewriteCallStatistic import rewrite_call_statistic
 
 app = Flask(__name__)
 app.secret_key = '4dk'
+login_manager = LoginManager(app)
 
 
 # Словарь функций для вызова из кастомного запроса

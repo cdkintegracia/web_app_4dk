@@ -65,6 +65,10 @@ li {
     margin-right: 5px;
 }
 
+.input-block {
+    display: flex;
+}
+
 .modal-body input {
     margin-top: 25px;
 }

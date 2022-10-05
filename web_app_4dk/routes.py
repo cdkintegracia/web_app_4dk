@@ -77,6 +77,7 @@ def login():
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
+    print(current_user)
     try:
         if request.method == 'POST':
             new_call_statistic_file = request.files['new_call_statistic_file']

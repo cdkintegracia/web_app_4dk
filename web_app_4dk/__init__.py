@@ -2,6 +2,7 @@ import json
 from time import asctime
 
 from flask import Flask, request, render_template, flash
+from flask_login import login_user, login_required
 
 from web_app_4dk.TaskService import create_task_service
 from web_app_4dk.UpdateCompanyValue import update_company_value
@@ -61,6 +62,7 @@ def custom_webhook():
 
 
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def main_page():
     try:
         if request.method == 'POST':

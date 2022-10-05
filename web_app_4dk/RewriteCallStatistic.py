@@ -31,9 +31,7 @@ def rewrite_call_statistic(month, year):
     }
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
     for element in elements:
-        print(element)
         return
-    return
     companies = b.get_all('crm.company.list', {'select': ['TITLE']})
 
     errors = []

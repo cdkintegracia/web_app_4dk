@@ -86,6 +86,11 @@ def main_page():
     return render_template('main_page.html', web_app_logs=read_logs())
 
 
+@login_manager.user_loader
+def load_user(user):
+    return 1
+
+
 # Обработчик вебхуков 1С-Коннект
 @app.route('/1c-connect', methods=['POST'])
 def update_connect_logs():

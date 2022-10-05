@@ -77,7 +77,8 @@ def login():
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    print(current_user)
+    if current_user != 1:
+        return redirect(url_for('login'))
     try:
         if request.method == 'POST':
             new_call_statistic_file = request.files['new_call_statistic_file']

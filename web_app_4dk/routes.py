@@ -73,7 +73,6 @@ def login():
 
 
 @app.route('/', methods=['GET', 'POST'])
-@login_manager.user_loader
 @login_required
 def main_page():
     try:

@@ -40,22 +40,16 @@ default_webhooks = {
     'ONCRMCONTACTUPDATE': update_contact_photo,
 }
 
-# Обработчик стандартных вебхуков Битрикс
 
+# Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
     update_logs("Получен дефолтный вебхук", request.form)
     default_webhooks[request.form['event']](request.form)
     return 'OK'
 
+
 # Обработчик кастомных вебхуков Битрикс
-
-@app.route('/create', methods=['GET'])
-def create():
-    c = UserAuth(login='login', password='12345')
-    return render_template('main_page.html', web_app_logs=read_logs())
-
-
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():
     update_logs("Получен кастомный вебхук", request.args)
@@ -77,13 +71,19 @@ def main_page():
         pass
     return render_template('main_page.html', web_app_logs=read_logs())
 
-# Обработчик вебхуков 1С-Коннект
 
+# Обработчик вебхуков 1С-Коннект
 @app.route('/1c-connect', methods=['POST'])
 def update_connect_logs():
     update_logs("Получен 1С-Коннект вебхук", request.json)
     connect_1c(request.json)
     return 'OK'
+
+
+@app.route('/create', methods=['GET'])
+def create():
+    return render_template('main_page.html', web_app_logs=read_logs())
+
 
 # Обновление логов веб-приложения
 def update_logs(text, req):

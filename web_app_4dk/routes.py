@@ -60,7 +60,7 @@ def custom_webhook():
     return 'OK'
 
 
-@app.route('/login', methods=['GET, POST'])
+@app.route('/login', methods=['GET, POST', 'HEAD'])
 def login():
     return render_template('login.html')
 
@@ -86,11 +86,6 @@ def update_connect_logs():
     update_logs("Получен 1С-Коннект вебхук", request.json)
     connect_1c(request.json)
     return 'OK'
-
-
-@app.route('/create', methods=['GET'])
-def create():
-    return render_template('main_page.html', web_app_logs=read_logs())
 
 
 # Обновление логов веб-приложения

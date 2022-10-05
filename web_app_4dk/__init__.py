@@ -13,6 +13,7 @@ login_manager = LoginManager(app)
 
 import web_app_4dk.routes, web_app_4dk.create_db
 
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 

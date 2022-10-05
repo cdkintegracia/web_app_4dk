@@ -62,6 +62,10 @@ def custom_webhook():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
+        print(login, password)
     return render_template('login.html')
 
 @app.route('/', methods=['GET', 'POST'])

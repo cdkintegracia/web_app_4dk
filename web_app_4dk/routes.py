@@ -73,7 +73,7 @@ def login():
 
 
 @app.route('/', methods=['GET', 'POST'])
-@login_required
+@login_manager.user_loader
 def main_page():
     try:
         if request.method == 'POST':

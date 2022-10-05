@@ -1,9 +1,11 @@
 from time import asctime
 
 from flask import request, render_template
+from flask_login import login_user, login_required, logout_user, current_user
+
 
 from web_app_4dk import app
-from web_app_4dk.models import UserAuth
+from web_app_4dk import login_manager
 from web_app_4dk.modules.TaskService import create_task_service
 from web_app_4dk.modules.UpdateCompanyValue import update_company_value
 from web_app_4dk.modules.UpdateCode1C import update_code_1c

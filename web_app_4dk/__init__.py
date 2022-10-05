@@ -1,7 +1,7 @@
 import json
+from time import asctime
 
 from flask import Flask, request, render_template, flash
-from time import asctime
 
 from web_app_4dk.TaskService import create_task_service
 from web_app_4dk.UpdateCompanyValue import update_company_value
@@ -14,6 +14,7 @@ from web_app_4dk.CreateDeal import create_deal
 from web_app_4dk.Connect1C import connect_1c
 from web_app_4dk.UpdateUserStatistics import update_user_statistics
 from web_app_4dk.UpdateContactPhoto import update_contact_photo
+from web_app_4dk.RewriteCallStatistic import rewrite_call_statistic
 
 app = Flask(__name__)
 app.secret_key = '4dk'
@@ -67,8 +68,7 @@ def main_page():
             new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
             month = request.form.get('month')
             year = request.form.get('year')
-            print(month, year)
-            update_call_statistic()
+            rewrite_call_statistic(month, year)
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())
@@ -102,9 +102,6 @@ def read_logs():
             final_text.append([info_text, request_text])
         return final_text[::-1]
 
-
-def update_call_statistic():
-    pass
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

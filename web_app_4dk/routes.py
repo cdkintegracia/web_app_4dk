@@ -1,9 +1,9 @@
 from time import asctime
 
-from flask import Flask, request, render_template
+from flask import request, render_template
 from flask_login import LoginManager
-from flask_sqlalchemy import SQLAlchemy
 
+from web_app_4dk import app, db
 from web_app_4dk.modules.TaskService import create_task_service
 from web_app_4dk.modules.UpdateCompanyValue import update_company_value
 from web_app_4dk.modules.UpdateCode1C import update_code_1c

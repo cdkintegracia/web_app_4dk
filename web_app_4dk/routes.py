@@ -74,8 +74,8 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/', methods=['GET', 'POST'])
 @login_required
+@app.route('/', methods=['GET', 'POST'])
 def main_page():
     try:
         if request.method == 'POST':

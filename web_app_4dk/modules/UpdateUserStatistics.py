@@ -3,7 +3,7 @@ import gspread
 import dateutil.parser
 import requests
 
-from web_app_4dk.authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 
 webhook = authentication('Bitrix')
 b = Bitrix(webhook)

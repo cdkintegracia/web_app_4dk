@@ -1,5 +1,6 @@
 import base64
 
+
 def authentication(key):
     """
     :param key: Сервис, для которого нужно вернуть аутентификацию.

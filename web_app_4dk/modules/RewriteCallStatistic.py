@@ -4,7 +4,7 @@ from time import time
 from fast_bitrix24 import Bitrix
 import openpyxl
 
-from web_app_4dk.authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 
 workbook = openpyxl.load_workbook("/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx")
 worksheet = workbook.active

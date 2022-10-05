@@ -2,7 +2,7 @@ from calendar import monthrange
 
 from fast_bitrix24 import Bitrix
 
-from web_app_4dk.authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 
 # Считывание файла authentication.txt
 

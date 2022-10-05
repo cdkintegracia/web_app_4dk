@@ -9,7 +9,7 @@ from requests import Session
 from zeep import Client
 from zeep.transports import Transport
 
-from web_app_4dk.authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 

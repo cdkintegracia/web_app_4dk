@@ -12,7 +12,7 @@ login_manager = LoginManager(app)
 
 
 import web_app_4dk.models
-import web_app_4dk.routes
+#import web_app_4dk.routes
 
 
 

@@ -49,8 +49,12 @@ def default_webhook():
     default_webhooks[request.form['event']](request.form)
     return 'OK'
 
-
 # Обработчик кастомных вебхуков Битрикс
+
+@app.route('/create', methods=['GET'])
+def create():
+    c = UserAuth(login='login', password='12345')
+
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():
     update_logs("Получен кастомный вебхук", request.args)

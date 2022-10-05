@@ -1,3 +1,4 @@
-from web_app_4dk import db
+from web_app_4dk import db, app
 
-db.create_all()
+with app.app_context():
+    db.create_all()

@@ -76,8 +76,6 @@ def login():
 @login_manager.user_loader
 @login_required
 def main_page():
-    if not current_user.is_authenticated:
-        redirect(url_for('login'))
     try:
         if request.method == 'POST':
             new_call_statistic_file = request.files['new_call_statistic_file']

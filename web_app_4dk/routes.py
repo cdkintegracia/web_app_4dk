@@ -67,8 +67,9 @@ def login():
         login = request.form.get('login')
         password = request.form.get('password')
         user = UserAuth.query.filter_by(login=login).first()
-        if user and user.password == password:
-            return redirect(url_for('main_page'))
+        if user:
+            if user.password == password:
+                return redirect(url_for('main_page'))
 
     return render_template('login.html')
 

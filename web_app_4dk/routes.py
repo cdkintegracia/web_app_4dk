@@ -1,7 +1,7 @@
 from time import asctime
 
 from flask import request, render_template, redirect, url_for
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, current_user
 
 
 from web_app_4dk import app

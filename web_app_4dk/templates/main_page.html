@@ -41,12 +41,12 @@
         <h5 class="modal-title" id="exampleModalLabel">Обновление статистики звонков</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
-      <form method="post" enctype="multipart/form-data"> 
+      <form method="POST" enctype="multipart/form-data"> 
       <div class="modal-body">
         <div class="input-block">
         Новая статистика:
         <input name="new_call_statistic_file" type="file" accept=".xlsx">
-        <select class="form-select" aria-label="Пример выбора по умолчанию">
+        <select class="form-select" aria-label="Месяц" name="month">
           <option selected>Выберите месяц</option>
           <option value="Январь">Январь</option>
           <option value="Февраль">Февраль</option>
@@ -61,7 +61,7 @@
           <option value="Ноябрь">Ноябрь</option>
           <option value="Декабрь">Декабрь</option>
         </select>
-        <select class="form-select" aria-label="Пример выбора по умолчанию">
+        <select class="form-select" aria-label="Год" name="year">
           <option selected>Выберите год</option>
           <option value="2022">2022</option>
           <option value="2023">2023</option>

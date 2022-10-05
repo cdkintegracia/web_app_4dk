@@ -1,9 +1,8 @@
 from time import asctime
 
 from flask import request, render_template
-from flask_login import LoginManager
 
-from web_app_4dk import app, db
+from web_app_4dk import app
 from web_app_4dk.models import UserAuth
 from web_app_4dk.modules.TaskService import create_task_service
 from web_app_4dk.modules.UpdateCompanyValue import update_company_value
@@ -55,6 +54,7 @@ def default_webhook():
 def create():
     c = UserAuth(login='login', password='12345')
     return render_template('main_page.html', web_app_logs=read_logs())
+
 
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():

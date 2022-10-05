@@ -12,7 +12,6 @@ def authentication(key):
     Параметр "key" соответствует названию сервиса из файла
     :return: Возвращает необходимую для сервиса аутентификацию
     """
-
     # Считывание файла authentication.txt
 
     with open('/root/credentials/authentications.txt') as file:
@@ -25,3 +24,4 @@ def authentication(key):
 
 
     return dct[key]
+

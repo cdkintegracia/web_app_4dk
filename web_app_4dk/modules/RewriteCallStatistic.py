@@ -74,4 +74,5 @@ def rewrite_call_statistic(month, year):
             }
         }
                )
-    return 
+        print(d)
+        return

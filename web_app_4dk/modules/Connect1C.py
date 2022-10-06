@@ -155,7 +155,7 @@ def connect_1c(req: dict):
         'result']
 
     # Начало обращения. Создание задачи
-    if req['message_type'] in [80, 81]:
+    if req['message_type'] in [80]:
         # Проверка была ли задача уже создана
         if is_task_created['tasks']:
             return
@@ -168,7 +168,6 @@ def connect_1c(req: dict):
                 break
         author_info = get_name(event['author_id'], req['treatment_id'])
         is_author_support = get_employee_id(author_info[0])
-        print(is_author_support)
         if is_author_support != '0':
             return
         message_time = time_handler(req['message_time'])

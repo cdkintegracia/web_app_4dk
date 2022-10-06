@@ -42,7 +42,6 @@ def rewrite_call_statistic(month, year):
             if col == 2:
                 continue
             value = worksheet.cell(row, col).value
-            print(value)
             if isinstance(value, datetime.time):
                 value = value.strftime('%H:%M:%S')
             elif type(value) is str:
@@ -53,6 +52,7 @@ def rewrite_call_statistic(month, year):
             if value is None:
                 break
             temp.append(value)
+        print(temp)
         if len(temp) != 3 or temp[2] == 0:
             continue
         if not temp[0].isdigit():

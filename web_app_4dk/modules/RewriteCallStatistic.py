@@ -58,7 +58,7 @@ def rewrite_call_statistic(month, year):
             errors.append(temp)
         else:
             data.append(temp)
-
+    print(data)
     for d in data:
         b.call('lists.element.add', {
             'IBLOCK_TYPE_ID': 'lists',
@@ -74,5 +74,3 @@ def rewrite_call_statistic(month, year):
             }
         }
                )
-        print(d)
-        return

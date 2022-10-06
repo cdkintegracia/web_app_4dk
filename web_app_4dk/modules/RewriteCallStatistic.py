@@ -42,6 +42,7 @@ def rewrite_call_statistic(month, year):
             if col == 2:
                 continue
             value = worksheet.cell(row, col).value
+            print(value)
             if isinstance(value, datetime.time):
                 value = value.strftime('%H:%M:%S')
             elif type(value) is str:
@@ -58,7 +59,7 @@ def rewrite_call_statistic(month, year):
             errors.append(temp)
         else:
             data.append(temp)
-    print(data)
+
     for d in data:
         b.call('lists.element.add', {
             'IBLOCK_TYPE_ID': 'lists',

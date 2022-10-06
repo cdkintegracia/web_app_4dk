@@ -7,4 +7,9 @@
 .form {
     display: flex;
     flex-direction: column;
+    padding-top: 50px;
+}
+
+.form input {
+    margin-top: 25px;
 }

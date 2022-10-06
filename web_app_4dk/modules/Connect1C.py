@@ -182,7 +182,7 @@ def connect_1c(req: dict):
             'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
             'GROUP_ID': '75',
             'CREATED_BY': '173',
-            'RESPONSIBLE_ID': '173',
+            'RESPONSIBLE_ID': author_info[0] if 'Плотникова' in author_info[0] or 'Сулейманов' in author_info[0] else '173',
             'UF_CRM_TASK': [f"CO_{company_id}"],
             'UF_AUTO_499889542776': req['treatment_id'],
             'STAGE_ID': '1165',

@@ -10,6 +10,7 @@ workbook = openpyxl.load_workbook("/root/web_app_4dk/web_app_4dk/new_call_statis
 worksheet = workbook.active
 b = Bitrix(authentication('Bitrix'))
 
+
 def rewrite_call_statistic(month, year):
     month_codes = {
             'Январь': '2215',
@@ -38,27 +39,38 @@ def rewrite_call_statistic(month, year):
     data = []
     for row in range(2, worksheet.max_row + 1):
         temp = []
-        for col in range(1, 4):
-            if col == 2:
+        for col in range(1, 11):
+            if col not in [1, 3, 10]:
                 continue
             value = worksheet.cell(row, col).value
             if isinstance(value, datetime.time):
                 value = value.strftime('%H:%M:%S')
             elif type(value) is str:
-                company_name = value.strip('ООО')
+                company_name = value.replace(u'\xa0', ' ')
                 for company in companies:
                     if company_name in company['TITLE']:
                         value = company['ID']
             if value is None:
                 break
             temp.append(value)
-        print(temp)
         if len(temp) != 3 or temp[2] == 0:
             continue
         if not temp[0].isdigit():
             errors.append(temp)
         else:
             data.append(temp)
+    new_errors = []
+    for error in errors:
+        value = None
+        inn = error[0].split()[-1]
+        for company in companies:
+            if inn in company['TITLE'].split()[-1]:
+                value = company['ID']
+                break
+        if value is None:
+            new_errors.append(error)
+        else:
+            data.append([value, error[1], error[2]])
 
     for d in data:
         b.call('lists.element.add', {
@@ -66,7 +78,7 @@ def rewrite_call_statistic(month, year):
             'IBLOCK_ID': '175',
             'ELEMENT_CODE': time(),
             'fields': {
-                'NAME': 'Август 2022',  # Название == месяц и год
+                'NAME': f"{month} {year}",  # Название == месяц и год
                 'PROPERTY_1303': d[1],  # Продолжительность звонка
                 'PROPERTY_1299': d[0],  # Привязка к компании
                 'PROPERTY_1305': d[2],  # Количество звонков
@@ -75,3 +87,23 @@ def rewrite_call_statistic(month, year):
             }
         }
                )
+
+    if new_errors:
+        task_text = 'Компания Длительность звонков Количество звонков\n'
+        for count, error in enumerate(errors, start=1):
+            str_error = ' '.join(list(map(lambda x: str(x), error)))
+            task_text += f"{count}. {str_error}\n"
+        b.call('tasks.task.add', {'fields': {
+            'TITLE': f"Ошибки записи статистики звонков за {month} {year}",
+            'DESCRIPTION': task_text,
+            'GROUP_ID': '13',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': '173'
+        }})
+    else:
+        b.call('tasks.task.add', {'fields': {
+            'TITLE': f"Cтатистика звонков за {month} {year} успешно перезаписана",
+            'GROUP_ID': '13',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': '173'
+        }})

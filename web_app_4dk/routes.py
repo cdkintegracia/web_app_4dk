@@ -109,14 +109,14 @@ def update_logs(text, req):
     log_dct = {}
     for key in req:
         log_dct.setdefault(key, req[key])
-    with open('logs.txt', 'a') as log_file:
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/logs.txt', 'a') as log_file:
         log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
 
 
 # Вывод на экран логов веб-приложения
 def read_logs():
     final_text = []
-    with open('logs.txt', 'r') as log_file:
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/logs.txt', 'r') as log_file:
         logs = log_file.readlines()
         for s in logs:
             info_text = s.split('request: ')[0]

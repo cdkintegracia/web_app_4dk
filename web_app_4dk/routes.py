@@ -72,6 +72,7 @@ def login():
             print(user.password, password)
             print(user.password == password)
             if user.password == password:
+                login_user(user)
                 return redirect(url_for('main_page'))
 
     return render_template('login.html')

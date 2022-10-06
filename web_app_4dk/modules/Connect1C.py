@@ -156,11 +156,6 @@ def connect_1c(req: dict):
 
     # Начало обращения. Создание задачи
     if req['message_type'] in [80, 81]:
-        # Автор сотрудник
-        author = get_name(req['author_id'])[0]
-        is_author_employee = get_employee_id(author)
-        if is_author_employee != '0':
-            return
         # Проверка была ли задача уже создана
         if is_task_created['tasks']:
             return

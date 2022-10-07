@@ -177,12 +177,17 @@ def connect_1c(req: dict):
         else:
             company_id = author_info[1]
 
+        support_id = get_employee_id(author_info[0])
+        responsible_id = '173'
+        if support_id in ['129', '127']:
+            responsible_id = support_id
+
         b.call('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект",
             'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
             'GROUP_ID': '75',
             'CREATED_BY': '173',
-            'RESPONSIBLE_ID': author_info[0] if 'Плотникова' in author_info[0] or 'Сулейманов' in author_info[0] else '173',
+            'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
             'UF_AUTO_499889542776': req['treatment_id'],
             'STAGE_ID': '1165',

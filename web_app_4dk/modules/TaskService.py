@@ -230,8 +230,17 @@ def create_task_service(dct):
             if employee in [None, 'None']:
                 continue
 
-            # Создание пунктов чек-листа для созданной задачи на сотрудника
+            # Проверка была ли создана задача, для возможности допостановки
+            is_task_exists = b.get_all('tasks.task.list', {
+                'filter': {'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                           'GROUP_ID': '71'
+                           }
+            }
+                                       )
+            if is_task_exists:
+                continue
 
+            # Создание пунктов чек-листа для созданной задачи на сотрудника
             company = b.get_all('crm.company.list', {
                 'filter': {
                     'ID': value[2]
@@ -247,16 +256,6 @@ def create_task_service(dct):
                                 )
 
             # Создание подзадачи для основной задачи
-
-            is_task_exists = b.get_all('tasks.task.list', {
-                'filter': {'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
-                           'GROUP_ID': '71'
-                           }
-            }
-                                       )
-            if is_task_exists:
-                continue
-
             b.call('tasks.task.add', {
                 'fields': {
                     'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",

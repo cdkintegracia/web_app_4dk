@@ -236,6 +236,12 @@ def create_task_service(dct):
             if employee in [None, 'None']:
                 continue
 
+            company = b.get_all('crm.company.list', {
+                'filter': {
+                    'ID': value[2]
+                }
+            })
+            
             # Проверка была ли создана подзадача, для возможности допостановки
             is_sub_task_exists = b.get_all('tasks.task.list', {
                 'select': ['ID'],
@@ -248,12 +254,6 @@ def create_task_service(dct):
                 continue
 
             # Создание пунктов чек-листа для созданной задачи на сотрудника
-            company = b.get_all('crm.company.list', {
-                'filter': {
-                    'ID': value[2]
-                }
-            })
-
             b.call('task.checklistitem.add', [
                 main_task, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>

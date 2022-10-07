@@ -231,7 +231,7 @@ def connect_1c(req: dict):
             requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
         b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
         elapsed_time = req['treatment']['treatment_duration']
-        b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}])
+        b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
     """

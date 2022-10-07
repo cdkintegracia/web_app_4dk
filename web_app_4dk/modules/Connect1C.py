@@ -179,9 +179,6 @@ def connect_1c(req: dict):
 
         support_info = get_name(req['author_id'], req['treatment_id'])
         support_id = get_employee_id(support_info[0])
-        print(req['author_id'])
-        print(support_id)
-        print(support_info[0])
         responsible_id = '173'
         if support_id in ['129', '127', '1']:
             responsible_id = support_id

@@ -206,38 +206,45 @@ def create_task_service(dct):
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
 
-            task = b.call('tasks.task.add', {
-                'fields': {
-                    'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
-                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': employee,
-                    'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '71',
-                    'DESCRIPTION': task_text,
-                    'CREATED_BY': '173',
-                }
+            is_main_task_exists = b.get_all('tasks.task.list', {
+                'select': ['ID'],
+                'filter': {'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
+                           'GROUP_ID': '71'
+                           }
             }
-                          )
+                                            )
+            if not is_main_task_exists:
+                task = b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
+                        'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                        'RESPONSIBLE_ID': employee,
+                        'ALLOW_CHANGE_DEADLINE': 'N',
+                        'GROUP_ID': '71',
+                        'DESCRIPTION': task_text,
+                        'CREATED_BY': '173',
+                    }
+                }
+                              )
+                main_task = task['task']['id']
+            else:
+                main_task = is_main_task_exists[0]['ID']
 
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
-
-            """
-            Можно потом удалить проверку на None
-            """
-
             if employee in [None, 'None']:
                 continue
 
-            # Проверка была ли создана задача, для возможности допостановки
-            is_task_exists = b.get_all('tasks.task.list', {
+            # Проверка была ли создана подзадача, для возможности допостановки
+            is_sub_task_exists = b.get_all('tasks.task.list', {
+                'select': ['ID'],
                 'filter': {'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
                            'GROUP_ID': '71'
                            }
             }
                                        )
-            if is_task_exists:
+            if is_sub_task_exists:
                 continue
 
             # Создание пунктов чек-листа для созданной задачи на сотрудника
@@ -248,7 +255,7 @@ def create_task_service(dct):
             })
 
             b.call('task.checklistitem.add', [
-                task['task']['id'], {
+                main_task, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>
                     'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
                 }
@@ -264,7 +271,7 @@ def create_task_service(dct):
                     'ALLOW_CHANGE_DEADLINE': 'N',
                     'GROUP_ID': '71',
                     'DESCRIPTION': f"{task_text}\n",
-                    'PARENT_ID': task['task']['id'],
+                    'PARENT_ID': main_task,
                     'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
                     'CREATED_BY': '173',
                 }
@@ -274,9 +281,9 @@ def create_task_service(dct):
 
         # Защита от дублирования задач
 
-        updated_task = b.get_all('tasks.task.get', {'taskId': task['task']['id']})
+        updated_task = b.get_all('tasks.task.get', {'taskId': main_task})
         if len(updated_task['task']['checklist']) == 0:
-            b.call('tasks.task.delete', {'taskId': task['task']['id']})
+            b.call('tasks.task.delete', {'taskId': main_task})
             print('Удалена пустая задача')
 
     b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})

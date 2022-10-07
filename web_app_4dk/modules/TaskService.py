@@ -228,7 +228,7 @@ def create_task_service(dct):
                               )
                 main_task = task['task']['id']
             else:
-                main_task = is_main_task_exists[0]['ID']
+                main_task = is_main_task_exists[0]['id']
 
         # Перебор значений выбранного выше ключа
 

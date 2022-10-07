@@ -179,7 +179,7 @@ def connect_1c(req: dict):
 
         support_info = get_name(req['author_id'], req['treatment_id'])
         support_id = get_employee_id(support_info[0])
-        print(req['author_info'])
+        print(req['author_id'])
         print(support_id)
         print(author_info[0])
         responsible_id = '173'

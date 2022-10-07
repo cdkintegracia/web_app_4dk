@@ -178,6 +178,8 @@ def connect_1c(req: dict):
             company_id = author_info[1]
 
         support_id = get_employee_id(author_info[0])
+        print(support_id)
+        print(author_info[0])
         responsible_id = '173'
         if support_id in ['129', '127']:
             responsible_id = support_id

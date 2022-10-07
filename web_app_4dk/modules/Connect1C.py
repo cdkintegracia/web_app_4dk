@@ -206,7 +206,6 @@ def connect_1c(req: dict):
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}
-
         data = load_logs()
         event_count = 0
         for event in data:
@@ -227,13 +226,15 @@ def connect_1c(req: dict):
             params = {0: task_to_update['id'], 1: comment['ID']}
             requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
         b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
+        elapsed_time = req['treatment']['treatment_duration']
+        b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}])
 
     # Смена ответственного
     """
     if is_task_created['tasks']:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
-        if connect_user_id == '0':
+        if connect_user_id == '0':  
             return
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:

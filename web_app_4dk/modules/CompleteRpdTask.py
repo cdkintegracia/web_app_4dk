@@ -9,6 +9,6 @@ b = Bitrix(webhook)
 
 
 def complete_rpd_task(req):
-    task = b.get_all('tasks.task.get', {'taskId': req['id']})
-    print(task)
-    
+    task = b.get_all('tasks.task.get', {'taskId': req['id'], 'select': ['UF_CRM_TASK']})
+    company_id = task['task']['ufCrmTask'][0].split('_')[1]
+    b.call('crm.company.update', {'ID': company_id, 'fields': {'UF_CRM_1665655830': '1195'}})

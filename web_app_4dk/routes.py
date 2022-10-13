@@ -20,6 +20,7 @@ from web_app_4dk.modules.UpdateUserStatistics import update_user_statistics
 from web_app_4dk.modules.UpdateContactPhoto import update_contact_photo
 from web_app_4dk.modules.RewriteCallStatistic import rewrite_call_statistic
 from web_app_4dk.modules.CreateTaskRpd import create_task_rpd
+from web_app_4dk.modules.CompleteRpdTask import complete_rpd_task
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -30,6 +31,7 @@ custom_webhooks = {
     'revise_its': revise_its,
     'prolongation_its': prolongation_its,
     'create_task_rpd': create_task_rpd,
+    'complete_rpd_task': complete_rpd_task,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

@@ -66,10 +66,10 @@ def create_task_rpd(req):
             # 0: ID сделки
             # 1: Название сделки
             # 2: ID компании
-            employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
+            employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID']]])
         else:
             # Добавление ID сделки к значению dct
-            employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
+            employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
 
     # Создание задач
     for employee in employees:
@@ -78,13 +78,14 @@ def create_task_rpd(req):
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
             is_main_task_exists = b.get_all('tasks.task.list', {
                 'select': ['ID'],
-                'filter': {'TITLE': f"РПД: {employee_name} {current_month} {current_year}",
-                           'GROUP_ID': '79'
+                'filter': {'TITLE': f"РПД: {employee_name}",
+                           'GROUP_ID': '79',
+                           '!STATUS': '5',
                            }})
             if not is_main_task_exists:
                 task = b.call('tasks.task.add', {
                     'fields': {
-                        'TITLE': f"РПД: {employee_name} {current_month} {current_year}",
+                        'TITLE': f"РПД: {employee_name}",
                         'DEADLINE': f"{current_year}-{datetime.now().month}-{current_monthrange} 19:00:00",
                         #'RESPONSIBLE_ID': employee,
                         'RESPONSIBLE_ID': '173',
@@ -105,8 +106,9 @@ def create_task_rpd(req):
             # Проверка была ли создана подзадача, для возможности допостановки
             is_sub_task_exists = b.get_all('tasks.task.list', {
                 'select': ['ID'],
-                'filter': {'TITLE': f"РПД: {company['TITLE']} {current_month} {current_year}",
-                           'GROUP_ID': '79'
+                'filter': {'TITLE': f"РПД: {company['TITLE']}",
+                           'GROUP_ID': '79',
+                           '!STATUS': '5',
                            }})
             if is_sub_task_exists:
                 continue
@@ -123,7 +125,7 @@ def create_task_rpd(req):
             # Создание подзадачи для основной задачи
             b.call('tasks.task.add', {
                 'fields': {
-                    'TITLE': f"РПД: {company['TITLE']} {current_month} {current_year}",
+                    'TITLE': f"РПД: {company['TITLE']}",
                     'DEADLINE': f"{current_year}-{datetime.now().month}-{current_monthrange} 19:00:00",
                     #'RESPONSIBLE_ID': employee,
                     'RESPONSIBLE_ID': '173',
@@ -131,7 +133,7 @@ def create_task_rpd(req):
                     'GROUP_ID': '79',
                     'DESCRIPTION': f"",
                     'PARENT_ID': main_task,
-                    'UF_CRM_TASK': [f"CO_{company['ID']}", f"D_{value[3]}"],
+                    'UF_CRM_TASK': [f"CO_{company['ID']}"],
                     'CREATED_BY': '173',
                 }})
 

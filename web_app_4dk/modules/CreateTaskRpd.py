@@ -84,7 +84,7 @@ def create_task_rpd(req):
             if not is_main_task_exists:
                 task = b.call('tasks.task.add', {
                     'fields': {
-                        'TITLE': f"РПД",
+                        'TITLE': f"РПД: {employee_name} {current_month} {current_year}",
                         'RESPONSIBLE_ID': '173',
                         'CREATED_BY': '173',
                         'GROUP_ID': '79'

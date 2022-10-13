@@ -123,7 +123,7 @@ def create_task_rpd(req):
             b.call('tasks.task.add', {
                 'fields': {
                     'TITLE': f"РПД: {company['TITLE']} {current_month} {current_year}",
-                    'DEADLINE': f"{current_year}-{current_month}-{current_monthrange} 19:00:00",
+                    'DEADLINE': f"{current_year}-{datetime.now().month}-{current_monthrange} 19:00:00",
                     #'RESPONSIBLE_ID': employee,
                     'RESPONSIBLE_ID': '173',
                     'ALLOW_CHANGE_DEADLINE': 'N',

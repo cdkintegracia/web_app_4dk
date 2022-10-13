@@ -33,7 +33,7 @@ def create_task_rpd(req):
     # Получение массива сделок
     if req['employees'] == '':
         deals = b.get_all('crm.deal.list', {
-            'select': ['ID', 'COMPANY_ID', 'ASSIGNED_BY_ID'],
+            'select': ['ID', 'COMPANY_ID', 'ASSIGNED_BY_ID', 'TITLE'],
             'filter': {
                 'UF_CRM_1657878818384': '859',
                 'STAGE_ID': ['C1:NEW', 'C1:UC_0KJKTY', 'C1:UC_3J0IH6'],
@@ -50,7 +50,7 @@ def create_task_rpd(req):
                     id_list.add(user['ID'])
         id_list = list(id_list)
         deals = b.get_all('crm.deal.list', {
-            'select': ['ID', 'COMPANY_ID', 'ASSIGNED_BY_ID'],
+            'select': ['ID', 'COMPANY_ID', 'ASSIGNED_BY_ID', 'TITLE'],
             'filter': {
                 'UF_CRM_1657878818384': '859',
                 'STAGE_ID': ['C1:NEW', 'C1:UC_0KJKTY', 'C1:UC_3J0IH6'],

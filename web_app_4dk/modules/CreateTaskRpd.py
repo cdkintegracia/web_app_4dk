@@ -86,11 +86,9 @@ def create_task_rpd(req):
                     'fields': {
                         'TITLE': f"РПД: {employee_name} {current_month} {current_year}",
                         'DEADLINE': f"{current_year}-{current_month}-{current_monthrange} 19:00:00",
-                        # 'RESPONSIBLE_ID': employee,
                         'RESPONSIBLE_ID': '173',
                         'ALLOW_CHANGE_DEADLINE': 'N',
                         'GROUP_ID': '79',
-                        'DESCRIPTION': '',
                         'CREATED_BY': '173',
                     }})
                 main_task = task['task']['id']

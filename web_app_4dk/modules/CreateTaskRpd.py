@@ -117,7 +117,7 @@ def create_task_rpd(req):
             b.call('task.checklistitem.add', [
                 main_task, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>
-                    'TITLE': f"{company['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
+                    'TITLE': f"{company['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/company/details/{value[2]}/",
                 }
             ], raw=True
                    )

@@ -87,10 +87,9 @@ def create_task_rpd(req):
                         'TITLE': f"РПД: {employee_name} {current_month} {current_year}",
                         'DEADLINE': f"{current_year}-{current_month}-{current_monthrange} 19:00:00",
                         'RESPONSIBLE_ID': '173',
-                        'ALLOW_CHANGE_DEADLINE': 'N',
-                        'GROUP_ID': '79',
                         'CREATED_BY': '173',
                     }})
+                return()
                 main_task = task['task']['id']
             else:
                 main_task = is_main_task_exists[0]['id']

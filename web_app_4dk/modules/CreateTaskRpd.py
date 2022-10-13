@@ -28,7 +28,7 @@ def create_task_rpd(req):
     }
     current_month = months[datetime.now().month]
     current_year = datetime.now().year
-    current_monthrange = monthrange(current_year, datetime.now().month)
+    current_monthrange = monthrange(current_year, datetime.now().month)[1]
 
     # Получение массива сделок
     if req['employees'] == '':

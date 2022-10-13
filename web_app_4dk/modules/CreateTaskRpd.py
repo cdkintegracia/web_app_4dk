@@ -87,6 +87,7 @@ def create_task_rpd(req):
                         'TITLE': f"РПД",
                         'RESPONSIBLE_ID': '173',
                         'CREATED_BY': '173',
+                        'GROUP_ID': '79'
                     }})
                 return()
                 main_task = task['task']['id']

@@ -7,14 +7,12 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 from fast_bitrix24 import Bitrix
 import dateutil.parser
-'''
+
 from web_app_4dk.modules.authentication import authentication
+
 
 webhook = authentication('Bitrix')
 b = Bitrix(webhook)
-'''
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
-
 month_string = {
         '01': 'Январь',
         '02': 'Февраль',
@@ -41,11 +39,13 @@ def create_company_call_report(req):
     company_info = b.get_all('crm.company.get', {'ID': company_id})
     company_name = company_info['TITLE']
     report_data = [
+        # 1 строка
         [
             company_name,
-            f'{report_created_time.day} {month_string[str(report_created_time.month)]}',
+            f'{month_string[str(report_created_time.month)]} {report_created_time.year}',   # Месяц и год
             f'Дата формирования {report_created_time.strftime("%d.%m.%Y %H:%M")}',
         ],
+        # 2 строка
         [
             'Дата звонка',
             'Контакт (кому звонили)',
@@ -58,7 +58,7 @@ def create_company_call_report(req):
     # Формирование отчета
     for contact in contacts:
         contact_info = b.get_all('crm.contact.get', {'id': contact['CONTACT_ID']})
-        contact_name = f"{contact_info['NAME']} {contact_info['LAST_NAME']} {contact_info['SECOND_NAME']}"
+        contact_name = f"{contact_info['LAST_NAME']} {contact_info['NAME']} {contact_info['SECOND_NAME']}"
         not_sorted_activities = b.get_all('crm.activity.list', {
             'filter': {
                 'OWNER_TYPE_ID': '3',
@@ -72,11 +72,13 @@ def create_company_call_report(req):
                 call_start_time = dateutil.parser.isoparse(activity['START_TIME'])
                 if call_start_time.month == datetime.now().month:
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]
+                    if 231 not in author['UF_DEPARTMENT']:
+                        continue
                     author_name = f"{author['NAME']} {author['LAST_NAME']}"
                     duration_formatted = activity['DESCRIPTION'].split(': ')[1]
                     phone_number = activity['SUBJECT'].split(' на ')[1]
                     call_end_time = dateutil.parser.isoparse(activity['END_TIME'])
-                    call_start_time_formatted = call_start_time.strftime('%H:%M:%S %d.%m.%Y')
+                    call_start_time_formatted = call_start_time.strftime('%d.%m.%Y %H:%M:%S')
                     report_data.append([
                         call_start_time_formatted,
                         contact_name,

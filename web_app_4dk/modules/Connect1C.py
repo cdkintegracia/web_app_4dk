@@ -166,6 +166,8 @@ def connect_1c(req: dict):
             if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
                 task_text = event['text']
                 break
+        if len(task_text) < 2:
+            return
         author_info = get_name(event['author_id'], req['treatment_id'])
         is_author_support = get_employee_id(author_info[0])
         if is_author_support != '0':
@@ -231,13 +233,13 @@ def connect_1c(req: dict):
         b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
-    """
+
     if is_task_created['tasks']:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
-        if connect_user_id == '0':  
+        if connect_user_id not in ['127', '129']:
             return
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:
-            b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'AUDITORS': [connect_user_id]}})
-    """
+            b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'ASSIGNED_BY_ID': connect_user_id}})
+

@@ -85,7 +85,7 @@ def create_company_call_report(req):
         for activity in activities:
             if 'Исходящий' in activity['SUBJECT'] and activity['DESCRIPTION']:
                 call_start_time = dateutil.parser.isoparse(activity['START_TIME'])
-                print(call_start_time.month == month_codes[req['month']], call_start_time.year == req['year'])
+                print(str(call_start_time.month) == month_codes[req['month']], str(call_start_time.year) == req['year'])
                 print(call_start_time.month, month_codes[req['month']], call_start_time.year, req['year'])
                 if call_start_time.month == month_codes[req['month']] and call_start_time.year == req['year']:
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]

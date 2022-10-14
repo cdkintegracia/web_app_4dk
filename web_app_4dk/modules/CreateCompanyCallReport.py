@@ -89,7 +89,7 @@ def create_company_call_report(req):
     report_data.append(['Итого', '', '', total_duration])
 
     # Создание xlsx файла отчета
-    report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S')
+    report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
     report_name = f'Отчет по звонкам {company_name} {report_name_time}.xlsx'.replace(' ', '_')
     workbook = openpyxl.Workbook()
     worklist = workbook.active

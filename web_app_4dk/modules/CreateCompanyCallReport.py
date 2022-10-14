@@ -28,6 +28,21 @@ month_string = {
         '12': 'Декабрь'
     }
 
+month_codes = {
+        'Январь': '01',
+        'Февраль': '02',
+        'Март': '03',
+        'Апрель': '04',
+        'Май': '05',
+        'Июнь': '06',
+        'Июль': '07',
+        'Август': '08',
+        'Сентябрь': '09',
+        'Октябрь': '10',
+        'Ноябрь': '11',
+        'Декабрь': '12'
+}
+
 
 def create_company_call_report(req):
 
@@ -42,7 +57,7 @@ def create_company_call_report(req):
         # 1 строка
         [
             company_name,
-            f'{month_string[str(report_created_time.month)]} {report_created_time.year}',   # Месяц и год
+            f'{req["month"]} {req["year"]}',   # Месяц и год
             f'Дата формирования {report_created_time.strftime("%d.%m.%Y %H:%M")}',
         ],
         # 2 строка
@@ -70,7 +85,7 @@ def create_company_call_report(req):
         for activity in activities:
             if 'Исходящий' in activity['SUBJECT'] and activity['DESCRIPTION']:
                 call_start_time = dateutil.parser.isoparse(activity['START_TIME'])
-                if call_start_time.month == datetime.now().month:
+                if call_start_time.month == month_codes[req['month']] and call_start_time.year == req['year']:
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]
                     if 231 not in author['UF_DEPARTMENT']:
                         continue

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="DataBase">
-  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.40">
+  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.44">
     <root id="1"/>
     <collation id="2" parent="1" name="RTRIM"/>
     <collation id="3" parent="1" name="NOCASE"/>
@@ -1316,42 +1316,42 @@
     </table>
     <table id="483" parent="166" name="user"/>
     <column id="484" parent="482" name="type">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
     <column id="485" parent="482" name="name">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
     <column id="486" parent="482" name="tbl_name">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
     <column id="487" parent="482" name="rootpage">
-      <DataType>INT|0s</DataType>
+      <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
     <column id="488" parent="482" name="sql">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>5</Position>
     </column>
     <column id="489" parent="483" name="id">
-      <DataType>INTEGER|0s</DataType>
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
     <column id="490" parent="483" name="login">
-      <DataType>VARCHAR(80)|0s</DataType>
+      <DasType>VARCHAR(80)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
     <column id="491" parent="483" name="password">
-      <DataType>VARCHAR(120)|0s</DataType>
+      <DasType>VARCHAR(120)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
     <column id="492" parent="483" name="goal">
-      <DataType>INTEGER|0s</DataType>
+      <DasType>INTEGER|0s</DasType>
       <Position>4</Position>
     </column>
     <index id="493" parent="483" name="sqlite_autoindex_user_1">

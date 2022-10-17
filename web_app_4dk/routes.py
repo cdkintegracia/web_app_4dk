@@ -7,7 +7,7 @@ from flask_login import login_user, login_required, current_user
 from web_app_4dk import app
 from web_app_4dk import login_manager
 from web_app_4dk.models import UserAuth
-from web_app_4dk.modules.TaskService import create_task_service
+from web_app_4dk.modules.ServiceTask import create_service_tasks, create_service_tasks_report
 from web_app_4dk.modules.UpdateCompanyValue import update_company_value
 from web_app_4dk.modules.UpdateCode1C import update_code_1c
 from web_app_4dk.modules.UpdateCallStatistic import update_call_statistic
@@ -27,7 +27,8 @@ from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_repo
 # Словарь функций для вызова из кастомного запроса
 
 custom_webhooks = {
-    'create_task_service': create_task_service,
+    'create_task_service': create_service_tasks,
+    'create_service_tasks_report': create_service_tasks_report,
     'check_task_result': check_task_result,
     'revise_its': revise_its,
     'prolongation_its': prolongation_its,

@@ -10,8 +10,36 @@ webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 
+months = {
+    'Январь': 1,
+    'Февраль': 2,
+    'Март': 3,
+    'Апрель': 4,
+    'Май': 5,
+    'Июнь': 6,
+    'Июль': 7,
+    'Август': 8,
+    'Сентябрь': 9,
+    'Октябрь': 10,
+    'Ноябрь': 11,
+    'Декабрь': 12
+}
 
-def get_deals_for_task_service(date_start, date_end, type_deals, employees):
+
+def get_employee_id(employees: str) -> list:
+    id_list = set()
+    id_employees = employees.split(', ')  # Строка с сотрудниками и отделами в список
+    for id in id_employees:
+        if 'user' in id:  # Если в массиве найден id сотрудника
+            id_list.add(id[5:])
+        elif 'group' in id:  # Если в массиве найден id отдела
+            department_users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': id[8:]}})
+            for user in department_users:
+                id_list.add(user['ID'])
+    id_list = list(id_list)
+
+
+def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     """
     Функция, которая вызывается из функции create_task_service
 
@@ -63,16 +91,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
             }
         )
     else:   # Если были выбраны сотрудники в параметрах БП
-        id_list = set()
-        id_employees = employees.split(', ')    # Строка с сотрудниками и отделами в список
-        for id in id_employees:
-            if 'user' in id:    # Если в массиве найден id сотрудника
-                id_list.add(id[5:])
-            elif 'group' in id:     # Если в массиве найден id отдела
-                department_users = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': id[8:]}})
-                for user in department_users:
-                    id_list.add(user['ID'])
-        id_list = list(id_list)
+        id_list = get_employee_id(employees)
 
         # Начались в сентябре 2022 и заканчиваются после сентября 2022
 
@@ -118,7 +137,7 @@ def get_deals_for_task_service(date_start, date_end, type_deals, employees):
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 
-def create_task_service(dct):
+def create_service_tasks(dct):
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
 
@@ -135,21 +154,6 @@ def create_task_service(dct):
     """
     task_text = dct['text']
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
-    months = {
-        'Январь': 1,
-        'Февраль': 2,
-        'Март': 3,
-        'Апрель': 4,
-        'Май': 5,
-        'Июнь': 6,
-        'Июль': 7,
-        'Август': 8,
-        'Сентябрь': 9,
-        'Октябрь': 10,
-        'Ноябрь': 11,
-        'Декабрь': 12
-    }
-
     type_deals = [
                     'UC_XIYCTV',  # ПРОФ Земля + Помощник
                     'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
@@ -181,7 +185,7 @@ def create_task_service(dct):
 
     # Получение массива сделок
 
-    deals = get_deals_for_task_service(date_start, date_end, type_deals, dct['employees'])
+    deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'])
 
     # Разделение ID сделок по ответственному
 
@@ -287,3 +291,21 @@ def create_task_service(dct):
             print('Удалена пустая задача')
 
     b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})
+
+
+def create_service_tasks_report(req):
+    month_last_day = monthrange(req['year'], months[req['month']])[1]
+    if not req['employees']:
+        tasks = b.get_all('tasks.task.list', {
+            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+            'GROUP_ID': '71',
+        })
+    else:
+        tasks = b.get_all('tasks.task.list', {
+            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+            'GROUP_ID': '71',
+            'RESPONSIBLE_ID': get_employee_id(req['employees'])
+        })
+    print(tasks)

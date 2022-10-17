@@ -35,6 +35,8 @@ months = {
 def get_employee_id(employees: str) -> list:
     id_list = set()
     id_employees = employees.split(', ')  # Строка с сотрудниками и отделами в список
+    if id_employees is None:
+        return employees
     for id in id_employees:
         if 'user' in id:  # Если в массиве найден id сотрудника
             id_list.add(id[5:])
@@ -320,7 +322,6 @@ def create_service_tasks_report(req):
 
     else:
         print(get_employee_id(req['employees']))
-        print(req['employees'])
         data = {
             'filter': {
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",

@@ -334,6 +334,7 @@ def create_service_tasks_report(req):
     workbook = openpyxl.Workbook()
     worklist = workbook.active
 
+    worklist.append([f"{req['month']} {req['year']}"])
     worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
     for task in tasks:
         worklist.append(task)

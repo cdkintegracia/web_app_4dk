@@ -303,12 +303,12 @@ def get_report_comment(task_id):
     report_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()['result']
     for report_comment in report_comments:
         if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE']:
-            return report_comment['POST_MESSAGE']
+            return report_comment['POST_MESSAGE'].split('[USER=333]')[0]
 
 
 def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
-    if not req['employees']:
+    if req['employees'] == '':
         data = {
             'filter': {
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
@@ -329,7 +329,6 @@ def create_service_tasks_report(req):
             }
         }
     tasks = requests.post(f'{authentication("Bitrix")}tasks.task.list', json=data).json()['result']['tasks']
-    print(tasks)
     tasks = list(map(lambda x: [
         x['responsible']['name'],
         ' '.join(x['title'].split(' ')[:-2]),

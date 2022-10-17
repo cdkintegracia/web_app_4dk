@@ -308,8 +308,7 @@ def get_report_comment(task_id):
 
 def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
-    if req['employees'] == '':
-        print('ПУСТО')
+    if not req['employees']:
         data = {
             'filter': {
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
@@ -320,7 +319,8 @@ def create_service_tasks_report(req):
         }
 
     else:
-        print('НЕ ПУСТО')
+        print(get_employee_id(req['employees']))
+        print(req['employees'])
         data = {
             'filter': {
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",

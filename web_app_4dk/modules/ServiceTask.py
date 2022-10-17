@@ -1,6 +1,12 @@
 from calendar import monthrange
+from datetime import datetime
+import base64
+from os import remove as os_remove
 
 from fast_bitrix24 import Bitrix
+import openpyxl
+from openpyxl.utils import get_column_letter
+import requests
 
 from web_app_4dk.modules.authentication import authentication
 
@@ -293,6 +299,13 @@ def create_service_tasks(dct):
     b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})
 
 
+def get_report_comment(task_id):
+    report_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()['result']
+    for report_comment in report_comments:
+        if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE']:
+            return report_comment['POST_MESSAGE']
+
+
 def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
     if not req['employees']:
@@ -301,6 +314,7 @@ def create_service_tasks_report(req):
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
                 '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
                 'GROUP_ID': '71',
+                'REAL_STATUS': '5',
             }
         })
     else:
@@ -309,7 +323,45 @@ def create_service_tasks_report(req):
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
                 '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
                 'GROUP_ID': '71',
-                'RESPONSIBLE_ID': get_employee_id(req['employees'])
+                'RESPONSIBLE_ID': get_employee_id(req['employees']),
+                'REAL_STATUS': '5',
             }
         })
-    print(tasks)
+    tasks = list(map(lambda x: [
+        x['responsible']['name'],
+        ' '.join(x['title'].split(' ')[:-2]),
+        get_report_comment(x['id'])
+    ], tasks))
+
+    # Создание xlsx файла отчета
+    report_created_time = datetime.now()
+    report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
+    report_name = f'Отчет по ЗСВ {report_name_time}.xlsx'.replace(' ', '_')
+    workbook = openpyxl.Workbook()
+    worklist = workbook.active
+
+    for task in tasks:
+        worklist.append(task)
+    for idx, col in enumerate(worklist.columns, 1):
+        worklist.column_dimensions[get_column_letter(idx)].auto_size = True
+    workbook.save(report_name)
+
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '189467'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Отчет по ЗСВ за {req["month"]} {req["tear"]} сформирован. {upload_report["DETAIL_URL"]}'})
+    os_remove(report_name)
+
+
+
+
+

@@ -35,8 +35,6 @@ months = {
 def get_employee_id(employees: str) -> list:
     id_list = set()
     id_employees = employees.split(', ')  # Строка с сотрудниками и отделами в список
-    if id_employees is None:
-        return employees
     for id in id_employees:
         if 'user' in id:  # Если в массиве найден id сотрудника
             id_list.add(id[5:])
@@ -45,6 +43,7 @@ def get_employee_id(employees: str) -> list:
             for user in department_users:
                 id_list.add(user['ID'])
     id_list = list(id_list)
+    return(id_list)
 
 
 def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
@@ -310,27 +309,16 @@ def get_report_comment(task_id):
 
 def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
-    if not req['employees']:
-        data = {
-            'filter': {
-                '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
-                '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
-                'GROUP_ID': '71',
-                'REAL_STATUS': '5',
-            }
+    print(get_employee_id(req['employees']))
+    data = {
+        'filter': {
+            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+            'GROUP_ID': '71',
+            'RESPONSIBLE_ID': get_employee_id(req['employees']),
+            'REAL_STATUS': '5',
         }
-
-    else:
-        print(get_employee_id(req['employees']))
-        data = {
-            'filter': {
-                '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
-                '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
-                'GROUP_ID': '71',
-                'RESPONSIBLE_ID': get_employee_id(req['employees']),
-                'REAL_STATUS': '5',
-            }
-        }
+    }
     tasks = requests.post(f'{authentication("Bitrix")}tasks.task.list', json=data).json()['result']['tasks']
     tasks = list(map(lambda x: [
         x['responsible']['name'],

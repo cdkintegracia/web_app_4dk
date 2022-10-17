@@ -297,9 +297,11 @@ def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
     if not req['employees']:
         tasks = b.get_all('tasks.task.list', {
-            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
-            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
-            'GROUP_ID': '71',
+            'filter': {
+                '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+                '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+                'GROUP_ID': '71',
+            }
         })
     else:
         tasks = b.get_all('tasks.task.list', {

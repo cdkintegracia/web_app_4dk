@@ -305,9 +305,11 @@ def create_service_tasks_report(req):
         })
     else:
         tasks = b.get_all('tasks.task.list', {
-            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
-            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
-            'GROUP_ID': '71',
-            'RESPONSIBLE_ID': get_employee_id(req['employees'])
+            'filter': {
+                '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+                '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+                'GROUP_ID': '71',
+                'RESPONSIBLE_ID': get_employee_id(req['employees'])
+            }
         })
     print(tasks)

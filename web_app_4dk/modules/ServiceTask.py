@@ -309,6 +309,7 @@ def get_report_comment(task_id):
 def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
     if req['employees'] == '':
+        print('ПУСТО')
         data = {
             'filter': {
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
@@ -319,6 +320,7 @@ def create_service_tasks_report(req):
         }
 
     else:
+        print('НЕ ПУСТО')
         data = {
             'filter': {
                 '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
@@ -332,7 +334,8 @@ def create_service_tasks_report(req):
     tasks = list(map(lambda x: [
         x['responsible']['name'],
         ' '.join(x['title'].split(' ')[:-2]),
-        get_report_comment(x['id'])
+        get_report_comment(x['id']),
+        f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/"
     ], tasks))
 
     # Создание xlsx файла отчета
@@ -342,6 +345,7 @@ def create_service_tasks_report(req):
     workbook = openpyxl.Workbook()
     worklist = workbook.active
 
+    worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
     for task in tasks:
         worklist.append(task)
     for idx, col in enumerate(worklist.columns, 1):

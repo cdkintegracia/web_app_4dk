@@ -328,7 +328,7 @@ def create_service_tasks_report(req):
                 'REAL_STATUS': '5',
             }
         }
-    tasks = requests.post(f'{authentication("Bitrix")}tasks.task.list', json=data).json()['result']
+    tasks = requests.post(f'{authentication("Bitrix")}tasks.task.list', json=data).json()['result']['tasks']
     print(tasks)
     tasks = list(map(lambda x: [
         x['responsible']['name'],

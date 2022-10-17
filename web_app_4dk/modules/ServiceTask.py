@@ -329,8 +329,7 @@ def create_service_tasks_report(req):
             }
         }
     tasks = requests.post(f'{authentication("Bitrix")}tasks.task.list', json=data).json()['result']
-    for task in tasks:
-        print(task)
+    print(tasks)
     tasks = list(map(lambda x: [
         x['responsible']['name'],
         ' '.join(x['title'].split(' ')[:-2]),

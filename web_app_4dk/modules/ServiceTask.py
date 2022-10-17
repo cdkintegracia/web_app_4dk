@@ -294,7 +294,7 @@ def create_service_tasks(dct):
 
 
 def create_service_tasks_report(req):
-    month_last_day = monthrange(req['year'], months[req['month']])[1]
+    month_last_day = monthrange(int(req['year']), months[req['month']])[1]
     if not req['employees']:
         tasks = b.get_all('tasks.task.list', {
             '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",

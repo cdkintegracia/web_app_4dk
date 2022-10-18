@@ -241,7 +241,7 @@ def connect_1c(req: dict):
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f"{connect_user_id, connect_user_name}"})
         if connect_user_id not in ['127', '129']:
-            return
+            connect_user_id = '173'
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:
             b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'ASSIGNED_BY_ID': connect_user_id}})

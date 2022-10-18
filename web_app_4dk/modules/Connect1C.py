@@ -202,7 +202,7 @@ def connect_1c(req: dict):
         b.call('tasks.task.update', {'taskId': task_to_change['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
 
     # Завершение обращения. Закрытие задачи
-    elif req['message_type'] in [82, 84, 90, 91, 92, 93]:
+    elif req['message_type'] in [82, 90, 91, 92, 93]:
 
         if not is_task_created['tasks']:
             return
@@ -237,6 +237,9 @@ def connect_1c(req: dict):
     if is_task_created['tasks']:
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
+        b.call('im.notify.system.add', {
+            'USER_ID': req['user_id'][5:],
+            'MESSAGE': f"{connect_user_id, connect_user_name}"})
         if connect_user_id not in ['127', '129']:
             return
         task_user_name = is_task_created['tasks'][0]['responsible']['name']

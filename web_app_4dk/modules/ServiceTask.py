@@ -304,7 +304,7 @@ def get_report_comment(task_id):
     report_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()['result']
     for report_comment in report_comments:
         if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE']:
-            return report_comment['POST_MESSAGE'].split('[USER=333]')[0]
+            return [report_comment['POST_MESSAGE'].split('[USER=333]')[0], report_comment]
 
 
 def create_service_tasks_report(req):
@@ -321,8 +321,10 @@ def create_service_tasks_report(req):
     tasks = list(map(lambda x: [
         x['responsible']['name'],
         ' '.join(x['title'].split(' ')[:-2]),
-        get_report_comment(x['id']),
-        f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/"
+        get_report_comment(x['id'])[0],
+        f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/",
+        get_report_comment(x['id'])[1],
+        x['title'],
     ], tasks))
 
     # Создание xlsx файла отчета
@@ -335,7 +337,9 @@ def create_service_tasks_report(req):
     worklist.append([f"{req['month']} {req['year']}"])
     worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
     for task in tasks:
-        worklist.append(task)
+        if 'Сервисный выезд' in task[-1]:
+            continue
+        worklist.append(task[:-1])
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True
     workbook.save(report_name)

@@ -304,7 +304,7 @@ def get_report_comment(task_id):
     report_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()['result']
     for report_comment in report_comments:
         if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE']:
-            return [report_comment['POST_MESSAGE'].split('[USER=333]')[0], report_comment]
+            return [report_comment['POST_MESSAGE'].split('[USER=333]')[0], report_comment['POST_MESSAGE']]
 
 
 def create_service_tasks_report(req):

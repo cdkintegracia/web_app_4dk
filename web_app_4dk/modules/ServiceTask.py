@@ -309,8 +309,7 @@ def get_report_comment(task_id):
 
 def create_service_tasks_report(req):
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
-    print(get_employee_id(req['employees']))
-    data = {
+    tasks = b.get_all('tasks.task.list', {
         'filter': {
             '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
             '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
@@ -318,8 +317,7 @@ def create_service_tasks_report(req):
             'RESPONSIBLE_ID': get_employee_id(req['employees']),
             'REAL_STATUS': '5',
         }
-    }
-    tasks = requests.post(f'{authentication("Bitrix")}tasks.task.list', json=data).json()['result']['tasks']
+    })
     tasks = list(map(lambda x: [
         x['responsible']['name'],
         ' '.join(x['title'].split(' ')[:-2]),

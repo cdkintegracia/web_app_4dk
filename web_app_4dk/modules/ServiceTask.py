@@ -304,7 +304,7 @@ def get_report_comment(task_id):
     report_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()['result']
     for report_comment in report_comments:
         if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE']:
-            formatted_comment =  report_comment['POST_MESSAGE'].split('Отчет Сервисный выезд')
+            formatted_comment = report_comment['POST_MESSAGE'].split('Отчет Сервисный выезд')
             if '[USER=333]' in formatted_comment[0]:
                 return formatted_comment[1]
             return formatted_comment[0]
@@ -324,9 +324,8 @@ def create_service_tasks_report(req):
     tasks = list(map(lambda x: [
         x['responsible']['name'],
         ' '.join(x['title'].split(' ')[:-2]),
-        get_report_comment(x['id'])[0],
+        get_report_comment(x['id']),
         f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/",
-        get_report_comment(x['id'])[1],
         x['title'],
     ], tasks))
 

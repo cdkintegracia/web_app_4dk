@@ -95,7 +95,10 @@ def get_event_info(event: dict) -> str:
     if event['message_type'] == 53:
         return f"Длительность: {event['rda']['duration']}\n"
     if event['message_type'] == 70:
-        return f"{event['file']['file_name']}\n{event['file']['preview_link_hi']}\n"
+        if 'preview_link_hi' in event['file']:
+            return f"{event['file']['file_name']}\n{event['file']['preview_link_hi']}\n"
+        else:
+            return f"{event['file']['file_name']}\n{event['file']['file_path']}\n"
     if event['message_type'] == 82:
         return f"Длительность обращения: {event['treatment']['treatment_duration']}\n"
     return f"\n"

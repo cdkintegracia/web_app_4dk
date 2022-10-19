@@ -62,6 +62,9 @@ connect_codes = {
 }
 
 
+allow_id = ['127', '129', '131', '183', '1', '311']
+
+
 def load_logs():
     logs = []
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt') as file:
@@ -182,7 +185,7 @@ def connect_1c(req: dict):
         support_info = get_name(req['author_id'], req['treatment_id'])
         support_id = get_employee_id(support_info[0])
         responsible_id = '173'
-        if support_id in ['129', '127', '1']:
+        if support_id in allow_id:
             responsible_id = support_id
 
         b.call('tasks.task.add', {'fields': {
@@ -240,7 +243,7 @@ def connect_1c(req: dict):
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f"{connect_user_id, connect_user_name}"})
-        if connect_user_id not in ['127', '129']:
+        if str(connect_user_id) not in allow_id:
             connect_user_id = '173'
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:

@@ -165,6 +165,7 @@ def connect_1c(req: dict):
 
         # Создание задачи с первым сообщением
         data = load_logs()
+        task_text = ''
         for event in data[::-1]:
             if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
                 task_text = event['text']

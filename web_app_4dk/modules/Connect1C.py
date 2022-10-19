@@ -170,6 +170,7 @@ def connect_1c(req: dict):
             if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
                 task_text = event['text']
                 break
+        # Исключаются обращения с сообщением оценки работы
         if len(task_text) < 2:
             return
         author_info = get_name(event['author_id'], req['treatment_id'])
@@ -242,7 +243,7 @@ def connect_1c(req: dict):
         connect_user_name = get_name(req['author_id'])[0]
         connect_user_id = get_employee_id(connect_user_name)
         if str(connect_user_id) not in allow_id:
-            connect_user_id = '173'
+            return
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         b.call('im.notify.system.add', {
             'USER_ID': '311',

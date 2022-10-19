@@ -303,7 +303,7 @@ def create_service_tasks(dct):
 def get_report_comment(task_id):
     report_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()['result']
     for report_comment in report_comments:
-        if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE']:
+        if 'Отчет Сервисный выезд' in report_comment['POST_MESSAGE'] and 'вы добавлены наблюдателем' not in report_comment:
             return report_comment['POST_MESSAGE'].replace('[USER=333]Отчет Сервисный выезд[/USER]', '')
 
 

@@ -245,7 +245,7 @@ def connect_1c(req: dict):
         task_user_name = is_task_created['tasks'][0]['responsible']['name']
         b.call('im.notify.system.add', {
             'USER_ID': '311',
-            'MESSAGE': f"{connect_user_id, connect_user_name}\n"
+            'MESSAGE': f"{connect_user_name}\n"
                        f"{task_user_name}"})
         if task_user_name != connect_user_name:
             b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'ASSIGNED_BY_ID': connect_user_id}})

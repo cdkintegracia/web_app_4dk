@@ -248,5 +248,5 @@ def connect_1c(req: dict):
             'MESSAGE': f"{connect_user_name}\n"
                        f"{task_user_name}"})
         if task_user_name != connect_user_name:
-            b.call('tasks.task.update', {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id}})
-
+            data = {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id}}
+            requests.post(f"{authentication('Bitrix')}tasks.task.update", json=data)

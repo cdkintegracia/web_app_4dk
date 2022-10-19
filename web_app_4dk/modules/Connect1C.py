@@ -245,5 +245,5 @@ def connect_1c(req: dict):
         if str(connect_user_id) in allow_id:
             task_user_name = is_task_created['tasks'][0]['responsible']['name']
             if task_user_name != connect_user_name:
-                data = {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id}}
+                data = {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
                 requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)

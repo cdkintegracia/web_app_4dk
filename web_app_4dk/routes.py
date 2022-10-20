@@ -1,9 +1,8 @@
 from time import asctime
-from os import stat, remove
+import os
 
 from flask import request, render_template, redirect, url_for
 from flask_login import login_user, login_required, current_user
-
 
 from web_app_4dk import app
 from web_app_4dk import login_manager
@@ -23,6 +22,7 @@ from web_app_4dk.modules.RewriteCallStatistic import rewrite_call_statistic
 from web_app_4dk.modules.CreateTaskRpd import create_task_rpd
 from web_app_4dk.modules.CompleteRpdTask import complete_rpd_task
 from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_report
+from web_app_4dk.modules.ReviseAccountingDeals import revise_accounting_deals
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -96,10 +96,12 @@ def main_page():
                 month = request.form.get('month')
                 year = request.form.get('year')
                 rewrite_call_statistic(month, year)
+                os.remove('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
             elif request.files['revise_accounting_deals_file']:
                 revise_accounting_deals_file = request.files['revise_accounting_deals_file']
                 revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-                print(revise_accounting_deals_file)
+                revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+                os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())
@@ -126,7 +128,7 @@ def update_logs(text, req):
         log_dct.setdefault(key, req[key])
     with open(file_path, 'a') as log_file:
         log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
-    if stat(file_path).st_size > 10000000:
+    if os.stat(file_path).st_size > 10000000:
         with open(file_path, 'w') as file:
             file.write('')
 

@@ -1,8 +1,12 @@
 from fast_bitrix24 import Bitrix
 import openpyxl
+import os
+import base64
+
+from web_app_4dk.modules.authentication import authentication
 
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+b = Bitrix(authentication('Bitrix'))
 
 
 def read_report_file(filename: str) -> dict:
@@ -32,7 +36,7 @@ def read_report_file(filename: str) -> dict:
     return {'titles': titles, 'data': file_data}
 
 
-def revise_accounting_deals(filename='1.xlsx'):
+def revise_accounting_deals(filename):
     job_counter = 0
     file_data = read_report_file(filename)
     for file_line in file_data['data']:
@@ -72,10 +76,21 @@ def revise_accounting_deals(filename='1.xlsx'):
     worksheet.append(file_data['titles'])
     for data in file_data['data']:
         worksheet.append(list(data.values()))
-    workbook.save('result.xlsx')
+    report_name = 'Сверка отчетности.xlsx'
+    workbook.save(report_name)
 
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '189467'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('tasks.task.add', {'fields': {'TITLE': 'Сверка отчетности', 'RESPONSIBLE_ID': '173', 'GROUP_ID': '13', 'DESCRIPTION': upload_report["DETAIL_URL"]}})
 
-revise_accounting_deals()
 
 
 

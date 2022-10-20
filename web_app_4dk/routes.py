@@ -89,9 +89,8 @@ def main_page():
     if current_user != 1:
         return redirect(url_for('login'))
     try:
-        print(request.method == 'POST')
-        print(request.form.get('submit_button'))
         if request.method == 'POST' and request.form.get('submit_button'):
+            print('go')
             if request.files['new_call_statistic_file']:
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
@@ -104,6 +103,8 @@ def main_page():
                 revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+        else:
+            print('not go')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

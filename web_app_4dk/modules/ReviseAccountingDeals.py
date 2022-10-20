@@ -90,7 +90,7 @@ def revise_accounting_deals(filename):
     worksheet.append(file_data['titles'])
     for data in file_data['data']:
         worksheet.append(list(data.values()))
-    create_time = datetime.now().strftime('%d-%m-%Y')
+    create_time = datetime.now().strftime('%d-%m-%Y-%f')
     report_name = f'Сверка_отчетности_{create_time}.xlsx'
     workbook.save(report_name)
 
@@ -108,7 +108,7 @@ def revise_accounting_deals(filename):
     task = b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
-            'RESPONSIBLE_ID': '311',
+            'RESPONSIBLE_ID': '19',
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})

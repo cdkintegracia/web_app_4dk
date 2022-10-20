@@ -105,7 +105,14 @@ def revise_accounting_deals(filename):
         'data': {'NAME': report_name},
         'fileContent': report_file_base64
     })
-    b.call('tasks.task.add', {'fields': {'TITLE': 'Сверка отчетности', 'RESPONSIBLE_ID': '19', 'GROUP_ID': '13', 'DESCRIPTION': upload_report["DETAIL_URL"]}})
+    b.call('tasks.task.add', {
+        'fields': {
+            'TITLE': 'Сверка отчетности',
+            'RESPONSIBLE_ID': '19',
+            'GROUP_ID': '13',
+            'DESCRIPTION': upload_report["DETAIL_URL"],
+            'CREATED_BY': '173'
+        }})
     os.remove(f'Сверка_отчетности_{create_time}.xlsx')
 
 

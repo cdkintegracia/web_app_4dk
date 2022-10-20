@@ -78,7 +78,7 @@ def revise_accounting_deals(filename):
     for data in file_data['data']:
         worksheet.append(list(data.values()))
     create_time = datetime.now().strftime('%d-%m-%Y')
-    report_name = f'Сверка_отчетности.xlsx {create_time}'
+    report_name = f'Сверка_отчетности_{create_time}.xlsx'
     workbook.save(report_name)
 
     # Загрузка отчета в Битрикс
@@ -92,7 +92,7 @@ def revise_accounting_deals(filename):
         'fileContent': report_file_base64
     })
     b.call('tasks.task.add', {'fields': {'TITLE': 'Сверка отчетности', 'RESPONSIBLE_ID': '173', 'GROUP_ID': '13', 'DESCRIPTION': upload_report["DETAIL_URL"]}})
-
+    os.remove(f'Сверка_отчетности_{create_time}.xlsx')
 
 
 

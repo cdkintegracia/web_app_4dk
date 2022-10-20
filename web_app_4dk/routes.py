@@ -91,7 +91,6 @@ def main_page():
     try:
         if request.method == 'POST':
             if request.files['new_call_statistic_file']:
-                print(request.files['new_call_statistic_file'])
                 '''
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')

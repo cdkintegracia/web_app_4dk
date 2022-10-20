@@ -38,92 +38,84 @@ def read_report_file(filename: str) -> dict:
 
 
 def revise_accounting_deals(filename):
-    try:
-        what_remove = [
-            'ИНН партнёра',
-            'КПП партнёра',
-            'Наименование партнёра',
-            'КПП абонента',
-            'Дата регистрации',
-            'Регион',
-            'Тарифная зона'
-        ]
-        job_counter = 0
-        file_data = read_report_file(filename)
-        for file_line in file_data['data']:
-            registration_data_list = file_line['Дата регистрации'].split('.')
-            registration_data = f"{registration_data_list[2]}-{registration_data_list[1]}-{registration_data_list[0]}"
-            company_info = b.get_all('crm.company.list', {
-                'filter': {'UF_CRM_1656070716': file_line['ИНН абонента'],
-                           'UF_CRM_1654682057': registration_data
-                           }})
-            if not company_info:
-                file_line.setdefault('Расхождение', 'Нет ИНН')
-                continue
-            company_id = company_info[0]['ID']
-            company_deals = b.get_all('crm.deal.list', {'filter': {'TYPE_ID': 'UC_O99QUW', 'COMPANY_ID': company_id}})
-            if not company_deals:
-                file_line.setdefault('Расхождение', 'Нет отчетности')
-                continue
-            company_deal = company_deals[0]
-            if int(float(company_deal['OPPORTUNITY'])) < int(float(file_line['Цена'])):
-                file_line.setdefault('Расхождение', 'Некорректная сумма')
-            else:
-                file_line.setdefault('Расхождение', 'Нет')
-            price = file_line.pop('Цена')
-            file_line.pop('Цена')
-            for value in what_remove:
-                file_line.pop(value)
-            file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
-            file_line.setdefault('Цена', price)
-            job_counter += 1
-            print(f"{job_counter} | {len(file_data['data'])}")
+    print('dsfasfsafaf')
+    what_remove = [
+        'ИНН партнёра',
+        'КПП партнёра',
+        'Наименование партнёра',
+        'КПП абонента',
+        'Дата регистрации',
+        'Регион',
+        'Тарифная зона'
+    ]
+    job_counter = 0
+    file_data = read_report_file(filename)
+    for file_line in file_data['data']:
+        registration_data_list = file_line['Дата регистрации'].split('.')
+        registration_data = f"{registration_data_list[2]}-{registration_data_list[1]}-{registration_data_list[0]}"
+        company_info = b.get_all('crm.company.list', {
+            'filter': {'UF_CRM_1656070716': file_line['ИНН абонента'],
+                       'UF_CRM_1654682057': registration_data
+                       }})
+        if not company_info:
+            file_line.setdefault('Расхождение', 'Нет ИНН')
+            continue
+        company_id = company_info[0]['ID']
+        company_deals = b.get_all('crm.deal.list', {'filter': {'TYPE_ID': 'UC_O99QUW', 'COMPANY_ID': company_id}})
+        if not company_deals:
+            file_line.setdefault('Расхождение', 'Нет отчетности')
+            continue
+        company_deal = company_deals[0]
+        if int(float(company_deal['OPPORTUNITY'])) < int(float(file_line['Цена'])):
+            file_line.setdefault('Расхождение', 'Некорректная сумма')
+        else:
+            file_line.setdefault('Расхождение', 'Нет')
+        price = file_line.pop('Цена')
+        file_line.pop('Цена')
+        for value in what_remove:
+            file_line.pop(value)
+        file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
+        file_line.setdefault('Цена', price)
+        job_counter += 1
+        print(f"{job_counter} | {len(file_data['data'])}")
 
-        ind = 0
-        for i in range(len(file_data['titles'])):
-            if file_data['titles'][i] == 'Цена':
-                ind = i
-                break
-        del file_data['titles'][ind]
-        for title in what_remove:
-            file_data['titles'].remove(title)
-        workbook = openpyxl.Workbook()
-        worksheet = workbook.active
-        worksheet.append(file_data['titles'])
-        for data in file_data['data']:
-            worksheet.append(list(data.values()))
-        create_time = datetime.now().strftime('%d-%m-%Y')
-        report_name = f'Сверка_отчетности_{create_time}.xlsx'
-        workbook.save(report_name)
+    ind = 0
+    for i in range(len(file_data['titles'])):
+        if file_data['titles'][i] == 'Цена':
+            ind = i
+            break
+    del file_data['titles'][ind]
+    for title in what_remove:
+        file_data['titles'].remove(title)
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.append(file_data['titles'])
+    for data in file_data['data']:
+        worksheet.append(list(data.values()))
+    create_time = datetime.now().strftime('%d-%m-%Y')
+    report_name = f'Сверка_отчетности_{create_time}.xlsx'
+    workbook.save(report_name)
 
-        # Загрузка отчета в Битрикс
-        bitrix_folder_id = '193689'
-        with open(report_name, 'rb') as file:
-            report_file = file.read()
-        report_file_base64 = str(base64.b64encode(report_file))[2:]
-        upload_report = b.call('disk.folder.uploadfile', {
-            'id': bitrix_folder_id,
-            'data': {'NAME': report_name},
-            'fileContent': report_file_base64
-        })
-        b.call('tasks.task.add', {
-            'fields': {
-                'TITLE': 'Сверка отчетности',
-                'RESPONSIBLE_ID': '19',
-                'GROUP_ID': '13',
-                'DESCRIPTION': upload_report["DETAIL_URL"],
-                'CREATED_BY': '173'
-            }})
-        os.remove(f'Сверка_отчетности_{create_time}.xlsx')
-    except:
-        b.call('tasks.task.add', {
-            'fields': {
-                'TITLE': 'Произошла ошибка при сверке отчетности',
-                'RESPONSIBLE_ID': '19',
-                'GROUP_ID': '13',
-                'DESCRIPTION': upload_report["DETAIL_URL"],
-                'CREATED_BY': '173'
-            }})
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '193689'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('tasks.task.add', {
+        'fields': {
+            'TITLE': 'Сверка отчетности',
+            'RESPONSIBLE_ID': '19',
+            'GROUP_ID': '13',
+            'DESCRIPTION': upload_report["DETAIL_URL"],
+            'CREATED_BY': '173'
+        }})
+    os.remove(f'Сверка_отчетности_{create_time}.xlsx')
+
 
 
 

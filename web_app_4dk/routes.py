@@ -99,13 +99,10 @@ def main_page():
                 rewrite_call_statistic(month, year)
                 os.remove('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
             elif request.files['revise_accounting_deals_file']:
-                print('kek')
                 revise_accounting_deals_file = request.files['revise_accounting_deals_file']
                 revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-            else:
-                print('111111111111111111111')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

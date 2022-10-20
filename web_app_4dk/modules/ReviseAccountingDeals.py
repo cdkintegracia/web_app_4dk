@@ -38,6 +38,15 @@ def read_report_file(filename: str) -> dict:
 
 
 def revise_accounting_deals(filename):
+    what_remove = [
+        'ИНН партнёра',
+        'КПП партнёра',
+        'Наименование партнёра',
+        'КПП абонента',
+        'Дата регистрации',
+        'Регион',
+        'Тарифная зона'
+    ]
     job_counter = 0
     file_data = read_report_file(filename)
     for file_line in file_data['data']:
@@ -61,6 +70,9 @@ def revise_accounting_deals(filename):
         else:
             file_line.setdefault('Расхождение', 'Нет')
         price = file_line.pop('Цена')
+        file_line.pop('Цена')
+        for value in what_remove:
+            file_line.pop(value)
         file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
         file_line.setdefault('Цена', price)
         job_counter += 1
@@ -72,6 +84,8 @@ def revise_accounting_deals(filename):
             ind = i
             break
     del file_data['titles'][ind]
+    for title in what_remove:
+        file_data['titles'].remove(title)
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
     worksheet.append(file_data['titles'])

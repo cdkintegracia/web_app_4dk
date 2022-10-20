@@ -64,7 +64,7 @@ def revise_accounting_deals(filename):
         file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
         file_line.setdefault('Цена', price)
         job_counter += 1
-        print(f"{job_counter} | {len(file_data['data'])}")
+        #print(f"{job_counter} | {len(file_data['data'])}")
 
     ind = 0
     for i in range(len(file_data['titles'])):

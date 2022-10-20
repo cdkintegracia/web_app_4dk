@@ -72,6 +72,7 @@ def revise_accounting_deals(filename):
         print('kek')
         price = file_line.pop('Цена')
         print(price)
+        print(file_line)
         file_line.pop('Цена')
         print(file_line)
         for value in what_remove:

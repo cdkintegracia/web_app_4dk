@@ -37,6 +37,7 @@
   </div>
     </div>
     <!-- Модальное окно "Сверка по отчетности"-->
+<form method="POST" enctype="multipart/form-data"> 
 <div class="modal fade" id="ReviseAccountingDealsModal" tabindex="-1" aria-labelledby="ReviseAccountingDealsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -44,11 +45,10 @@
         <h5 class="modal-title" id="ReviseAccountingDealsModalLabel">Сверка по отчетности</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
-      <form method="POST" enctype="multipart/form-data"> 
       <div class="modal-body">
         <div class="input-block">
-        Файл формата .rar или .xlsx
-        <input name="revise_accounting_deals_file" type="file" accept='.xlsx, .rar'>
+        Файл формата .zip или .xlsx
+        <input name="revise_accounting_deals_file" type="file" accept='.xlsx, .zip'>
         <div class="text-block">
           Текст
         </div>
@@ -66,7 +66,6 @@
                     {% endwith %}
         <input type="submit" value="Сверка" name="submit_button">
       </div>
-      </form>
     </div>
   </div>
 </div>
@@ -78,7 +77,6 @@
         <h5 class="modal-title" id="exampleModalLabel">Обновление статистики звонков</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
-      <form method="POST" enctype="multipart/form-data">
       <div class="modal-body">
         <div class="input-block">
         Новая статистика:

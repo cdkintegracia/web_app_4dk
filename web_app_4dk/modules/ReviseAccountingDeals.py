@@ -108,7 +108,7 @@ def revise_accounting_deals(filename):
     task = b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
-            'RESPONSIBLE_ID': '19',
+            'RESPONSIBLE_ID': '311',
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})

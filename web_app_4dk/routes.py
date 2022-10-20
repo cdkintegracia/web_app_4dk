@@ -99,8 +99,7 @@ def main_page():
                 year = request.form.get('year')
                 rewrite_call_statistic(month, year)
                 '''
-        elif request.files['revise_accounting_deals_file']:
-            print(request.files['revise_accounting_deals_file'])
+        print(request.files['revise_accounting_deals_file'])
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

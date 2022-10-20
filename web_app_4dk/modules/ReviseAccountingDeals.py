@@ -56,18 +56,14 @@ def revise_accounting_deals(filename):
             'filter': {'UF_CRM_1656070716': file_line['ИНН абонента'],
                        'UF_CRM_1654682057': registration_data
                        }})
-        print('kek')
         if not company_info:
             file_line.setdefault('Расхождение', 'Нет ИНН')
             continue
-        print('kek')
         company_id = company_info[0]['ID']
         company_deals = b.get_all('crm.deal.list', {'filter': {'TYPE_ID': 'UC_O99QUW', 'COMPANY_ID': company_id}})
-        print('kek')
         if not company_deals:
             file_line.setdefault('Расхождение', 'Нет отчетности')
             continue
-        print('kek')
         company_deal = company_deals[0]
         if int(float(company_deal['OPPORTUNITY'])) < int(float(file_line['Цена'])):
             file_line.setdefault('Расхождение', 'Некорректная сумма')
@@ -75,8 +71,9 @@ def revise_accounting_deals(filename):
             file_line.setdefault('Расхождение', 'Нет')
         print('kek')
         price = file_line.pop('Цена')
+        print(price)
         file_line.pop('Цена')
-        print('kek')
+        print(file_line)
         for value in what_remove:
             file_line.pop(value)
         file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))

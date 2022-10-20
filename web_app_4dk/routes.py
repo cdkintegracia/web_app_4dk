@@ -89,7 +89,7 @@ def main_page():
     if current_user != 1:
         return redirect(url_for('login'))
     try:
-        if request.method == 'POST':
+        if request.method == 'POST' and request.form.get('submit_button'):
             if request.files['new_call_statistic_file']:
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')

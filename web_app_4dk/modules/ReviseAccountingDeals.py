@@ -50,8 +50,6 @@ def revise_accounting_deals(filename):
     job_counter = 0
     file_data = read_report_file(filename)
     for file_line in file_data['data']:
-        job_counter += 1
-        print(f"{job_counter} | {len(file_data['data'])}")
         registration_data_list = file_line['Дата регистрации'].split('.')
         registration_data = f"{registration_data_list[2]}-{registration_data_list[1]}-{registration_data_list[0]}"
         company_info = b.get_all('crm.company.list', {
@@ -73,10 +71,13 @@ def revise_accounting_deals(filename):
             file_line.setdefault('Расхождение', 'Нет')
         price = file_line.pop('Цена')
         file_line.pop('Цена')
+        print('kek')
         for value in what_remove:
             file_line.pop(value)
         file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
         file_line.setdefault('Цена', price)
+        job_counter += 1
+        print(f"{job_counter} | {len(file_data['data'])}")
 
     ind = 0
     for i in range(len(file_data['titles'])):

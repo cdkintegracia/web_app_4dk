@@ -99,7 +99,7 @@ def main_page():
             elif request.files['revise_accounting_deals_file']:
                 revise_accounting_deals_file = request.files['revise_accounting_deals_file']
                 revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-                print('11111111111111111111111111111111')
+                print(revise_accounting_deals_file)
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

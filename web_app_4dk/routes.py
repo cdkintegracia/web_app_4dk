@@ -1,4 +1,5 @@
 from time import asctime
+from os import stat
 
 from flask import request, render_template, redirect, url_for
 from flask_login import login_user, login_required, current_user
@@ -114,11 +115,15 @@ def update_connect_logs():
 
 # Обновление логов веб-приложения
 def update_logs(text, req):
+    file_path = '/root/web_app_4dk/web_app_4dk/static/logs/logs.txt'
     log_dct = {}
     for key in req:
         log_dct.setdefault(key, req[key])
-    with open('/root/web_app_4dk/web_app_4dk/static/logs/logs.txt', 'a') as log_file:
+    with open(file_path, 'a') as log_file:
         log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
+    if stat(file_path).st_size > 10000000:
+        with open(file_path, 'r') as file:
+            file.write('')
 
 
 # Вывод на экран логов веб-приложения

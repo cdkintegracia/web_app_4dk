@@ -27,6 +27,8 @@ def read_report_file(filename: str) -> dict:
         ]:
             file_data.append(temp)
     titles.append('Расхождение')
+    titles.append('Цена из Битрикса')
+    titles.append('Цена')
     return {'titles': titles, 'data': file_data}
 
 
@@ -36,8 +38,6 @@ def revise_accounting_deals(filename='1.xlsx'):
     for file_line in file_data['data']:
         registration_data_list = file_line['Дата регистрации'].split('.')
         registration_data = f"{registration_data_list[2]}-{registration_data_list[1]}-{registration_data_list[0]}"
-        if file_line['ИНН абонента'] != '7804376366':
-            continue
         company_info = b.get_all('crm.company.list', {
             'filter': {'UF_CRM_1656070716': file_line['ИНН абонента'],
                        'UF_CRM_1654682057': registration_data
@@ -55,9 +55,18 @@ def revise_accounting_deals(filename='1.xlsx'):
             file_line.setdefault('Расхождение', 'Некорректная сумма')
         else:
             file_line.setdefault('Расхождение', 'Нет')
+        price = file_line.pop('Цена')
+        file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
+        file_line.setdefault('Цена', price)
         job_counter += 1
         print(f"{job_counter} | {len(file_data['data'])}")
 
+    ind = 0
+    for i in range(len(file_data['titles'])):
+        if file_data['titles'][i] == 'Цена':
+            ind = i
+            break
+    del file_data['titles'][ind]
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
     worksheet.append(file_data['titles'])

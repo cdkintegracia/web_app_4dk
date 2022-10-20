@@ -85,7 +85,6 @@ def revise_accounting_deals(filename):
     del file_data['titles'][ind]
     for title in what_remove:
         file_data['titles'].remove(title)
-    print('ok')
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
     worksheet.append(file_data['titles'])
@@ -105,14 +104,14 @@ def revise_accounting_deals(filename):
         'data': {'NAME': report_name},
         'fileContent': report_file_base64
     })
-    b.call('tasks.task.add', {
+    task = b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
             'RESPONSIBLE_ID': '19',
-            'GROUP_ID': '13',
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})
+    print(task)
     os.remove(f'Сверка_отчетности_{create_time}.xlsx')
 
 

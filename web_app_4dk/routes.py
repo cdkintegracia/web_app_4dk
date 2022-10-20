@@ -90,11 +90,15 @@ def main_page():
         return redirect(url_for('login'))
     try:
         if request.method == 'POST':
-            new_call_statistic_file = request.files['new_call_statistic_file']
-            new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
-            month = request.form.get('month')
-            year = request.form.get('year')
-            rewrite_call_statistic(month, year)
+            if request.files['new_call_statistic_file']:
+                print('1')
+                new_call_statistic_file = request.files['new_call_statistic_file']
+                new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
+                month = request.form.get('month')
+                year = request.form.get('year')
+                rewrite_call_statistic(month, year)
+            elif request.files['new_call_statistic_file']:
+                print('2')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

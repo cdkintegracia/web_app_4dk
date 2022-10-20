@@ -2,6 +2,7 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 import os
 import base64
+from datetime import datetime
 
 from web_app_4dk.modules.authentication import authentication
 
@@ -76,11 +77,12 @@ def revise_accounting_deals(filename):
     worksheet.append(file_data['titles'])
     for data in file_data['data']:
         worksheet.append(list(data.values()))
-    report_name = 'Сверка отчетности.xlsx'
+    create_time = datetime.now().strftime('%d-%m-%Y')
+    report_name = f'Сверка_отчетности.xlsx {create_time}'
     workbook.save(report_name)
 
     # Загрузка отчета в Битрикс
-    bitrix_folder_id = '189467'
+    bitrix_folder_id = '193689'
     with open(report_name, 'rb') as file:
         report_file = file.read()
     report_file_base64 = str(base64.b64encode(report_file))[2:]

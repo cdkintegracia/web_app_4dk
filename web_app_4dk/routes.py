@@ -90,8 +90,8 @@ def main_page():
         return redirect(url_for('login'))
     try:
         if request.method == 'POST' and request.form.get('submit_button'):
-            print('go')
             if request.files['new_call_statistic_file']:
+                print('fsafa')
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
                 month = request.form.get('month')
@@ -99,12 +99,13 @@ def main_page():
                 rewrite_call_statistic(month, year)
                 os.remove('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
             elif request.files['revise_accounting_deals_file']:
+                print('kek')
                 revise_accounting_deals_file = request.files['revise_accounting_deals_file']
                 revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-        else:
-            print('not go')
+            else:
+                print('111111111111111111111')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

@@ -104,7 +104,6 @@ def revise_accounting_deals(filename):
         'data': {'NAME': report_name},
         'fileContent': report_file_base64
     })
-    print(upload_report)
     task = b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
@@ -112,7 +111,6 @@ def revise_accounting_deals(filename):
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})
-    print(task)
     os.remove(f'Сверка_отчетности_{create_time}.xlsx')
 
 

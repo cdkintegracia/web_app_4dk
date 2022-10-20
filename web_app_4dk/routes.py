@@ -91,15 +91,16 @@ def main_page():
     try:
         if request.method == 'POST':
             if request.files['new_call_statistic_file']:
-                print('11111111111111111111')
-                return
+                print(request.files['new_call_statistic_file'])
+                '''
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
                 month = request.form.get('month')
                 year = request.form.get('year')
                 rewrite_call_statistic(month, year)
-            elif request.files['revise_accounting_deals_file']:
-                print('22222222222222222222')
+                '''
+        elif request.files['revise_accounting_deals_file']:
+            print(request.files['revise_accounting_deals_file'])
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

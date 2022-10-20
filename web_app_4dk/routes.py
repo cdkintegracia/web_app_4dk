@@ -97,7 +97,7 @@ def main_page():
                 month = request.form.get('month')
                 year = request.form.get('year')
                 rewrite_call_statistic(month, year)
-            elif request.files['new_call_statistic_file']:
+            elif request.files['revise_accounting_deals_file']:
                 print('2')
     except:
         pass

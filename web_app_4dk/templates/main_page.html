@@ -18,6 +18,9 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Обновить статистику звонков
         </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ReviseAccountingDeals">
+          Сверка по отчетности
+        </button>
       </div>
       <div class="logs_block" align="center">
       <h2>Логи веб-приложения</h2>
@@ -33,7 +36,7 @@
     </div>
   </div>
     </div>
-    <!-- Модальное окно -->
+    <!-- Модальное окно "Обновить статистику звонков"-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -42,6 +45,40 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <form method="POST" enctype="multipart/form-data"> 
+      <div class="modal-body">
+        <div class="input-block">
+        Файл формата .rar или .xlsx
+        <input name="new_call_statistic_file" type="file" accept=".xlsx">
+        <div class="text-block">
+          Текст
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class=flashes>
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                        </dib>
+                    {% endif %}
+                    {% endwith %}
+        <input type="submit" value="Обновить данные">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Модальное окно "Сверка по отчетности"-->
+<div class="modal fade" id="ReviseAccountingDeals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ReviseAccountingDealsLabel">Обновление статистики звонков</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <form method="POST" enctype="multipart/form-data">
       <div class="modal-body">
         <div class="input-block">
         Новая статистика:

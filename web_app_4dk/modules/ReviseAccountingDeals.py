@@ -69,12 +69,7 @@ def revise_accounting_deals(filename):
             file_line.setdefault('Расхождение', 'Некорректная сумма')
         else:
             file_line.setdefault('Расхождение', 'Нет')
-        print('kek')
         price = file_line.pop('Цена')
-        print(price)
-        print(file_line)
-        file_line.pop('Цена')
-        print(file_line)
         for value in what_remove:
             file_line.pop(value)
         file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))

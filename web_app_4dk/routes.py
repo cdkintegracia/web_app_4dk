@@ -122,7 +122,7 @@ def update_logs(text, req):
     with open(file_path, 'a') as log_file:
         log_file.write(f"{asctime()} | {text} | request: {log_dct}\n")
     if stat(file_path).st_size > 10000000:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'w') as file:
             file.write('')
 
 

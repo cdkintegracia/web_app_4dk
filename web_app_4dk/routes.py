@@ -1,5 +1,5 @@
 from time import asctime
-from os import stat
+from os import stat, remove
 
 from flask import request, render_template, redirect, url_for
 from flask_login import login_user, login_required, current_user
@@ -91,15 +91,20 @@ def main_page():
     try:
         if request.method == 'POST':
             if request.files['new_call_statistic_file']:
-                '''
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
                 month = request.form.get('month')
                 year = request.form.get('year')
                 rewrite_call_statistic(month, year)
-                '''
-            elif request.files['revise_accounting_deals_file'] :
-                print(request.files['revise_accounting_deals_file'])
+            elif request.files['revise_accounting_deals_file']:
+                revise_accounting_deals_file = request.files['revise_accounting_deals_file']
+                if '.xlsx' in revise_accounting_deals_file:
+                    revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+                    print('Сохранено!')
+                else:
+                    pass
+                remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

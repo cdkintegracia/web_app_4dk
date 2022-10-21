@@ -173,6 +173,16 @@ def connect_1c(req: dict):
             if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
                 task_text = event['text']
                 break
+
+        # Проверка на наличие хотя бы одного русского символа в сообщении
+        russian_char_flag = False
+        for word in task_text:
+            for char in word:
+                if 1040 <= ord(char) <= 1103:
+                    russian_char_flag = True
+        if russian_char_flag is False:
+            return
+
         # Исключаются обращения с сообщением оценки работы
         if len(task_text) < 2:
             return
@@ -180,6 +190,7 @@ def connect_1c(req: dict):
         is_author_support = get_employee_id(author_info[0])
         if is_author_support != '0':
             return
+
         message_time = time_handler(req['message_time'])
         user_info = get_name(req['user_id'], req['treatment_id'])
         if len(author_info) < 2:

@@ -90,7 +90,8 @@ def create_deals_rpd(req):
                             'CREATED_BY': '173',
                             'COMPANY_ID': company_id,
                             'CATEGORY_ID': '13',
-                            'CLOSEDATE': '2022-11-30'
+                            'CLOSEDATE': '2022-11-30',
+                            'TYPE_ID': 'UC_4N16O3'
                         }})
 
 

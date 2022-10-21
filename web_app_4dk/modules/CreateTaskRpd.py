@@ -89,7 +89,8 @@ def create_deals_rpd(req):
                             'ASSIGNED_BY_ID': employee,
                             'CREATED_BY': '173',
                             'COMPANY_ID': company_id,
-                            'CATEGORY_ID': '13'
+                            'CATEGORY_ID': '13',
+                            'CLOSEDATE': '2022-11-30'
                         }})
 
 

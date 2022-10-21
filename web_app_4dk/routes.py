@@ -33,7 +33,7 @@ custom_webhooks = {
     'check_task_result': check_task_result,
     'revise_its': revise_its,
     'prolongation_its': prolongation_its,
-    'create_task_rpd': create_deals_rpd,
+    'create_deals_rpd': create_deals_rpd,
     'complete_rpd_task': complete_rpd_task,
     'create_company_call_report': create_company_call_report,
 }

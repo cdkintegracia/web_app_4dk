@@ -19,7 +19,7 @@ from web_app_4dk.modules.Connect1C import connect_1c
 from web_app_4dk.modules.UpdateUserStatistics import update_user_statistics
 from web_app_4dk.modules.UpdateContactPhoto import update_contact_photo
 from web_app_4dk.modules.RewriteCallStatistic import rewrite_call_statistic
-from web_app_4dk.modules.CreateTaskRpd import create_task_rpd
+from web_app_4dk.modules.CreateTaskRpd import create_deals_rpd
 from web_app_4dk.modules.CompleteRpdTask import complete_rpd_task
 from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_report
 from web_app_4dk.modules.ReviseAccountingDeals import revise_accounting_deals
@@ -33,7 +33,7 @@ custom_webhooks = {
     'check_task_result': check_task_result,
     'revise_its': revise_its,
     'prolongation_its': prolongation_its,
-    'create_task_rpd': create_task_rpd,
+    'create_task_rpd': create_deals_rpd,
     'complete_rpd_task': complete_rpd_task,
     'create_company_call_report': create_company_call_report,
 }

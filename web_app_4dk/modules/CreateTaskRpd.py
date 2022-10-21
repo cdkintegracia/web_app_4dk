@@ -11,7 +11,7 @@ webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 
-def create_task_rpd(req):
+def create_deals_rpd(req):
     months = {
         1: 'Январь',
         2: 'Февраль',
@@ -85,7 +85,7 @@ def create_task_rpd(req):
                 if not is_deal_exists:
                     deal = b.call('crm.deal.add', {
                         'fields': {
-                            'TITLE': f"Работа с РПД СМ",
+                            'TITLE': f"Работа с РПД (СМ)",
                             'ASSIGNED_BY_ID': employee,
                             'CREATED_BY': '173',
                             'COMPANY_ID': company_id,

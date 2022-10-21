@@ -73,6 +73,8 @@ def create_task_rpd(req):
 
     # Создание сделок
     for employee in employees:
+        print(employee)
+        return
         if employee not in ['None', None]:
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
@@ -81,8 +83,6 @@ def create_task_rpd(req):
                 'filter': {'CATEGORY_ID': '13',
                            'COMPANY_ID': employee
                            }})
-            print(employee)
-            return
 
             if not is_main_task_exists:
                 task = b.call('tasks.task.add', {

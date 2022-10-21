@@ -74,22 +74,21 @@ def create_task_rpd(req):
     # Создание сделок
     for employee in employees:
         if employee not in ['None', None]:
-            employee_fields = b.get_all('user.get', {"ID": employee})
-            employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-            print(employees[employee][2])
+            for deal in employee:
+                company_id = deal[2]
             is_deal_exists = b.get_all('crm.deal.list', {
                 'select': ['ID'],
                 'filter': {'CATEGORY_ID': '13',
-                           'COMPANY_ID': employees[employee][2]
+                           'COMPANY_ID': company_id
                            }})
 
             if not is_deal_exists:
                 deal = b.call('crm.deal.add', {
                     'fields': {
-                        'TITLE': f"Работа с РПД (СМ)",
+                        'TITLE': f"Работа с РПД СМ",
                         'ASSIGNED_BY_ID': employee,
                         'CREATED_BY': '173',
-                        'COMPANY_ID': employees[employee][2],
+                        'COMPANY_ID': company_id,
                         'CATEGORY_ID': '13'
                     }})
 

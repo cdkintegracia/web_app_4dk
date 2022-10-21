@@ -76,6 +76,7 @@ def create_task_rpd(req):
         if employee not in ['None', None]:
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
+            print(employees[employee][2])
             is_deal_exists = b.get_all('crm.deal.list', {
                 'select': ['ID'],
                 'filter': {'CATEGORY_ID': '13',

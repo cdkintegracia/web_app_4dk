@@ -74,7 +74,7 @@ def create_task_rpd(req):
     # Создание сделок
     for employee in employees:
         print(employee)
-        return
+        continue
         if employee not in ['None', None]:
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']

@@ -54,7 +54,8 @@ def create_deals_rpd(req):
             'filter': {
                 'UF_CRM_1657878818384': '859',
                 'STAGE_ID': ['C1:NEW', 'C1:UC_0KJKTY', 'C1:UC_3J0IH6'],
-                'ASSIGNED_BY_ID': id_list
+                'ASSIGNED_BY_ID': id_list,
+                '!TYPE_ID': 'UC_GZFC63',
             }})
 
     # Разделение ID сделок по ответственному

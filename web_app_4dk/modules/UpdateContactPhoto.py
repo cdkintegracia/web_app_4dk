@@ -9,6 +9,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def update_contact_photo(req: dict):
+    return
     contact_id = req['data[FIELDS][ID]']
     contact = requests.get(url=f'{authentication("Bitrix")}crm.contact.list?select[]=PHOTO&filter[ID]={contact_id}').json()['result'][0]
     companies = requests.get(url=f'{authentication("Bitrix")}crm.contact.company.items.get?ID={contact_id}').json()['result']

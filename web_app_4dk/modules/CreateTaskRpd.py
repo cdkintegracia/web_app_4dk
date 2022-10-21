@@ -74,9 +74,7 @@ def create_task_rpd(req):
     # Создание сделок
     for employee in employees:
         if employee not in ['None', None]:
-            for deal in employee:
-                print(deal)
-                continue
+            for deal in employees[employee]:
                 company_id = deal[2]
                 is_deal_exists = b.get_all('crm.deal.list', {
                     'select': ['ID'],

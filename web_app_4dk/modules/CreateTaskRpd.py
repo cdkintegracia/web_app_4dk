@@ -71,17 +71,19 @@ def create_task_rpd(req):
             # Добавление ID сделки к значению dct
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
 
-    # Создание задач
+    # Создание сделок
     for employee in employees:
         if employee not in ['None', None]:
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-            is_main_task_exists = b.get_all('tasks.task.list', {
+            is_deal_exists = b.get_all('crm.deal.list', {
                 'select': ['ID'],
-                'filter': {'TITLE': f"РПД: {employee_name}",
-                           'GROUP_ID': '79',
-                           '!STATUS': '5',
+                'filter': {'CATEGORY_ID': '13',
+                           'COMPANY_ID': employee
                            }})
+            print(employee)
+            return
+
             if not is_main_task_exists:
                 task = b.call('tasks.task.add', {
                     'fields': {
@@ -94,54 +96,7 @@ def create_task_rpd(req):
                         'ALLOW_CHANGE_DEADLINE': 'N',
                         'DESCRIPTION': f"",
                     }})
-                main_task = task['task']['id']
-            else:
-                main_task = is_main_task_exists[0]['id']
 
-        for value in employees[employee]:
-            if employee in [None, 'None']:
-                continue
-            company = b.get_all('crm.company.list', {'filter': {'ID': value[2]}})[0]
 
-            # Проверка была ли создана подзадача, для возможности допостановки
-            is_sub_task_exists = b.get_all('tasks.task.list', {
-                'select': ['ID'],
-                'filter': {'TITLE': f"РПД: {company['TITLE']}",
-                           'GROUP_ID': '79',
-                           '!STATUS': '5',
-                           }})
-            if is_sub_task_exists:
-                continue
-
-            # Создание пунктов чек-листа для созданной задачи на сотрудника
-            b.call('task.checklistitem.add', [
-                main_task, {
-                    # <Название компании> <Название сделки> <Ссылка на сделку>
-                    'TITLE': f"{company['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/company/details/{value[2]}/",
-                }
-            ], raw=True
-                   )
-
-            # Создание подзадачи для основной задачи
-            b.call('tasks.task.add', {
-                'fields': {
-                    'TITLE': f"РПД: {company['TITLE']}",
-                    'DEADLINE': f"{current_year}-{datetime.now().month}-{current_monthrange} 19:00:00",
-                    #'RESPONSIBLE_ID': employee,
-                    'RESPONSIBLE_ID': '173',
-                    'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '79',
-                    'DESCRIPTION': f"",
-                    'PARENT_ID': main_task,
-                    'UF_CRM_TASK': [f"CO_{company['ID']}"],
-                    'CREATED_BY': '173',
-                }})
-
-        # Защита от дублирования задач
-        updated_task = b.get_all('tasks.task.get', {'taskId': main_task})
-        if len(updated_task['task']['checklist']) == 0:
-            b.call('tasks.task.delete', {'taskId': main_task})
-            print('Удалена пустая задача')
-
-    b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Задачи на РПД поставлены'})
+    b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сделки на РПД созданы'})
 

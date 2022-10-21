@@ -1,11 +1,13 @@
 import base64
 
 from fast_bitrix24 import Bitrix
+from bitrix24 import *
 import requests
 
 from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
+bx24 = Bitrix24(authentication('Bitrix'))
 
 
 def update_contact_photo(req: dict):
@@ -24,7 +26,8 @@ def update_contact_photo(req: dict):
             photo = file.read()
         new_photo = base64.b64encode(photo)
         data = {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}}
-        requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
+        bx24.callMethod('crm.contact.update', id=contact_id, fields={'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}})
+        #requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
         #b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}})
     else:
         return

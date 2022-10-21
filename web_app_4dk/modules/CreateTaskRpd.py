@@ -90,7 +90,8 @@ def create_task_rpd(req):
                         'CREATED_BY': '173',
                         'COMPANY_ID': employees[employee][2],
                     }})
-            return
+
+                return
 
 
     b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сделки на РПД созданы'})

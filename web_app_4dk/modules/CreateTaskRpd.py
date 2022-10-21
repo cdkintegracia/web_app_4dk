@@ -89,6 +89,7 @@ def create_task_rpd(req):
                         'ASSIGNED_BY_ID': employee,
                         'CREATED_BY': '173',
                         'COMPANY_ID': employees[employee][2],
+                        'CATEGORY_ID': '13'
                     }})
 
                 return

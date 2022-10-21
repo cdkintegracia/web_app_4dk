@@ -72,30 +72,25 @@ def create_task_rpd(req):
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID']])
 
     # Создание сделок
-    print(employees)
     for employee in employees:
-        continue
         if employee not in ['None', None]:
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
             is_deal_exists = b.get_all('crm.deal.list', {
                 'select': ['ID'],
                 'filter': {'CATEGORY_ID': '13',
-                           'COMPANY_ID': employee
+                           'COMPANY_ID': employees[employee][2]
                            }})
 
-            if not is_main_task_exists:
-                task = b.call('tasks.task.add', {
+            if not is_deal_exists:
+                deal = b.call('crm.deal.add', {
                     'fields': {
-                        'TITLE': f"РПД: {employee_name}",
-                        'DEADLINE': f"{current_year}-{datetime.now().month}-{current_monthrange} 19:00:00",
-                        #'RESPONSIBLE_ID': employee,
-                        'RESPONSIBLE_ID': '173',
+                        'TITLE': f"Работа с РПД (СМ)",
+                        'ASSIGNED_BY_ID': employee,
                         'CREATED_BY': '173',
-                        'GROUP_ID': '79',
-                        'ALLOW_CHANGE_DEADLINE': 'N',
-                        'DESCRIPTION': f"",
+                        'COMPANY_ID': employees[employee][2],
                     }})
+            return
 
 
     b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сделки на РПД созданы'})

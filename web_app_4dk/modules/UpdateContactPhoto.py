@@ -26,8 +26,8 @@ def update_contact_photo(req: dict):
             photo = file.read()
         new_photo = base64.b64encode(photo)
         data = {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}}
-        bx24.callMethod('crm.contact.update', id=contact_id, fields={'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}})
+        #bx24.callMethod('crm.contact.update', id=contact_id, fields={'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}})
         #requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
-        #b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}})
+        b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}})
     else:
         return

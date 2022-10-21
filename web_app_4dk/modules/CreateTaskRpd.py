@@ -75,24 +75,25 @@ def create_task_rpd(req):
     for employee in employees:
         if employee not in ['None', None]:
             for deal in employee:
+                print(deal)
                 company_id = deal[2]
-            is_deal_exists = b.get_all('crm.deal.list', {
-                'select': ['ID'],
-                'filter': {'CATEGORY_ID': '13',
-                           'COMPANY_ID': company_id
-                           }})
+                is_deal_exists = b.get_all('crm.deal.list', {
+                    'select': ['ID'],
+                    'filter': {'CATEGORY_ID': '13',
+                               'COMPANY_ID': company_id
+                               }})
 
-            if not is_deal_exists:
-                deal = b.call('crm.deal.add', {
-                    'fields': {
-                        'TITLE': f"Работа с РПД СМ",
-                        'ASSIGNED_BY_ID': employee,
-                        'CREATED_BY': '173',
-                        'COMPANY_ID': company_id,
-                        'CATEGORY_ID': '13'
-                    }})
+                if not is_deal_exists:
+                    deal = b.call('crm.deal.add', {
+                        'fields': {
+                            'TITLE': f"Работа с РПД СМ",
+                            'ASSIGNED_BY_ID': employee,
+                            'CREATED_BY': '173',
+                            'COMPANY_ID': company_id,
+                            'CATEGORY_ID': '13'
+                        }})
 
-                return
+                    return
 
 
     b.call('im.notify.system.add', {'USER_ID': req['user_id'][5:], 'MESSAGE': f'Сделки на РПД созданы'})

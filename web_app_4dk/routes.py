@@ -22,6 +22,7 @@ from web_app_4dk.modules.RewriteCallStatistic import rewrite_call_statistic
 from web_app_4dk.modules.CreateDealsRpd import create_deals_rpd
 from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_report
 from web_app_4dk.modules.ReviseAccountingDeals import revise_accounting_deals
+from web_app_4dk.modules.FillContract import fill_contract
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -34,6 +35,7 @@ custom_webhooks = {
     'prolongation_its': prolongation_its,
     'create_deals_rpd': create_deals_rpd,
     'create_company_call_report': create_company_call_report,
+    'fill_contact': fill_contract,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

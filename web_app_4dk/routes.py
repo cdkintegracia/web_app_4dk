@@ -35,7 +35,7 @@ custom_webhooks = {
     'prolongation_its': prolongation_its,
     'create_deals_rpd': create_deals_rpd,
     'create_company_call_report': create_company_call_report,
-    'fill_contact': fill_contract,
+    'fill_contract': fill_contract,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

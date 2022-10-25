@@ -6,7 +6,7 @@ from web_app_4dk.modules.authentication import authentication
 
 
 def fill_contract(req):
-    b = authentication('Bitrix')
+    b = Bitrix(authentication('Bitrix'))
     p = Petrovich()
     cased_fn = p.firstname(req['first_name'], Case.GENITIVE)
     cased_ln = p.lastname(req['last_name'], Case.GENITIVE)

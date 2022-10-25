@@ -20,7 +20,7 @@ def fill_contract(req):
         'TEMPLATE_ID': '1203',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],
         'PARAMETERS': {
-            'fio': f"{req['last_name'].upper()} {req['first_name'][0].upper()} {req['second_name'][0].upper()}",
+            'fio': f"{req['last_name'].upper()} {req['first_name'][0].upper()}. {req['second_name'][0].upper()}.",
             'cased_fio': f"{cased_ln.upper()} {cased_fn.upper()} {cased_sn.upper()}",
             'type': req['type'],
             'based': req['based']

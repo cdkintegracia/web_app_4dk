@@ -31,7 +31,7 @@ def fill_contract(req):
             'fio': f"{req['last_name'].upper()} {req['first_name'][0].upper()}. {req['second_name'][0].upper()}.",
             'cased_fio': f"{cased_ln.upper()} {cased_fn.upper()} {cased_sn.upper()}",
             'type': req['type'],
-            'based': req['based'],
+            'based': req['based'].capitalize(),
             'job_post': req['job_post'].lower(),
             'cased_job_post': cased_job_post.capitalize(),
         }})

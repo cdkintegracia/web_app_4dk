@@ -19,11 +19,14 @@ def fill_contract(req):
     cased_ln = p.lastname(req['last_name'], Case.GENITIVE, genders[req['gender']])
     cased_sn = p.middlename(req['second_name'], Case.GENITIVE, genders[req['gender']])
     job_post = []
-    for word in req['job_post'].split():
-        parse_word = morph.parse(word)[0]
-        cased_word = parse_word.inflect({'gent'})
-        job_post.append(cased_word[0])
-    cased_job_post = ' '.join(job_post)
+    try:
+        for word in req['job_post'].split():
+            parse_word = morph.parse(word)[0]
+            cased_word = parse_word.inflect({'gent'})
+            job_post.append(cased_word[0])
+        cased_job_post = ' '.join(job_post)
+    except:
+        cased_job_post = req['job_post']
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1203',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],

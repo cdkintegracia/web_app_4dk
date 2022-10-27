@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pymorphy2
 from petrovich.main import Petrovich
 from petrovich.enums import Case, Gender
@@ -27,6 +29,10 @@ def fill_contract(req):
         cased_job_post = ' '.join(job_post)
     except:
         cased_job_post = req['job_post']
+    if not req['date']:
+        document_date = datetime.now()
+    else:
+        document_date = req['date']
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1203',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],
@@ -37,5 +43,5 @@ def fill_contract(req):
             'based': req['based'].capitalize(),
             'job_post': req['job_post'].capitalize(),
             'cased_job_post': cased_job_post.lower(),
-            'data': req['date']
+            'data': document_date
         }})

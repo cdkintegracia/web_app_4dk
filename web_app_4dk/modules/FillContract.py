@@ -9,6 +9,20 @@ from web_app_4dk.modules.authentication import authentication
 
 
 def fill_contract(req):
+    months = {
+        'Январь': 1,
+        'Февраль': 2,
+        'Март': 3,
+        'Апрель': 4,
+        'Май': 5,
+        'Июнь': 6,
+        'Июль': 7,
+        'Август': 8,
+        'Сентябрь': 9,
+        'Октябрь': 10,
+        'Ноябрь': 11,
+        'Декабрь': 12
+    }
     b = Bitrix(authentication('Bitrix'))
     p = Petrovich()
     morph = pymorphy2.MorphAnalyzer(lang='ru')
@@ -30,6 +44,8 @@ def fill_contract(req):
     except:
         cased_job_post = req['job_post']
     if not req['date']:
+        string_month = datetime.now().month
+        print('aaaaaaaaaaaaaaaaaa', string_month)
         document_date = datetime.now().strftime('%d %m %Y')
     else:
         document_date = req['date']

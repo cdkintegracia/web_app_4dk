@@ -37,4 +37,5 @@ def fill_contract(req):
             'based': req['based'].capitalize(),
             'job_post': req['job_post'].capitalize(),
             'cased_job_post': cased_job_post.lower(),
+            'data': req['date']
         }})

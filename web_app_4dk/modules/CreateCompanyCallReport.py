@@ -83,22 +83,24 @@ def create_company_call_report(req):
         activities = sorted(not_sorted_activities, key=lambda x: x['ID'])
 
         for activity in activities:
-            if 'Исходящий' in activity['SUBJECT'] and activity['DESCRIPTION']:
+            if 'Исходящий' in activity['SUBJECT']:
                 call_start_time = dateutil.parser.isoparse(activity['START_TIME'])
                 if str(call_start_time.month) == month_codes[req['month']] and str(call_start_time.year) == req['year']:
+                    if activity['AUTHOR_ID'] == '109':  # Ридкобород
+                        continue
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]
                     if 231 not in author['UF_DEPARTMENT']:
                         continue
                     author_name = f"{author['NAME']} {author['LAST_NAME']}"
-                    duration_formatted = activity['DESCRIPTION'].split(': ')[1]
                     phone_number = activity['SUBJECT'].split(' на ')[1]
                     call_end_time = dateutil.parser.isoparse(activity['END_TIME'])
                     call_start_time_formatted = call_start_time.strftime('%d.%m.%Y %H:%M:%S')
+                    duration = call_end_time - call_start_time
                     report_data.append([
                         call_start_time_formatted,
                         contact_name,
                         phone_number,
-                        duration_formatted,
+                        duration,
                         author_name,
                     ])
                     duration = call_end_time - call_start_time

@@ -30,7 +30,7 @@ def fill_contract(req):
     except:
         cased_job_post = req['job_post']
     if not req['date']:
-        document_date = datetime.now()
+        document_date = datetime.now().strftime('%d %m %Y')
     else:
         document_date = req['date']
     b.call('bizproc.workflow.start', {

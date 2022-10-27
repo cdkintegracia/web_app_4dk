@@ -44,11 +44,15 @@ def fill_contract(req):
     except:
         cased_job_post = req['job_post']
     if not req['date']:
-        string_month = datetime.now().month
-        print('aaaaaaaaaaaaaaaaaa', string_month)
-        document_date = datetime.now().strftime('%d %m %Y')
+        day = datetime.now().day
+        string_month = months[datetime.now().month]
+        year = datetime.now().year
     else:
-        document_date = req['date']
+        req_date = req['date'].split('.')
+        day = int(req_date[0])
+        string_month = months[int(req_date[1])]
+        year = req_date[2]
+    document_date = f"{day} {string_month} {year}"
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1203',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],

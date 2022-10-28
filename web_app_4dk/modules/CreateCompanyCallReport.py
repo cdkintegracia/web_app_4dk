@@ -129,7 +129,6 @@ def create_company_call_report(req):
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]
                     if 231 not in author['UF_DEPARTMENT']:
                         continue
-                    print(activity)
                     author_name = f"{author['NAME']} {author['LAST_NAME']}"
                     phone_number = activity['SUBJECT'].split(' на ')[1]
                     call_end_time = dateutil.parser.isoparse(activity['END_TIME'])

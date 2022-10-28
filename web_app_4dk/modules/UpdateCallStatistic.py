@@ -94,7 +94,6 @@ def update_call_statistic(req):
 
     companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
     for company in companies:
-        responsible = company['ASSIGNED_BY_ID']
         list_elements = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '175',
@@ -108,6 +107,9 @@ def update_call_statistic(req):
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
         if len(list_elements) == 0:
+            responsible = b.get_all('crm.company.list', {
+                'select': ['ASSIGNED_BY_ID'],
+                'filter': {'ID': company['COMPANY_ID']}})[0]['ASSIGNED_BY_ID']
             b.call('lists.element.add', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '175',
@@ -134,6 +136,8 @@ def update_call_statistic(req):
                     element_call_count = element['PROPERTY_1305'][field_value]
                 for field_value in element['PROPERTY_1307']:
                     limit_duration = element['PROPERTY_1307'][field_value]
+                for field_value in element['PROPERTY_1355']:
+                    responsible = element['PROPERTY_1355'][field_value]
                 try:
                     for field_value in element['PROPERTY_1315']:
                         first_break_limit = element['PROPERTY_1315'][field_value]

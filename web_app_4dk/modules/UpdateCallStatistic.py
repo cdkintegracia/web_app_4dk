@@ -94,6 +94,7 @@ def update_call_statistic(req):
 
     companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
     for company in companies:
+        responsible = company['ASSIGNED_BY_ID']
         list_elements = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '175',
@@ -118,6 +119,7 @@ def update_call_statistic(req):
                     'PROPERTY_1305': '1',    # Количество звонков
                     'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
                     'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
+                    'PROPERTY_1355': responsible,
                 }
             }
                    )
@@ -168,6 +170,7 @@ def update_call_statistic(req):
                     'PROPERTY_1317': second_break_limit,    # Превышение лимита x2
                     'PROPERTY_1339': month_codes[strftime("%m")],   # Месяц
                     'PROPERTY_1341': year_codes[strftime('%Y')],    # Год
+                    'PROPERTY_1355': responsible,
                 }
             }
                    )

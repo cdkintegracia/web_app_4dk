@@ -96,21 +96,24 @@ def add_new_task(req: dict):
 
 
 def add_old_task(req: dict):
-    task = requests.get(f"{authentication('Bitrix')}tasks.task.get?taskId={req['data[FIELDS_AFTER][ID]']}").json()['result']
-    if task:
-        if task['task']['status'] != '5':
-            return
-    user_info = requests.get(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
-    user_info = user_info['result'][0]
-    user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
-    data_to_write = [task['task']['id'],
-                     'TASK',
-                     user_name,
-                     time_handler(task['task']['createdDate']),
-                     'Завершена'
-                     ]
-
+    try:
+        task = requests.get(f"{authentication('Bitrix')}tasks.task.get?taskId={req['data[FIELDS_AFTER][ID]']}").json()['result']
+        if task:
+            if task['task']['status'] != '5':
+                return
+        user_info = requests.get(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
+        user_info = user_info['result'][0]
+        user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
+        data_to_write = [task['task']['id'],
+                         'TASK',
+                         user_name,
+                         time_handler(task['task']['createdDate']),
+                         'Завершена'
+                         ]
+    except:
+        return
     write_to_sheet(data_to_write)
+
 
 
 

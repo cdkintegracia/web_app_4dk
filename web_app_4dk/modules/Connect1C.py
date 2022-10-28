@@ -65,6 +65,10 @@ connect_codes = {
 allow_id = ['127', '129', '131', '183', '1', '311']
 
 
+def send_bitrix_request(method: str, data: dict):
+    return requests.post(f"{authentication('Bitrix')}{method}", json=data).json()['result']
+
+
 def load_logs():
     logs = []
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt') as file:
@@ -82,7 +86,7 @@ def time_handler(time: str) -> str:
 
 def get_employee_id(name: str) -> str:
     name = name.split()
-    employee_id = b.get_all('user.get', {'filter': {'NAME': name[0], 'LAST_NAME': name[1]}})
+    employee_id = send_bitrix_request('user.get', {'filter': {'NAME': name[0], 'LAST_NAME': name[1]}})
     try:
         return employee_id[0]['ID']
     except:
@@ -133,9 +137,9 @@ def get_name(user_id: str, *args) -> list:
                 if company_id == company['Value'][0]:
                     inn = company['Value'][4]
                     try:
-                        company_id = b.get_all('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
+                        company_id = send_bitrix_request('crm.company.list', {'select': ['ID'], 'filter': {'UF_CRM_1656070716': inn}})[0]['ID']
                     except:
-                        b.call('tasks.task.add', {
+                        send_bitrix_request('tasks.task.add', {
                             'fields': {
                                 'TITLE': '1С:Коннект Не найдена компания по ИНН',
                                 'DESCRIPTION': f"ID компании: {company_id}\nИНН: {inn}\nID обращения: {args[0]}",
@@ -204,7 +208,7 @@ def connect_1c(req: dict):
         if support_id in allow_id:
             responsible_id = support_id
 
-        b.call('tasks.task.add', {'fields': {
+        send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект",
             'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
             'GROUP_ID': '75',
@@ -218,7 +222,7 @@ def connect_1c(req: dict):
     # Перевод обращения
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':
         task_to_change = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']['tasks'][0]
-        b.call('tasks.task.update', {'taskId': task_to_change['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
+        send_bitrix_request('tasks.task.update', {'taskId': task_to_change['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:
@@ -242,7 +246,7 @@ def connect_1c(req: dict):
 
         task_to_update = is_task_created['tasks'][0]
 
-        b.call('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
+        send_bitrix_request('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
         task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_to_update["id"]}').json()['result']
         for comment in task_comments:
             params = {0: task_to_update['id'], 1: comment['ID']}
@@ -250,6 +254,7 @@ def connect_1c(req: dict):
         b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
         elapsed_time = req['treatment']['treatment_duration']
         b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
+
 
     # Смена ответственного
 

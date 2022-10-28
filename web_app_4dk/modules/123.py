@@ -90,6 +90,9 @@ def create_company_call_report(req):
                         continue
                     author_name = f"{author['NAME']} {author['LAST_NAME']}"
                     phone_number = activity['SUBJECT'].split(' на ')[1]
+                    check_mobile_phone = phone_number.split(' ')
+                    if check_mobile_phone[1] == '812':
+                        phone_number = ''
                     call_end_time = dateutil.parser.isoparse(activity['END_TIME'])
                     call_start_time_formatted = call_start_time.strftime('%d.%m.%Y %H:%M:%S')
                     duration = call_end_time - call_start_time
@@ -138,8 +141,7 @@ def create_company_call_report(req):
     report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
     report_data.append(['Итого', '', '', total_duration])
     report_data = titles + report_data
-    for x in report_data:
-        print(x)
+
 
 create_company_call_report(req)
 

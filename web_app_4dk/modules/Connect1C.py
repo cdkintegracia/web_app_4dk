@@ -117,7 +117,7 @@ def create_task(req):
     if support_id in allow_id:
         responsible_id = support_id
 
-    send_bitrix_request('tasks.task.add', {'fields': {
+    new_task = send_bitrix_request('tasks.task.add', {'fields': {
         'TITLE': f"1С:Коннект {support_line(req['line_id'])}",
         'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
         'GROUP_ID': '75',
@@ -127,15 +127,20 @@ def create_task(req):
         'UF_AUTO_499889542776': req['treatment_id'],
         'STAGE_ID': '1165',
     }})
+    return new_task['task']
 
 
 def check_task_existence(req):
     data = {
-        'UF_AUTO_499889542776': req['treatment_id']
+        'filter': {
+            'UF_AUTO_499889542776': req['treatment_id']
+        }
     }
-    task_existence = send_bitrix_request('tasks.task.list', data)
+    task_existence = send_bitrix_request('tasks.task.list', data)['tasks']
     if not task_existence:
         create_task(req)
+    else:
+        return task_existence[0]['id']
 
 
 def send_bitrix_request(method: str, data: dict):
@@ -228,11 +233,7 @@ def connect_1c(req: dict):
         json.dump(req, file, ensure_ascii=False)
         file.write('\n')
 
-    check_task_existence(req)
-
-    is_task_created = requests.get(
-        url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()[
-        'result']
+    task = check_task_existence(req)
 
     # Перевод обращения
     if req['message_type'] == 89 and req['data']['direction'] == 'to':
@@ -256,22 +257,21 @@ def connect_1c(req: dict):
                 task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
-        task_to_update = is_task_created['tasks'][0]
 
-        send_bitrix_request('tasks.task.update', {'taskId': task_to_update['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
-        task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_to_update["id"]}').json()['result']
+        send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
+        task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()['result']
         for comment in task_comments:
-            params = {0: task_to_update['id'], 1: comment['ID']}
+            params = {0: task['id'], 1: comment['ID']}
             requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
-        b.call('task.commentitem.add', [task_to_update['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task_to_update['responsibleId']}], raw=True)
+        b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task['responsibleId']}], raw=True)
         elapsed_time = req['treatment']['treatment_duration']
-        b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
+        b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:
-        task_user_name = is_task_created['tasks'][0]['responsible']['name']
+        task_user_name = task['tasks'][0]['responsible']['name']
         if task_user_name != connect_user_name:
-            data = {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
+            data = {'taskId': task['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
             requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)

@@ -80,7 +80,7 @@ def support_line(line_id: str):
             return support_line_name
 
 
-def create_task(req):
+def create_task(req) -> dict:
     # Создание задачи с первым сообщением
     data = load_logs()
     task_text = ''
@@ -96,13 +96,13 @@ def create_task(req):
             if 1040 <= ord(char) <= 1103:
                 russian_char_flag = True
     if russian_char_flag is False:
-        return
+        return {'error': 'Нет хотя бы одного русского символа в сообщении'}
 
     # Проверка на инициатора обращения
     author_info = get_name(event['author_id'], req['treatment_id'])
     is_author_support = get_employee_id(author_info[0])
     if is_author_support != '0':
-        return
+        return {'error': 'Инициатор сообщения - сотрудник'}
 
     message_time = time_handler(req['message_time'])
     user_info = get_name(req['user_id'], req['treatment_id'])
@@ -234,6 +234,8 @@ def connect_1c(req: dict):
         file.write('\n')
 
     task = check_task_existence(req)
+    if 'error' in task:
+        return
 
     # Перевод обращения
     if req['message_type'] == 89 and req['data']['direction'] == 'to':
@@ -256,7 +258,6 @@ def connect_1c(req: dict):
                     authors.setdefault(event['author_id'], get_name(event['author_id']))
                 task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
-
 
         send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
         task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()['result']

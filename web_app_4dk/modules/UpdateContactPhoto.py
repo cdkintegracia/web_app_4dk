@@ -40,5 +40,5 @@ def update_contact_photo(req: dict):
                 new_photo = base64.b64encode(photo)
                 data = {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}}
                 requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
-                os_remove('/root/web_app_4dk/web_app_4dk/red_square.png')
+                #os_remove('/root/web_app_4dk/web_app_4dk/red_square.png')
 

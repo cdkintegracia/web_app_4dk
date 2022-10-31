@@ -1,4 +1,5 @@
 import base64
+from os import remove as os_remove
 
 from fast_bitrix24 import Bitrix
 import requests
@@ -30,10 +31,14 @@ def update_contact_photo(req: dict):
     else:
         if not companies:
             if 'PHOTO' not in contact or contact['PHOTO'] in [None, 'None']:
+                r = requests.get(
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Square_Yellow.svg/1200px-Square_Yellow.svg.png')
+                with open('/root/web_app_4dk/web_app_4dk/red_square.png', 'wb') as file:
+                    file.write(r.content)
                 with open('/root/web_app_4dk/web_app_4dk/red_square.png', 'rb') as file:
                     photo = file.read()
                 new_photo = base64.b64encode(photo)
                 data = {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}}
-                #requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
-                b.call('crm.contact.update', {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}})
+                requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
+                os_remove('/root/web_app_4dk/web_app_4dk/red_square.png')
 

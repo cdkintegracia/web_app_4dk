@@ -65,6 +65,66 @@ connect_codes = {
 allow_id = ['127', '129', '131', '183', '1', '311']
 
 
+def create_task(req):
+    # Создание задачи с первым сообщением
+    data = load_logs()
+    task_text = ''
+    for event in data[::-1]:
+        if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
+            task_text = event['text']
+            break
+
+    # Проверка на наличие хотя бы одного русского символа в сообщении
+    russian_char_flag = False
+    for word in task_text:
+        for char in word:
+            if 1040 <= ord(char) <= 1103:
+                russian_char_flag = True
+    if russian_char_flag is False:
+        return
+
+    # Исключаются обращения с сообщением оценки работы
+    if len(task_text) < 2:
+        return
+    author_info = get_name(event['author_id'], req['treatment_id'])
+    is_author_support = get_employee_id(author_info[0])
+    if is_author_support != '0':
+        return
+
+    message_time = time_handler(req['message_time'])
+    user_info = get_name(req['user_id'], req['treatment_id'])
+    if len(author_info) < 2:
+        company_id = user_info[1]
+    else:
+        company_id = author_info[1]
+
+    support_info = get_name(req['author_id'], req['treatment_id'])
+    support_id = get_employee_id(support_info[0])
+    responsible_id = '173'
+    if support_id in allow_id:
+        responsible_id = support_id
+
+    send_bitrix_request('tasks.task.add', {'fields': {
+        'TITLE': f"1С:Коннект",
+        'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
+        'GROUP_ID': '75',
+        'CREATED_BY': '173',
+        'RESPONSIBLE_ID': responsible_id,
+        'UF_CRM_TASK': [f"CO_{company_id}"],
+        'UF_AUTO_499889542776': req['treatment_id'],
+        'STAGE_ID': '1165',
+    }})
+
+
+def check_task_existence(req):
+    data = {
+        'UF_AUTO_499889542776': req['treatment_id']
+    }
+    task_existence = send_bitrix_request('tasks.task.list', data)
+    if not task_existence:
+        create_task(req)
+
+
 def send_bitrix_request(method: str, data: dict):
     return requests.post(f"{authentication('Bitrix')}{method}", json=data).json()['result']
 
@@ -160,75 +220,19 @@ def connect_1c(req: dict):
         json.dump(req, file, ensure_ascii=False)
         file.write('\n')
 
+    check_task_existence(req)
+
     is_task_created = requests.get(
         url=f"{authentication('Bitrix')}tasks.task.list?select[]=ID&&select[]=RESPONSIBLE_ID&filter[UF_AUTO_499889542776]={req['treatment_id']}").json()[
         'result']
 
-    # Начало обращения. Создание задачи
-    if req['message_type'] in [80]:
-        # Проверка была ли задача уже создана
-        if is_task_created['tasks']:
-            return
-
-        # Создание задачи с первым сообщением
-        data = load_logs()
-        task_text = ''
-        for event in data[::-1]:
-            if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
-                task_text = event['text']
-                break
-
-        # Проверка на наличие хотя бы одного русского символа в сообщении
-        russian_char_flag = False
-        for word in task_text:
-            for char in word:
-                if 1040 <= ord(char) <= 1103:
-                    russian_char_flag = True
-        if russian_char_flag is False:
-            return
-
-        # Исключаются обращения с сообщением оценки работы
-        if len(task_text) < 2:
-            return
-        author_info = get_name(event['author_id'], req['treatment_id'])
-        is_author_support = get_employee_id(author_info[0])
-        if is_author_support != '0':
-            return
-
-        message_time = time_handler(req['message_time'])
-        user_info = get_name(req['user_id'], req['treatment_id'])
-        if len(author_info) < 2:
-            company_id = user_info[1]
-        else:
-            company_id = author_info[1]
-
-        support_info = get_name(req['author_id'], req['treatment_id'])
-        support_id = get_employee_id(support_info[0])
-        responsible_id = '173'
-        if support_id in allow_id:
-            responsible_id = support_id
-
-        send_bitrix_request('tasks.task.add', {'fields': {
-            'TITLE': f"1С:Коннект",
-            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
-            'GROUP_ID': '75',
-            'CREATED_BY': '173',
-            'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': req['treatment_id'],
-            'STAGE_ID': '1165',
-        }})
-
     # Перевод обращения
-    elif req['message_type'] == 89 and req['data']['direction'] == 'to':
+    if req['message_type'] == 89 and req['data']['direction'] == 'to':
         task_to_change = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']['tasks'][0]
         send_bitrix_request('tasks.task.update', {'taskId': task_to_change['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:
-
-        if not is_task_created['tasks']:
-            return
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}
@@ -255,14 +259,11 @@ def connect_1c(req: dict):
         elapsed_time = req['treatment']['treatment_duration']
         b.call('task.elapseditem.add', [task_to_update['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
-
     # Смена ответственного
-
-    if is_task_created['tasks']:
-        connect_user_name = get_name(req['author_id'])[0]
-        connect_user_id = get_employee_id(connect_user_name)
-        if str(connect_user_id) in allow_id:
-            task_user_name = is_task_created['tasks'][0]['responsible']['name']
-            if task_user_name != connect_user_name:
-                data = {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
-                requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)
+    connect_user_name = get_name(req['author_id'])[0]
+    connect_user_id = get_employee_id(connect_user_name)
+    if str(connect_user_id) in allow_id:
+        task_user_name = is_task_created['tasks'][0]['responsible']['name']
+        if task_user_name != connect_user_name:
+            data = {'taskId': is_task_created['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
+            requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)

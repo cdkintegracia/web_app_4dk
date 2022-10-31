@@ -23,11 +23,13 @@ def update_contact_photo(req: dict):
     companies = requests.post(url=f'{authentication("Bitrix")}crm.contact.company.items.get', json=data).json()['result']
 
     if 'PHOTO' in contact:
+        print('СЮДА')
         if companies and contact['PHOTO'] is not None:
             photo_id = contact['PHOTO']['id']
             data = {'ID': contact_id, 'fields': {'PHOTO': {'id': photo_id, 'remove': 'Y'}}}
             requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
     else:
+        print('СЮДА')
         if not companies:
             if 'PHOTO' not in contact or contact['PHOTO'] in [None, 'None']:
                 with open('/root/web_app_4dk/web_app_4dk/red_square.png', 'rb') as file:

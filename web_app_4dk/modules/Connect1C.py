@@ -13,6 +13,12 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
+# Клиент для XML запроса
+session = Session()
+session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
+client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
+                transport=Transport(session=session))
+
 # Словарь кодов 1с-коннект
 connect_codes = {
     1: 'Текстовое сообщение',
@@ -65,6 +71,15 @@ connect_codes = {
 allow_id = ['127', '129', '131', '183', '1', '311']
 
 
+def support_line(line_id: str):
+    support_lines = client.service.ServiceLineKindRead('Params')
+    for support_line in support_lines[1]['Value']['row']:
+        support_line_id = support_line['Value'][0]
+        support_line_name = support_line['Value'][2]
+        if line_id == support_line_id:
+            return support_line_name
+
+
 def create_task(req):
     # Создание задачи с первым сообщением
     data = load_logs()
@@ -83,9 +98,7 @@ def create_task(req):
     if russian_char_flag is False:
         return
 
-    # Исключаются обращения с сообщением оценки работы
-    if len(task_text) < 2:
-        return
+    # Проверка на инициатора обращения
     author_info = get_name(event['author_id'], req['treatment_id'])
     is_author_support = get_employee_id(author_info[0])
     if is_author_support != '0':
@@ -105,7 +118,7 @@ def create_task(req):
         responsible_id = support_id
 
     send_bitrix_request('tasks.task.add', {'fields': {
-        'TITLE': f"1С:Коннект",
+        'TITLE': f"1С:Коннект {support_line(req['line_id'])}",
         'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
         'GROUP_ID': '75',
         'CREATED_BY': '173',
@@ -169,11 +182,6 @@ def get_event_info(event: dict) -> str:
 
 
 def get_name(user_id: str, *args) -> list:
-    # Клиент для XML запроса
-    session = Session()
-    session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
-    client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
-                    transport=Transport(session=session))
 
     # Получение списка сотрудников
     specialists = client.service.SpecialistRead('Params')

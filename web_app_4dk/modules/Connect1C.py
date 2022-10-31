@@ -130,7 +130,7 @@ def create_task(req) -> dict:
     return new_task['task']
 
 
-def check_task_existence(req):
+def check_task_existence(req) -> dict:
     data = {
         'filter': {
             'UF_AUTO_499889542776': req['treatment_id']

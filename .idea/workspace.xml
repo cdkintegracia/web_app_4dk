@@ -220,12 +220,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.web_app_4dk" />
-      <item itemvalue="Python.test" />
       <item itemvalue="Python.123" />
       <item itemvalue="Python.code" />
       <item itemvalue="Python.dsds" />
       <item itemvalue="Python.fs" />
+      <item itemvalue="Python.test" />
+      <item itemvalue="Python.web_app_4dk" />
     </list>
     <recent_temporary>
       <list>

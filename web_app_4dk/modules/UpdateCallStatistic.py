@@ -136,8 +136,11 @@ def update_call_statistic(req):
                     element_call_count = element['PROPERTY_1305'][field_value]
                 for field_value in element['PROPERTY_1307']:
                     limit_duration = element['PROPERTY_1307'][field_value]
-                for field_value in element['PROPERTY_1355']:
-                    responsible = element['PROPERTY_1355'][field_value]
+                try:
+                    for field_value in element['PROPERTY_1355']:
+                        responsible = element['PROPERTY_1355'][field_value]
+                except:
+                    responsible = company['ASSIGNED_BY_ID']
                 try:
                     for field_value in element['PROPERTY_1315']:
                         first_break_limit = element['PROPERTY_1315'][field_value]

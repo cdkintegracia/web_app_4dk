@@ -234,6 +234,7 @@ def connect_1c(req: dict):
         file.write('\n')
 
     task = check_task_existence(req)
+    print(task)
     if 'error' in task:
         return
 

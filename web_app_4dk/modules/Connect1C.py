@@ -234,7 +234,6 @@ def connect_1c(req: dict):
         file.write('\n')
 
     task = check_task_existence(req)
-    print(task)
     if 'error' in task:
         return
 
@@ -260,6 +259,7 @@ def connect_1c(req: dict):
                 task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
+        print(task)
         send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
         task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()['result']
         for comment in task_comments:

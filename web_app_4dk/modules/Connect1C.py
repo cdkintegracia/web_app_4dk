@@ -273,7 +273,7 @@ def connect_1c(req: dict):
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:
-        task_user_name = task['tasks'][0]['responsible']['name']
+        task_user_name = task['responsible']['name']
         if task_user_name != connect_user_name:
-            data = {'taskId': task['tasks'][0]['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
+            data = {'taskId': task['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
             requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)

@@ -139,6 +139,10 @@ def update_call_statistic(req):
                 if 'PROPERTY_1355' in element:
                     for field_value in element['PROPERTY_1355']:
                         responsible = element['PROPERTY_1355'][field_value]
+                else:
+                    responsible = b.get_all('crm.company.list', {
+                        'select': ['ASSIGNED_BY_ID'],
+                        'filter': {'ID': company['COMPANY_ID']}})[0]['ASSIGNED_BY_ID']
                 try:
                     for field_value in element['PROPERTY_1315']:
                         first_break_limit = element['PROPERTY_1315'][field_value]

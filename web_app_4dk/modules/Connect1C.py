@@ -233,9 +233,11 @@ def connect_1c(req: dict):
         json.dump(req, file, ensure_ascii=False)
         file.write('\n')
 
-    task = check_task_existence(req)
-    if 'error' in task:
-        return
+    # Новое обращение
+    if req['message_type'] == 80:
+        task = check_task_existence(req)
+        if 'error' in task:
+            return
 
     # Перевод обращения
     if req['message_type'] == 89 and req['data']['direction'] == 'to':
@@ -244,6 +246,7 @@ def connect_1c(req: dict):
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:
+        task = check_task_existence(req)
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}
@@ -270,6 +273,7 @@ def connect_1c(req: dict):
         b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
+    task = check_task_existence(req)
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:

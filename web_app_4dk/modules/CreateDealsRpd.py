@@ -92,15 +92,15 @@ def create_deals_rpd(req):
         if employee not in ['None', None]:
             for deal in employees[employee]:
                 company_id = deal[2]
-                is_deal_exists = b.get_all('crm.deal.list', {
+                data = {
                     'select': ['ID'],
                     'filter': {'CATEGORY_ID': '13',
                                'COMPANY_ID': company_id
-                               }})
-
+                               }}
+                is_deal_exists = requests.post(f"{webhook}crm.deal.list", json=data).json()['result']
                 if not is_deal_exists:
 
-                    data =  {
+                    data = {
                         'fields': {
                             'TITLE': f"Работа с РПД (СМ)",
                             'ASSIGNED_BY_ID': employee,

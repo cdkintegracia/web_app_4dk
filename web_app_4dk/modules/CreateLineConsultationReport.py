@@ -49,6 +49,7 @@ def sort_types(types):
 
 
 def create_line_consultation_report(req):
+    return
     month_codes = {
         'Январь': '01',
         'Февраль': '02',

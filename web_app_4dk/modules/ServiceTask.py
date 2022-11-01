@@ -160,6 +160,8 @@ def create_service_tasks(dct):
 
     """
     task_text = dct['text']
+    print(task_text)
+    exit()
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     type_deals = [
                     'UC_XIYCTV',  # ПРОФ Земля + Помощник

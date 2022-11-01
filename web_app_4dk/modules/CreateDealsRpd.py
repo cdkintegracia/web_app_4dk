@@ -2,6 +2,7 @@ from datetime import datetime
 from calendar import monthrange
 
 from fast_bitrix24 import Bitrix
+import requests
 
 from web_app_4dk.modules.authentication import authentication
 
@@ -98,7 +99,8 @@ def create_deals_rpd(req):
                                }})
 
                 if not is_deal_exists:
-                    deal = b.call('crm.deal.add', {
+
+                    data =  {
                         'fields': {
                             'TITLE': f"Работа с РПД (СМ)",
                             'ASSIGNED_BY_ID': employee,
@@ -107,7 +109,8 @@ def create_deals_rpd(req):
                             'CATEGORY_ID': '13',
                             'CLOSEDATE': '2022-11-30',
                             'TYPE_ID': 'UC_4N16O3'
-                        }})
+                        }}
+                    requests.post(url=f"{webhook}crm.deal.add", json=data)
 
 
 

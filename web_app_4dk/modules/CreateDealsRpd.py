@@ -12,6 +12,7 @@ b = Bitrix(webhook)
 
 
 def create_deals_rpd(req):
+    ignore_company_list = []
     months = {
         1: 'Январь',
         2: 'Февраль',
@@ -64,6 +65,16 @@ def create_deals_rpd(req):
     # Разделение ID сделок по ответственному
     employees = {}
     for deal in deals:
+        if deal['COMPANY_ID'] in ignore_company_list:
+            continue
+        company_deals = b.get_all('crm.deal.list', {
+            'filter': {
+                'COMPANY_ID': deal['COMPANY_ID'],
+                'TYPE_ID': 'UC_GZFC63'
+            }})
+        if company_deals:
+            ignore_company_list.append(deal['COMPANY_ID'])
+            continue
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
             # Создание ключа с ID сотрудника и значение:

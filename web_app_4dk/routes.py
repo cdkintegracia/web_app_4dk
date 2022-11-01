@@ -23,6 +23,7 @@ from web_app_4dk.modules.CreateDealsRpd import create_deals_rpd
 from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_report
 from web_app_4dk.modules.ReviseAccountingDeals import revise_accounting_deals
 from web_app_4dk.modules.FillContract import fill_contract
+from web_app_4dk.modules.CreateLineConsultationReport import create_line_consultation_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -36,6 +37,7 @@ custom_webhooks = {
     'create_deals_rpd': create_deals_rpd,
     'create_company_call_report': create_company_call_report,
     'fill_contract': fill_contract,
+    'create_line_consultation_report': create_line_consultation_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

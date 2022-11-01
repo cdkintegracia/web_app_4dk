@@ -68,11 +68,12 @@ def create_deals_rpd(req):
     for deal in deals:
         if deal['COMPANY_ID'] in ignore_company_list:
             continue
-        company_deals = b.get_all('crm.deal.list', {
+        data = {
             'filter': {
                 'COMPANY_ID': deal['COMPANY_ID'],
                 'TYPE_ID': 'UC_GZFC63'
-            }})
+            }}
+        company_deals = requests.post(f"{webhook}crm.deal.list", json=data).json()['result']
         if company_deals:
             ignore_company_list.append(deal['COMPANY_ID'])
             continue

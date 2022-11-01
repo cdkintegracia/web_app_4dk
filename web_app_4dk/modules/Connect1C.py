@@ -241,8 +241,8 @@ def connect_1c(req: dict):
 
     # Перевод обращения
     if req['message_type'] == 89 and req['data']['direction'] == 'to':
-        task_to_change = requests.get(url=f"{authentication('Bitrix')}tasks.task.list?filter[UF_AUTO_499889542776]={req['treatment_id']}").json()['result']['tasks'][0]
-        send_bitrix_request('tasks.task.update', {'taskId': task_to_change['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
+        task = check_task_existence(req)
+        send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:

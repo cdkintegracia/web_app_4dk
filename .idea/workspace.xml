@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/UpdateContactPhoto.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateContactPhoto.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +87,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.code">
+  <component name="RunManager" selected="Python.123">
     <configuration name="123" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -225,11 +226,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.123" />
         <item itemvalue="Python.code" />
         <item itemvalue="Python.CreateLineConsultationReport" />
         <item itemvalue="Python.asd" />
         <item itemvalue="Python.123321" />
-        <item itemvalue="Python.123" />
       </list>
     </recent_temporary>
   </component>

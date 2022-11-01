@@ -31,7 +31,6 @@ def update_contact_photo(req: dict):
     else:
         if not companies:
             if 'PHOTO' not in contact or contact['PHOTO'] in [None, 'None']:
-                print('--------------------------------------------------')
                 r = requests.get(
                     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Square_Yellow.svg/1200px-Square_Yellow.svg.png')
                 with open('/root/web_app_4dk/web_app_4dk/red_square.png', 'wb') as file:
@@ -42,7 +41,7 @@ def update_contact_photo(req: dict):
                 data = {'ID': contact_id, 'fields': {'PHOTO': {'fileData': ['red_square.png', str(new_photo)[2:]]}}}
                 requests.post(url=f"{authentication('Bitrix')}crm.contact.update", json=data)
                 try:
-                    os_remove('/root/web_app_4dk/web_app_4dk/red_square.png')
+                    #os_remove('/root/web_app_4dk/web_app_4dk/red_square.png')
                 except:
                     pass
 

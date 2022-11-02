@@ -117,7 +117,7 @@ def create_task(req) -> dict:
     support_line_name = get_support_line_name(req)
     b.call('im.notify.system.add', {
         'USER_ID': '311',
-        'MESSAGE': f"{req}} op"
+        'MESSAGE': f"{req} op"
     })
     if 'ЛК' in support_line_name and responsible_id == '127':
         new_task = send_bitrix_request('tasks.task.add', {'fields': {

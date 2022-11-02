@@ -292,8 +292,12 @@ def connect_1c(req: dict):
         b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
-    task = check_task_existence(req)
-    if 'error' in task:
+    data = {
+        'filter':
+            {'UF_AUTO_499889542776': req['treatment_id']}
+    }
+    task = send_bitrix_request('tasks.task.list', data)['result']['tasks']
+    if not task:
         return
     data = {'taskId': task['id']}
     task = send_bitrix_request('tasks.task.get', data)['task']

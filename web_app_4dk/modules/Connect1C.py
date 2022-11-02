@@ -296,8 +296,7 @@ def connect_1c(req: dict):
     if 'error' in task:
         return
     data = {'taskId': task['id']}
-    task = send_bitrix_request('tasks.task.get', data)
-    print(task)
+    task = send_bitrix_request('tasks.task.get', data)['task']
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:

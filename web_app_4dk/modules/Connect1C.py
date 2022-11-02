@@ -71,13 +71,11 @@ connect_codes = {
 allow_id = ['127', '129', '131', '183', '1', '311']
 
 
-def support_line(line_id: str):
-    support_lines = client.service.ServiceLineKindRead('Params')
-    for support_line in support_lines[1]['Value']['row']:
-        support_line_id = support_line['Value'][0]
-        support_line_name = support_line['Value'][2]
-        if line_id == support_line_id:
-            return support_line_name
+def get_support_line_name(req):
+    lines = client.service.ServiceLineKindRead('Params')[1]['Value']['row']
+    for line in lines:
+        if req['line_id'] == line['Value'][0]:
+            return line['Value'][2]
 
 
 def create_task(req) -> dict:
@@ -116,18 +114,30 @@ def create_task(req) -> dict:
     responsible_id = '173'
     if support_id in allow_id:
         responsible_id = support_id
-
-    new_task = send_bitrix_request('tasks.task.add', {'fields': {
-        'TITLE': f"1С:Коннект {support_line(req['line_id'])}",
-        'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
-        'GROUP_ID': '75',
-        'CREATED_BY': '173',
-        'RESPONSIBLE_ID': responsible_id,
-        'UF_CRM_TASK': [f"CO_{company_id}"],
-        'UF_AUTO_499889542776': req['treatment_id'],
-        'STAGE_ID': '1165',
-    }})
-    return new_task['task']
+    support_line_name = get_support_line_name(req)
+    if 'ЛК' in support_line_name and responsible_id == '127':
+        new_task = send_bitrix_request('tasks.task.add', {'fields': {
+            'TITLE': f"1С:Коннект {support_line_name}",
+            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
+            'GROUP_ID': '7',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': responsible_id,
+            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_AUTO_499889542776': req['treatment_id'],
+        }})
+        return new_task['task']
+    else:
+        new_task = send_bitrix_request('tasks.task.add', {'fields': {
+            'TITLE': f"1С:Коннект {support_line_name}",
+            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
+            'GROUP_ID': '75',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': responsible_id,
+            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_AUTO_499889542776': req['treatment_id'],
+            'STAGE_ID': '1165',
+        }})
+        return new_task['task']
 
 
 def check_task_existence(req) -> dict:
@@ -287,6 +297,7 @@ def connect_1c(req: dict):
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:
+        print(task)
         task_user_name = task['responsible']['name']
         if task_user_name != connect_user_name:
             data = {'taskId': task['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}

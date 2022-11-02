@@ -242,7 +242,6 @@ def connect_1c(req: dict):
     # Перевод обращения
     if req['message_type'] == 89 and req['data']['direction'] == 'to':
         task = check_task_existence(req)
-        task = check_task_existence(req)
         if 'error' in task:
             return
         send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
@@ -279,13 +278,12 @@ def connect_1c(req: dict):
         b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
-    data = {'taskId': check_task_existence(req)['id']}
-    task = send_bitrix_request('tasks.task.get', data)
     task = check_task_existence(req)
     if 'error' in task:
         return
-    else:
-        task = task['id']
+    data = {'taskId': task['id']}
+    task = send_bitrix_request('tasks.task.get', data)
+
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:

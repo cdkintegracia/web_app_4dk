@@ -242,11 +242,17 @@ def connect_1c(req: dict):
     # Перевод обращения
     if req['message_type'] == 89 and req['data']['direction'] == 'to':
         task = check_task_existence(req)
+        task = check_task_existence(req)
+        if 'error' in task:
+            return
         send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:
         task = check_task_existence(req)
+        task = check_task_existence(req)
+        if 'error' in task:
+            return
         task_text = ''
         treatment_id = req['treatment_id']
         authors = {}
@@ -275,6 +281,9 @@ def connect_1c(req: dict):
     # Смена ответственного
     data = {'taskId': check_task_existence(req)['id']}
     task = send_bitrix_request('tasks.task.get', data)['task']
+    task = check_task_existence(req)
+    if 'error' in task:
+        return
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:

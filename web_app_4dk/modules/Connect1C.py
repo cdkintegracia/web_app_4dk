@@ -296,9 +296,11 @@ def connect_1c(req: dict):
         'filter':
             {'UF_AUTO_499889542776': req['treatment_id']}
     }
-    task = send_bitrix_request('tasks.task.list', data)['tasks'][0]
+    task = send_bitrix_request('tasks.task.list', data)['tasks']
     if not task:
         return
+    else:
+        task = task[0]
     data = {'taskId': task['id']}
     task = send_bitrix_request('tasks.task.get', data)['task']
     connect_user_name = get_name(req['author_id'])[0]

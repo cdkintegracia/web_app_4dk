@@ -279,8 +279,8 @@ def connect_1c(req: dict):
         b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
-    data = {'taskId': check_task_existence(req)}
-    task = send_bitrix_request('tasks.task.get', data)['task']
+    data = {'taskId': check_task_existence(req)['id']}
+    task = send_bitrix_request('tasks.task.get', data)
     task = check_task_existence(req)
     if 'error' in task:
         return

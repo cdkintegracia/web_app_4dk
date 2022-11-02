@@ -159,7 +159,7 @@ def create_service_tasks(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    task_text = dct['text']
+    task_text = b.get_all('tasks.task.list', {'filter': {'ID': '76295'}})[0]['description']
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     type_deals = [
                     'UC_XIYCTV',  # ПРОФ Земля + Помощник

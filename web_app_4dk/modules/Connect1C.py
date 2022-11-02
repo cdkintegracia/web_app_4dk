@@ -130,18 +130,17 @@ def create_task(req) -> dict:
             'UF_AUTO_499889542776': req['treatment_id'],
         }})
         return new_task['task']
-    else:
-        new_task = send_bitrix_request('tasks.task.add', {'fields': {
-            'TITLE': f"1С:Коннект {support_line_name}",
-            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
-            'GROUP_ID': '75',
-            'CREATED_BY': '173',
-            'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': req['treatment_id'],
-            'STAGE_ID': '1165',
-        }})
-        return new_task['task']
+    new_task = send_bitrix_request('tasks.task.add', {'fields': {
+        'TITLE': f"1С:Коннект {support_line_name}",
+        'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
+        'GROUP_ID': '75',
+        'CREATED_BY': '173',
+        'RESPONSIBLE_ID': responsible_id,
+        'UF_CRM_TASK': [f"CO_{company_id}"],
+        'UF_AUTO_499889542776': req['treatment_id'],
+        'STAGE_ID': '1165',
+    }})
+    return new_task['task']
 
 
 def check_task_existence(req) -> dict:

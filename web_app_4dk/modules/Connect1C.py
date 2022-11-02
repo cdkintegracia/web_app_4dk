@@ -279,11 +279,13 @@ def connect_1c(req: dict):
         b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
     # Смена ответственного
-    data = {'taskId': check_task_existence(req)['id']}
+    data = {'taskId': check_task_existence(req)}
     task = send_bitrix_request('tasks.task.get', data)['task']
     task = check_task_existence(req)
     if 'error' in task:
         return
+    else:
+        task = task['id']
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
     if str(connect_user_id) in allow_id:

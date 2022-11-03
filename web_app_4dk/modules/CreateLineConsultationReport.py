@@ -70,5 +70,15 @@ def create_line_consultation_report(req):
         'filter': {
             'UF_CRM_1657878818384': '859',   # ИТС
             }})
+    data_to_write = []
+    ignore_list = []
+    for deal in deals:
+        company_id = deal['COMPANY_ID']
+        company_deals = b.get_all('crm.deal.list', {'filter': {'COMPANY_ID': company_id}})
+        for company_deal in company_deals:
+            company_deal_id = company_deal['ID']
+            company_deal_info = b.get_all('crm.deal.get', {'ID': company_deal_id})
+            print(company_deal_info)
+            exit()
 
 create_line_consultation_report('req')

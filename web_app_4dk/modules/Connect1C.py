@@ -125,7 +125,7 @@ def create_task(req) -> dict:
         'USER_ID': '311',
         'MESSAGE': f"{req} op"
     })
-    if 'ЛК' in support_line_name and responsible_id == '127':
+    if 'ЛК' in support_line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {support_line_name}",
             'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",

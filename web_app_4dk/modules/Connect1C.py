@@ -270,7 +270,8 @@ def connect_1c(req: dict):
                 'taskId': task['id'],
                 'fields': {
                     'UF_AUTO_499889542776': req['data']['treatment_id'],
-                    'GROUP_ID': '7'
+                    'GROUP_ID': '7',
+                    'STAGE_ID': '65'
                 }})
         else:
             send_bitrix_request('tasks.task.update', {

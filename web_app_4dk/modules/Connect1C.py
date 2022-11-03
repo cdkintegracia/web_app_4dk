@@ -303,7 +303,7 @@ def connect_1c(req: dict):
         support_line_name = get_support_line_name(req)
         if 'ЛК' in support_line_name:
             send_bitrix_request('tasks.task.update',
-                                {'taskId': task['id'], 'fields': {'STAGE_ID': '67', 'STATUS': '5'}})
+                                {'taskId': task['id'], 'fields': {'GROUP_ID': '7', 'STAGE_ID': '67', 'STATUS': '5'}})
         else:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})

@@ -134,6 +134,7 @@ def create_task(req) -> dict:
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
             'UF_AUTO_499889542776': req['treatment_id'],
+            'STAGE_ID': '65'
         }})
         return new_task['task']
     new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -281,7 +282,6 @@ def connect_1c(req: dict):
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:
         task = check_task_existence(req)
-        task = check_task_existence(req)
         if 'error' in task:
             return
         task_text = ''
@@ -299,8 +299,13 @@ def connect_1c(req: dict):
                 task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
                 task_text += f"{get_event_info(event)}\n"
 
-
-        send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
+        support_line_name = get_support_line_name(req)
+        if 'ЛК' in support_line_name:
+            send_bitrix_request('tasks.task.update',
+                                {'taskId': task['id'], 'fields': {'STAGE_ID': '67', 'STATUS': '5'}})
+        else:
+            send_bitrix_request('tasks.task.update',
+                                {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
         task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()['result']
         for comment in task_comments:
             params = {0: task['id'], 1: comment['ID']}

@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" afterDir="false" />
-    </list>
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,7 +84,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.safs">
+  <component name="RunManager" selected="Python.dgd">
     <configuration name="123" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -110,7 +107,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="code" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="dgd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -122,7 +119,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/code.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/dgd.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -218,19 +215,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.dgd" />
       <item itemvalue="Python.safs" />
       <item itemvalue="Python.trtrt" />
       <item itemvalue="Python.fsfafsfafa" />
-      <item itemvalue="Python.code" />
       <item itemvalue="Python.123" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.dgd" />
         <item itemvalue="Python.safs" />
         <item itemvalue="Python.trtrt" />
         <item itemvalue="Python.fsfafsfafa" />
         <item itemvalue="Python.123" />
-        <item itemvalue="Python.code" />
       </list>
     </recent_temporary>
   </component>

@@ -73,9 +73,15 @@ allow_id = ['127', '129', '131', '183', '1', '311']
 
 def get_support_line_name(req):
     lines = client.service.ServiceLineKindRead('Params')[1]['Value']['row']
-    for line in lines:
-        if req['line_id'] == line['Value'][0]:
-            return line['Value'][2]
+    if 'data' in req:
+        if 'line_id' in req['data']:
+            for line in lines:
+                if req['data']['line_id'] == line['Value'][0]:
+                    return line['Value'][2]
+    else:
+        for line in lines:
+            if req['line_id'] == line['Value'][0]:
+                return line['Value'][2]
 
 
 def create_task(req) -> dict:
@@ -257,7 +263,20 @@ def connect_1c(req: dict):
         task = check_task_existence(req)
         if 'error' in task:
             return
-        send_bitrix_request('tasks.task.update', {'taskId': task['id'], 'fields': {'UF_AUTO_499889542776': req['data']['treatment_id']}})
+        support_line_name = get_support_line_name(req)
+        if 'ЛК' in support_line_name:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task['id'],
+                'fields': {
+                    'UF_AUTO_499889542776': req['data']['treatment_id'],
+                    'GROUP_ID': '7'
+                }})
+        else:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task['id'],
+                'fields': {
+                    'UF_AUTO_499889542776': req['data']['treatment_id']
+                }})
 
     # Завершение обращения. Закрытие задачи
     elif req['message_type'] in [82, 90, 91, 92, 93]:

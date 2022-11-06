@@ -12,6 +12,8 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def rewrite_call_statistic(month, year):
+    if not month:
+        return 
     month_codes = {
             'Январь': '2215',
             'Февраль': '2217',

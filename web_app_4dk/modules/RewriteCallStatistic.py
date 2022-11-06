@@ -12,8 +12,6 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def rewrite_call_statistic(month, year):
-    if not month:
-        return 
     month_codes = {
             'Январь': '2215',
             'Февраль': '2217',
@@ -42,7 +40,7 @@ def rewrite_call_statistic(month, year):
     for row in range(2, worksheet.max_row + 1):
         temp = []
         for col in range(1, 11):
-            if col not in [1, 3, 4]:
+            if col not in [1, 3, 10]:
                 continue
             value = worksheet.cell(row, col).value
             if isinstance(value, datetime.time):

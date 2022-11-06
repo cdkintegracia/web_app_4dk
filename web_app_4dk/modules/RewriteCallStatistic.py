@@ -40,7 +40,7 @@ def rewrite_call_statistic(month, year):
     for row in range(2, worksheet.max_row + 1):
         temp = []
         for col in range(1, 11):
-            if col not in [1, 3, 10]:
+            if col not in [1, 3, 4]:
                 continue
             value = worksheet.cell(row, col).value
             if isinstance(value, datetime.time):

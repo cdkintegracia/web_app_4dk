@@ -121,10 +121,6 @@ def create_task(req) -> dict:
     if support_id in allow_id:
         responsible_id = support_id
     support_line_name = get_support_line_name(req)
-    b.call('im.notify.system.add', {
-        'USER_ID': '311',
-        'MESSAGE': f"{req} op"
-    })
     if 'ЛК' in support_line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {support_line_name}",

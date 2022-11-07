@@ -6,12 +6,16 @@ import openpyxl
 
 from web_app_4dk.modules.authentication import authentication
 
-workbook = openpyxl.load_workbook("/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx")
-worksheet = workbook.active
+
 b = Bitrix(authentication('Bitrix'))
 
 
 def rewrite_call_statistic(month, year):
+    try:
+        workbook = openpyxl.load_workbook("/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx")
+        worksheet = workbook.active
+    except:
+        return
     month_codes = {
             'Январь': '2215',
             'Февраль': '2217',

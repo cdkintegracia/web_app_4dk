@@ -170,17 +170,17 @@ def create_line_consultation_report(req):
         report_name = f'Отчет_по_ЛК_{create_time}.xlsx'
         workbook.save(report_name)
 
-        # Загрузка отчета в Битрикс
-        bitrix_folder_id = '187139'
-        with open(report_name, 'rb') as file:
-            report_file = file.read()
-        report_file_base64 = str(base64.b64encode(report_file))[2:]
-        upload_report = b.call('disk.folder.uploadfile', {
-            'id': bitrix_folder_id,
-            'data': {'NAME': report_name},
-            'fileContent': report_file_base64
-        })
-        b.call('im.notify.system.add', {
-            'USER_ID': req['user_id'][5:],
-            'MESSAGE': f'Отчет по ЛК за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
-        os.remove(report_name)
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '187139'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Отчет по ЛК за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
+    os.remove(report_name)

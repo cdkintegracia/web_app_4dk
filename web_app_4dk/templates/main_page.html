@@ -21,6 +21,9 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ReviseAccountingDealsModal">
           Сверка по отчетности
         </button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ReviseNewSub">
+          Сверка по NewSub
+        </button>
       </div>
       <div class="logs_block" align="center">
       <h2>Логи веб-приложения</h2>
@@ -78,6 +81,36 @@
     </div>
     <div class="toast-body">
       Привет, мир! Это тост-сообщение.
+    </div>
+  </div>
+</div>
+<!-- Модальное окно "Сверка по NewSub"-->
+<div class="modal fade" id="ReviseNewSub" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ReviseNewSubLabel">Обновление статистики звонков</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-block">
+        NewSub файл
+        <input name="newsub_file" type="file" accept=".xlsx">
+      </div>
+      </div>
+      <div class="modal-footer">
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class=flashes>
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                        </dib>
+                    {% endif %}
+                    {% endwith %}
+        <input type="submit" value="Сформировать файл сверки" name="submit_button">
+      </div>
+      </div>
     </div>
   </div>
 </div>

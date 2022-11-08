@@ -105,6 +105,9 @@ def main_page():
                 revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+            elif request.files['newsub_file']:
+                newsub_file = request.files['newsub_file']
+                newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

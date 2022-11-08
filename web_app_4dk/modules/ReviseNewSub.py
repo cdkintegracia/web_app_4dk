@@ -3,6 +3,8 @@ import openpyxl
 from datetime import datetime
 from openpyxl.utils import get_column_letter
 import dateutil.parser
+import base64
+import os
 
 from web_app_4dk.modules.authentication import authentication
 
@@ -10,8 +12,7 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 
-def revise_new_sub():
-    return
+def revise_new_sub(filename):
     deal_type_names = {
         'SALE': 'ИТС Земля',
         'COMPLEX': 'СааС',
@@ -75,7 +76,7 @@ def revise_new_sub():
         'C1:UC_KZSOR2': 'Нет оплаты',
         'C1:UC_VQ5HJD': 'Ждем решения клиента',
     }
-    workbook = openpyxl.load_workbook('NewSub.xlsx')
+    workbook = openpyxl.load_workbook(filename)
     worksheet = workbook.active
     max_rows = worksheet.max_row
     max_columns = worksheet.max_column
@@ -130,14 +131,14 @@ def revise_new_sub():
         ]
     ]
     for line in data:
-        reg_number_1с = line[titles['Регномер']]
-        code1c_1с = line[titles['Вид 1С:ИТС']]
+        reg_number_1c = line[titles['Регномер']]
+        code1c_1c = line[titles['Вид 1С:ИТС']]
         deal_name_1c = line[titles['Наименование вида 1С:ИТС']]
         company_name_1c = line[titles['Пользователь']]
         close_date_1c = line[titles['Конец']]
         inn_1c = line[titles['ИНН / ЕДРПОУ(Укр) пользователя']]
         deal_was_found = 'Нет'
-        deal = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1с) and str(x['UF_CRM_1655972832']) == str(code1c_1с), deals))
+        deal = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == str(code1c_1c), deals))
         close_date_b24 = ''
         deal_name_b24 = ''
         company_name_b24 = ''
@@ -159,8 +160,8 @@ def revise_new_sub():
             else:
                 deal_was_found = 'Другая дата завершения'
         report_data.append([
-            reg_number_1с,
-            code1c_1с,
+            reg_number_1c,
+            code1c_1c,
             deal_name_1c,
             company_name_1c,
             deal_was_found,
@@ -183,6 +184,26 @@ def revise_new_sub():
     for idx, col in enumerate(worksheet.columns, 1):
         worksheet.column_dimensions[get_column_letter(idx)].auto_size = True
     workbook.save(report_name)
+
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '214239'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    task = b.call('tasks.task.add', {
+        'fields': {
+            'TITLE': 'Сверка по NewSub',
+            'RESPONSIBLE_ID': '173',
+            'GROUP_ID': '13',
+            'DESCRIPTION': upload_report["DETAIL_URL"],
+            'CREATED_BY': '173'
+        }})
+    os.remove(report_name)
 
 
 

@@ -141,7 +141,10 @@ def revise_new_sub(filename):
             'Код в Б24'
         ]
     ]
+    count = 0
     for line in data:
+        count += 1
+        print(f'{count} | {len(data)}')
         reg_number_1c = line[titles['Регномер']]
         code1c_1c = line[titles['Вид 1С:ИТС']]
         deal_name_1c = line[titles['Наименование вида 1С:ИТС']]
@@ -157,7 +160,12 @@ def revise_new_sub(filename):
         deal_type_b24 = ''
         deal_stage_b24 = ''
         code1c_b24 = ''
-        deal_was_found = 'Нет'
+        if not deals:
+            extra_1c_codes = ['160', '161', '162', '2001', '2002', '2003']
+            for extra_1c_code in extra_1c_codes:
+                deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == extra_1c_code, all_deals))
+                if deals:
+                    break
         if deals:
             for deal in deals:
                 close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
@@ -172,6 +180,7 @@ def revise_new_sub(filename):
                     company_name_b24 = ''
                 if str(close_date_b24) == str(close_date_1c):
                     deal_was_found = 'Да'
+                    break
                 else:
                     deal_was_found = 'Другая дата завершения'
         report_data.append([

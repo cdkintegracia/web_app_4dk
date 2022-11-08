@@ -68,7 +68,8 @@ connect_codes = {
 }
 
 
-allow_id = ['127', '129', '131', '183', '1', '311', '125', '119', '123']
+allow_id = ['127', '129', '131', '183', '1', '311', '125', '119', '123', '121']
+
 
 
 def get_support_line_name(req):
@@ -101,6 +102,13 @@ def create_task(req) -> dict:
                 russian_char_flag = True
     if russian_char_flag is False:
         return {'error': 'Нет хотя бы одного русского символа в сообщении'}
+
+    # Проверка сообщения через фильтр
+    filter_word_list = [
+        'спасибо',
+    ]
+    if task_text.lower().strip('!-_/|\\+,.? ') in filter_word_list:
+        return {'error': 'сообщение попало в фильтр лист'}
 
     # Проверка на инициатора обращения
     author_info = get_name(event['author_id'], req['treatment_id'])

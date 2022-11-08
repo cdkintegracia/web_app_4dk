@@ -116,13 +116,18 @@ def create_line_consultation_report(req):
             'UF_CRM_1657878818384': '859',   # ИТС
             }})
     companies = b.get_all('crm.company.list')
-    data_to_write = [[
+    data_to_write = [
+        [
+            f"Отчет по ЛК за {req['month']} {req['year']}"
+        ],
+        [
         'Компания',
         'Топ ИТС',
         'Продолжительность звонков',
         'Количество звонков',
         'Количество обращений в Коннекте'
-    ]]
+    ]
+    ]
     ignore_list = []
     count = 0
     for deal in deals:

@@ -106,6 +106,7 @@ def main_page():
                 revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
             elif request.files['newsub_file']:
+                print('OOOOOOOOOOOOOOOOO')
                 newsub_file = request.files['newsub_file']
                 newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
                 revise_new_sub('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')

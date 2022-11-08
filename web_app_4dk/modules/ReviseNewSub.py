@@ -13,6 +13,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 
+
 def revise_new_sub(filename):
     deal_type_names = {
         'SALE': 'ИТС Земля',
@@ -151,8 +152,7 @@ def revise_new_sub(filename):
         close_date_1c = line[titles['Конец']]
         inn_1c = line[titles['ИНН / ЕДРПОУ(Укр) пользователя']]
         deal_was_found = 'Нет'
-        deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == str(code1c_1c), all_deals))
-        deals = list(sorted(deals, key=lambda x: dateutil.parser.isoparse(x['CLOSEDATE'])))
+        deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']).strip(' ') == str(reg_number_1c).strip(' ') and str(x['UF_CRM_1655972832']).strip(' ') == str(code1c_1c).strip(' '), all_deals))
         close_date_b24 = ''
         deal_name_b24 = ''
         company_name_b24 = ''
@@ -164,12 +164,12 @@ def revise_new_sub(filename):
         if not deals:
             extra_1c_codes = ['160', '161', '162', '2001', '2002', '2003']
             for extra_1c_code in extra_1c_codes:
-                deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == extra_1c_code, all_deals))
+                deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']).strip(' ') == str(reg_number_1c).strip(' ') and str(x['UF_CRM_1655972832']).strip(' ') == extra_1c_code.strip(' '), all_deals))
                 if deals:
                     code1c_b24 = extra_1c_code
                     break
-
         if deals:
+            deals = list(sorted(deals, key=lambda x: dateutil.parser.isoparse(x['CLOSEDATE'])))
             for deal in deals:
                 close_date_b24 = dateutil.parser.isoparse(deal['CLOSEDATE'])
                 close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
@@ -200,7 +200,7 @@ def revise_new_sub(filename):
             deal_stage_b24,
             code1c_b24
         ])
-        
+
     # Создание xlsx файла отчета
     report_created_time = datetime.now()
     report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
@@ -232,4 +232,5 @@ def revise_new_sub(filename):
             'CREATED_BY': '173'
         }})
     os.remove(report_name)
+
 

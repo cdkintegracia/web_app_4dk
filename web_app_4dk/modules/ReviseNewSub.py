@@ -93,7 +93,7 @@ def revise_new_sub(filename):
     report_name = f'Сверка по {worksheet.cell(row=1, column=1).value}'
     titles = {}
     data = []
-    deals = b.get_all('crm.deal.list', {
+    all_deals = b.get_all('crm.deals.list', {
         'select': [
             'UF_CRM_1640523562691',     # Регномер
             'UF_CRM_1655972832',        # СлужКод1С
@@ -137,7 +137,8 @@ def revise_new_sub(filename):
             'Тип в Б24',
             'Дата завершения в 1С',
             'Дата завершения в Б24',
-            'Стадия в Б24'
+            'Стадия в Б24',
+            'Код в Б24'
         ]
     ]
     for line in data:
@@ -148,27 +149,31 @@ def revise_new_sub(filename):
         close_date_1c = line[titles['Конец']]
         inn_1c = line[titles['ИНН / ЕДРПОУ(Укр) пользователя']]
         deal_was_found = 'Нет'
-        deal = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == str(code1c_1c), deals))
+        deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == str(code1c_1c), all_deals))
+        deals = list(sorted(deals, key=lambda x: dateutil.parser.isoparse(x['CLOSEDATE'])))
         close_date_b24 = ''
         deal_name_b24 = ''
         company_name_b24 = ''
         deal_type_b24 = ''
         deal_stage_b24 = ''
-        if deal:
-            close_date_b24 = dateutil.parser.isoparse(deal[0]['CLOSEDATE'])
-            close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
-            deal_name_b24 = deal[0]['TITLE']
-            deal_type_b24 = deal_type_names[deal[0]['TYPE_ID']]
-            deal_stage_b24 = deal_stage_names[deal[0]['STAGE_ID']]
-            company_name_b24 = list(filter(lambda x: str(x['UF_CRM_1656070716']) == str(inn_1c), companies))
-            if company_name_b24:
-                company_name_b24 = company_name_b24[0]['TITLE']
-            if not company_name_b24:
-                company_name_b24 = ''
-            if str(close_date_b24) == str(close_date_1c):
-                deal_was_found = 'Да'
-            else:
-                deal_was_found = 'Другая дата завершения'
+        code1c_b24 = ''
+        if deals:
+            for deal in deals:
+                deal_was_found = 'Нет'
+                close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
+                deal_name_b24 = deal['TITLE']
+                deal_type_b24 = deal_type_names[deal['TYPE_ID']]
+                deal_stage_b24 = deal_stage_names[deal['STAGE_ID']]
+                code1c_b24 = deal['UF_CRM_1655972832']
+                company_name_b24 = list(filter(lambda x: str(x['UF_CRM_1656070716']) == str(inn_1c), companies))
+                if company_name_b24:
+                    company_name_b24 = company_name_b24[0]['TITLE']
+                if not company_name_b24:
+                    company_name_b24 = ''
+                if str(close_date_b24) == str(close_date_1c):
+                    deal_was_found = 'Да'
+                else:
+                    deal_was_found = 'Другая дата завершения'
         report_data.append([
             reg_number_1c,
             code1c_1c,
@@ -180,7 +185,8 @@ def revise_new_sub(filename):
             deal_type_b24,
             close_date_1c,
             close_date_b24,
-            deal_stage_b24
+            deal_stage_b24,
+            code1c_b24
         ])
         
     # Создание xlsx файла отчета

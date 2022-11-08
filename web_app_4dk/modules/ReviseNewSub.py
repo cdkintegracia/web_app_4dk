@@ -13,7 +13,6 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def revise_new_sub(filename):
-    print(filename)
     deal_type_names = {
         'SALE': 'ИТС Земля',
         'COMPLEX': 'СааС',
@@ -91,6 +90,7 @@ def revise_new_sub(filename):
                 'DESCRIPTION': 'Не удалось открыть загруженный файл NewSub. Может помочь его пересохранение в тот же формат.',
                 'CREATED_BY': '173'
             }})
+    print('OOOOOOOOOOOOOOOOOOOOO')
     report_name = f'Сверка по {worksheet.cell(row=1, column=1).value}'
     titles = {}
     data = []

@@ -90,7 +90,8 @@ def revise_new_sub(filename):
                 'DESCRIPTION': 'Не удалось открыть загруженный файл NewSub. Может помочь его пересохранение в тот же формат.',
                 'CREATED_BY': '173'
             }})
-    print('OOOOOOOOOOOOOOOOOOOOO')
+        return
+    print('OOOOOOOOOOOOOO')
     report_name = f'Сверка по {worksheet.cell(row=1, column=1).value}'
     titles = {}
     data = []
@@ -108,6 +109,7 @@ def revise_new_sub(filename):
             'CATEGORY_ID': '1'
         }
     })
+    print(all_deals)
     companies = b.get_all('crm.company.list', {
         'select': [
             'TITLE',

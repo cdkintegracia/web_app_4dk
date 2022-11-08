@@ -76,10 +76,20 @@ def revise_new_sub(filename):
         'C1:UC_KZSOR2': 'Нет оплаты',
         'C1:UC_VQ5HJD': 'Ждем решения клиента',
     }
-    workbook = openpyxl.load_workbook(filename)
-    worksheet = workbook.active
-    max_rows = worksheet.max_row
-    max_columns = worksheet.max_column
+    try:
+        workbook = openpyxl.load_workbook(filename)
+        worksheet = workbook.active
+        max_rows = worksheet.max_row
+        max_columns = worksheet.max_column
+    except:
+        b.call('tasks.task.add', {
+            'fields': {
+                'TITLE': 'Ошибка: Сверка по NewSub',
+                'RESPONSIBLE_ID': '173',
+                'GROUP_ID': '13',
+                'DESCRIPTION': 'Не удалось открыть загруженный файл NewSub. Может помочь его пересохранение в тот же формат.',
+                'CREATED_BY': '173'
+            }})
     report_name = f'Сверка по {worksheet.cell(row=1, column=1).value}'
     titles = {}
     data = []

@@ -24,6 +24,7 @@ from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_repo
 from web_app_4dk.modules.ReviseAccountingDeals import revise_accounting_deals
 from web_app_4dk.modules.FillContract import fill_contract
 from web_app_4dk.modules.CreateLineConsultationReport import create_line_consultation_report
+from web_app_4dk.modules.ReviseNewSub import revise_new_sub
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -93,7 +94,6 @@ def main_page():
     try:
         if request.method == 'POST' and request.form.get('submit_button'):
             if request.files['new_call_statistic_file']:
-                print('fsafa')
                 new_call_statistic_file = request.files['new_call_statistic_file']
                 new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
                 month = request.form.get('month')
@@ -108,6 +108,8 @@ def main_page():
             elif request.files['newsub_file']:
                 newsub_file = request.files['newsub_file']
                 newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
+                revise_new_sub('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
+                os.remove('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

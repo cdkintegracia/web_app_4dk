@@ -231,5 +231,4 @@ def revise_new_sub(filename):
         }})
     os.remove(report_name)
 
-revise_new_sub('04382_NewSub_20221107_165443.xlsx')
 

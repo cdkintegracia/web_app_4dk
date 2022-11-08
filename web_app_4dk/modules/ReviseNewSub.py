@@ -12,6 +12,7 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 
+
 def revise_new_sub(filename):
     deal_type_names = {
         'SALE': 'ИТС Земля',
@@ -142,10 +143,7 @@ def revise_new_sub(filename):
             'Код в Б24'
         ]
     ]
-    count = 0
     for line in data:
-        count += 1
-        print(f'{count} | {len(data)}')
         reg_number_1c = line[titles['Регномер']]
         code1c_1c = line[titles['Вид 1С:ИТС']]
         deal_name_1c = line[titles['Наименование вида 1С:ИТС']]
@@ -161,19 +159,23 @@ def revise_new_sub(filename):
         deal_type_b24 = ''
         deal_stage_b24 = ''
         code1c_b24 = ''
+
+        # Поиск сделок по дополнительным кодам
         if not deals:
             extra_1c_codes = ['160', '161', '162', '2001', '2002', '2003']
             for extra_1c_code in extra_1c_codes:
                 deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']) == str(reg_number_1c) and str(x['UF_CRM_1655972832']) == extra_1c_code, all_deals))
                 if deals:
+                    code1c_b24 = extra_1c_code
                     break
+
         if deals:
             for deal in deals:
+                close_date_b24 = dateutil.parser.isoparse(deal['CLOSEDATE'])
                 close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
                 deal_name_b24 = deal['TITLE']
                 deal_type_b24 = deal_type_names[deal['TYPE_ID']]
                 deal_stage_b24 = deal_stage_names[deal['STAGE_ID']]
-                code1c_b24 = deal['UF_CRM_1655972832']
                 company_name_b24 = list(filter(lambda x: str(x['UF_CRM_1656070716']) == str(inn_1c), companies))
                 if company_name_b24:
                     company_name_b24 = company_name_b24[0]['TITLE']
@@ -230,5 +232,4 @@ def revise_new_sub(filename):
             'CREATED_BY': '173'
         }})
     os.remove(report_name)
-
 

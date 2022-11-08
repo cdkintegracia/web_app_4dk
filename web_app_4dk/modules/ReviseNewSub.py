@@ -157,9 +157,9 @@ def revise_new_sub(filename):
         deal_type_b24 = ''
         deal_stage_b24 = ''
         code1c_b24 = ''
+        deal_was_found = 'Нет'
         if deals:
             for deal in deals:
-                deal_was_found = 'Нет'
                 close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
                 deal_name_b24 = deal['TITLE']
                 deal_type_b24 = deal_type_names[deal['TYPE_ID']]

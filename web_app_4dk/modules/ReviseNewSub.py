@@ -13,6 +13,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def revise_new_sub(filename):
+    print(filename)
     deal_type_names = {
         'SALE': 'ИТС Земля',
         'COMPLEX': 'СааС',

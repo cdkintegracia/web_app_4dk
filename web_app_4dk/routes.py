@@ -108,7 +108,6 @@ def main_page():
             elif request.files['newsub_file']:
                 newsub_file = request.files['newsub_file']
                 newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
-                print('OOOOOOOOOOOOOOOOO')
                 revise_new_sub('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
     except:

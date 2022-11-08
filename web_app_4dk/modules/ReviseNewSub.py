@@ -91,11 +91,10 @@ def revise_new_sub(filename):
                 'CREATED_BY': '173'
             }})
         return
-    print('OOOOOOOOOOOOOO')
     report_name = f'Сверка по {worksheet.cell(row=1, column=1).value}'
     titles = {}
     data = []
-    all_deals = b.get_all('crm.deals.list', {
+    all_deals = b.get_all('crm.deal.list', {
         'select': [
             'UF_CRM_1640523562691',     # Регномер
             'UF_CRM_1655972832',        # СлужКод1С
@@ -109,7 +108,6 @@ def revise_new_sub(filename):
             'CATEGORY_ID': '1'
         }
     })
-    print(all_deals)
     companies = b.get_all('crm.company.list', {
         'select': [
             'TITLE',
@@ -233,5 +231,5 @@ def revise_new_sub(filename):
         }})
     os.remove(report_name)
 
-
+revise_new_sub('04382_NewSub_20221107_165443.xlsx')
 

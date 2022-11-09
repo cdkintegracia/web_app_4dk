@@ -97,8 +97,10 @@ def create_company_call_report(req):
                     author_name = f"{author['NAME']} {author['LAST_NAME']}"
                     phone_number = activity['SUBJECT'].split(' на ')[1]
                     check_mobile_phone = phone_number.split(' ')
+                    '''
                     if check_mobile_phone[1] == '812':
                         phone_number = ''
+                    '''
                     call_end_time = dateutil.parser.isoparse(activity['END_TIME'])
                     call_start_time_formatted = call_start_time.strftime('%d.%m.%Y %H:%M:%S')
                     duration = call_end_time - call_start_time

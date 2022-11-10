@@ -186,6 +186,10 @@ def revise_new_sub(filename):
                     break
                 else:
                     deal_was_found = 'Другая дата завершения'
+        if deal_was_found == 'Нет':
+            deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']).strip(' ') == str(reg_number_1c).strip(' '), all_deals))
+            if not deals:
+                deal_was_found = 'Нет регномера'
         report_data.append([
             reg_number_1c,
             code1c_1c,

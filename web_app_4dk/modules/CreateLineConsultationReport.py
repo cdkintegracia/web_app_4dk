@@ -131,10 +131,8 @@ def create_line_consultation_report(req):
     ]
     ]
     ignore_list = []
-    count = 0
     for deal in deals:
         try:
-            count += 1
             company_id = deal['COMPANY_ID']
             if company_id in ignore_list:
                 continue
@@ -172,7 +170,6 @@ def create_line_consultation_report(req):
                     tasks_duration_time
                 ]
             )
-            print(f"{count} | {len(deals)}")
         except:
             pass
         workbook = openpyxl.Workbook()
@@ -184,7 +181,7 @@ def create_line_consultation_report(req):
         workbook.save(report_name)
 
     # Загрузка отчета в Битрикс
-    bitrix_folder_id = '187139'
+    bitrix_folder_id = '213023'
     with open(report_name, 'rb') as file:
         report_file = file.read()
     report_file_base64 = str(base64.b64encode(report_file))[2:]

@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateRpdReport.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/ReviseNewSub.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/ReviseNewSub.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/фыв.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateLineConsultationReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateLineConsultationReport.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateRpdReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateRpdReport.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CreateRpdReport">
+  <component name="RunManager" selected="Python.fhd">
     <configuration name="фыв" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -153,7 +152,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ReviseNewSub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="asd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -165,7 +164,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/ReviseNewSub.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/asd.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -174,7 +173,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="gsdg" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="fhd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -186,7 +185,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/gsdg.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/fhd.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -220,18 +219,18 @@
     <list>
       <item itemvalue="Python.web_app_4dk" />
       <item itemvalue="Python.CreateRpdReport" />
+      <item itemvalue="Python.asd" />
+      <item itemvalue="Python.fhd" />
       <item itemvalue="Python.фыв" />
       <item itemvalue="Python.CreateCompanyCallReport" />
-      <item itemvalue="Python.gsdg" />
-      <item itemvalue="Python.ReviseNewSub" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.fhd" />
         <item itemvalue="Python.CreateRpdReport" />
+        <item itemvalue="Python.asd" />
         <item itemvalue="Python.фыв" />
         <item itemvalue="Python.CreateCompanyCallReport" />
-        <item itemvalue="Python.ReviseNewSub" />
-        <item itemvalue="Python.gsdg" />
       </list>
     </recent_temporary>
   </component>

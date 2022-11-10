@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
+import time
 import base64
 import os
 
@@ -125,7 +126,8 @@ def create_line_consultation_report(req):
         'Топ ИТС',
         'Продолжительность звонков',
         'Количество звонков',
-        'Количество обращений в Коннекте'
+        'Количество обращений в Коннекте',
+        'Длительность обращений в Коннекте'
     ]
     ]
     ignore_list = []
@@ -136,6 +138,7 @@ def create_line_consultation_report(req):
             company_id = deal['COMPANY_ID']
             if company_id in ignore_list:
                 continue
+            tasks_duration_seconds = 0
             tasks = b.get_all('tasks.task.list', {
                 'filter': {
                     '!UF_AUTO_499889542776': None,
@@ -143,6 +146,10 @@ def create_line_consultation_report(req):
                     '<CREATED_DATE': filter_date_end,
                     'UF_CRM_TASK': f"CO_{company_id}"
                 }})
+            for task in tasks:
+                tasks_duration_seconds += int(task['durationFact'])
+            tasks_duration_time = time.gmtime(tasks_duration_seconds)
+            tasks_duration_time = time.strftime("%H:%M:%S", tasks_duration_time)
             company_info = list(filter(lambda x: x['ID'] == company_id ,companies))[0]
             company_name = company_info['TITLE']
             company_deals = list(filter(lambda x: x['COMPANY_ID'] == company_id, deals))
@@ -161,7 +168,8 @@ def create_line_consultation_report(req):
                     deal_type_names[company_deal_top_type],
                     call_info['call_duration'],
                     call_info['call_count'],
-                    len(tasks)
+                    len(tasks),
+                    tasks_duration_time
                 ]
             )
             print(f"{count} | {len(deals)}")

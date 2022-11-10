@@ -15,7 +15,7 @@ import base64
 webhook = 'https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/'
 b = Bitrix(webhook)
 
-def create_report_rpd(req):
+def create_rpd_report(req):
     stage_names = {
         'C13:NEW': 'Новые',
         'C13:UC_PYAKJ0': 'Отправлено письмо / сообщение',

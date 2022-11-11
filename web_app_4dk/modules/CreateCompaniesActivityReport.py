@@ -76,8 +76,6 @@ def create_companies_activity_report(req):
     ]
     counter = 0
     for company in companies:
-        if company['TITLE'] != 'ПАЛЬМИРА-СПБ 7806539231':
-            continue
         counter += 1
         print(f'{counter} | {len(companies)}')
         contacts = b.get_all('crm.company.contact.items.get', {'id': company['ID']})

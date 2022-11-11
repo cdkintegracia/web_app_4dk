@@ -6,13 +6,12 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 import base64
 
-#from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 
 
 # Считывание файла authentication.txt
 
-#webhook = authentication('Bitrix')
-webhook = 'https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/'
+webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 def create_rpd_report(req):

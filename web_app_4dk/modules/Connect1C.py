@@ -259,7 +259,9 @@ def connect_1c(req: dict):
 
     # Новое обращение
     if req['message_type'] == 80:
+        print('pflfxffxzfzxfzxfzfxfz')
         task = check_task_existence(req)
+        print(task)
         if 'error' in task:
             return
 

@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateCompaniesActivityReport.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateRpdReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateRpdReport.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateCompaniesActivityReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateCompaniesActivityReport.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +87,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.dgs">
+  <component name="RunManager" selected="Python.CreateCompaniesActivityReport">
     <configuration name="CreateCompaniesActivityReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -227,8 +225,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.dgs" />
         <item itemvalue="Python.CreateCompaniesActivityReport" />
+        <item itemvalue="Python.dgs" />
         <item itemvalue="Python.fhd" />
         <item itemvalue="Python.CreateRpdReport" />
         <item itemvalue="Python.asd" />

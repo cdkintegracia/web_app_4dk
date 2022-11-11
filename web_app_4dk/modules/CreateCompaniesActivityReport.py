@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
@@ -151,6 +152,7 @@ def create_companies_activity_report(req):
                      datetime.strftime(dateutil.parser.isoparse(company['DATE_CREATE']), '%d.%m.%Y')
                     ]
                 )
+        time.sleep(1)
 
     workbook = openpyxl.Workbook()
     worksheet = workbook.active

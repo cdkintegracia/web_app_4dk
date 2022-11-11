@@ -49,6 +49,13 @@ def create_companies_activity_report(req):
                 'UC_92H9MN',    # Индивидуальный
                 'UC_7V8HWF',    # Индивидуальный+Облако
                 'UC_34QFP9',    # Уникс
+            ],
+            'STAGE_ID': [
+                'C1:NEW',           # Услуга активна
+                'C1:UC_0KJKTY',     # Счет сформирован
+                'C1:UC_3J0IH6',     # Счет отправлен клиенту
+                'C1:UC_KZSOR2',     # Нет оплаты
+                'C1:UC_VQ5HJD',     # Ждём решения клиента
             ]
         }})
     company_id_list = list(set(map(lambda x: x['COMPANY_ID'], deals)))

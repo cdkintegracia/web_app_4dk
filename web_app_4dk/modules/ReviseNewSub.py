@@ -215,8 +215,7 @@ def revise_new_sub(filename):
             'Код в Б24'
         ]
     ]
-    # Обратная сверка
-    revise_b24_deals(file_name, data)
+
     for line in data:
         reg_number_1c = line[titles['Регномер']]
         code1c_1c = line[titles['Вид 1С:ИТС']]

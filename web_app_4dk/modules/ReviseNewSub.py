@@ -76,7 +76,7 @@ deal_stage_names = {
     }
 
 
-def revise_b24_deals(file_name, file_data):
+def revise_b24_deals(file_name, file_data, titles):
     all_deals = b.get_all('crm.deal.list', {
         'select': [
             'UF_CRM_1640523562691',  # Регномер
@@ -143,7 +143,8 @@ def revise_b24_deals(file_name, file_data):
             'Дата завершения в 1С',
         ]
     ]
-    for data in file_data:
+    for deal in all_deals:
+        data = list(filter(lambda x: deal['UF_CRM_1640523562691'] == x[titles['Регномер']], file_data))
         print(data)
 
 

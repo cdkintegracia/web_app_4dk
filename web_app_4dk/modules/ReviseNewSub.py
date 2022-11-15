@@ -215,6 +215,8 @@ def revise_new_sub(filename):
             'Код в Б24'
         ]
     ]
+    # Обратная сверка
+    revise_b24_deals(file_name, data)
     for line in data:
         reg_number_1c = line[titles['Регномер']]
         code1c_1c = line[titles['Вид 1С:ИТС']]
@@ -287,9 +289,6 @@ def revise_new_sub(filename):
     for idx, col in enumerate(worksheet.columns, 1):
         worksheet.column_dimensions[get_column_letter(idx)].auto_size = True
     workbook.save(report_name)
-
-    # Обратная сверка
-    revise_b24_deals(file_name, data)
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '214239'

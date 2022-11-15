@@ -289,6 +289,9 @@ def revise_new_sub(filename):
         worksheet.column_dimensions[get_column_letter(idx)].auto_size = True
     workbook.save(report_name)
 
+    # Обратная сверка
+    revise_b24_deals(file_name, data)
+
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '214239'
     with open(report_name, 'rb') as file:

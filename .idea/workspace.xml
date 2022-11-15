@@ -87,7 +87,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.EmailParcer">
+  <component name="RunManager" selected="Python.ReviseNewSub">
     <configuration name="авр" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -172,7 +172,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="dgs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ReviseNewSub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -184,7 +184,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/dgs.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/ReviseNewSub.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -217,19 +217,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.ReviseNewSub" />
       <item itemvalue="Python.EmailParcer" />
       <item itemvalue="Python.CreateCompaniesActivityReport" />
       <item itemvalue="Python.CreateNotUsedTestRpdTask" />
       <item itemvalue="Python.авр" />
-      <item itemvalue="Python.dgs" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ReviseNewSub" />
         <item itemvalue="Python.EmailParcer" />
         <item itemvalue="Python.авр" />
         <item itemvalue="Python.CreateNotUsedTestRpdTask" />
         <item itemvalue="Python.CreateCompaniesActivityReport" />
-        <item itemvalue="Python.dgs" />
       </list>
     </recent_temporary>
   </component>

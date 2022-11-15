@@ -11,6 +11,7 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
+
 deal_type_names = {
         'SALE': 'ИТС Земля',
         'COMPLEX': 'СааС',
@@ -74,9 +75,9 @@ deal_stage_names = {
         'C1:UC_KZSOR2': 'Нет оплаты',
         'C1:UC_VQ5HJD': 'Ждем решения клиента',
     }
+extra_1c_codes = ['161', '162', '2001', '2002', '2003']
 
-
-def revise_b24_deals(file_name, file_data, titles):
+def revise_b24_deals(file_name, file_data, titles, companies):
     all_deals = b.get_all('crm.deal.list', {
         'select': [
             'UF_CRM_1640523562691',  # Регномер
@@ -100,7 +101,6 @@ def revise_b24_deals(file_name, file_data, titles):
                     'UC_SV60SP',    # АОВ+Облако
                     'UC_92H9MN',    # Индивидуальный
                     'UC_7V8HWF',    # Индивидуальный+Облако
-                    'UC_34QFP9',    # Уникс
                     'UC_AVBW73',    # Базовый Земля
                     'UC_GPT391',    # Базовый Облако
                     'UC_1UPOTU',    # ИТС Бесплатный
@@ -108,7 +108,6 @@ def revise_b24_deals(file_name, file_data, titles):
                     'GOODS',        # ГРМ
                     'UC_DBLSP5',    # Садовод+Помощник
                     'UC_J426ZW',    # 1С Садовод
-                    'UC_BZYY0D',    # ИТС Отраслевой
                     'UC_2B0CK2',    # 1Спарк в договоре
                     'UC_86JXH1',    # 1Спарк 3000
                     'UC_WUGAZ7',    # 1СпаркПЛЮС 22500
@@ -117,6 +116,8 @@ def revise_b24_deals(file_name, file_data, titles):
                     'UC_40Q6MC',    # Старт ЭДО
                     'UC_XJFZN4',    # Кабинет садовода
                     'UC_USDKKM',    # Медицина
+                    'UC_D1DN7U',    # 1С Кабинет сотрудника
+                    'UC_H8S037',    # ЭДО
             ],
             'STAGE_ID': [
                 'C1:NEW',           # Услуга активна
@@ -141,11 +142,68 @@ def revise_b24_deals(file_name, file_data, titles):
             'Название сделки в 1С',
             'Дата завершения в Б24',
             'Дата завершения в 1С',
+            'Код в 1С'
         ]
     ]
     for deal in all_deals:
-        data = list(filter(lambda x: deal['UF_CRM_1640523562691'] == x[titles['Регномер']], file_data))
-        print(data)
+        reg_number_b24 = deal['UF_CRM_1640523562691']
+        code_1c_b24 = deal['UF_CRM_1655972832']
+        deal_name_b24 = deal['TITLE']
+        deal_type_b24 = deal_type_names[deal['TYPE_ID']]
+        deal_stage_b24 = deal_stage_names[deal['STAGE_ID']]
+        close_date_b24 = dateutil.parser.isoparse(deal['CLOSEDATE'])
+        close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
+        company_name_b24 = ''
+        extra_code = ''
+        company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]
+        if company_info:
+            company_name_b24 = company_info['TITLE']
+        data_was_found = 'Нет'
+        company_name_1c = ''
+        deal_name_1c = ''
+        close_date_1c = ''
+        data = list(filter(lambda x: str(reg_number_b24).strip(' ') == str(x[titles['Регномер']]).strip(' ') and str(code_1c_b24).strip(' ') == str(x[titles['Вид 1С:ИТС']]).strip(' '), file_data))
+
+        # Поиск сделок по дополнительным кодам
+        if not data and str(code_1c_b24).strip(' ') in extra_1c_codes:
+            for extra_1c_code in extra_1c_codes:
+                data = list(filter(lambda x: str(reg_number_b24).strip(' ') == str(x[titles['Регномер']]).strip(' ') and str(x[titles['Вид 1С:ИТС']]).strip(' ') == extra_1c_code.strip(' '), file_data))
+                if data:
+                    extra_code = extra_1c_code
+                    break
+
+        if data:
+            for line in data:
+                company_name_1c = line[titles['Пользователь']]
+                deal_name_1c = line[titles['Наименование вида 1С:ИТС']]
+                close_date_1c = line[titles['Конец']]
+                if str(close_date_b24) == str(line[titles['Конец']]):
+                    data_was_found = 'Да'
+                    break
+                else:
+                    data_was_found = 'Другая дата завершения'
+
+        if data_was_found == 'Нет':
+            data = list(filter(lambda x: str(reg_number_b24).strip(' ') == str(x[titles['Регномер']]).strip(' '), file_data))
+            if not data:
+                data_was_found = 'Нет регномера'
+
+        report_data.append([
+            reg_number_b24,
+            code_1c_b24,
+            deal_name_b24,
+            deal_type_b24,
+            deal_stage_b24,
+            company_name_b24,
+            data_was_found,
+            company_name_1c,
+            deal_name_1c,
+            close_date_b24,
+            close_date_1c,
+            extra_code
+        ])
+
+    return report_data
 
 
 def revise_new_sub(filename):
@@ -231,15 +289,14 @@ def revise_new_sub(filename):
         company_name_b24 = ''
         deal_type_b24 = ''
         deal_stage_b24 = ''
-        code1c_b24 = ''
+        extra_code = ''
 
         # Поиск сделок по дополнительным кодам
-        if not deals:
-            extra_1c_codes = ['160', '161', '162', '2001', '2002', '2003']
+        if not deals and str(code1c_1c) in extra_1c_codes:
             for extra_1c_code in extra_1c_codes:
                 deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']).strip(' ') == str(reg_number_1c).strip(' ') and str(x['UF_CRM_1655972832']).strip(' ') == extra_1c_code.strip(' '), all_deals))
                 if deals:
-                    code1c_b24 = extra_1c_code
+                    extra_code = extra_1c_code
                     break
         if deals:
             deals = list(sorted(deals, key=lambda x: dateutil.parser.isoparse(x['CLOSEDATE'])))
@@ -275,8 +332,11 @@ def revise_new_sub(filename):
             close_date_1c,
             close_date_b24,
             deal_stage_b24,
-            code1c_b24
+            extra_code,
         ])
+
+    # Обратная сверка
+    reverse_report = revise_b24_deals(file_name, data, titles, companies)
 
     # Создание xlsx файла отчета
     report_created_time = datetime.now()
@@ -284,14 +344,18 @@ def revise_new_sub(filename):
     report_name = f'Сверка по NewSub {report_name_time}.xlsx'.replace(' ', '_')
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
+    worksheet.title = 'Сверка по NewSub'
     for data in report_data:
         worksheet.append(data)
     for idx, col in enumerate(worksheet.columns, 1):
         worksheet.column_dimensions[get_column_letter(idx)].auto_size = True
-    workbook.save(report_name)
 
-    # Обратная сверка
-    revise_b24_deals(file_name, data)
+    worksheet = workbook.create_sheet('Обратная сверка')
+    for data in reverse_report:
+        worksheet.append(data)
+    for idx, col in enumerate(worksheet.columns, 1):
+        worksheet.column_dimensions[get_column_letter(idx)].auto_size = True
+    workbook.save(report_name)
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '214239'
@@ -312,5 +376,4 @@ def revise_new_sub(filename):
             'CREATED_BY': '173'
         }})
     os.remove(report_name)
-
 

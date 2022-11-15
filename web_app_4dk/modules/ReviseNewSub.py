@@ -145,7 +145,6 @@ def revise_b24_deals(file_name, file_data):
     ]
     for data in file_data:
         print(data)
-        exit()
 
 
 def revise_new_sub(filename):

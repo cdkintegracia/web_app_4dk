@@ -11,11 +11,7 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
-
-
-
-def revise_new_sub(filename):
-    deal_type_names = {
+deal_type_names = {
         'SALE': 'ИТС Земля',
         'COMPLEX': 'СааС',
         'UC_APUWEW': 'ИТС Земля + СааС',
@@ -69,7 +65,7 @@ def revise_new_sub(filename):
         'UC_YIAJC8': 'Лицензия с купоном ИТС',
         '1': 'Не указан',
     }
-    deal_stage_names = {
+deal_stage_names = {
         'C1:NEW': 'Услуга активна',
         'C1:LOSE': 'Отказ от сопровождения',
         'C1:UC_0KJKTY': 'Счет сформирован',
@@ -78,6 +74,81 @@ def revise_new_sub(filename):
         'C1:UC_KZSOR2': 'Нет оплаты',
         'C1:UC_VQ5HJD': 'Ждем решения клиента',
     }
+
+
+def revise_b24_deals(file_name, file_data):
+    all_deals = b.get_all('crm.deal.list', {
+        'select': [
+            'UF_CRM_1640523562691',  # Регномер
+            'UF_CRM_1655972832',  # СлужКод1С
+            'COMPANY_ID',
+            'TITLE',
+            'CLOSEDATE',
+            'TYPE_ID',
+            'STAGE_ID'
+        ],
+        'filter': {
+            'CATEGORY_ID': '1',
+            'TYPE_ID': [
+                    'UC_HT9G9H',    # ПРОФ Земля
+                    'UC_XIYCTV',    # ПРОФ Земля+Помощник
+                    'UC_N113M9',    # ПРОФ Земля+Облако
+                    'UC_5T4MAW',    # ПРОФ Земля+Облако+Помощник
+                    'UC_ZKPT1B',    # ПРОФ Облако
+                    'UC_2SJOEJ',    # ПРОФ Облако+Помощник
+                    'UC_81T8ZR',    # АОВ
+                    'UC_SV60SP',    # АОВ+Облако
+                    'UC_92H9MN',    # Индивидуальный
+                    'UC_7V8HWF',    # Индивидуальный+Облако
+                    'UC_34QFP9',    # Уникс
+                    'UC_AVBW73',    # Базовый Земля
+                    'UC_GPT391',    # Базовый Облако
+                    'UC_1UPOTU',    # ИТС Бесплатный
+                    'UC_K9QJDV',    # ГРМ Бизнес
+                    'GOODS',        # ГРМ
+                    'UC_DBLSP5',    # Садовод+Помощник
+                    'UC_J426ZW',    # 1С Садовод
+                    'UC_BZYY0D',    # ИТС Отраслевой
+                    'UC_2B0CK2',    # 1Спарк в договоре
+                    'UC_86JXH1',    # 1Спарк 3000
+                    'UC_WUGAZ7',    # 1СпаркПЛЮС 22500
+                    'UC_A7G0AM',    # 1С Контрагент
+                    'UC_GZFC63',    # РПД
+                    'UC_40Q6MC',    # Старт ЭДО
+                    'UC_XJFZN4',    # Кабинет садовода
+                    'UC_USDKKM',    # Медицина
+            ],
+            'STAGE_ID': [
+                'C1:NEW',           # Услуга активна
+                'C1:UC_0KJKTY',     # Счет сформирован
+                'C1:UC_3J0IH6',     # Счет отправлен клиенту
+                ]
+        }})
+    report_name = f'Обратная сверка по {file_name}'
+    report_data = [
+        [
+            report_name
+        ],
+        [
+            'Регномер в Б24',
+            'Код в Б24',
+            'Название в Б24',
+            'Тип в Б24',
+            'Стадия в Б24',
+            'Компания в Б24',
+            'Найдено в 1С',
+            'Компания в 1С',
+            'Название сделки в 1С',
+            'Дата завершения в Б24',
+            'Дата завершения в 1С',
+        ]
+    ]
+    for data in file_data:
+        print(data)
+        exit()
+
+
+def revise_new_sub(filename):
     try:
         workbook = openpyxl.load_workbook(filename)
         worksheet = workbook.active
@@ -93,6 +164,7 @@ def revise_new_sub(filename):
                 'CREATED_BY': '173'
             }})
         return
+    file_name = worksheet.cell(row=1, column=1).value
     report_name = f'Сверка по {worksheet.cell(row=1, column=1).value}'
     titles = {}
     data = []
@@ -216,6 +288,9 @@ def revise_new_sub(filename):
     for idx, col in enumerate(worksheet.columns, 1):
         worksheet.column_dimensions[get_column_letter(idx)].auto_size = True
     workbook.save(report_name)
+
+    # Обратная сверка
+    revise_b24_deals(file_name, data)
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '214239'

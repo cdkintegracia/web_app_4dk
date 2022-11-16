@@ -37,7 +37,8 @@ def start_call_statistic_bizproc(element_id=None, activity=None, company_id=None
                 'PROPERTY_1299': company_id,
                 'NAME': f'{month_string[current_month]} {current_year}',
             }})
-        element_id = b24_list_element[0]['ID']
+        if b24_list_element:
+            element_id = b24_list_element[0]['ID']
     if element_id:
         b.call('bizproc.workflow.start', {
             'TEMPLATE_ID': '1239',

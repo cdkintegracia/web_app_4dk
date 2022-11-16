@@ -131,11 +131,8 @@ def update_user_statistics(req: dict):
         'ONTASKADD': add_new_task,
         'ONTASKUPDATE': add_old_task,
     }
-    for i in req:
-        print(i, 'event' == i)
-        print('event' in req)
-        print(i, req[i])    
-    funcs[req['event']](req)
+    if 'event' in req:
+        funcs[req['event']](req)
 
 
 

@@ -131,9 +131,8 @@ def update_user_statistics(req: dict):
         'ONTASKADD': add_new_task,
         'ONTASKUPDATE': add_old_task,
     }
-    b.call('im.notify.system.add', {
-        'USER_ID': '311',
-        'MESSAGE': req})
+    for i in req:
+        print(i)
     funcs[req['event']](req)
 
 

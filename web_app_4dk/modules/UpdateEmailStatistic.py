@@ -18,4 +18,4 @@ def update_email_statistic(activity_info: dict):
     """
     b.call('im.notify.system.add', {
         'USER_ID': '311',
-        'MESSAGE': activity_info['result']['ID']})
+        'MESSAGE': activity_info['result']})

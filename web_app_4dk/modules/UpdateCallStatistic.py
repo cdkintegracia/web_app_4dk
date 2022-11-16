@@ -50,6 +50,48 @@ allowed_numbers = []
 for employee in allowed_departments:
     allowed_numbers.append(employee['WORK_PHONE'])
 
+
+def sort_types(company_id):
+    deals = b.get_all('crm.deal.list', {
+        'select': ['COMPANY_ID'],
+        'filter': {
+            'COMPANY_ID': company_id,
+            'CATEGORY_ID': '1',
+            'STAGE_ID': [
+                'C1:UC_0KJKTY',     # Счет сформирован
+                'C1:UC_3J0IH6',     # Счет отправлен клиенту
+                'C1:UC_KZSOR2',     # Нет оплаты
+                'C1:UC_VQ5HJD',     # Ждём решения клиента
+                'C1:WON',           # Услуга завершена
+            ]
+        }
+    })
+    types = list(map(lambda x: x['COMPANY_ID'], deals))
+    level_1 = ['ПРОФ Земля', 'ПРОФ Земля+Помощник', 'ПРОФ Земля+Облако', 'ПРОФ Земля+Облако+Помощник',
+               'ПРОФ Облако', 'ПРОФ Облако+Помощник', 'АОВ', 'АОВ+Облако', 'Индивидуальный',
+               'Индивидуальный+Облако', 'Уникс']
+    level_2 = ['Базовый Земля', 'Базовый Облако', 'ИТС Бесплатный', 'ГРМ Бизнес', 'ГРМ', 'Садовод',
+               'Садовод+Помощник']
+    level_3 = ['Допы Облако', 'Медицина', 'ИТС Отраслевой']
+    level_4 = ['Услуги (без нашего ИТС)', 'Тестовый', 'Лицензия с купоном ИТС', 'Лицензия', 'Отчетность',
+               'Отчетность (в рамках ИТС)', '1Спарк в договоре', '1Спарк 3000', '1СпаркРиски ПЛЮС 22500',
+               'Контрагент', 'РПД', 'Подпись', 'Подпись 1000', 'Кабинет сотрудника', 'ЭДО', 'ОФД', 'СтартЭДО',
+               'МДЛП', '1С Касса', 'ЭТП', 'Коннект', 'Кабинет садовода', 'БИТРИКС24', 'Товар', 'Клиент']
+    for type in level_1:
+        if type in types:
+            return type
+    for type in level_2:
+        if type in types:
+            return type
+    for type in level_3:
+        if type in types:
+            return type
+    for type in level_4:
+        if type in types:
+            return type
+    return 'Не найден'
+
+
 def update_call_statistic(req):
     """
     :param req: request.form
@@ -107,6 +149,7 @@ def update_call_statistic(req):
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
         if len(list_elements) == 0:
+
             responsible = b.get_all('crm.company.list', {
                 'select': ['ASSIGNED_BY_ID'],
                 'filter': {'ID': company['COMPANY_ID']}})[0]['ASSIGNED_BY_ID']
@@ -125,6 +168,7 @@ def update_call_statistic(req):
                     'PROPERTY_1359': '0',   # Исходящие письма
                     'PROPERTY_1361': 1,     # Всегда взаимодействий
                     'PROPERTY_1365': '0',  # Обращений в 1С:Коннект
+                    'PROPERTY_1367': sort_types(company['COMPANY_ID']),     # Топ сделка
                 }
             }
                    )
@@ -171,6 +215,11 @@ def update_call_statistic(req):
                         connect_treatment_count = element['PROPERTY_1365'][field_value]
                 except:
                     connect_treatment_count = '0'
+                try:
+                    for field_value in element['PROPERTY_1367']:
+                        top_deal = element['PROPERTY_1367'][field_value]
+                except:
+                    top_deal = sort_types(company['COMPANY_ID'])
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -201,6 +250,7 @@ def update_call_statistic(req):
                     'PROPERTY_1359': sent_emails,     # Исходящие письма
                     'PROPERTY_1361': str(int(total_interactions) + 1),  # Всегда взаимодействий
                     'PROPERTY_1365': connect_treatment_count,           # Обращений в 1С:Коннект
+                    'PROPERTY_1367': top_deal,                          # Топ сделка
                 }
             }
                    )

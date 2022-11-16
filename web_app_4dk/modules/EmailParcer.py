@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 
 from fast_bitrix24 import Bitrix
 
-b = Bitrix('')
+b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
 
 
 def html_parser(mail_info):
@@ -33,8 +33,8 @@ def upload_file_to_bx24(filename: str, filecontent: str) -> str:
 
 
 def mail_parser():
-    mail_pass = "hGrWQhkxdPkpxTvz6TYW"
-    username = "korpovmoxem@mail.ru"
+    mail_pass = "Ru3rhv84ydvvC5PCecE4"
+    username = "mok@gk4dk.ru"
     imap_server = "imap.mail.ru"
     imap = imaplib.IMAP4_SSL(imap_server)
     imap.login(username, mail_pass)

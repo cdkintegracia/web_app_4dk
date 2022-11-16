@@ -123,6 +123,7 @@ def update_call_statistic(req):
                     'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
                     'PROPERTY_1355': responsible,
                     'PROPERTY_1359': '0',   # Исходящие письма
+                    'PROPERTY_1361': 1,     # Всегда взаимодействий
                 }
             }
                    )
@@ -137,8 +138,6 @@ def update_call_statistic(req):
                     element_call_count = element['PROPERTY_1305'][field_value]
                 for field_value in element['PROPERTY_1307']:
                     limit_duration = element['PROPERTY_1307'][field_value]
-                for field_value in element['PROPERTY_1359']:
-                    sent_emails = element['PROPERTY_1359'][field_value]
                 if 'PROPERTY_1355' in element:
                     for field_value in element['PROPERTY_1355']:
                         responsible = element['PROPERTY_1355'][field_value]
@@ -156,6 +155,16 @@ def update_call_statistic(req):
                         second_break_limit = element['PROPERTY_1317'][field_value]
                 except:
                     second_break_limit = '2209'
+                try:
+                    for field_value in element['PROPERTY_1359']:
+                        sent_emails = element['PROPERTY_1359'][field_value]
+                except:
+                    sent_emails = '0'
+                try:
+                    for field_value in element['PROPERTY_1361']:
+                        total_interactions = element['PROPERTY_1361'][field_value]
+                except:
+                    total_interactions = '0'
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -184,6 +193,7 @@ def update_call_statistic(req):
                     'PROPERTY_1341': year_codes[strftime('%Y')],    # Год
                     'PROPERTY_1355': responsible,
                     'PROPERTY_1359': str(int(sent_emails) + 1),     # Исходящие письма
+                    'PROPERTY_1361': str(int(total_interactions) + 1),  # Всегда взаимодействий
                 }
             }
                    )

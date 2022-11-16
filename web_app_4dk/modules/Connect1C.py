@@ -10,6 +10,7 @@ from zeep import Client
 from zeep.transports import Transport
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.UpdateEmailStatistic import start_call_statistic_bizproc
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -151,6 +152,7 @@ def create_task(req) -> dict:
         'UF_AUTO_499889542776': req['treatment_id'],
         'STAGE_ID': '1165',
     }})
+    start_call_statistic_bizproc(company_id=company_id, activity='connect')
     return new_task['task']
 
 

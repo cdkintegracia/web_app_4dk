@@ -133,6 +133,7 @@ def update_user_statistics(req: dict):
     }
     for i in req:
         print(i, 'event' == i)
+        print('event' in req)
     funcs[req['event']](req)
 
 

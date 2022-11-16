@@ -124,6 +124,7 @@ def update_call_statistic(req):
                     'PROPERTY_1355': responsible,
                     'PROPERTY_1359': '0',   # Исходящие письма
                     'PROPERTY_1361': 1,     # Всегда взаимодействий
+                    'PROPERTY_1365': '0',  # Обращений в 1С:Коннект
                 }
             }
                    )
@@ -165,6 +166,11 @@ def update_call_statistic(req):
                         total_interactions = element['PROPERTY_1361'][field_value]
                 except:
                     total_interactions = '0'
+                try:
+                    for field_value in element['PROPERTY_1365']:
+                        connect_treatment_count = element['PROPERTY_1365'][field_value]
+                except:
+                    connect_treatment_count = '0'
 
             # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -192,8 +198,9 @@ def update_call_statistic(req):
                     'PROPERTY_1339': month_codes[strftime("%m")],   # Месяц
                     'PROPERTY_1341': year_codes[strftime('%Y')],    # Год
                     'PROPERTY_1355': responsible,
-                    'PROPERTY_1359': str(int(sent_emails) + 1),     # Исходящие письма
+                    'PROPERTY_1359': sent_emails,     # Исходящие письма
                     'PROPERTY_1361': str(int(total_interactions) + 1),  # Всегда взаимодействий
+                    'PROPERTY_1365': connect_treatment_count,           # Обращений в 1С:Коннект
                 }
             }
                    )

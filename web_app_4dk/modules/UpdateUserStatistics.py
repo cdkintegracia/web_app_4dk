@@ -68,7 +68,7 @@ def add_mail(req: dict):
     """
     activity_type = requests.post(f"{authentication('Bitrix')}crm.activity.get?id={req['data[FIELDS][ID]']}").json()
     if activity_type['result']['PROVIDER_TYPE_ID'] == 'EMAIL':
-        update_email_statistic(activity_type)
+        update_email_statistic(activity_type['result'])
         user_info = b.get_all('user.get', {'ID': activity_type['result']['AUTHOR_ID']})[0]
         user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
         data_to_write = [activity_type['result']['ID'],

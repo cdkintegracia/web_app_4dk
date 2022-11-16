@@ -122,6 +122,7 @@ def update_call_statistic(req):
                     'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
                     'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
                     'PROPERTY_1355': responsible,
+                    'PROPERTY_1359': '0',   # Исходящие письма
                 }
             }
                    )
@@ -136,6 +137,8 @@ def update_call_statistic(req):
                     element_call_count = element['PROPERTY_1305'][field_value]
                 for field_value in element['PROPERTY_1307']:
                     limit_duration = element['PROPERTY_1307'][field_value]
+                for field_value in element['PROPERTY_1359']:
+                    sent_emails = element['PROPERTY_1359'][field_value]
                 if 'PROPERTY_1355' in element:
                     for field_value in element['PROPERTY_1355']:
                         responsible = element['PROPERTY_1355'][field_value]
@@ -180,6 +183,7 @@ def update_call_statistic(req):
                     'PROPERTY_1339': month_codes[strftime("%m")],   # Месяц
                     'PROPERTY_1341': year_codes[strftime('%Y')],    # Год
                     'PROPERTY_1355': responsible,
+                    'PROPERTY_1359': str(int(sent_emails) + 1),     # Исходящие письма
                 }
             }
                    )

@@ -53,7 +53,7 @@ for employee in allowed_departments:
 
 def sort_types(company_id):
     deals = b.get_all('crm.deal.list', {
-        'select': ['COMPANY_ID'],
+        'select': ['TYPE_ID'],
         'filter': {
             'COMPANY_ID': company_id,
             'CATEGORY_ID': '1',
@@ -66,7 +66,7 @@ def sort_types(company_id):
             ]
         }
     })
-    types = list(map(lambda x: x['COMPANY_ID'], deals))
+    types = list(map(lambda x: x['TYPE_ID'], deals))
     level_1 = ['UC_HT9G9H',                         # ПРОФ Земля
                'UC_XIYCTV',                         # ПРОФ Земля+Помощник
                'UC_N113M9',                         # ПРОФ Земля+Облако

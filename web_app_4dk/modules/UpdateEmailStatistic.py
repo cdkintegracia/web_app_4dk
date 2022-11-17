@@ -27,30 +27,7 @@ month_string = {
     }
 
 
-def start_call_statistic_bizproc(element_id=None, activity=None, company_id=None):
-    if not element_id and company_id:
-        current_month = datetime.strftime(datetime.now(), "%m")
-        current_year = datetime.strftime(datetime.now(), "%Y")
-        b24_list_element = b.get_all('lists.element.get', {
-            'IBLOCK_TYPE_ID': 'lists',
-            'IBLOCK_ID': '175',
-            'filter': {
-                'PROPERTY_1299': company_id,
-                'NAME': f'{month_string[current_month]} {current_year}',
-            }})
-        if b24_list_element:
-            element_id = b24_list_element[0]['ID']
-    if element_id:
-        b.call('bizproc.workflow.start', {
-            'TEMPLATE_ID': '1239',
-            'DOCUMENT_ID': ['lists', 'Bitrix\Lists\BizprocDocumentLists', element_id],
-            'PARAMETERS': {'activity': activity}
-        })
-
-
 def update_company_statistic(company_id):
-    pass
-    #start_call_statistic_bizproc(company_id=company_id, activity='sent_email')
     update_element(company_id=company_id, outgoing_email=True)
 
 

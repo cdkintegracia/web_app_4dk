@@ -234,7 +234,7 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
                 'NAME': current_date,
             }})
     if not element:
-        return
+        create_element(company_id)
     for field_value in element['PROPERTY_1303']:
         element_duration = element['PROPERTY_1303'][field_value]
     for field_value in element['PROPERTY_1305']:

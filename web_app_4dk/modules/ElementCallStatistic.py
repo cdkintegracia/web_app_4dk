@@ -198,7 +198,7 @@ def create_element(company_id, call_duration=None):
         string_call_duration = strftime("%H:%M:%S", call_duration)
         total_interactions = '1'
 
-    b.call('lists.element.add', {
+    element = b.call('lists.element.add', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '175',
         'ELEMENT_CODE': time(),
@@ -218,6 +218,8 @@ def create_element(company_id, call_duration=None):
         }
     }
            )
+    print(element)
+    return element['id']
 
 
 def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False):
@@ -233,8 +235,10 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
                 'PROPERTY_1299': company_id,
                 'NAME': current_date,
             }})
-    if not element:
-        create_element(company_id)
+        if element:
+            element = element[0]
+        else:
+            create_element(company_id)
     for field_value in element['PROPERTY_1303']:
         element_duration = element['PROPERTY_1303'][field_value]
     for field_value in element['PROPERTY_1305']:

@@ -218,16 +218,8 @@ def create_element(company_id, call_duration=None):
         }
     }
            )
-    print(element)
-    print(element)
-    print(element)
-    print(element)
-    print(element)
-    print(element)
-    print(element)
-    print(element)
-    print(element)
-    
+    return str(element)
+
 
 def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False):
     lk_call_count = 0

@@ -110,6 +110,10 @@ def update_call_statistic(req):
 
             elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
                 create_element(company_id=company['COMPANY_ID'], call_duration=call_duration)
+
+            elif req['data[CALL_TYPE]'] == '1':
+                create_element(company_id=company['COMPANY_ID'])
+                update_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
             '''
             responsible = b.get_all('crm.company.list', {
                 'select': ['ASSIGNED_BY_ID'],
@@ -145,6 +149,9 @@ def update_call_statistic(req):
 
                 elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
                     update_element(element=element, company_id=company['COMPANY_ID'], call_duration_seconds=call_duration_seconds)
+
+                elif req['data[CALL_TYPE]'] == '1':
+                    update_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
                 '''
                 for field_value in element['PROPERTY_1303']:
                     element_duration = element['PROPERTY_1303'][field_value]

@@ -330,8 +330,8 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             'PROPERTY_1361': str(int(total_interactions) + 1),  # Всегда взаимодействий
             'PROPERTY_1365': str(int(connect_treatment_count) + connect_treatment),  # Обращений в 1С:Коннект
             'PROPERTY_1367': top_deal,  # Топ сделка
-            'PROPERTY_1369': str(int(incoming_calls) + int(incoming_call)),     # Входящие звонки
-            'PROPERTY_1375': str(int(outgoing_calls_others) + int(outgoing_call_other)),     # Исходящие (остальные)
+            'PROPERTY_1369': str(int(incoming_calls) + incoming_call),     # Входящие звонки
+            'PROPERTY_1375': str(int(outgoing_calls_others) + outgoing_call_other),     # Исходящие (остальные)
         }
     }
     send_bitrix_request('lists.element.update', request_data)

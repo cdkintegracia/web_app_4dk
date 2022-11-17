@@ -7,7 +7,7 @@ from datetime import timedelta
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.modules.UpdateUserStatistics import update_user_statistics
+from web_app_4dk.modules.UpdateUserStatistics import add_call
 
 # Считывание файла authentication.txt
 
@@ -342,7 +342,7 @@ def update_call_statistic(req):
     :return: Обновление или создание элемента в УС "Статистика звонков"
     """
 
-    update_user_statistics(req)     # Запись в статистику пользователя
+    add_call(req)     # Запись в статистику пользователя
 
     if req['data[CALL_TYPE]'] in ['2', '3']:
         pass

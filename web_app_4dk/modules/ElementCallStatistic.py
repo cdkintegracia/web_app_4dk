@@ -7,7 +7,7 @@ from datetime import timedelta
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.modules.UpdateUserStatistics import update_user_statistics
+
 
 # Считывание файла authentication.txt
 

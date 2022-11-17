@@ -3,7 +3,7 @@ from datetime import datetime
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.modules.ElementCallStatistic import update_element
+#from web_app_4dk.modules.ElementCallStatistic import update_element
 
 
 # Считывание файла authentication.txt
@@ -50,7 +50,7 @@ def start_call_statistic_bizproc(element_id=None, activity=None, company_id=None
 
 def update_company_statistic(company_id):
     #start_call_statistic_bizproc(company_id=company_id, activity='sent_email')
-    update_element(company_id=company_id, outgoing_email=True)
+    #update_element(company_id=company_id, outgoing_email=True)
 
 
 

@@ -238,6 +238,13 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             element = element[0]
         else:
             create_element(company_id)
+            element = b.get_all('lists.element.get', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '175',
+                'filter': {
+                    'PROPERTY_1299': company_id,
+                    'NAME': current_date,
+                }})[0]
     for field_value in element['PROPERTY_1303']:
         element_duration = element['PROPERTY_1303'][field_value]
     for field_value in element['PROPERTY_1305']:

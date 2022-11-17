@@ -4,15 +4,8 @@ from time import gmtime
 from time import strptime
 from datetime import timedelta
 
-from fast_bitrix24 import Bitrix
-
 from web_app_4dk.modules.authentication import authentication
-
-
-# Считывание файла authentication.txt
-
-webhook = authentication('Bitrix')
-b = Bitrix(webhook)
+from web_app_4dk.modules.Connect1C import send_bitrix_request
 
 
 month_string = {
@@ -50,8 +43,9 @@ year_codes = {
     '2023': '2241'
 }
 
+
 def sort_types(company_id):
-    deals = b.get_all('crm.deal.list', {
+    request_data = {
         'select': ['TYPE_ID'],
         'filter': {
             'COMPANY_ID': company_id,
@@ -64,7 +58,8 @@ def sort_types(company_id):
                 'C1:WON',           # Услуга завершена
             ]
         }
-    })
+    }
+    deals = send_bitrix_request('crm.deal.list', request_data)
     types = list(map(lambda x: x['TYPE_ID'], deals))
     level_1 = ['UC_HT9G9H',                         # ПРОФ Земля
                'UC_XIYCTV',                         # ПРОФ Земля+Помощник
@@ -186,9 +181,10 @@ def sort_types(company_id):
 def create_element(company_id, call_duration=None):
     current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
 
-    responsible = b.get_all('crm.company.list', {
+    request_data = {
         'select': ['ASSIGNED_BY_ID'],
-        'filter': {'ID': company_id}})[0]['ASSIGNED_BY_ID']
+        'filter': {'ID': company_id}}
+    responsible = send_bitrix_request('crm.company.list', request_data)[0]['ASSIGNED_BY_ID']
 
     lk_call_count = '0'
     total_interactions = '0'
@@ -198,7 +194,7 @@ def create_element(company_id, call_duration=None):
         string_call_duration = strftime("%H:%M:%S", call_duration)
         total_interactions = '1'
 
-    element = b.call('lists.element.add', {
+    request_data = {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '175',
         'ELEMENT_CODE': time(),
@@ -217,7 +213,7 @@ def create_element(company_id, call_duration=None):
             'PROPERTY_1369': '0',   # Входящие звонки
         }
     }
-           )
+    element = send_bitrix_request('lists.element.add', request_data)
     return str(element)
 
 
@@ -227,24 +223,19 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
         lk_call_count = 1
     if not element and company_id:
         current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
-        element = b.get_all('lists.element.get', {
+        request_data = {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '175',
             'filter': {
                 'PROPERTY_1299': company_id,
                 'NAME': current_date,
-            }})
+            }}
+        element = send_bitrix_request('lists.element.get', request_data)
         if element:
             element = element[0]
         else:
             create_element(company_id)
-            element = b.get_all('lists.element.get', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '175',
-                'filter': {
-                    'PROPERTY_1299': company_id,
-                    'NAME': current_date,
-                }})[0]
+            element = send_bitrix_request('lists.element.get', request_data)
     for field_value in element['PROPERTY_1303']:
         element_duration = element['PROPERTY_1303'][field_value]
     for field_value in element['PROPERTY_1305']:
@@ -255,9 +246,10 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
         for field_value in element['PROPERTY_1355']:
             responsible = element['PROPERTY_1355'][field_value]
     else:
-        responsible = b.get_all('crm.company.list', {
+        request_data = {
             'select': ['ASSIGNED_BY_ID'],
-            'filter': {'ID': company_id}})[0]['ASSIGNED_BY_ID']
+            'filter': {'ID': company_id}}
+        responsible = send_bitrix_request('crm.company.list', request_data)[0]['ASSIGNED_BY_ID']
     try:
         for field_value in element['PROPERTY_1315']:
             first_break_limit = element['PROPERTY_1315'][field_value]
@@ -305,7 +297,7 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
     new_seconds = int(element_seconds) + int(call_duration_seconds)
     new_time = gmtime(new_seconds)
 
-    b.call('lists.element.update', {
+    request_data = {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '175',
         'ELEMENT_ID': element['ID'],
@@ -327,4 +319,5 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             'PROPERTY_1369': str(int(incoming_calls) + int(incoming_call)),     # Входящие звонки
         }
     }
-           )
+    send_bitrix_request('lists.element.update', request_data)
+

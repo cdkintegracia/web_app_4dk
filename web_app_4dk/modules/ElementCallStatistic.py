@@ -222,6 +222,7 @@ def create_element(company_id, outgoing_email=False, connect_treatment=False, ca
 
 def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False):
     lk_call_count = 0
+    total_interactions_bool = True
     if call_duration:
         lk_call_count = 1
     if not element and company_id:
@@ -238,6 +239,7 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             element = element[0]
         else:
             create_element(company_id)
+            total_interactions_bool = False
             element = send_bitrix_request('lists.element.get', request_data)[0]
     for field_value in element['PROPERTY_1303']:
         element_duration = element['PROPERTY_1303'][field_value]
@@ -321,7 +323,7 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
             'PROPERTY_1355': responsible,
             'PROPERTY_1359': str(int(sent_emails) + outgoing_email),  # Исходящие письма
-            'PROPERTY_1361': str(int(total_interactions) + 1),  # Всегда взаимодействий
+            'PROPERTY_1361': str(int(total_interactions) + total_interactions_bool),  # Всегда взаимодействий
             'PROPERTY_1365': str(int(connect_treatment_count) + connect_treatment),  # Обращений в 1С:Коннект
             'PROPERTY_1367': top_deal,  # Топ сделка
             'PROPERTY_1369': str(int(incoming_calls) + incoming_call),     # Входящие звонки

@@ -3,9 +3,10 @@ from time import time
 from time import gmtime
 from time import strptime
 from datetime import timedelta
+import requests
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.modules.Connect1C import send_bitrix_request
+
 
 
 month_string = {
@@ -42,6 +43,10 @@ year_codes = {
     '2022': '2239',
     '2023': '2241'
 }
+
+
+def send_bitrix_request(method: str, data: dict):
+    return requests.post(f"{authentication('Bitrix')}{method}", json=data).json()['result']
 
 
 def sort_types(company_id):

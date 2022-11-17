@@ -226,7 +226,7 @@ def create_element(company_id, call_duration=None):
     return str(element)
 
 
-def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False, outgoing_call_other=None):
+def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False, outgoing_call_other=False):
     lk_call_count = 0
     if call_duration_seconds:
         lk_call_count = 1

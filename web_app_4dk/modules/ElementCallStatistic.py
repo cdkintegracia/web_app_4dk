@@ -241,6 +241,14 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
         else:
             create_element(company_id)
             element = send_bitrix_request('lists.element.get', request_data)
+    print(element)
+    print(element)
+    print(element)
+    print(element)
+    print(element)
+    print(element)
+    print(element)
+    print(element)
     for field_value in element['PROPERTY_1303']:
         element_duration = element['PROPERTY_1303'][field_value]
     for field_value in element['PROPERTY_1305']:

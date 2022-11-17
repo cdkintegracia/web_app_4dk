@@ -71,14 +71,7 @@ def update_call_statistic(req):
     """
 
     add_call(req)     # Запись в статистику пользователя
-
-    if req['data[CALL_TYPE]'] in ['2', '3']:
-        pass
-
-
-    if req['data[CALL_TYPE]'] not in ['1', ] or\
-            req['data[PORTAL_NUMBER]'] not in employee_numbers or\
-            req['data[CALL_FAILED_CODE]'] != '200':
+    if req['data[CALL_FAILED_CODE]'] != '200':
         return
 
     client_number = req['data[PHONE_NUMBER]']
@@ -112,7 +105,12 @@ def update_call_statistic(req):
 
         if len(list_elements) == 0:
 
-            create_element(company_id=company['COMPANY_ID'], call_duration=call_duration)
+            if req['data[CALL_TYPE]'] in ['2', '3']:
+                new_element = create_element(company_id=company['COMPANY_ID'])
+                update_element(element=new_element, company_id=company['COMPANY_ID'], incoming_call=True)
+
+            elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
+                create_element(company_id=company['COMPANY_ID'], call_duration=call_duration)
             '''
             responsible = b.get_all('crm.company.list', {
                 'select': ['ASSIGNED_BY_ID'],
@@ -143,7 +141,11 @@ def update_call_statistic(req):
         else:
 
             for element in list_elements:
-                update_element(element=element, company_id=company['COMPANY_ID'], call_duration_seconds=call_duration_seconds)
+                if req['data[CALL_TYPE]'] in ['2', '3']:
+                    update_element(element=element, company_id=company['COMPANY_ID'], incoming_call=True)
+
+                elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
+                    update_element(element=element, company_id=company['COMPANY_ID'], call_duration_seconds=call_duration_seconds)
                 '''
                 for field_value in element['PROPERTY_1303']:
                     element_duration = element['PROPERTY_1303'][field_value]

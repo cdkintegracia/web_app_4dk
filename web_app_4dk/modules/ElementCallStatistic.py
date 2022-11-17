@@ -183,7 +183,6 @@ def sort_types(company_id):
     request_data = {
         'USER_ID': '311',
         'MESSAGE': f'Типы {types}\nКомпания {company_id}'}
-    send_bitrix_request('im.notify.system.add', request_data)
     return 'Не найден'
 
 

@@ -3,9 +3,8 @@ from time import time
 from time import gmtime
 from time import strptime
 from datetime import timedelta
-import requests
 
-from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.tools import *
 
 
 
@@ -43,10 +42,6 @@ year_codes = {
     '2022': '2239',
     '2023': '2241'
 }
-
-
-def send_bitrix_request(method: str, data: dict):
-    return requests.post(f"{authentication('Bitrix')}{method}", json=data).json()['result']
 
 
 def sort_types(company_id):
@@ -186,7 +181,7 @@ def sort_types(company_id):
     return 'Не найден'
 
 
-def create_element(company_id, call_duration=None):
+def create_element(company_id, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False):
     current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
 
     request_data = {
@@ -200,7 +195,6 @@ def create_element(company_id, call_duration=None):
     if call_duration:
         lk_call_count = '1'
         string_call_duration = strftime("%H:%M:%S", call_duration)
-        total_interactions = '1'
 
     request_data = {
         'IBLOCK_TYPE_ID': 'lists',
@@ -214,21 +208,21 @@ def create_element(company_id, call_duration=None):
             'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
             'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
             'PROPERTY_1355': responsible,
-            'PROPERTY_1359': '0',  # Исходящие письма
-            'PROPERTY_1361': total_interactions,  # Всего взаимодействий
-            'PROPERTY_1365': '0',  # Обращений в 1С:Коннект
+            'PROPERTY_1359': int(outgoing_email),  # Исходящие письма
+            'PROPERTY_1361': '1',  # Всего взаимодействий
+            'PROPERTY_1365': int(connect_treatment),  # Обращений в 1С:Коннект
             'PROPERTY_1367': sort_types(company_id),  # Топ сделка
-            'PROPERTY_1369': '0',   # Входящие звонки
-            'PROPERTY_1375': '0',   # Исходящие (остальные)
+            'PROPERTY_1369': int(incoming_call),   # Входящие звонки
+            'PROPERTY_1375': int(outgoing_call_other),   # Исходящие (остальные)
         }
     }
     element = send_bitrix_request('lists.element.add', request_data)
     return str(element)
 
 
-def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False, outgoing_call_other=False):
+def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False):
     lk_call_count = 0
-    if call_duration_seconds:
+    if call_duration:
         lk_call_count = 1
     if not element and company_id:
         current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
@@ -308,7 +302,7 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
         minutes=element_time.tm_min,
         seconds=element_time.tm_sec
     ).seconds
-    new_seconds = int(element_seconds) + int(call_duration_seconds)
+    new_seconds = int(element_seconds) + int(call_duration)
     new_time = gmtime(new_seconds)
 
     request_data = {

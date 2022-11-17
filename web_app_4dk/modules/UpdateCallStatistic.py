@@ -1,16 +1,10 @@
 from time import strftime
 from time import gmtime
 
-from fast_bitrix24 import Bitrix
-
-from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.modules.UpdateUserStatistics import add_call
 from web_app_4dk.modules.ElementCallStatistic import update_element, create_element
+from web_app_4dk.tools import *
 
-# Считывание файла authentication.txt
-
-webhook = authentication('Bitrix')
-b = Bitrix(webhook)
 
 employee_numbers = [
     '+79991174816',     # Жанна Умалатова
@@ -58,7 +52,8 @@ month_string = {
         '12': 'Декабрь'
     }
 
-allowed_departments = b.get_all('user.get', {'filter': {'UF_DEPARTMENT': ['231', ]}})
+request_data = {'filter': {'UF_DEPARTMENT': ['231', ]}}
+allowed_departments = send_bitrix_request('user.get', request_data)
 allowed_numbers = []
 for employee in allowed_departments:
     allowed_numbers.append(employee['WORK_PHONE'])
@@ -81,16 +76,18 @@ def update_call_statistic(req):
 
     # ID контакта через номер телефона
 
-    contact = b.get_all('telephony.externalCall.searchCrmEntities', {'PHONE_NUMBER': client_number})
+    request_data = {'PHONE_NUMBER': client_number}
+    contact = send_bitrix_request('telephony.externalCall.searchCrmEntities', request_data)
     if not contact:
         return
     contact_id = contact[0]['CRM_ENTITY_ID']
 
     # Компании, связанные с контактом | заполнение УС "Статистика звонков"
 
-    companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
+    request_data = {'id': contact_id}
+    companies = send_bitrix_request('crm.contact.company.items.get', request_data)
     for company in companies:
-        list_elements = b.get_all('lists.element.get', {
+        request_data = {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '175',
             'filter': {
@@ -98,22 +95,21 @@ def update_call_statistic(req):
                 'NAME': current_date,
             }
         }
-                                  )
+        list_elements = send_bitrix_request('lists.element.get', request_data)
 
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
         if len(list_elements) == 0:
 
             if req['data[CALL_TYPE]'] in ['2', '3']:
-                create_element(company_id=company['COMPANY_ID'])
-                update_element(company_id=company['COMPANY_ID'], incoming_call=True)
+                create_element(company_id=company['COMPANY_ID'], incoming_call=True)
 
             elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
                 create_element(company_id=company['COMPANY_ID'], call_duration=call_duration)
 
             elif req['data[CALL_TYPE]'] == '1':
-                create_element(company_id=company['COMPANY_ID'])
-                update_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
+                create_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
+
             '''
             responsible = b.get_all('crm.company.list', {
                 'select': ['ASSIGNED_BY_ID'],
@@ -148,7 +144,7 @@ def update_call_statistic(req):
                     update_element(element=element, company_id=company['COMPANY_ID'], incoming_call=True)
 
                 elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
-                    update_element(element=element, company_id=company['COMPANY_ID'], call_duration_seconds=call_duration_seconds)
+                    update_element(element=element, company_id=company['COMPANY_ID'], call_duration=call_duration_seconds)
 
                 elif req['data[CALL_TYPE]'] == '1':
                     update_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)

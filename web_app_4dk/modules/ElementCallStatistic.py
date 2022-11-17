@@ -219,13 +219,14 @@ def create_element(company_id, call_duration=None):
             'PROPERTY_1365': '0',  # Обращений в 1С:Коннект
             'PROPERTY_1367': sort_types(company_id),  # Топ сделка
             'PROPERTY_1369': '0',   # Входящие звонки
+            'PROPERTY_1375': '0',   # Исходящие (остальные)
         }
     }
     element = send_bitrix_request('lists.element.add', request_data)
     return str(element)
 
 
-def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False):
+def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration_seconds=False, incoming_call=False, outgoing_call_other=None):
     lk_call_count = 0
     if call_duration_seconds:
         lk_call_count = 1
@@ -293,6 +294,11 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             incoming_calls = element['PROPERTY_1369'][field_value]
     except:
         incoming_calls = '0'
+    try:
+        for field_value in element['PROPERTY_1375']:
+            outgoing_calls_others = element['PROPERTY_1375'][field_value]
+    except:
+        outgoing_calls_others = '0'
 
     # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -325,6 +331,7 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             'PROPERTY_1365': str(int(connect_treatment_count) + connect_treatment),  # Обращений в 1С:Коннект
             'PROPERTY_1367': top_deal,  # Топ сделка
             'PROPERTY_1369': str(int(incoming_calls) + int(incoming_call)),     # Входящие звонки
+            'PROPERTY_1375': str(int(outgoing_calls_others) + int(outgoing_call_other)),     # Исходящие (остальные)
         }
     }
     send_bitrix_request('lists.element.update', request_data)

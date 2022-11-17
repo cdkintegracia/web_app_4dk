@@ -75,7 +75,6 @@ def update_call_statistic(req):
         return
 
     client_number = req['data[PHONE_NUMBER]']
-    employee_number = req['data[PORTAL_NUMBER]']
     call_duration_seconds = req['data[CALL_DURATION]']
     call_duration = gmtime(int(req['data[CALL_DURATION]']))
     current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
@@ -106,8 +105,8 @@ def update_call_statistic(req):
         if len(list_elements) == 0:
 
             if req['data[CALL_TYPE]'] in ['2', '3']:
-                new_element = create_element(company_id=company['COMPANY_ID'])
-                update_element(element=new_element, company_id=company['COMPANY_ID'], incoming_call=True)
+                create_element(company_id=company['COMPANY_ID'])
+                update_element(company_id=company['COMPANY_ID'], incoming_call=True)
 
             elif req['data[CALL_TYPE]'] in ['1', ] and req['data[PORTAL_NUMBER]'] in employee_numbers:
                 create_element(company_id=company['COMPANY_ID'], call_duration=call_duration)

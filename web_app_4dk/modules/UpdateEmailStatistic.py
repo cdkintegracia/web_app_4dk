@@ -49,6 +49,7 @@ def start_call_statistic_bizproc(element_id=None, activity=None, company_id=None
 
 
 def update_company_statistic(company_id):
+    pass
     #start_call_statistic_bizproc(company_id=company_id, activity='sent_email')
     #update_element(company_id=company_id, outgoing_email=True)
 

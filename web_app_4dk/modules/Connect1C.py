@@ -10,7 +10,8 @@ from zeep import Client
 from zeep.transports import Transport
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.modules.UpdateEmailStatistic import start_call_statistic_bizproc
+from web_app_4dk.modules.UpdateCallStatistic import update_element
+
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -152,12 +153,12 @@ def create_task(req) -> dict:
         'UF_AUTO_499889542776': req['treatment_id'],
         'STAGE_ID': '1165',
     }})
-    start_call_statistic_bizproc(company_id=company_id, activity='connect')
     return new_task['task']
 
 
 def check_task_existence(req) -> dict:
     data = {
+        'select': ['*', 'UF_*'],
         'filter': {
             'UF_AUTO_499889542776': req['treatment_id']
         }
@@ -320,6 +321,9 @@ def connect_1c(req: dict):
         b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task['responsibleId']}], raw=True)
         elapsed_time = req['treatment']['treatment_duration']
         b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
+        ufCrmTask = task['ufCrmTask']
+        company_id = list(filter(lambda x: 'CO' in x, ufCrmTask))[0].replace('CO_', '')
+        update_element(company_id=company_id, connect_treatment=True)
 
     # Смена ответственного
     data = {

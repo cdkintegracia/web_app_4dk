@@ -9,7 +9,6 @@
 
 .log_list {
     text-align: left;
-    margin: 10px;
 }
 
 li {
@@ -125,4 +124,8 @@ body {
 
 .log_window {
     background-color: #fff;
+}
+
+.logs_block {
+    margin: 10px;
 }

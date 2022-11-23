@@ -44,36 +44,6 @@
     </button>
     </div>
     </div>
-  <!-- Модальное окно "Обработка статистики Мегафона"-->
-<div class="modal fade" id="MegafonCallsHandlerModal" tabindex="-1" aria-labelledby="MegafonCallsHandlerLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="MegafonCallsHandlerLabel">Обработка файла Мегафона</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-      </div>
-      <div class="modal-body">
-        <div class="input-block">
-        Статистика Мегафона
-        <input name="newsub_file" type="file" accept=".xlsx">
-      </div>
-      </div>
-      <div class="modal-footer">
-        {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <div class=flashes>
-                        {% for message in messages %}
-                        {{ message }}
-                        {% endfor %}
-                        </dib>
-                    {% endif %}
-                    {% endwith %}
-        <input type="submit" value="Обработать" name="submit_button">
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
     <!-- Модальное окно "Сверка по отчетности"-->
 <form method="POST" enctype="multipart/form-data"> 
 <div class="modal fade" id="ReviseAccountingDealsModal" tabindex="-1" aria-labelledby="ReviseAccountingDealsModalLabel" aria-hidden="true">
@@ -119,6 +89,36 @@
     </div>
   </div>
 </div>
+  <!-- Модальное окно "Обработка статистики Мегафона"-->
+  <div class="modal fade" id="MegafonCallsHandlerModal" tabindex="-1" aria-labelledby="MegafonCallsHandlerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="MegafonCallsHandlerLabel">Обработка файла Мегафона</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-block">
+          Файл Мегафона
+          <input name="newsub_file" type="file" accept=".xlsx">
+        </div>
+        </div>
+        <div class="modal-footer">
+          {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                          <div class=flashes>
+                          {% for message in messages %}
+                          {{ message }}
+                          {% endfor %}
+                          </dib>
+                      {% endif %}
+                      {% endwith %}
+          <input type="submit" value="Обработать" name="submit_button">
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <!-- Модальное окно "Сверка по NewSub"-->
 <div class="modal fade" id="ReviseNewSubModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">

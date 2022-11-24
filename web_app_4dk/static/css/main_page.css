@@ -19,6 +19,7 @@ li {
     display: flex;
     flex-direction: column;
     padding-top: 250px;
+    margin-left: 10px;
 }
 
 .buttons a {
@@ -123,4 +124,8 @@ body {
 
 .log_window {
     background-color: #fff;
+}
+
+.logs_block {
+    margin: 10px;
 }

@@ -92,7 +92,7 @@ def create_task(req) -> dict:
     data = load_logs()
     task_text = ''
     for event in data[::-1]:
-        if event['treatment_id'] == req['treatment_id'] and event['message_type'] == 1:
+        if event['treatment_id'] == req['treatment_id'] and event['message_type'] != 80:
             task_text = event['text']
             break
 

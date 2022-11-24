@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import base64
+from os import remove as os_remove
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -6,6 +8,9 @@ import openpyxl
 
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
 
+report_created_time = datetime.now()
+report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
+report_name = f'Отчет Мегафон {report_name_time}.xlsx'.replace(' ', '_')
 
 lk_employers = []
 adm_employers = []
@@ -56,8 +61,8 @@ def get_company_names(company_id: list) -> list:
     return result
 
 
-def read_megafon_file(key='data'):
-    workbook = openpyxl.load_workbook('История внешних звонков 03-11-2022.xlsx')
+def read_megafon_file(file_name, key='data'):
+    workbook = openpyxl.load_workbook(file_name)
     worksheet = workbook.active
     max_rows = worksheet.max_row
     max_columns = worksheet.max_column
@@ -74,7 +79,7 @@ def read_megafon_file(key='data'):
         if temp:
             megafon_data.append(temp)
     if key == 'data':
-        return list(filter(lambda x: x[0] == 'исходящий',megafon_data))
+        return list(filter(lambda x: x[0] == 'исходящий', megafon_data))
     elif key == 'titles':
         return worksheet_titles
 
@@ -253,17 +258,17 @@ def find_top_deal(deals: list) -> str:
     return ''
 
 
-def write_data_to_file(data_to_write):
+def write_data_to_file(data_to_write, file_name):
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
     for data in data_to_write:
         worksheet.append(data)
-    workbook.save('text1.xlsx')
+    workbook.save(file_name)
 
 
-def megafon_calls_handler():
-    megafon_data = read_megafon_file('data')
-    megafon_titles = read_megafon_file('titles')
+def megafon_calls_handler(file_name):
+    megafon_data = read_megafon_file(key='data', file_name=file_name)
+    megafon_titles = read_megafon_file(file_name, 'titles')
     b24_companies = list(filter(lambda x: 'PHONE' in x, b24_companies_handler(b24_companies_info)))
     b24_contacts = list(filter(lambda x: 'PHONE' in x, b24_contacts_handler(b24_contacts_info)))
     result_titles = [
@@ -308,10 +313,27 @@ def megafon_calls_handler():
         temp += values
         data_to_write.append(temp)
 
-    write_data_to_file(data_to_write)
+    write_data_to_file(data_to_write, report_name)
 
+    # Загрузка файла в Битрикс
+    bitrix_folder_id = '232345'
 
-megafon_calls_handler()
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_file = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('tasks.task.add', {'fields': {
+        'TITLE': f"Файл Мегафона обработан",
+        'DESCRIPTION': upload_file["DETAIL_URL"],
+        'GROUP_ID': '13',
+        'CREATED_BY': '173',
+        'RESPONSIBLE_ID': '173'
+    }})
+    os_remove(report_name)
 
-
+megafon_calls_handler('Сентябрь 12022.xlsx')
 

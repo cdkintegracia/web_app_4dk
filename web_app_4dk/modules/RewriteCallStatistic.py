@@ -111,3 +111,4 @@ def rewrite_call_statistic(month, year):
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '173'
         }})
+

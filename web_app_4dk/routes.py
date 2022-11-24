@@ -27,6 +27,7 @@ from web_app_4dk.modules.CreateLineConsultationReport import create_line_consult
 from web_app_4dk.modules.ReviseNewSub import revise_new_sub
 from web_app_4dk.modules.CreateRpdReport import create_rpd_report
 from web_app_4dk.modules.CreateCompaniesActivityReport import create_companies_activity_report
+from web_app_4dk.modules.MegafonCallsHandler import megafon_calls_handler
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -114,6 +115,11 @@ def main_page():
                 newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
                 revise_new_sub('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
+            elif request.files['megafon_file']:
+                newsub_file = request.files['megafon_file']
+                newsub_file.save('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
+                megafon_calls_handler('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
+                os.remove('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

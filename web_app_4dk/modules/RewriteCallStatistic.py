@@ -106,7 +106,7 @@ def rewrite_call_statistic(month, year):
         }})
     else:
         b.call('tasks.task.add', {'fields': {
-            'TITLE': f"Cтатистика звонков за {month} {year} успешно перезаписана",
+            'TITLE': f"ИЗМЕНИТЬ БП (ЗАДАЧИ НА ЛИМИТ). Cтатистика звонков за {month} {year} успешно перезаписана",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': '173'

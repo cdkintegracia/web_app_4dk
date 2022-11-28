@@ -115,8 +115,7 @@ def add_new_task(req: dict):
             'GROUP_ID': group_id,
             'UF_CRM_TASK': company
         }}
-    check_tasks = send_bitrix_request('tasks.task.list', data)
-    print('ДЛИНА', len(check_tasks))
+    check_tasks = send_bitrix_request('tasks.task.list', data)['tasks']
 
     if len(check_tasks) > 1:
         task_urls = ''
@@ -129,7 +128,6 @@ def add_new_task(req: dict):
             'MESSAGE': f'ВНИМАНИЕ! В течение последнего часа для {company_name} уже была создана задача в {group_name}.\n' 
                        f'{task_urls}'
         }
-        print(task_urls)
         send_bitrix_request('im.notify.system.add', data)
 
 

@@ -92,7 +92,7 @@ def add_new_task(req: dict):
         return
     uf_crm_task = task['task']['ufCrmTask']
     if not uf_crm_task:
-        return 
+        return
     company = list(filter(lambda x: 'CO' in x, uf_crm_task))
     if not company:
         return
@@ -116,7 +116,7 @@ def add_new_task(req: dict):
             'UF_CRM_TASK': company
         }}
     check_tasks = send_bitrix_request('tasks.task.list', data)
-    print(len(check_tasks))
+    print('ДЛИНА', len(check_tasks))
 
     if len(check_tasks) > 1:
         task_urls = ''

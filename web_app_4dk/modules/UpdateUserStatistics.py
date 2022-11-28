@@ -88,7 +88,6 @@ def add_new_task(req: dict):
         'taskId': req['data[FIELDS_AFTER][ID]']
     }
     task = send_bitrix_request('tasks.task.get', data)
-    print(task)
     if 'ufCrmTask' not in task['task'] or 'groupId' not in task['task']:
         return
     uf_crm_task = task['task']['ufCrmTask']
@@ -115,6 +114,7 @@ def add_new_task(req: dict):
             'UF_CRM_TASK': company
         }}
     check_tasks = send_bitrix_request('tasks.task.list', data)
+    print(check_tasks)
 
     if len(check_tasks) > 1:
         task_urls = ''

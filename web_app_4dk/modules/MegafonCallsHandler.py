@@ -6,7 +6,7 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 
 from web_app_4dk.modules.authentication import authentication
-
+'''
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -337,6 +337,5 @@ def megafon_calls_handler(file_name):
     }})
     os_remove(report_name)
 
-
-if __name__ == '__main__':
-    megafon_calls_handler()
+megafon_calls_handler('Сентябрь 12022.xlsx')
+'''

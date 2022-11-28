@@ -83,6 +83,7 @@ def add_mail(req: dict):
 
 
 def add_new_task(req: dict):
+    print('dgsgdsgsdgdsgdsgdsgdsg')
     data = {
         'select': ['UF_CRM_TASK', 'GROUP_ID', 'RESPONSIBLE_ID', 'CREATED_DATE'],
         'taskId': req['data[FIELDS_AFTER][ID]']

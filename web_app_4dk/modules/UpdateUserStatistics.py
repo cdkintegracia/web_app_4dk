@@ -91,6 +91,8 @@ def add_new_task(req: dict):
     if 'ufCrmTask' not in task['task'] or 'groupId' not in task['task']:
         return
     uf_crm_task = task['task']['ufCrmTask']
+    if not uf_crm_task:
+        return 
     company = list(filter(lambda x: 'CO' in x, uf_crm_task))
     if not company:
         return

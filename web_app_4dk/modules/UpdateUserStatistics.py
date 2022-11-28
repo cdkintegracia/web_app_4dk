@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+
 from fast_bitrix24 import Bitrix
 import gspread
 import dateutil.parser
@@ -5,6 +7,7 @@ import requests
 
 from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.modules.UpdateEmailStatistic import update_email_statistic
+from web_app_4dk.tools import *
 
 webhook = authentication('Bitrix')
 b = Bitrix(webhook)
@@ -80,21 +83,49 @@ def add_mail(req: dict):
 
 
 def add_new_task(req: dict):
-    return
-    task = b.get_all('tasks.task.get', {'taskId': req['data[FIELDS_AFTER][ID]']})
-    if task['task']['status'] != '2':
+    data = {
+        'select': ['UF_CRM_TASK', 'GROUP_ID', 'RESPONSIBLE_ID', 'CREATED_DATE'],
+        'taskId': req['data[FIELDS_AFTER][ID]']
+    }
+    task = send_bitrix_request('tasks.task.get', data)
+    if 'ufCrmTask' not in task['task'] or 'groupId' not in task['task']:
         return
-    user_info = requests.post(f"{authentication('Bitrix')}user.get?id={task['task']['responsibleId']}").json()
-    user_info = user_info['result'][0]
-    user_name = f"{user_info['NAME']} {user_info['LAST_NAME']}"
-    data_to_write = [task['task']['id'],
-            'TASK',
-                         user_name,
-                         time_handler(task['task']['createdDate']),
-                     'В работе'
-                     ]
+    uf_crm_task = task['task']['ufCrmTask']
+    company = list(filter(lambda x: 'CO' in x, uf_crm_task))[0]
+    if not company:
+        return
+    data = {
+        'filter': {
+            'ID': company.replace('CO_', '')
+        }}
+    company_name = send_bitrix_request('crm.company.list', data)[0]['TITLE']
+    task_id = task['task']['id']
+    group_id = task['task']['groupId']
+    group_name = task['task']['group']['name']
+    responsible = task['task']['responsibleId']
+    created_date = dateutil.parser.isoparse(task['task']['createdDate'])
+    date_start_filter = datetime.strftime(created_date - timedelta(hours=1), '%Y-%m-%d %H:%M:%S')
 
-    write_to_sheet(data_to_write)
+    data = {
+        'filter': {
+            '>=CREATED_DATE': date_start_filter,
+            'GROUP_ID': group_id,
+            'UF_CRM_TASK': company
+        }}
+    check_tasks = send_bitrix_request('tasks.task.list', data)
+
+    if len(check_tasks) > 1:
+        task_urls = ''
+        for check_task in check_tasks:
+            if check_task['id'] == task_id:
+                continue
+            task_urls += f'https://vc4dk.bitrix24.ru/workgroups/group/{group_id}/tasks/task/view/{check_task["id"]}/\n'
+        data = {
+            'USER_ID': responsible,
+            'MESSAGE': f'ВНИМАНИЕ! В течение последнего часа для {company_name} уже была создана задача в {group_name}.\n' 
+                       f'{task_urls}'
+        }
+        send_bitrix_request('im.notify.system.add', data)
 
 
 def add_old_task(req: dict):
@@ -115,8 +146,6 @@ def add_old_task(req: dict):
     except:
         return
     write_to_sheet(data_to_write)
-
-
 
 
 def update_user_statistics(req: dict):

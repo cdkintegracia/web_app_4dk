@@ -337,5 +337,4 @@ def megafon_calls_handler(file_name):
     }})
     os_remove(report_name)
 
-megafon_calls_handler('Сентябрь 12022.xlsx')
 

@@ -105,7 +105,7 @@ def add_new_task(req: dict):
     task_id = task['task']['id']
     group_id = task['task']['groupId']
     group_name = task['task']['group']['name']
-    responsible = task['task']['responsibleId']
+    responsible = task['task']['createdBy']
     created_date = dateutil.parser.isoparse(task['task']['createdDate'])
     date_start_filter = datetime.strftime(created_date - timedelta(hours=1), '%Y-%m-%d %H:%M:%S')
 

@@ -105,7 +105,10 @@ def add_new_task(req: dict):
     company_name = send_bitrix_request('crm.company.list', data)[0]['TITLE']
     task_id = task['task']['id']
     group_id = task['task']['groupId']
-    group_name = task['task']['group']['name']
+    try:
+        group_name = task['task']['group']['name']
+    except:
+        return
     responsible = task['task']['createdBy']
     created_date = dateutil.parser.isoparse(task['task']['createdDate'])
     date_start_filter = datetime.strftime(created_date - timedelta(hours=1), '%Y-%m-%d %H:%M:%S')

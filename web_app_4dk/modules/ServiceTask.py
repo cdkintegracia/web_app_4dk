@@ -241,7 +241,7 @@ def create_service_tasks(dct):
                     }
                 }
                               )
-                exit()
+    
                 main_task = task['task']['id']
             else:
                 main_task = is_main_task_exists[0]['id']

@@ -4,7 +4,7 @@ from datetime import datetime
 import openpyxl
 
 
-
+b = Bitrix('')
 
 deal = b.get_all('crm.deal.list', {'select': ['UF_CRM_1657878818384'], 'filter': {'ID': '100795'}})
 
@@ -62,10 +62,11 @@ for accounting_deal in accounting_deals:
         responsible_info = list(filter(lambda x: x['ID'] == responsible, users_info))[0]
         responsible_name = f"{responsible_info['NAME']} {responsible_info['LAST_NAME']}"
         task_date_end_str = datetime.strftime(dateutil.parser.isoparse(task_date_end), "%d.%m.%Y")
-        single_deals.append([accounting_deal['ID'], responsible_name, task_date_end_str])
+        single_deals.append([accounting_deal['ID'], responsible_name, task_date_end_str, company_name, accounting_deal['TITLE']])
     else:
         if regnumber in used_regnumbers:
             continue
+        regnumber_filtered_deals_count = len(regnumber_filtered_deals)
         responsible = regnumber_filtered_deals[0]['ASSIGNED_BY_ID']
         its_accounting_deals = list(filter(lambda x: x['TYPE_ID'] == 'UC_OV4T7K' and x['UF_CRM_1640523562691'] == regnumber, accounting_deals))
         if its_accounting_deals:
@@ -91,16 +92,16 @@ for accounting_deal in accounting_deals:
         responsible_info = list(filter(lambda x: x['ID'] == responsible, users_info))[0]
         responsible_name = f"{responsible_info['NAME']} {responsible_info['LAST_NAME']}"
         task_date_end_str = datetime.strftime(dateutil.parser.isoparse(task_date_end), "%d.%m.%Y")
-        gk_deals.append([accounting_deal['ID'], responsible_name, task_date_end_str])
+        gk_deals.append([accounting_deal['ID'], responsible_name, task_date_end_str, regnumber_filtered_deals_count])
 
 workbook = openpyxl.Workbook()
 worksheet = workbook.active
 worksheet.title = 'Уникальный регномер'
-worksheet.append(['ID', 'Ответственный', 'Крайний срок'])
+worksheet.append(['ID', 'Ответственный', 'Крайний срок', 'Компания', 'Сделка'])
 for row in single_deals:
     worksheet.append(row)
 worksheet = workbook.create_sheet('ГК')
-worksheet.append(['ID', 'Ответственный', 'Крайний срок'])
+worksheet.append(['ID', 'Ответственный', 'Крайний срок', 'Кол-во элементов'])
 for row in gk_deals:
     worksheet.append(row)
 workbook.save('test.xlsx')

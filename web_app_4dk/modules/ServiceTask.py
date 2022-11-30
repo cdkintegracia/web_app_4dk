@@ -161,8 +161,6 @@ def create_service_tasks(dct):
     """
     task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description']
     task_text = task_text.replace('[LIST]', '').replace('/[LIST]', '')
-    print(task_text)
-    exit()
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     type_deals = [
                     'UC_XIYCTV',  # ПРОФ Земля + Помощник
@@ -243,6 +241,7 @@ def create_service_tasks(dct):
                     }
                 }
                               )
+                exit()
                 main_task = task['task']['id']
             else:
                 main_task = is_main_task_exists[0]['id']

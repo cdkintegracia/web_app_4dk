@@ -89,6 +89,8 @@ def add_new_task(req: dict):
     }
     task = send_bitrix_request('tasks.task.get', data)
 
+    if task['task']['groupId'] not in ['1', '7']:
+        return
     if 'ufCrmTask' not in task['task'] or 'groupId' not in task['task']:
         return
     uf_crm_task = task['task']['ufCrmTask']

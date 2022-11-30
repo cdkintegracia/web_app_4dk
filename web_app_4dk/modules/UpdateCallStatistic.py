@@ -110,31 +110,6 @@ def update_call_statistic(req):
             elif req['data[CALL_TYPE]'] == '1':
                 create_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
 
-            '''
-            responsible = b.get_all('crm.company.list', {
-                'select': ['ASSIGNED_BY_ID'],
-                'filter': {'ID': company['COMPANY_ID']}})[0]['ASSIGNED_BY_ID']
-            b.call('lists.element.add', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '175',
-                'ELEMENT_CODE': time(),
-                'fields': {
-                    'NAME': current_date,   # Название == месяц и год
-                    'PROPERTY_1303': strftime("%H:%M:%S", call_duration),   # Продолжительность звонка
-                    'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
-                    'PROPERTY_1305': '1',    # Количество звонков
-                    'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
-                    'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
-                    'PROPERTY_1355': responsible,
-                    'PROPERTY_1359': '0',   # Исходящие письма
-                    'PROPERTY_1361': 1,     # Всего взаимодействий
-                    'PROPERTY_1365': '0',  # Обращений в 1С:Коннект
-                    'PROPERTY_1367': sort_types(company['COMPANY_ID']),     # Топ сделка
-                }
-            }
-                   )
-            '''
-
         # Если найден элемент - он обновляется
 
         else:
@@ -148,83 +123,6 @@ def update_call_statistic(req):
 
                 elif req['data[CALL_TYPE]'] == '1':
                     update_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
-                '''
-                for field_value in element['PROPERTY_1303']:
-                    element_duration = element['PROPERTY_1303'][field_value]
-                for field_value in element['PROPERTY_1305']:
-                    element_call_count = element['PROPERTY_1305'][field_value]
-                for field_value in element['PROPERTY_1307']:
-                    limit_duration = element['PROPERTY_1307'][field_value]
-                if 'PROPERTY_1355' in element:
-                    for field_value in element['PROPERTY_1355']:
-                        responsible = element['PROPERTY_1355'][field_value]
-                else:
-                    responsible = b.get_all('crm.company.list', {
-                        'select': ['ASSIGNED_BY_ID'],
-                        'filter': {'ID': company['COMPANY_ID']}})[0]['ASSIGNED_BY_ID']
-                try:
-                    for field_value in element['PROPERTY_1315']:
-                        first_break_limit = element['PROPERTY_1315'][field_value]
-                except:
-                    first_break_limit = '2207'
-                try:
-                    for field_value in element['PROPERTY_1317']:
-                        second_break_limit = element['PROPERTY_1317'][field_value]
-                except:
-                    second_break_limit = '2209'
-                try:
-                    for field_value in element['PROPERTY_1359']:
-                        sent_emails = element['PROPERTY_1359'][field_value]
-                except:
-                    sent_emails = '0'
-                try:
-                    for field_value in element['PROPERTY_1361']:
-                        total_interactions = element['PROPERTY_1361'][field_value]
-                except:
-                    total_interactions = '0'
-                try:
-                    for field_value in element['PROPERTY_1365']:
-                        connect_treatment_count = element['PROPERTY_1365'][field_value]
-                except:
-                    connect_treatment_count = '0'
-                try:
-                    for field_value in element['PROPERTY_1367']:
-                        top_deal = element['PROPERTY_1367'][field_value]
-                except:
-                    top_deal = sort_types(company['COMPANY_ID'])
 
-            # Форматирование времени в секунды и суммирование с длительностью звонка
 
-            element_time = strptime(element_duration, "%H:%M:%S")
-            element_seconds = timedelta(
-                hours=element_time.tm_hour,
-                minutes=element_time.tm_min,
-                seconds=element_time.tm_sec
-            ).seconds
-            new_seconds = int(element_seconds) + int(call_duration_seconds)
-            new_time = gmtime(new_seconds)
-
-            b.call('lists.element.update', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '175',
-                'ELEMENT_ID': element['ID'],
-                'fields': {
-                    'NAME': element['NAME'],
-                    'PROPERTY_1303': strftime("%H:%M:%S", new_time),    # Продолжительность звонков
-                    'PROPERTY_1299': company['COMPANY_ID'],     # Привязка к компании
-                    'PROPERTY_1305': str(int(element_call_count) + 1),   # Количество звонков
-                    'PROPERTY_1307': limit_duration,    # Лимит продолжительности звонков
-                    'PROPERTY_1315': first_break_limit,     # Превышение лимита
-                    'PROPERTY_1317': second_break_limit,    # Превышение лимита x2
-                    'PROPERTY_1339': month_codes[strftime("%m")],   # Месяц
-                    'PROPERTY_1341': year_codes[strftime('%Y')],    # Год
-                    'PROPERTY_1355': responsible,
-                    'PROPERTY_1359': sent_emails,     # Исходящие письма
-                    'PROPERTY_1361': str(int(total_interactions) + 1),  # Всегда взаимодействий
-                    'PROPERTY_1365': connect_treatment_count,           # Обращений в 1С:Коннект
-                    'PROPERTY_1367': top_deal,                          # Топ сделка
-                }
-            }
-                   )
-            '''
 

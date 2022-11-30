@@ -187,7 +187,10 @@ def create_service_tasks(dct):
     if len(month) == 1:  # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
         month = '0' + month
 
-    date_start = f'{year}-{month_start}-{day_start}'
+    if month_start == '12':
+        date_start = f'{str(int(year) -1)}-{month_start}-{day_start}'
+    else:
+        date_start = f'{year}-{month_start}-{day_start}'
     date_end = f'{year}-{month_end}-01'
 
     # Получение массива сделок

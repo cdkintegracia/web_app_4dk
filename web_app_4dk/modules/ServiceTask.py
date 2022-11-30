@@ -160,7 +160,7 @@ def create_service_tasks(dct):
 
     """
     task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description']
-    task_text = str(task_text).replace('[LIST]', '').replace['/[LIST]', '']
+    task_text = task_text.replace('[LIST]', '').replace('/[LIST]', '')
     print(task_text)
     exit()
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи

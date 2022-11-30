@@ -159,7 +159,7 @@ def create_service_tasks(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description'].replace(['[LIST]'], '').replace['/[LIST]', '']
+    task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description'].replace('[LIST]', '').replace['/[LIST]', '']
     print(task_text)
     exit()
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи

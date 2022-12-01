@@ -57,6 +57,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     :return: Массив найденных сделок по фильтру (состоит из 3 массивов)
     :return:
     """
+    print(date_start, date_end)
 
     if employees == '':     # Если не были выбраны сотрудники в параметрах БП
 
@@ -241,7 +242,7 @@ def create_service_tasks(dct):
                     }
                 }
                               )
-    
+
                 main_task = task['task']['id']
             else:
                 main_task = is_main_task_exists[0]['id']

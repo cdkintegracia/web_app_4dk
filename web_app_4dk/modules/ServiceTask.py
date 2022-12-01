@@ -278,7 +278,7 @@ def create_quarter_subtask(task_id, check_list_id, employee, quarter_deals, year
                 'ALLOW_CHANGE_DEADLINE': 'N',
                 'GROUP_ID': '71',
                 'DESCRIPTION': f"{task_text}\n",
-                'PARENT_ID': check_list_id,
+                'PARENT_ID': task_id,
                 'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{deal['ID']}"],
                 'CREATED_BY': '173',
             }

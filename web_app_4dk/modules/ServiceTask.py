@@ -417,7 +417,7 @@ def create_service_tasks(dct):
                                 'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                             }
                         ], raw=True
-                                                    )
+                                                    )['result']
 
         # Перебор значений выбранного выше ключа
 

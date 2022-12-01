@@ -272,7 +272,7 @@ def create_quarter_subtask(task_id, check_list_id, employee, quarter_deals, year
         # Создание подзадачи для основной задачи
         b.call('tasks.task.add', {
             'fields': {
-                'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                'TITLE': f"СВ: {company['TITLE']} {dct['month']} {str(year)}",
                 'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
                 'RESPONSIBLE_ID': employee,
                 'ALLOW_CHANGE_DEADLINE': 'N',

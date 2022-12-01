@@ -272,7 +272,7 @@ def create_quarter_subtask(task_id, check_list_id, employee, quarter_deals, year
         # Создание подзадачи для основной задачи
         b.call('tasks.task.add', {
             'fields': {
-                'TITLE': f"СВ: {company['TITLE']} {dct['month']} {str(year)}",
+                'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
                 'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
                 'RESPONSIBLE_ID': employee,
                 'ALLOW_CHANGE_DEADLINE': 'N',
@@ -423,6 +423,17 @@ def create_service_tasks(dct):
                     'ID': value[2]
                 }
             })
+
+            if dct['quarter'] == 'Y':
+                is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
+                    'select': ['ID'],
+                    'filter': {'TITLE': f"СВ (К): {company[0]['TITLE']} {dct['month']} {str(year)}",
+                               'GROUP_ID': '71'
+                               }
+                }
+                                               )
+                if not is_quarter_sub_task_exists:
+                    create_quarter_subtask(main_task, quarter_check_list, employee, quarter_deals, year, month, current_month_days, task_text, dct)
             
             # Проверка была ли создана подзадача, для возможности допостановки
             is_sub_task_exists = b.get_all('tasks.task.list', {
@@ -432,36 +443,33 @@ def create_service_tasks(dct):
                            }
             }
                                        )
-            if is_sub_task_exists:
-                continue
+            if not is_sub_task_exists:
 
-            # Создание пунктов чек-листа для созданной задачи на сотрудника
-            b.call('task.checklistitem.add', [
-                main_task, {
-                    # <Название компании> <Название сделки> <Ссылка на сделку>
-                    'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                    'PARENT_ID': main_check_list,
-                }
-            ], raw=True
-                                )
+                # Создание пунктов чек-листа для созданной задачи на сотрудника
+                b.call('task.checklistitem.add', [
+                    main_task, {
+                        # <Название компании> <Название сделки> <Ссылка на сделку>
+                        'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
+                        'PARENT_ID': main_check_list,
+                    }
+                ], raw=True
+                                    )
 
-            # Создание подзадачи для основной задачи
-            b.call('tasks.task.add', {
-                'fields': {
-                    'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
-                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': employee,
-                    'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '71',
-                    'DESCRIPTION': f"{task_text}\n",
-                    'PARENT_ID': main_task,
-                    'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
-                    'CREATED_BY': '173',
+                # Создание подзадачи для основной задачи
+                b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                        'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                        'RESPONSIBLE_ID': employee,
+                        'ALLOW_CHANGE_DEADLINE': 'N',
+                        'GROUP_ID': '71',
+                        'DESCRIPTION': f"{task_text}\n",
+                        'PARENT_ID': main_task,
+                        'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
+                        'CREATED_BY': '173',
+                    }
                 }
-            }
-                          )
-            if dct['quarter'] == 'Y':
-                create_quarter_subtask(main_task, quarter_check_list, employee, quarter_deals, year, month, current_month_days, task_text, dct)
+                              )
 
 
         # Защита от дублирования задач

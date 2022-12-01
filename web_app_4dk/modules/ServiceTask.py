@@ -146,7 +146,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
 
 
 def create_service_tasks(dct):
-    print(req['quarter'])
+    print(dct['quarter'])
     exit()
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'

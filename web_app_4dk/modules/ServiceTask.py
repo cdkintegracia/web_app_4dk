@@ -422,6 +422,7 @@ def create_service_tasks(dct):
                     elif check_list['TITLE'] == 'Квартальные':
                         quarter_check_list = check_list['ID']
                     elif 'Квартальные' not in check_list['TITLE']:
+                        print('НЕ НАЙДЕН ЧЕК ЛИСТ СОЗДАН НОВЫЙ')
                         quarter_check_list = b.call('task.checklistitem.add', [
                             main_task, {
                                 'TITLE': 'Квартальные', 'PARENT_ID': main_task,

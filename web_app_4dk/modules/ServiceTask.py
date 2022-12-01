@@ -437,10 +437,10 @@ def create_service_tasks(dct):
 
             # Создание пунктов чек-листа для созданной задачи на сотрудника
             b.call('task.checklistitem.add', [
-                main_task, {
+                main_check_list, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>
                     'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                    'PARENT_ID':main_check_list,
+                    'PARENT_ID': main_task,
                 }
             ], raw=True
                                 )

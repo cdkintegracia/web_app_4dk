@@ -422,7 +422,7 @@ def create_service_tasks(dct):
             if dct['quarter'] == 'Y':
                 is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
                     'select': ['ID'],
-                    'filter': {'TITLE': f"СВ (К): {company[0]['TITLE']} {dct['month']} {str(year)}",
+                    'filter': {'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
                                'GROUP_ID': '71'
                                }
                 }

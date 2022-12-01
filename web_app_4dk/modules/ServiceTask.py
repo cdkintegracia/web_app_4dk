@@ -412,7 +412,7 @@ def create_service_tasks(dct):
                             'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                         }
                     ], raw=True
-                                            )
+                                            )['result']
             else:
                 main_task = is_main_task_exists[0]['id']
                 check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']

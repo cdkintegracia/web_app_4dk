@@ -46,7 +46,7 @@ def get_employee_id(employees: str) -> list:
     return(id_list)
 
 
-def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employees):
+def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
     deal_types = [
                     'UC_HT9G9H',    # ПРОФ Земля
                     'UC_XIYCTV',    # ПРОФ Земля+Помощник
@@ -70,6 +70,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '0',    # Помощник
                     'TYPE_ID': deal_types,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -84,6 +85,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
                     '<CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '0',    # Помощник
                     'TYPE_ID': deal_types,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -97,6 +99,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '0',    # Помощник
                     'TYPE_ID': deal_types,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -114,6 +117,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
                     'UF_CRM_1662365565770': '0',    # Помощник
                     'TYPE_ID': deal_types,
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -129,6 +133,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
                     'UF_CRM_1662365565770': '0',    # Помощник
                     'TYPE_ID': deal_types,
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -143,6 +148,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
                     'UF_CRM_1662365565770': '0',    # Помощник
                     'TYPE_ID': deal_types,
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -150,7 +156,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 
-def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
+def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
     """
     Функция, которая вызывается из функции create_task_service
 
@@ -158,7 +164,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     :param date_end: Дата конца фильтрации сделок
     :param type_deals: Типы сделок для фильтрации
     :param employees: Сотрудники и отделы для фильтрации сделок
-    :param quarter: Квартальные задачи (Да/Нет)
+    :param stages: Стадии сделок
     :return: Массив найденных сделок по фильтру (состоит из 3 массивов)
     :return:
     """
@@ -174,6 +180,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_end,
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -187,6 +194,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_start,
                     '<CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -199,6 +207,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -215,6 +224,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -229,6 +239,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '<CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -242,6 +253,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -321,6 +333,11 @@ def create_service_tasks(dct):
                     'UC_81T8ZR',  # АОВ
                     'UC_SV60SP',  # АОВ + Облако
                 ]
+    stage_ids = [
+        'C1:NEW',
+        'C1:UC_0KJKTY',
+        'C1:UC_3J0IH6',
+    ]
 
     year = int(dct['year'])
     month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
@@ -350,10 +367,10 @@ def create_service_tasks(dct):
 
     # Получение массива сделок
 
-    deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'])
+    deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
     quarter_deals = []
     if dct['quarter'] == 'Y':
-        quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'])
+        quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
 
     # Разделение ID сделок по ответственному
 

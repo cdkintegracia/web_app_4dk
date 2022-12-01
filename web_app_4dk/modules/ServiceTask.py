@@ -47,6 +47,7 @@ def get_employee_id(employees: str) -> list:
 
 
 def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
+    print(date_start, date_end)
     deal_types = [
                     'UC_HT9G9H',    # ПРОФ Земля
                     'UC_XIYCTV',    # ПРОФ Земля+Помощник

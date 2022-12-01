@@ -136,6 +136,13 @@ def add_new_task(req: dict):
         }
         send_bitrix_request('im.notify.system.add', data)
 
+        data = {
+            'USER_ID': '1',
+            'MESSAGE': f'ВНИМАНИЕ! В течение последнего часа для {company_name} уже была создана задача в {group_name}.\n'
+                       f'{task_urls}'
+        }
+        send_bitrix_request('im.notify.system.add', data)
+
 
 def add_old_task(req: dict):
     try:

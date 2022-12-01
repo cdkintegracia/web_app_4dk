@@ -46,6 +46,110 @@ def get_employee_id(employees: str) -> list:
     return(id_list)
 
 
+def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employees):
+    deal_types = [
+                    'UC_HT9G9H',    # ПРОФ Земля
+                    'UC_XIYCTV',    # ПРОФ Земля+Помощник
+                    'UC_5T4MAW',    # ПРОФ Земля+Облако+Помощник
+                    'UC_N113M9',    # ПРОФ Земля+Облако
+                    'UC_ZKPT1B',    # ПРОФ Облако
+                    'UC_2SJOEJ',    # ПРОФ Облако+Помощник
+                    'UC_92H9MN',    # Индивидуальный
+                    'UC_7V8HWF',    # Индивидуальный+Облако
+                ]
+
+    if employees == '':     # Если не были выбраны сотрудники в параметрах БП
+
+        # Начались в сентябре 2022 и заканчиваются после сентября 2022
+
+        deals_start_in_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '>BEGINDATE': date_start,
+                    '<BEGINDATE': date_end,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+        deals_start_before_end_in = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_start,
+                    '<CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются после сентября 2022
+
+        deals_start_before_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                }
+            }
+        )
+    else:   # Если были выбраны сотрудники в параметрах БП
+        id_list = get_employee_id(employees)
+
+        # Начались в сентябре 2022 и заканчиваются после сентября 2022
+
+        deals_start_in_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '>BEGINDATE': date_start,
+                    '<BEGINDATE': date_end,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'ASSIGNED_BY_ID': id_list,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+        deals_start_before_end_in = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_start,
+                    '<CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'ASSIGNED_BY_ID': id_list,
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются после сентября 2022
+
+        deals_start_before_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'ASSIGNED_BY_ID': id_list,
+                }
+            }
+        )
+
+    return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
+
+
 def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     """
     Функция, которая вызывается из функции create_task_service
@@ -54,10 +158,10 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     :param date_end: Дата конца фильтрации сделок
     :param type_deals: Типы сделок для фильтрации
     :param employees: Сотрудники и отделы для фильтрации сделок
+    :param quarter: Квартальные задачи (Да/Нет)
     :return: Массив найденных сделок по фильтру (состоит из 3 массивов)
     :return:
     """
-    print(date_start, date_end)
 
     if employees == '':     # Если не были выбраны сотрудники в параметрах БП
 
@@ -145,9 +249,45 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 
+def create_quarter_subtask(task_id, check_list_id, employee, quarter_deals, year, month, current_month_days, task_text, dct):
+    deals = list(filter(lambda x: x['ASSIGNED_BY_ID'] == employee, quarter_deals))
+    for deal in deals:
+
+        company = b.get_all('crm.company.list', {
+            'filter': {
+                'ID': deal['COMPANY_ID']
+            }
+        })[0]
+
+        # Создание пунктов чек-листа для созданной задачи на сотрудника
+        b.call('task.checklistitem.add', [
+            check_list_id, {
+                # <Название компании> <Название сделки> <Ссылка на сделку>
+                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
+            }
+        ], raw=True
+               )
+
+        # Создание подзадачи для основной задачи
+        b.call('tasks.task.add', {
+            'fields': {
+                'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                'RESPONSIBLE_ID': employee,
+                'ALLOW_CHANGE_DEADLINE': 'N',
+                'GROUP_ID': '71',
+                'DESCRIPTION': f"{task_text}\n",
+                'PARENT_ID': check_list_id,
+                'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{deal['ID']}"],
+                'CREATED_BY': '173',
+            }
+        }
+               )
+
+
+
+
 def create_service_tasks(dct):
-    print(dct['quarter'])
-    exit()
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
 
@@ -202,6 +342,9 @@ def create_service_tasks(dct):
     # Получение массива сделок
 
     deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'])
+    quarter_deals = []
+    if dct['quarter'] == 'Y':
+        quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'])
 
     # Разделение ID сделок по ответственному
 
@@ -246,10 +389,29 @@ def create_service_tasks(dct):
                     }
                 }
                               )
-
                 main_task = task['task']['id']
+                main_check_list = b.call('task.checklistitem.add', [
+                    main_task, {
+                        'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                    }
+                ], raw=True
+                                            )
+                quarter_check_list = ''
+                if dct['quarter'] == 'Y':
+                    quarter_check_list = b.call('task.checklistitem.add', [
+                        main_task, {
+                            'TITLE': 'Квартальные', 'PARENT_ID': main_task,
+                        }
+                    ], raw=True
+                                            )
             else:
                 main_task = is_main_task_exists[0]['id']
+                check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']
+                for check_list in check_lists:
+                    if check_list['TITLE'] == 'Ежемесячные' or check_list['TITLE'] == 'BX_CHECKLIST_1':
+                        main_check_list = check_list['ID']
+                    elif check_list['TITLE'] == 'Квартальные':
+                        quarter_check_list = check_list['ID']
 
         # Перебор значений выбранного выше ключа
 
@@ -276,7 +438,7 @@ def create_service_tasks(dct):
 
             # Создание пунктов чек-листа для созданной задачи на сотрудника
             b.call('task.checklistitem.add', [
-                main_task, {
+                main_check_list, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>
                     'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
                 }
@@ -298,6 +460,8 @@ def create_service_tasks(dct):
                 }
             }
                           )
+            if dct['quarter'] == 'Y':
+                create_quarter_subtask(main_task, quarter_check_list, employee, quarter_deals, year, month, current_month_days, task_text, dct)
 
 
         # Защита от дублирования задач

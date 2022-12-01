@@ -360,7 +360,7 @@ def create_service_tasks(dct):
     if len(month) == 1:  # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
         month = '0' + month
 
-    if month_start == '12':
+    if month_end == '1':
         date_start = f'{str(int(year) -1)}-{month_start}-{day_start}'
         date_end = f'{year + 1}-{month_end}-01'
     else:

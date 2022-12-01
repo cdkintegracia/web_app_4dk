@@ -259,6 +259,16 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
             }
         })[0]
 
+        is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
+            'select': ['ID'],
+            'filter': {'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
+                       'GROUP_ID': '71'
+                       }
+        }
+                                               )
+        if is_quarter_sub_task_exists:
+            continue
+
         # Создание пунктов чек-листа для созданной задачи на сотрудника
         b.call('task.checklistitem.add', [
             task_id, {
@@ -419,16 +429,8 @@ def create_service_tasks(dct):
                         ], raw=True
                                                     )['result']
 
-            if dct['quarter'] == 'Y':
-                is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
-                    'select': ['ID'],
-                    'filter': {'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
-                               'GROUP_ID': '71'
-                               }
-                }
-                                                       )
-                if not is_quarter_sub_task_exists:
-                    create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
+            if dct['quarter'] == 'Y' and dct['month'] in ['Декабрь', 'Март', 'Июнь', 'Сентябрь']:
+                create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
                                            current_month_days, task_text, dct)
 
         # Перебор значений выбранного выше ключа

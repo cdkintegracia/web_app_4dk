@@ -345,6 +345,7 @@ def create_service_tasks(dct):
     date_start = datetime.strptime(f'01-{month}-{year}', '%d-%m-%Y') - timedelta(days=1)
     date_end = datetime.strftime(date_start + timedelta(days=32), '%Y-%m') + '-01'
     date_start = datetime.strftime(date_start, '%Y-%m-%d')
+    current_month_days = monthrange(year, int(month))[1]  # Количество дней в выбранном месяце
 
     # Получение массива сделок
 

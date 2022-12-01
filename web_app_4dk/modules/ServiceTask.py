@@ -411,6 +411,13 @@ def create_service_tasks(dct):
                         main_check_list = check_list['ID']
                     elif check_list['TITLE'] == 'Квартальные':
                         quarter_check_list = check_list['ID']
+                    elif 'Квартальные' not in check_lists['TITLE']:
+                        quarter_check_list = b.call('task.checklistitem.add', [
+                            main_task, {
+                                'TITLE': 'Квартальные', 'PARENT_ID': main_task,
+                            }
+                        ], raw=True
+                                                    )
 
         # Перебор значений выбранного выше ключа
 

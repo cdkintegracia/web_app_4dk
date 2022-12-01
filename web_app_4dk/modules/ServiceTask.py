@@ -146,6 +146,8 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
 
 
 def create_service_tasks(dct):
+    print(req['quarter'])
+    exit()
     """
     :param dct: Словарь из url POST запроса, в котором есть ключи 'year', 'month'
 
@@ -316,8 +318,6 @@ def get_report_comment(task_id):
 
 
 def create_service_tasks_report(req):
-    print(req['quarter'])
-    exit()
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
     tasks = b.get_all('tasks.task.list', {
         'filter': {

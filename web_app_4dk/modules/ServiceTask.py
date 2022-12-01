@@ -1,5 +1,5 @@
 from calendar import monthrange
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 from os import remove as os_remove
 
@@ -17,18 +17,18 @@ b = Bitrix(webhook)
 
 
 months = {
-    'Январь': 1,
-    'Февраль': 2,
-    'Март': 3,
-    'Апрель': 4,
-    'Май': 5,
-    'Июнь': 6,
-    'Июль': 7,
-    'Август': 8,
-    'Сентябрь': 9,
-    'Октябрь': 10,
-    'Ноябрь': 11,
-    'Декабрь': 12
+    'Январь': '01',
+    'Февраль': '02',
+    'Март': '03',
+    'Апрель': '04',
+    'Май': '05',
+    'Июнь': '06',
+    'Июль': '07',
+    'Август': '08',
+    'Сентябрь': '09',
+    'Октябрь': '10',
+    'Ноябрь': '11',
+    'Декабрь': '12'
 }
 
 
@@ -340,32 +340,11 @@ def create_service_tasks(dct):
         'C1:UC_3J0IH6',
     ]
 
-    year = int(dct['year'])
-    month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
-    month_end = str(months[dct['month']] + 1)   # Месяц начала фильтрации
+    year = dct['year']
+    month = months[dct['month']]
+    date_start = datetime.strptime(f'01-{month}-{year}', '%d-%m-%Y') - timedelta(days=1)
+    date_end = '01-' + datetime.strftime(date_start + timedelta(days=32), '%m-%Y')
 
-    if month == '1':    # Месяц конца фильтрации
-        month_start = '12'  # Если месяц январь, то предыдущий - декабрь
-    else:
-        month_start = str(months[dct['month']] - 1)
-    day_start = monthrange(year, int(month_start))[1]   # День начала фильтрации
-    current_month_days = monthrange(year, int(month))[1]    # Количество дней в выбранном месяце
-
-    if month_end == '13':
-        month_end = '1'
-    if len(month_start) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-        month_start = '0' + month_start
-    if len(month_end) == 1:
-        month_end = '0' + month_end    # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-    if len(month) == 1:  # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-        month = '0' + month
-
-    if month_end == '1':
-        date_start = f'{str(int(year) -1)}-{month_start}-{day_start}'
-        date_end = f'{year + 1}-{month_end}-01'
-    else:
-        date_start = f'{year}-{month_start}-{day_start}'
-        date_end = f'{year}-{month_end}-01'
 
     # Получение массива сделок
 

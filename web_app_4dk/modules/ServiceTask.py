@@ -182,6 +182,8 @@ def create_service_tasks(dct):
     day_start = monthrange(year, int(month_start))[1]   # День начала фильтрации
     current_month_days = monthrange(year, int(month))[1]    # Количество дней в выбранном месяце
 
+    if month_end == '13':
+        month_end = '1'
     if len(month_start) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
         month_start = '0' + month_start
     if len(month_end) == 1:

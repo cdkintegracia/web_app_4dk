@@ -426,7 +426,7 @@ def create_service_tasks(dct):
                         quarter_check_list = check_list['ID']
                         quarter_check_list_flag = True
 
-            if quarter_check_list_flag is False:
+            if quarter_check_list_flag is False and dct['quarter'] == 'Y':
                 quarter_check_list = b.call('task.checklistitem.add', [
                     main_task, {
                         'TITLE': 'Квартальные', 'PARENT_ID': main_task,

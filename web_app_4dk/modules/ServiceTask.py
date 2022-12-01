@@ -249,7 +249,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 
-def create_quarter_subtask(task_id, check_list_id, employee, quarter_deals, year, month, current_month_days, task_text, dct):
+def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, year, month, current_month_days, task_text, dct):
     deals = list(filter(lambda x: x['ASSIGNED_BY_ID'] == employee, quarter_deals))
     for deal in deals:
 
@@ -419,6 +419,18 @@ def create_service_tasks(dct):
                         ], raw=True
                                                     )['result']
 
+            if dct['quarter'] == 'Y':
+                is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
+                    'select': ['ID'],
+                    'filter': {'TITLE': f"СВ (К): {company[0]['TITLE']} {dct['month']} {str(year)}",
+                               'GROUP_ID': '71'
+                               }
+                }
+                                                       )
+                if not is_quarter_sub_task_exists:
+                    create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
+                                           current_month_days, task_text, dct)
+
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
@@ -430,17 +442,6 @@ def create_service_tasks(dct):
                     'ID': value[2]
                 }
             })
-
-            if dct['quarter'] == 'Y':
-                is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
-                    'select': ['ID'],
-                    'filter': {'TITLE': f"СВ (К): {company[0]['TITLE']} {dct['month']} {str(year)}",
-                               'GROUP_ID': '71'
-                               }
-                }
-                                               )
-                if not is_quarter_sub_task_exists:
-                    create_quarter_subtask(main_task, quarter_check_list, employee, quarter_deals, year, month, current_month_days, task_text, dct)
             
             # Проверка была ли создана подзадача, для возможности допостановки
             is_sub_task_exists = b.get_all('tasks.task.list', {

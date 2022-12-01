@@ -343,8 +343,8 @@ def create_service_tasks(dct):
     year = dct['year']
     month = months[dct['month']]
     date_start = datetime.strptime(f'01-{month}-{year}', '%d-%m-%Y') - timedelta(days=1)
-    date_end = '01-' + datetime.strftime(date_start + timedelta(days=32), '%m-%Y')
-
+    date_end = datetime.strftime(date_start + timedelta(days=32), '%Y-%m') + '-01'
+    date_start = datetime.strftime(date_start, '%Y-%m-%d')
 
     # Получение массива сделок
 

@@ -394,7 +394,7 @@ def create_service_tasks(dct):
                         'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
                     }
                 ], raw=True
-                                            )
+                                            )['result']
                 quarter_check_list = ''
                 if dct['quarter'] == 'Y':
                     quarter_check_list = b.call('task.checklistitem.add', [
@@ -437,10 +437,10 @@ def create_service_tasks(dct):
 
             # Создание пунктов чек-листа для созданной задачи на сотрудника
             b.call('task.checklistitem.add', [
-                main_check_list, {
+                main_task, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>
                     'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                    'PARENT_ID': main_task,
+                    'PARENT_ID': main_check_list,
                 }
             ], raw=True
                                 )

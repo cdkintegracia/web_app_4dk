@@ -399,12 +399,6 @@ def create_service_tasks(dct):
                 }
                               )
                 main_task = task['task']['id']
-                main_check_list = b.call('task.checklistitem.add', [
-                    main_task, {
-                        'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
-                    }
-                ], raw=True
-                                            )['result']
                 quarter_check_list = ''
                 if dct['quarter'] == 'Y':
                     quarter_check_list = b.call('task.checklistitem.add', [
@@ -412,6 +406,12 @@ def create_service_tasks(dct):
                             'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                         }
                     ], raw=True
+                                                )['result']
+                main_check_list = b.call('task.checklistitem.add', [
+                    main_task, {
+                        'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                    }
+                ], raw=True
                                             )['result']
             else:
                 main_task = is_main_task_exists[0]['id']

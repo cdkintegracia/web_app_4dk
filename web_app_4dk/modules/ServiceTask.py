@@ -261,9 +261,10 @@ def create_quarter_subtask(task_id, check_list_id, employee, quarter_deals, year
 
         # Создание пунктов чек-листа для созданной задачи на сотрудника
         b.call('task.checklistitem.add', [
-            check_list_id, {
+            task_id, {
                 # <Название компании> <Название сделки> <Ссылка на сделку>
                 'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
+                'PARENT_ID': check_list_id,
             }
         ], raw=True
                )
@@ -438,9 +439,10 @@ def create_service_tasks(dct):
 
             # Создание пунктов чек-листа для созданной задачи на сотрудника
             b.call('task.checklistitem.add', [
-                main_check_list, {
+                main_task, {
                     # <Название компании> <Название сделки> <Ссылка на сделку>
                     'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
+                    'PARENT_ID':main_check_list,
                 }
             ], raw=True
                                 )

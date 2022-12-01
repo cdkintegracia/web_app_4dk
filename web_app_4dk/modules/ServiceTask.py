@@ -414,8 +414,8 @@ def create_service_tasks(dct):
                 ], raw=True
                                             )['result']
 
-            quarter_check_list_flag = False
             else:
+                quarter_check_list_flag = False
                 main_task = is_main_task_exists[0]['id']
                 check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']
                 for check_list in check_lists:
@@ -425,13 +425,13 @@ def create_service_tasks(dct):
                         quarter_check_list = check_list['ID']
                         quarter_check_list_flag = True
 
-            if quarter_check_list_flag is False:
-                quarter_check_list = b.call('task.checklistitem.add', [
-                    main_task, {
-                        'TITLE': 'Квартальные', 'PARENT_ID': main_task,
-                    }
-                ], raw=True
-                                            )['result']
+                if quarter_check_list_flag is False:
+                    quarter_check_list = b.call('task.checklistitem.add', [
+                        main_task, {
+                            'TITLE': 'Квартальные', 'PARENT_ID': main_task,
+                        }
+                    ], raw=True
+                                                )['result']
 
             if dct['quarter'] == 'Y' and dct['month'] in ['Декабрь', 'Март', 'Июнь', 'Сентябрь']:
                 create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,

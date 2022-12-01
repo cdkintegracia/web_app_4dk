@@ -419,6 +419,7 @@ def create_service_tasks(dct):
                 main_task = is_main_task_exists[0]['id']
                 check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']
                 for check_list in check_lists:
+                    print(check_list)
                     if check_list['TITLE'] == 'Ежемесячные' or check_list['TITLE'] == 'BX_CHECKLIST_1':
                         main_check_list = check_list['ID']
                     elif check_list['TITLE'] == 'Квартальные':
@@ -432,6 +433,7 @@ def create_service_tasks(dct):
                         }
                     ], raw=True
                                                 )['result']
+                print('-----------------------------')
 
             if dct['quarter'] == 'Y' and dct['month'] in ['Декабрь', 'Март', 'Июнь', 'Сентябрь']:
                 create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,

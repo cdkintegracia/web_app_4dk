@@ -316,6 +316,7 @@ def get_report_comment(task_id):
 
 
 def create_service_tasks_report(req):
+    print(req['quarter'])
     month_last_day = monthrange(int(req['year']), months[req['month']])[1]
     tasks = b.get_all('tasks.task.list', {
         'filter': {

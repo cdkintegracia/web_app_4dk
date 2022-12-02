@@ -4,7 +4,7 @@ from datetime import datetime
 import openpyxl
 
 
-b = Bitrix('')
+b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
 
 deal = b.get_all('crm.deal.list', {'select': ['UF_CRM_1657878818384'], 'filter': {'ID': '100795'}})
 
@@ -46,11 +46,16 @@ single_deals = []
 gk_deals = []
 used_regnumbers = []
 
+gk_count = 0
+used_responsibles = []
+
 for accounting_deal in accounting_deals:
     regnumber = accounting_deal['UF_CRM_1640523562691']
     regnumber_filtered_deals = list(filter(lambda x: x['UF_CRM_1640523562691'] == regnumber, accounting_deals))
     if len(regnumber_filtered_deals) == 1:
         responsible = accounting_deal['ASSIGNED_BY_ID']
+        if responsible in used_responsibles:
+            continue
         its_filtered_deals = list(filter(lambda x: x['UF_CRM_1640523562691'] == regnumber, its_deals))
         if its_filtered_deals:
             responsible = its_filtered_deals[0]['ASSIGNED_BY_ID']
@@ -62,9 +67,21 @@ for accounting_deal in accounting_deals:
         responsible_info = list(filter(lambda x: x['ID'] == responsible, users_info))[0]
         responsible_name = f"{responsible_info['NAME']} {responsible_info['LAST_NAME']}"
         task_date_end_str = datetime.strftime(dateutil.parser.isoparse(task_date_end), "%d.%m.%Y")
-        single_deals.append([accounting_deal['ID'], responsible_name, task_date_end_str, company_name, accounting_deal['TITLE']])
+        task_date_end_b24 = datetime.strftime(dateutil.parser.isoparse(task_date_end), "%Y-%m-%d") + ' 19:00:00'
+        b.call('tasks.task.add', {
+            'fields': {
+                'RESPONSIBLE_ID': '91',
+                'TITLE': f"Смена ЭЦП {responsible_name}",
+                'GROUP_ID': '89',
+                'DEADLINE': task_date_end_b24,
+                'UF_CRM_TASK': [uf_crm_company, uf_crm_deal],
+                'DESCRIPTION': "75% наших клиентов на 1С-отчетность используют ЭЦП, которые перестанут работать через месяц. Это более 2200 штук. Требуется узнать, по каждому ИНН, получил пользователь ЭЦП от ФНС, если не получил - еще раз направить в ФНС и зафиксировать дату следующего контакта, а если уже получил, то решить, когда клиент готов ее ввести в сервис. Завершением задачи будет либо обработанное заявление с подписью ФНС, или отказ клиента от использования сервиса.",
+                'AUTHOR_ID': '173'
+            }
+        })
+        used_responsibles.append(responsible)
     else:
-        if regnumber in used_regnumbers:
+        if regnumber in used_regnumbers or gk_count == 5:
             continue
         regnumber_filtered_deals_count = len(regnumber_filtered_deals)
         responsible = regnumber_filtered_deals[0]['ASSIGNED_BY_ID']
@@ -82,18 +99,48 @@ for accounting_deal in accounting_deals:
         task_date_end = gk_filtered_deal['UF_CRM_1637934330556']
         task_name = 'Смена ЭЦП ГК'
         for deal in regnumber_filtered_deals:
-            if 'UF_CRM_1637934121' in deal:
-                task_name += f" {deal['UF_CRM_1637934121']}"
+            if 'UF_CRM_1637934121' in deal and deal['UF_CRM_1637934121'] is not None:
+                gk_or_company = deal['UF_CRM_1637934121']
+                gk_or_company = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]['TITLE']
+                task_name += f" {gk_or_company}"
                 break
         if task_name == 'Смена ЭЦП ГК':
-            company_name = list(filter(lambda x: x['ID'] == early_deal_id, regnumber_filtered_deals))[2]
+            company_id = list(filter(lambda x: x['ID'] == early_deal_id, regnumber_filtered_deals))[0]['COMPANY_ID']
+            company_name = list(filter(lambda x: x['ID'] == company_id, companies))[0]['TITLE']
+            gk_or_company = company_name
             task_name += f" {company_name}"
         used_regnumbers.append(regnumber)
         responsible_info = list(filter(lambda x: x['ID'] == responsible, users_info))[0]
         responsible_name = f"{responsible_info['NAME']} {responsible_info['LAST_NAME']}"
         task_date_end_str = datetime.strftime(dateutil.parser.isoparse(task_date_end), "%d.%m.%Y")
+        task_date_end_b24 = datetime.strftime(dateutil.parser.isoparse(task_date_end), "%Y-%m-%d") + ' 19:00:00'
         gk_deals.append([accounting_deal['ID'], responsible_name, task_date_end_str, regnumber_filtered_deals_count])
+        gk_task = b.call('tasks.task.add', {
+            'fields': {
+                'RESPONSIBLE_ID': '91',
+                'TITLE': f"{task_name} {responsible_name}",
+                'GROUP_ID': '89',
+                'DEADLINE': task_date_end_b24,
+                'DESCRIPTION': "75% наших клиентов на 1С-отчетность используют ЭЦП, которые перестанут работать через месяц. Это более 2200 штук. Требуется узнать, по каждому ИНН, получил пользователь ЭЦП от ФНС, если не получил - еще раз направить в ФНС и зафиксировать дату следующего контакта, а если уже получил, то решить, когда клиент готов ее ввести в сервис. Завершением задачи будет либо обработанное заявление с подписью ФНС, или отказ клиента от использования сервиса.",
+                'STAGE_ID': '1277',
+                'AUTHOR_ID': '173'
+            }
+        })['task']['id']
+        for deal in regnumber_filtered_deals:
+            company_name = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]['TITLE']
+            deal_name = deal['TITLE']
+            ecp_validity_period = deal['UF_CRM_1637934330556']
+            deal_url = f"https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/"
+            b.call('task.checklistitem.add', [
+                gk_task, {
+                    'TITLE': f"{company_name} {deal_name} {datetime.strftime(dateutil.parser.isoparse(ecp_validity_period), '%d.%m.%Y')} {deal_url}",
+                }
+            ], raw=True
+                   )
+        gk_count += 1
 
+
+''''
 workbook = openpyxl.Workbook()
 worksheet = workbook.active
 worksheet.title = 'Уникальный регномер'
@@ -104,7 +151,7 @@ worksheet = workbook.create_sheet('ГК')
 worksheet.append(['ID', 'Ответственный', 'Крайний срок', 'Кол-во элементов'])
 for row in gk_deals:
     worksheet.append(row)
-workbook.save('test.xlsx')
-
+workbook.save('test.xlsx') 
+'''
 
 

@@ -1,4 +1,6 @@
 import json
+import pytz
+from datetime import datetime, timedelta
 
 import requests
 from fast_bitrix24 import Bitrix
@@ -91,6 +93,7 @@ def create_task(req) -> dict:
     # Создание задачи с первым сообщением
     data = load_logs()
     task_text = ''
+    data = list(filter(lambda x: x['treatment_id'] == req['treatment_id'], data))
     for event in data[::-1]:
         if event['treatment_id'] == req['treatment_id'] and event['message_type'] != 80:
             task_text = event['text']
@@ -143,6 +146,17 @@ def create_task(req) -> dict:
             'STAGE_ID': '65'
         }})
         return new_task['task']
+    elif 'Обновить 1С' in support_line_name:
+        new_task = send_bitrix_request('tasks.task.add', {'fields': {
+            'TITLE': f"1С:Коннект {support_line_name}",
+            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
+            'GROUP_ID': '1',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': responsible_id,
+            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_AUTO_499889542776': req['treatment_id'],
+        }})
+        return new_task['task']
     new_task = send_bitrix_request('tasks.task.add', {'fields': {
         'TITLE': f"1С:Коннект {support_line_name}",
         'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
@@ -180,6 +194,18 @@ def load_logs():
         for line in file:
             logs.append(json.loads(line))
     return logs
+
+
+def clear_logs():
+    logs = load_logs()
+    utc = pytz.UTC
+    logs = list(sorted(logs, key=lambda x: dateutil.parser.isoparse(x['message_time'])))
+    current_date = utc.localize(datetime.now() - timedelta(days=14))
+    filtred_logs = list(filter(lambda x: dateutil.parser.isoparse(x['message_time']) > current_date, logs))
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt', 'w') as file:
+        for log in filtred_logs:
+            json.dump(log, file, ensure_ascii=False)
+            file.write('\n')
 
 
 def time_handler(time: str) -> str:
@@ -280,6 +306,13 @@ def connect_1c(req: dict):
                     'GROUP_ID': '7',
                     'STAGE_ID': '65'
                 }})
+        elif 'Обновить 1С' in support_line_name:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task['id'],
+                'fields': {
+                    'UF_AUTO_499889542776': req['data']['treatment_id'],
+                    'GROUP_ID': '1',
+                }})
         else:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task['id'],
@@ -297,6 +330,7 @@ def connect_1c(req: dict):
         authors = {}
         data = load_logs()
         event_count = 0
+        data = list(filter(lambda x: x['treatment_id'] == treatment_id, data))
         for event in data:
             if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
                 event_count += 1
@@ -311,6 +345,9 @@ def connect_1c(req: dict):
         if 'ЛК' in support_line_name:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'GROUP_ID': '7', 'STAGE_ID': '67', 'STATUS': '5'}})
+        elif 'Обновить 1С' in support_line_name:
+            send_bitrix_request('tasks.task.update',
+                                {'taskId': task['id'], 'fields': {'GROUP_ID': '1', 'STATUS': '5', 'STAGE_ID': '15'}})
         else:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})

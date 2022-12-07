@@ -28,6 +28,8 @@ from web_app_4dk.modules.ReviseNewSub import revise_new_sub
 from web_app_4dk.modules.CreateRpdReport import create_rpd_report
 from web_app_4dk.modules.CreateCompaniesActivityReport import create_companies_activity_report
 from web_app_4dk.modules.MegafonCallsHandler import megafon_calls_handler
+from web_app_4dk.modules.FNSTaskComplete import fns_task_complete
+from web_app_4dk.modules.ChangeResponsible import change_responsible
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -44,6 +46,7 @@ custom_webhooks = {
     'create_line_consultation_report': create_line_consultation_report,
     'create_rpd_report': create_rpd_report,
     'create_companies_activity_report': create_companies_activity_report,
+    'fns_task_complete': fns_task_complete,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом
@@ -120,6 +123,12 @@ def main_page():
                 newsub_file.save('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
                 megafon_calls_handler('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
+            elif request.files['change_responsible_file']:
+                new_responsible = request.form.get('new_responsible')
+                change_responsible_file = request.files['change_responsible_file']
+                change_responsible_file.save('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+                change_responsible_file(new_responsible, '/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+                os.remove('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
     except:
         pass
     return render_template('main_page.html', web_app_logs=read_logs())

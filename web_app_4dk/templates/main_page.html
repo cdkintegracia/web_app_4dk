@@ -21,6 +21,9 @@
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ReviseNewSubModal">
           Сверка по NewSub
         </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ChangeResponsibleModal">
+          Смена ответственного
+        </button>
       </div>
       <div class="logs_block" align="center">
       <h2>Логи веб-приложения</h2>
@@ -37,7 +40,7 @@
   </div>
   <div class="buttons">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#MegafonCallsHandlerModal">
-      Отчет по Мегафону
+      Обработка файла Мегафона
     </button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
       Обновить статистику звонков
@@ -89,18 +92,42 @@
     </div>
   </div>
 </div>
+  <!-- Модальное окно "Смена ответственного"-->
+  <div class="modal fade" id="ChangeResponsibleModal" tabindex="-1" aria-labelledby="ChangeResponsibleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ChangeResponsibleLabel">Смена ответственного в компаниях, контактах, сделках</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-block">
+          .xlsx файл, в котором есть колонка "Компании" c названиями компаний
+          <input name="change_responsible_file" type="file" accept=".xlsx">
+          <div class="input-block">
+            ID нового ответсвенного
+            <input name="new_responsible" type="text">
+        </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Сменить" name="submit_button">
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Модальное окно "Обработка статистики Мегафона"-->
   <div class="modal fade" id="MegafonCallsHandlerModal" tabindex="-1" aria-labelledby="MegafonCallsHandlerLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="MegafonCallsHandlerLabel">Отчет по Мегафону</h5>
+          <h5 class="modal-title" id="MegafonCallsHandlerLabel">Обработка файла Мегафона</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
         </div>
         <div class="modal-body">
           <div class="input-block">
-          История звонков Мегафона
-          <input name="newsub_file" type="file" accept=".xlsx">
+          Файл Мегафона
+          <input name="megafon_file" type="file" accept=".xlsx">
         </div>
         </div>
         <div class="modal-footer">

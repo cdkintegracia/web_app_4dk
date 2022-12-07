@@ -17,29 +17,37 @@ report_name = f'Отчет Мегафон {report_name_time}.xlsx'.replace(' ', 
 lk_employers = []
 adm_employers = []
 cs_employers = []
-b24_users = b.get_all('user.get')
-for user in b24_users:
-    user_name = f'{user["LAST_NAME"]} {user["NAME"]}'
-    for department in user['UF_DEPARTMENT']:
-        if department == 5:
-            adm_employers.append(user_name)
-        elif department == 231 and user_name != 'Ридкобород Светлана':
-            lk_employers.append(user_name)
-        elif department in [27, 29]:
-            cs_employers.append(user_name)
+b24_users = []
+b24_contacts_info = []
+b24_companies_info = []
+b24_deals = []
 
-b24_contacts_info = b.get_all('crm.contact.list', {'select': ['PHONE']})
-b24_companies_info = b.get_all('crm.company.list', {'select': ['PHONE', 'TITLE']})
-b24_deals = b.get_all('crm.deal.list', {
-    'filter': {
-        'CATEGORY_ID': '1',
-        'STAGE_ID': [
-            'C1:UC_0KJKTY',  # Счет сформирован
-            'C1:UC_3J0IH6',  # Счет отправлен клиенту
-            'C1:UC_KZSOR2',  # Нет оплаты
-            'C1:UC_VQ5HJD',  # Ждём решения клиента
-            'C1:NEW',  # Услуга активна
-        ]}})
+
+def get_bx24_data():
+    global b24_users, b24_contacts_info, b24_companies_info, b24_deals
+    b24_users = b.get_all('user.get')
+    for user in b24_users:
+        user_name = f'{user["LAST_NAME"]} {user["NAME"]}'
+        for department in user['UF_DEPARTMENT']:
+            if department == 5:
+                adm_employers.append(user_name)
+            elif department == 231 and user_name != 'Ридкобород Светлана':
+                lk_employers.append(user_name)
+            elif department in [27, 29]:
+                cs_employers.append(user_name)
+
+    b24_contacts_info = b.get_all('crm.contact.list', {'select': ['PHONE']})
+    b24_companies_info = b.get_all('crm.company.list', {'select': ['PHONE', 'TITLE']})
+    b24_deals = b.get_all('crm.deal.list', {
+        'filter': {
+            'CATEGORY_ID': '1',
+            'STAGE_ID': [
+                'C1:UC_0KJKTY',  # Счет сформирован
+                'C1:UC_3J0IH6',  # Счет отправлен клиенту
+                'C1:UC_KZSOR2',  # Нет оплаты
+                'C1:UC_VQ5HJD',  # Ждём решения клиента
+                'C1:NEW',  # Услуга активна
+            ]}})
 
 
 def parse_phone_numbers(phones_info: list) -> list:
@@ -271,6 +279,7 @@ def write_data_to_file(data_to_write, file_name):
 
 
 def megafon_calls_handler(file_name):
+    get_bx24_data()
     megafon_data = read_megafon_file(key='data', file_name=file_name)
     megafon_titles = read_megafon_file(file_name, 'titles')
     b24_companies = list(filter(lambda x: 'PHONE' in x, b24_companies_handler(b24_companies_info)))

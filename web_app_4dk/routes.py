@@ -126,9 +126,13 @@ def main_page():
             elif request.files['change_responsible_file']:
                 print('ok')
                 new_responsible = request.form.get('new_responsible')
+                print('ok')
                 change_responsible_file = request.files['change_responsible_file']
+                print('ok')
                 change_responsible_file.save('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+                print('ok')
                 change_responsible_file(new_responsible, '/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+                print('ok')
                 os.remove('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
     except:
         pass

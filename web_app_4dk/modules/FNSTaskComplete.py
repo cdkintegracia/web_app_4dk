@@ -13,14 +13,15 @@ def fns_task_complete(req):
 
     else:
         all_tasks = b.get_all('tasks.task.list', {'filter': {'GROUP_ID': '89'}})
-        print(f"Все задачаи", all_tasks)
         for gk_task in all_tasks:
                 if req['regnumber'] in gk_task['description']:
+                    print(gk_task)
                     all_checklists = b.get_all('task.checklistitem.getlist', {'taskId': gk_task['id']})
                     checklist = list(filter(lambda x: req['company_name'] in x['TITLE'], all_checklists))
                     if checklist:
                         checklist = checklist[0]
                         b.call('task.checklistitem.update', [gk_task['id'], checklist['ID'], {'IS_COMPLETE': 'Y'}], raw=True)
+                        return
 
 
 

@@ -124,6 +124,7 @@ def main_page():
                 megafon_calls_handler('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
             elif request.files['change_responsible_file']:
+                print('ok')
                 new_responsible = request.form.get('new_responsible')
                 change_responsible_file = request.files['change_responsible_file']
                 change_responsible_file.save('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')

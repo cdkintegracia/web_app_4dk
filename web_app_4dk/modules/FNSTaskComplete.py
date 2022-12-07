@@ -1,6 +1,8 @@
 from fast_bitrix24 import Bitrix
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+from authentication import authentication
+
+b = Bitrix(authentication('Bitrix'))
 
 
 def fns_task_complete(req):
@@ -10,6 +12,8 @@ def fns_task_complete(req):
     if task:
         task = task[0]
         update_task = b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1279', 'STATUS': '5'}})
+        b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': 'Администратор изменил вендора ЭЦП в сделке. Задача была автоматически завершена', 'AUTHOR_ID': '173'}],
+               raw=True)
 
     else:
         all_tasks = b.get_all('tasks.task.list', {'filter': {'GROUP_ID': '89'}})
@@ -20,4 +24,8 @@ def fns_task_complete(req):
                     if checklist:
                         checklist = checklist[0]
                         b.call('task.checklistitem.update', [gk_task['id'], checklist['ID'], {'IS_COMPLETE': 'Y'}], raw=True)
+                        b.call('task.commentitem.add', [gk_task['id'], {
+                            'POST_MESSAGE': f'Администратор изменил вендора ЭЦП в сделке по компании {req["company_name"]}. Соответствующий элемент чеклиста был автоматически закрыт',
+                            'AUTHOR_ID': '173'}],
+                               raw=True)
                         return

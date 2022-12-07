@@ -1,8 +1,9 @@
 from fast_bitrix24 import Bitrix
 import openpyxl
 
+from authentication import authentication
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+b = Bitrix(authentication('Bitrix'))
 
 
 def read_xlsx_file(file_name) -> list:

@@ -4,7 +4,7 @@ from datetime import datetime
 import openpyxl
 
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+b = Bitrix('')
 
 deal = b.get_all('crm.deal.list', {'select': ['UF_CRM_1657878818384'], 'filter': {'ID': '100795'}})
 

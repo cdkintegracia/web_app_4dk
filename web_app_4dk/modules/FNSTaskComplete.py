@@ -22,12 +22,3 @@ def fns_task_complete(req):
                         checklist = checklist[0]
                         b.call('task.checklistitem.update', [gk_task['id'], checklist['ID'], {'IS_COMPLETE': 'Y'}], raw=True)
                         return
-
-
-
-req = {
-    'company_id': '',
-    'regnumber': '800308713',
-    'company_name': 'ТЕРМОСЕНС 4705075517'
-}
-fns_task_complete(req)

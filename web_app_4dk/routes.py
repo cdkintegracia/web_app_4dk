@@ -99,7 +99,7 @@ def login():
 def main_page():
     if current_user != 1:
         return redirect(url_for('login'))
-    try:
+    else:
         if request.method == 'POST' and request.form.get('submit_button'):
             if request.files['new_call_statistic_file']:
                 new_call_statistic_file = request.files['new_call_statistic_file']
@@ -127,11 +127,9 @@ def main_page():
                 new_responsible = request.form.get('new_responsible')
                 change_responsible_file = request.files['change_responsible_file']
                 change_responsible_file.save('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
-                print(change_responsible_file)
                 change_responsible(new_responsible, '/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
                 os.remove('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
-    except:
-        pass
+
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

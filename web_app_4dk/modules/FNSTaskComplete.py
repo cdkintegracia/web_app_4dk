@@ -15,7 +15,6 @@ def fns_task_complete(req):
         all_tasks = b.get_all('tasks.task.list', {'filter': {'GROUP_ID': '89'}})
         for gk_task in all_tasks:
                 if req['regnumber'] in gk_task['description']:
-                    print(gk_task)
                     all_checklists = b.get_all('task.checklistitem.getlist', {'taskId': gk_task['id']})
                     checklist = list(filter(lambda x: req['company_name'] in x['TITLE'], all_checklists))
                     if checklist:

@@ -6,7 +6,7 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 
 from web_app_4dk.modules.authentication import authentication
-'''
+
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -269,10 +269,8 @@ def write_data_to_file(data_to_write, file_name):
         worksheet.append(data)
     workbook.save(file_name)
 
-'''
+
 def megafon_calls_handler(file_name):
-    pass
-    '''
     megafon_data = read_megafon_file(key='data', file_name=file_name)
     megafon_titles = read_megafon_file(file_name, 'titles')
     b24_companies = list(filter(lambda x: 'PHONE' in x, b24_companies_handler(b24_companies_info)))
@@ -341,5 +339,3 @@ def megafon_calls_handler(file_name):
     }})
     os_remove(report_name)
 
-megafon_calls_handler('Сентябрь 12022.xlsx')
-'''

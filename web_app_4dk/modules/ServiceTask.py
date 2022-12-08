@@ -372,6 +372,7 @@ def create_service_tasks(dct):
 
         if not deals:
             for deal in quarter_deals:
+                print(deal)
                 employee = deal['ASSIGNED_BY_ID']  # Ответственный
                 if employee not in employees:
 

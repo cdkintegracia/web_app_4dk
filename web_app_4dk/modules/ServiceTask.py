@@ -423,6 +423,7 @@ def create_service_tasks(dct):
                     ], raw=True
                                                 )['result']
                     quarter_check_list_flag = True
+
                 main_check_list = b.call('task.checklistitem.add', [
                     main_task, {
                         'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
@@ -455,7 +456,7 @@ def create_service_tasks(dct):
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
-            if employee in [None, 'None']:
+            if employee in [None, 'None'] and not deals:
                 continue
 
             company = b.get_all('crm.company.list', {

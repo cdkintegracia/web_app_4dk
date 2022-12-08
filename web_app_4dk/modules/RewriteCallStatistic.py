@@ -5,6 +5,7 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.ElementCallStatistic import rewrite_element
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -75,8 +76,13 @@ def rewrite_call_statistic(month, year):
             data.append([value, error[1], error[2]])
 
     for d in data:
-        print(d)
-        exit()
+        for element in elements:
+            company_id = list(element['PROPERTY_1299'].values())[0]
+            if d[0] == company_id:
+                rewrite_element(element, d[1], d[2])
+                print(element)
+                exit()
+
 
     if new_errors:
         task_text = 'Компания Длительность звонков Количество звонков\n'

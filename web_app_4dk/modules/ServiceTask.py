@@ -357,8 +357,6 @@ def create_service_tasks(dct):
 
     # Разделение ID сделок по ответственному
 
-    if not deals:
-        deals = quarter_deals
     for deal in deals:
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:
@@ -371,6 +369,20 @@ def create_service_tasks(dct):
         else:
             # Добавление ID сделки к значению dct
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
+
+        if not deals:
+            for deal in quarter_deals:
+                employee = deal['ASSIGNED_BY_ID']  # Ответственный
+                if employee not in employees:
+
+                    # Создание ключа с ID сотрудника и значение:
+                    # 0: ID сделки
+                    # 1: Название сделки
+                    # 2: ID компании
+                    employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
+                else:
+                    # Добавление ID сделки к значению dct
+                    employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
 
     # Формирование задач
 

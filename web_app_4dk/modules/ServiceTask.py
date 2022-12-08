@@ -374,7 +374,7 @@ def create_service_tasks(dct):
 
     for employee in employees:
         if employee not in ['None', None]:
-
+            print(employee)
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
 

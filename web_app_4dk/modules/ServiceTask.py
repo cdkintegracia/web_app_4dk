@@ -354,10 +354,11 @@ def create_service_tasks(dct):
     quarter_deals = []
     if dct['quarter'] == 'Y':
         quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
-    print(quarter_deals)
 
     # Разделение ID сделок по ответственному
 
+    if not deals:
+        deals = quarter_deals
     for deal in deals:
         employee = deal['ASSIGNED_BY_ID']   # Ответственный
         if employee not in employees:

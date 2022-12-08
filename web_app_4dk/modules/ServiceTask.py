@@ -456,7 +456,7 @@ def create_service_tasks(dct):
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
-            if employee in [None, 'None'] and not deals:
+            if employee in [None, 'None'] or not deals:
                 continue
 
             company = b.get_all('crm.company.list', {

@@ -35,8 +35,6 @@ def rewrite_call_statistic(month, year):
         '2023': '2241'
     }
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
-    for element in elements:
-        b.call('lists.element.delete', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'ELEMENT_ID': element['ID']})
     companies = b.get_all('crm.company.list', {'select': ['TITLE']})
 
     errors = []
@@ -77,20 +75,8 @@ def rewrite_call_statistic(month, year):
             data.append([value, error[1], error[2]])
 
     for d in data:
-        b.call('lists.element.add', {
-            'IBLOCK_TYPE_ID': 'lists',
-            'IBLOCK_ID': '175',
-            'ELEMENT_CODE': time(),
-            'fields': {
-                'NAME': f"{month} {year}",  # Название == месяц и год
-                'PROPERTY_1303': d[1],  # Продолжительность звонка
-                'PROPERTY_1299': d[0],  # Привязка к компании
-                'PROPERTY_1305': d[2],  # Количество звонков
-                'PROPERTY_1339': month_codes[month],    # Месяц
-                'PROPERTY_1341': year_codes[year],    # Год
-            }
-        }
-               )
+        print(d)
+        exit()
 
     if new_errors:
         task_text = 'Компания Длительность звонков Количество звонков\n'

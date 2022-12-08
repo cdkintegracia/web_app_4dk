@@ -230,6 +230,11 @@ def rewrite_element(element_data, calls_count, calls_duration):
     property_1369 = list(element_data['PROPERTY_1369'].values())[0]
     property_1375 = list(element_data['PROPERTY_1375'].values())[0]
     property_1377 = list(element_data['PROPERTY_1377'].values())[0]
+    print(property_1359)
+    print(property_1365)
+    print(property_1369)
+    print(property_1375)
+    print(property_1305)
     property_1361 = int(property_1359) + int(property_1365) + int(property_1369) + int(property_1375) + int(property_1305)
     request_data = {
         'IBLOCK_TYPE_ID': 'lists',

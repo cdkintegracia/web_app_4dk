@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/temp.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -348,7 +352,7 @@
       <workItem from="1669874519337" duration="15897000" />
       <workItem from="1669903576960" duration="68000" />
       <workItem from="1669903718116" duration="111000" />
-      <workItem from="1669965047211" duration="51134000" />
+      <workItem from="1669965047211" duration="52240000" />
     </task>
     <servers />
   </component>

@@ -313,6 +313,18 @@ def connect_1c(req: dict):
                     'UF_AUTO_499889542776': req['data']['treatment_id'],
                     'GROUP_ID': '1',
                 }})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '19',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '153',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '133',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '117',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
         else:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task['id'],

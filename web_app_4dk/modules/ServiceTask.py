@@ -370,20 +370,19 @@ def create_service_tasks(dct):
             # Добавление ID сделки к значению dct
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
 
-        if not deals:
-            for deal in quarter_deals:
-                print(deal)
-                employee = deal['ASSIGNED_BY_ID']  # Ответственный
-                if employee not in employees:
+    if not deals:
+        for deal in quarter_deals:
+            employee = deal['ASSIGNED_BY_ID']  # Ответственный
+            if employee not in employees:
 
-                    # Создание ключа с ID сотрудника и значение:
-                    # 0: ID сделки
-                    # 1: Название сделки
-                    # 2: ID компании
-                    employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
-                else:
-                    # Добавление ID сделки к значению dct
-                    employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
+                # Создание ключа с ID сотрудника и значение:
+                # 0: ID сделки
+                # 1: Название сделки
+                # 2: ID компании
+                employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
+            else:
+                # Добавление ID сделки к значению dct
+                employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
 
     # Формирование задач
 

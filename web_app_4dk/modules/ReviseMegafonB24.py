@@ -2,7 +2,7 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 from datetime import datetime
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+b = Bitrix()
 
 
 workbook = openpyxl.load_workbook('Отчет_Мегафон_07-12-2022_17_14_40_685685.xlsx')

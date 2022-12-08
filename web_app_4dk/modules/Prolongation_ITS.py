@@ -25,7 +25,9 @@ def prolongation_its(req):
                                ], 'filter': {
                                    'ASSIGNED_BY_ID': users_id,
                                    '<=CLOSEDATE': date_filter_end,
-                                   '>=CLOSEDATE': date_filter_start
+                                   '>=CLOSEDATE': date_filter_start,
+                                   '!TYPE_ID': 'UC_QQPYF0',         # != Лицензия
+                                    'CATEGORY_ID': '1',
                                }
                                }
                                )
@@ -38,7 +40,9 @@ def prolongation_its(req):
                                ], 'filter': {
                                    'ASSIGNED_BY_ID': users_id,
                                    '<=UF_CRM_1638958630625': date_filter_end,
-                                   '>=UF_CRM_1638958630625': date_filter_start
+                                   '>=UF_CRM_1638958630625': date_filter_start,
+                                   '!TYPE_ID': 'UC_QQPYF0',  # != Лицензия
+                                   'CATEGORY_ID': '1',
                                }
                                }
                                )

@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/temp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +87,28 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.ReviseMegafonB24">
+    <configuration name="вмы" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="flask" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/вмы.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="12312312321" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -177,28 +197,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="вмы" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="flask" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/вмы.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="vddv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -245,6 +243,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.вмы" />
       <item itemvalue="Python.12312312321" />
       <item itemvalue="Python.ChangeResponsible" />
       <item itemvalue="Python.ReviseMegafonB24" />
@@ -352,7 +351,7 @@
       <workItem from="1669874519337" duration="15897000" />
       <workItem from="1669903576960" duration="68000" />
       <workItem from="1669903718116" duration="111000" />
-      <workItem from="1669965047211" duration="52240000" />
+      <workItem from="1669965047211" duration="54385000" />
     </task>
     <servers />
   </component>

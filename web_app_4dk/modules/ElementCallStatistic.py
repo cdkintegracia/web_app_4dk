@@ -248,7 +248,10 @@ def rewrite_element(element_data, calls_duration, calls_count):
         property_1365 = '0'
     else:
         property_1365 = list(element_data['PROPERTY_1365'].values())[0]
-    property_1369 = list(element_data['PROPERTY_1369'].values())[0]
+    if 'PROPERTY_1369' not in element_data:
+        property_1369 = '0'
+    else:
+        property_1369 = list(element_data['PROPERTY_1369'].values())[0]
     if 'PROPERTY_1375' not in element_data:
         property_1375 = '0'
     else:

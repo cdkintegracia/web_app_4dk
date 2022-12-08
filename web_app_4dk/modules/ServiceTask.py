@@ -354,6 +354,7 @@ def create_service_tasks(dct):
     quarter_deals = []
     if dct['quarter'] == 'Y':
         quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
+    print(quarter_deals)
 
     # Разделение ID сделок по ответственному
 
@@ -374,7 +375,7 @@ def create_service_tasks(dct):
 
     for employee in employees:
         if employee not in ['None', None]:
-            print(employee)
+
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
 

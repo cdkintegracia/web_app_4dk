@@ -220,15 +220,39 @@ def create_element(company_id, outgoing_email=False, connect_treatment=False, ca
 
 def rewrite_element(element_data, calls_duration, calls_count):
     property_1303 = calls_duration
-    property_1299 = list(element_data['PROPERTY_1299'].values())[0]
     property_1305 = calls_count
+    if 'PROPERTY_1307' not in element_data:
+        property_1307 = '00:00:00'
+    else:
+        property_1307 = list(element_data['PROPERTY_1307'].values())[0]
+    if 'PROPERTY_1315' not in element_data:
+        property_1315 = ''
+    else:
+        property_1315 = list(element_data['PROPERTY_1315'].values())[0]
+    if 'PROPERTY_1317' not in element_data:
+        property_1317 = ''
+    else:
+        property_1317 = list(element_data['PROPERTY_1317'].values())[0]
+    property_1299 = list(element_data['PROPERTY_1299'].values())[0]
     property_1339 = list(element_data['PROPERTY_1339'].values())[0]
     property_1341 = list(element_data['PROPERTY_1341'].values())[0]
-    property_1355 = list(element_data['PROPERTY_1355'].values())[0]
-    property_1359 = list(element_data['PROPERTY_1359'].values())[0]
-    property_1365 = list(element_data['PROPERTY_1365'].values())[0]
+    if 'PROPERTY_1355' not in element_data:
+        property_1355 = ''
+    else:
+        property_1355 = list(element_data['PROPERTY_1355'].values())[0]
+    if 'PROPERTY_1359' not in element_data:
+        property_1359 = '0'
+    else:
+        property_1359 = list(element_data['PROPERTY_1359'].values())[0]
+    if 'PROPERTY_1365' not in element_data:
+        property_1365 = '0'
+    else:
+        property_1365 = list(element_data['PROPERTY_1365'].values())[0]
     property_1369 = list(element_data['PROPERTY_1369'].values())[0]
-    property_1375 = list(element_data['PROPERTY_1375'].values())[0]
+    if 'PROPERTY_1375' not in element_data:
+        property_1375 = '0'
+    else:
+        property_1375 = list(element_data['PROPERTY_1375'].values())[0]
     if 'PROPERTY_1377' not in element_data:
         property_1377 = ''
     else:
@@ -240,9 +264,12 @@ def rewrite_element(element_data, calls_duration, calls_count):
         'ELEMENT_ID': element_data['ID'],
         'fields': {
             'NAME': element_data['NAME'],  # Название == месяц и год
-            'PROPERTY_1303': property_1303,  # Продолжительность звонка
             'PROPERTY_1299': property_1299,  # Привязка к компании
+            'PROPERTY_1303': property_1303,  # Продолжительность звонка
             'PROPERTY_1305': property_1305,  # Количество звонков
+            'PROPERTY_1307': property_1307,
+            'PROPERTY_1315': property_1315,
+            'PROPERTY_1317': property_1317,
             'PROPERTY_1339': property_1339,  # Месяц
             'PROPERTY_1341': property_1341,  # Год
             'PROPERTY_1355': property_1355,

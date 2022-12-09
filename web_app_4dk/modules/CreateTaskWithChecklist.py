@@ -48,7 +48,7 @@ def create_task_with_checklist(req):
     else:
         task = is_task_exists[0]
         checklist = b.call('task.checklistitem.getlist', [task['id']], raw=True)['result']
-        checklist_titles = list(filter(lambda x: req['company_name'] in x['TITLE'], checklist))
+        checklist_titles = list(filter(lambda x: x['TITLE'], checklist))
         for company in companies_info:
             checklist_text = f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"
             if checklist_text not in checklist_titles:

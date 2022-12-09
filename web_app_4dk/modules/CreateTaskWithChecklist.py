@@ -42,18 +42,21 @@ def create_task_with_checklist(req):
         for company in companies_info:
             b.call('task.checklistitem.add', [task['task']['id'], {'TITLE': f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"}], raw=True)
 
+
         send_bitrix_request('im.notify.system.add', {
             'USER_ID': who_started,
             'MESSAGE': f"Задача Взаимодействие с клиентами создана\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task['task']['id']}/"
         })
+
     else:
         task = is_task_exists[0]
         checklist = b.call('task.checklistitem.getlist', [task['id']], raw=True)['result']
-        checklist_titles = list(filter(lambda x: x['TITLE'], checklist))
+        checklist_titles = list(map(lambda x: x['TITLE'], checklist))
         for company in companies_info:
             checklist_text = f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"
             if checklist_text not in checklist_titles:
                 b.call('task.checklistitem.add', [task['id'], {'TITLE': f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"}], raw=True)
+
         send_bitrix_request('im.notify.system.add', {
             'USER_ID': who_started,
             'MESSAGE': f"Задача Взаимодействие с клиентами обновлена\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task['id']}/"

@@ -12,7 +12,6 @@ b = Bitrix(authentication('Bitrix'))
 def create_task_with_checklist(req):
     current_date = datetime.now()
     user = req['user'].replace('user_', '')
-    print(user)
     deals = b.get_all('crm.deal.list', {
         'filter': {
             'ASSIGNED_BY_ID': user,

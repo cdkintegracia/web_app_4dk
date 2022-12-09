@@ -35,4 +35,4 @@ def create_task_with_checklist(req):
         b.call('task.checklistitem.add', [task['task']['id'], {'TITLE': f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"}], raw=True)
     b.call('im.notify.system.add', {
         'USER_ID': who_started,
-        'MESSAGE': f'Задача с чек-листом поставлена\nССЫЛКА'})
+        'MESSAGE': f'Задача с чек-листом поставлена\nhttps://vc4dk.bitrix24.ru/{task["task"]["link"]}'})

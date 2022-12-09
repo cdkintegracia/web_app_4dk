@@ -35,6 +35,5 @@ def create_task_with_checklist(req):
         b.call('task.checklistitem.add', [task['task']['responsible']['id'], {'TITLE': f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"}], raw=True)
     send_bitrix_request('im.notify.system.add', {
         'USER_ID': who_started,
-        'MESSAGE': f"Задача с чек-листом поставлена\n"
-                   f"https://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task['task']['id']}/"
+        'MESSAGE': f"Задача с чек-листом поставлена\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task['task']['id']}/"
     })

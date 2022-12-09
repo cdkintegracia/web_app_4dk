@@ -28,6 +28,7 @@ def create_task_with_checklist(req):
             'TITLE': 'Взаимодействие с клиентами',
             'CREATED_BY': '173',
             'DEADLINE': deadline_str,
+            'RESPONSIBLE_ID': user,
         }})
     if not is_task_exists:
         task = b.call('tasks.task.add', {

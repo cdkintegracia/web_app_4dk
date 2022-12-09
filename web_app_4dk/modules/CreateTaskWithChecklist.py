@@ -12,7 +12,7 @@ b = Bitrix(authentication('Bitrix'))
 def create_task_with_checklist(req):
     current_date = datetime.now()
     user = req['user'].replace('user_', '')
-    print(req['who_started'])
+    who_started = req['who_started'].replace('user_', '')
     deals = b.get_all('crm.deal.list', {
         'filter': {
             'ASSIGNED_BY_ID': user,
@@ -30,5 +30,9 @@ def create_task_with_checklist(req):
             'CREATED_BY': '173',
             'DEADLINE': deadline_str,
         }})
+    print(task)
     for company in companies_info:
         b.call('task.checklistitem.add', [task['task']['id'], {'TITLE': f"{company['TITLE']} https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/"}], raw=True)
+    b.call('im.notify.system.add', {
+        'USER_ID': who_started,
+        'MESSAGE': f'Задача с чек-листом поставлена\nССЫЛКА'})

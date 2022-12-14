@@ -72,10 +72,6 @@ connect_codes = {
 }
 
 
-allow_id = ['127', '129', '131', '183', '1', '311', '125', '119', '123', '121', '109', '137']
-
-
-
 def get_support_line_name(req):
     lines = client.service.ServiceLineKindRead('Params')[1]['Value']['row']
     if 'data' in req:
@@ -131,8 +127,7 @@ def create_task(req) -> dict:
     support_info = get_name(req['author_id'], req['treatment_id'])
     support_id = get_employee_id(support_info[0])
     responsible_id = '173'
-    if support_id in allow_id:
-        responsible_id = support_id
+    responsible_id = support_id
     support_line_name = get_support_line_name(req)
     if 'ЛК' in support_line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -388,8 +383,7 @@ def connect_1c(req: dict):
     task = send_bitrix_request('tasks.task.get', data)['task']
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
-    if str(connect_user_id) in allow_id:
-        task_user_name = task['responsible']['name']
-        if task_user_name != connect_user_name:
-            data = {'taskId': task['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
-            requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)
+    task_user_name = task['responsible']['name']
+    if task_user_name != connect_user_name:
+        data = {'taskId': task['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
+        requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)

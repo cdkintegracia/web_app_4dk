@@ -143,7 +143,7 @@ def create_task(req) -> dict:
         return new_task['task']
     elif 'Обновить 1С' in support_line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
-            'TITLE': f"1С:Коннект {support_line_name}",
+            'TITLE': f"1С:Коннект ТЛП",
             'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
             'GROUP_ID': '1',
             'CREATED_BY': '173',

@@ -1,5 +1,5 @@
 from calendar import monthrange
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 from os import remove as os_remove
 
@@ -17,18 +17,18 @@ b = Bitrix(webhook)
 
 
 months = {
-    'Январь': 1,
-    'Февраль': 2,
-    'Март': 3,
-    'Апрель': 4,
-    'Май': 5,
-    'Июнь': 6,
-    'Июль': 7,
-    'Август': 8,
-    'Сентябрь': 9,
-    'Октябрь': 10,
-    'Ноябрь': 11,
-    'Декабрь': 12
+    'Январь': '01',
+    'Февраль': '02',
+    'Март': '03',
+    'Апрель': '04',
+    'Май': '05',
+    'Июнь': '06',
+    'Июль': '07',
+    'Август': '08',
+    'Сентябрь': '09',
+    'Октябрь': '10',
+    'Ноябрь': '11',
+    'Декабрь': '12'
 }
 
 
@@ -46,7 +46,117 @@ def get_employee_id(employees: str) -> list:
     return(id_list)
 
 
-def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
+def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
+    deal_types = [
+                    'UC_HT9G9H',    # ПРОФ Земля
+                    'UC_XIYCTV',    # ПРОФ Земля+Помощник
+                    'UC_5T4MAW',    # ПРОФ Земля+Облако+Помощник
+                    'UC_N113M9',    # ПРОФ Земля+Облако
+                    'UC_ZKPT1B',    # ПРОФ Облако
+                    'UC_2SJOEJ',    # ПРОФ Облако+Помощник
+                    'UC_92H9MN',    # Индивидуальный
+                    'UC_7V8HWF',    # Индивидуальный+Облако
+                ]
+
+    if employees == '':     # Если не были выбраны сотрудники в параметрах БП
+
+        # Начались в сентябре 2022 и заканчиваются после сентября 2022
+
+        deals_start_in_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '>BEGINDATE': date_start,
+                    '<BEGINDATE': date_end,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'STAGE_ID': stages
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+        deals_start_before_end_in = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_start,
+                    '<CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'STAGE_ID': stages
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются после сентября 2022
+
+        deals_start_before_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'STAGE_ID': stages
+                }
+            }
+        )
+    else:   # Если были выбраны сотрудники в параметрах БП
+        id_list = get_employee_id(employees)
+
+        # Начались в сентябре 2022 и заканчиваются после сентября 2022
+
+        deals_start_in_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '>BEGINDATE': date_start,
+                    '<BEGINDATE': date_end,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются в сентябре 2022
+
+        deals_start_before_end_in = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_start,
+                    '<CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
+                }
+            }
+        )
+
+        # начались до сентября 2022 и заканчиваются после сентября 2022
+
+        deals_start_before_end_after = b.get_all(
+            'crm.deal.list', {
+                'filter': {
+                    '<BEGINDATE': date_start,
+                    '>CLOSEDATE': date_end,
+                    'UF_CRM_1662365565770': '0',    # Помощник
+                    'TYPE_ID': deal_types,
+                    'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
+                }
+            }
+        )
+
+    return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
+
+
+def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
     """
     Функция, которая вызывается из функции create_task_service
 
@@ -54,6 +164,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
     :param date_end: Дата конца фильтрации сделок
     :param type_deals: Типы сделок для фильтрации
     :param employees: Сотрудники и отделы для фильтрации сделок
+    :param stages: Стадии сделок
     :return: Массив найденных сделок по фильтру (состоит из 3 массивов)
     :return:
     """
@@ -69,6 +180,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_end,
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -82,6 +194,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_start,
                     '<CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -94,6 +207,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '<BEGINDATE': date_start,
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -110,6 +224,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -124,6 +239,7 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '<CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
@@ -137,11 +253,59 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees):
                     '>CLOSEDATE': date_end,
                     'UF_CRM_1662365565770': '1',    # Помощник
                     'ASSIGNED_BY_ID': id_list,
+                    'STAGE_ID': stages
                 }
             }
         )
 
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
+
+
+def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, year, month, current_month_days, task_text, dct):
+    deals = list(filter(lambda x: x['ASSIGNED_BY_ID'] == employee, quarter_deals))
+    for deal in deals:
+
+        company = b.get_all('crm.company.list', {
+            'filter': {
+                'ID': deal['COMPANY_ID']
+            }
+        })[0]
+
+        is_quarter_sub_task_exists = b.get_all('tasks.task.list', {
+            'select': ['ID'],
+            'filter': {'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
+                       'GROUP_ID': '71'
+                       }
+        }
+                                               )
+        if is_quarter_sub_task_exists:
+            continue
+
+        # Создание пунктов чек-листа для созданной задачи на сотрудника
+        b.call('task.checklistitem.add', [
+            task_id, {
+                # <Название компании> <Название сделки> <Ссылка на сделку>
+                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
+                'PARENT_ID': check_list_id,
+            }
+        ], raw=True
+               )
+
+        # Создание подзадачи для основной задачи
+        b.call('tasks.task.add', {
+            'fields': {
+                'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
+                'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                'RESPONSIBLE_ID': employee,
+                'ALLOW_CHANGE_DEADLINE': 'N',
+                'GROUP_ID': '71',
+                'DESCRIPTION': f"{task_text}\n",
+                'PARENT_ID': task_id,
+                'UF_CRM_TASK': [f"CO_{company['ID']}", f"D_{deal['ID']}"],
+                'CREATED_BY': '173',
+            }
+        }
+               )
 
 
 def create_service_tasks(dct):
@@ -159,7 +323,8 @@ def create_service_tasks(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
-    task_text = b.get_all('tasks.task.list', {'filter': {'ID': '76295'}})[0]['description']
+    task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description']
+    task_text = task_text.replace('[LIST]', '').replace('/[LIST]', '')
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
     type_deals = [
                     'UC_XIYCTV',  # ПРОФ Земля + Помощник
@@ -168,31 +333,27 @@ def create_service_tasks(dct):
                     'UC_81T8ZR',  # АОВ
                     'UC_SV60SP',  # АОВ + Облако
                 ]
+    stage_ids = [
+        'C1:NEW',
+        'C1:UC_0KJKTY',
+        'C1:UC_3J0IH6',
+    ]
 
-    year = int(dct['year'])
-    month = str(months[dct['month']])   # Месяц из параметра, преобразованный в число
-    month_end = str(months[dct['month']] + 1)   # Месяц начала фильтрации
-
-    if month == '1':    # Месяц конца фильтрации
-        month_start = '12'  # Если месяц январь, то предыдущий - декабрь
-    else:
-        month_start = str(months[dct['month']] - 1)
-    day_start = monthrange(year, int(month_start))[1]   # День начала фильтрации
-    current_month_days = monthrange(year, int(month))[1]    # Количество дней в выбранном месяце
-
-    if len(month_start) == 1:     # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-        month_start = '0' + month_start
-    if len(month_end) == 1:
-        month_end = '0' + month_end    # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-    if len(month) == 1:  # Если месяц состоит из одной цифры, тогда он приводится к двухзначному формату
-        month = '0' + month
-
-    date_start = f'{year}-{month_start}-{day_start}'
-    date_end = f'{year}-{month_end}-01'
+    year = dct['year']
+    month = months[dct['month']]
+    date_start = datetime.strptime(f'01-{month}-{year}', '%d-%m-%Y') - timedelta(days=1)
+    date_end = datetime.strftime(date_start + timedelta(days=32), '%Y-%m') + '-01'
+    date_start = datetime.strftime(date_start, '%Y-%m-%d')
+    if month[0] == '0':
+        month.replace('0', '')
+    current_month_days = monthrange(int(year), int(month))[1]  # Количество дней в выбранном месяце
 
     # Получение массива сделок
 
-    deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'])
+    deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
+    quarter_deals = []
+    if dct['quarter'] == 'Y':
+        quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
 
     # Разделение ID сделок по ответственному
 
@@ -209,6 +370,20 @@ def create_service_tasks(dct):
             # Добавление ID сделки к значению dct
             employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
 
+    if not deals:
+        for deal in quarter_deals:
+            employee = deal['ASSIGNED_BY_ID']  # Ответственный
+            if employee not in employees:
+
+                # Создание ключа с ID сотрудника и значение:
+                # 0: ID сделки
+                # 1: Название сделки
+                # 2: ID компании
+                employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
+            else:
+                # Добавление ID сделки к значению dct
+                employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
+
     # Формирование задач
 
     for employee in employees:
@@ -224,6 +399,7 @@ def create_service_tasks(dct):
                            }
             }
                                             )
+            quarter_check_list_flag = False
             if not is_main_task_exists:
                 task = b.call('tasks.task.add', {
                     'fields': {
@@ -238,13 +414,49 @@ def create_service_tasks(dct):
                 }
                               )
                 main_task = task['task']['id']
+                quarter_check_list = ''
+                if dct['quarter'] == 'Y':
+                    quarter_check_list = b.call('task.checklistitem.add', [
+                        main_task, {
+                            'TITLE': 'Квартальные', 'PARENT_ID': main_task,
+                        }
+                    ], raw=True
+                                                )['result']
+                    quarter_check_list_flag = True
+
+                main_check_list = b.call('task.checklistitem.add', [
+                    main_task, {
+                        'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                    }
+                ], raw=True
+                                            )['result']
+
             else:
                 main_task = is_main_task_exists[0]['id']
+                check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']
+                for check_list in check_lists:
+                    if check_list['TITLE'] == 'Ежемесячные' or check_list['TITLE'] == 'BX_CHECKLIST_1':
+                        main_check_list = check_list['ID']
+                    elif check_list['TITLE'] == 'Квартальные':
+                        quarter_check_list = check_list['ID']
+                        quarter_check_list_flag = True
+
+            if quarter_check_list_flag is False and dct['quarter'] == 'Y':
+                quarter_check_list = b.call('task.checklistitem.add', [
+                    main_task, {
+                        'TITLE': 'Квартальные', 'PARENT_ID': main_task,
+                    }
+                ], raw=True
+                                            )['result']
+
+            if dct['quarter'] == 'Y' and dct['month'] in ['Декабрь', 'Март', 'Июнь', 'Сентябрь']:
+                create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
+                                           current_month_days, task_text, dct)
 
         # Перебор значений выбранного выше ключа
 
         for value in employees[employee]:
-            if employee in [None, 'None']:
+            if employee in [None, 'None'] or not deals:
                 continue
 
             company = b.get_all('crm.company.list', {
@@ -261,33 +473,33 @@ def create_service_tasks(dct):
                            }
             }
                                        )
-            if is_sub_task_exists:
-                continue
+            if not is_sub_task_exists:
 
-            # Создание пунктов чек-листа для созданной задачи на сотрудника
-            b.call('task.checklistitem.add', [
-                main_task, {
-                    # <Название компании> <Название сделки> <Ссылка на сделку>
-                    'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                }
-            ], raw=True
-                                )
+                # Создание пунктов чек-листа для созданной задачи на сотрудника
+                b.call('task.checklistitem.add', [
+                    main_task, {
+                        # <Название компании> <Название сделки> <Ссылка на сделку>
+                        'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
+                        'PARENT_ID': main_check_list,
+                    }
+                ], raw=True
+                                    )
 
-            # Создание подзадачи для основной задачи
-            b.call('tasks.task.add', {
-                'fields': {
-                    'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
-                    'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
-                    'RESPONSIBLE_ID': employee,
-                    'ALLOW_CHANGE_DEADLINE': 'N',
-                    'GROUP_ID': '71',
-                    'DESCRIPTION': f"{task_text}\n",
-                    'PARENT_ID': main_task,
-                    'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
-                    'CREATED_BY': '173',
+                # Создание подзадачи для основной задачи
+                b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                        'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                        'RESPONSIBLE_ID': employee,
+                        'ALLOW_CHANGE_DEADLINE': 'N',
+                        'GROUP_ID': '71',
+                        'DESCRIPTION': f"{task_text}\n",
+                        'PARENT_ID': main_task,
+                        'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
+                        'CREATED_BY': '173',
+                    }
                 }
-            }
-                          )
+                              )
 
 
         # Защита от дублирования задач

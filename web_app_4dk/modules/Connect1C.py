@@ -1,4 +1,6 @@
 import json
+import pytz
+from datetime import datetime, timedelta
 
 import requests
 from fast_bitrix24 import Bitrix
@@ -70,10 +72,6 @@ connect_codes = {
 }
 
 
-allow_id = ['127', '129', '131', '183', '1', '311', '125', '119', '123', '121']
-
-
-
 def get_support_line_name(req):
     lines = client.service.ServiceLineKindRead('Params')[1]['Value']['row']
     if 'data' in req:
@@ -91,6 +89,7 @@ def create_task(req) -> dict:
     # Создание задачи с первым сообщением
     data = load_logs()
     task_text = ''
+    data = list(filter(lambda x: x['treatment_id'] == req['treatment_id'], data))
     for event in data[::-1]:
         if event['treatment_id'] == req['treatment_id'] and event['message_type'] != 80:
             task_text = event['text']
@@ -128,8 +127,7 @@ def create_task(req) -> dict:
     support_info = get_name(req['author_id'], req['treatment_id'])
     support_id = get_employee_id(support_info[0])
     responsible_id = '173'
-    if support_id in allow_id:
-        responsible_id = support_id
+    responsible_id = support_id
     support_line_name = get_support_line_name(req)
     if 'ЛК' in support_line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -141,6 +139,17 @@ def create_task(req) -> dict:
             'UF_CRM_TASK': [f"CO_{company_id}"],
             'UF_AUTO_499889542776': req['treatment_id'],
             'STAGE_ID': '65'
+        }})
+        return new_task['task']
+    elif 'Обновить 1С' in support_line_name:
+        new_task = send_bitrix_request('tasks.task.add', {'fields': {
+            'TITLE': f"1С:Коннект ТЛП",
+            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
+            'GROUP_ID': '1',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': responsible_id,
+            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_AUTO_499889542776': req['treatment_id'],
         }})
         return new_task['task']
     new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -180,6 +189,18 @@ def load_logs():
         for line in file:
             logs.append(json.loads(line))
     return logs
+
+
+def clear_logs():
+    logs = load_logs()
+    utc = pytz.UTC
+    logs = list(sorted(logs, key=lambda x: dateutil.parser.isoparse(x['message_time'])))
+    current_date = utc.localize(datetime.now() - timedelta(days=14))
+    filtred_logs = list(filter(lambda x: dateutil.parser.isoparse(x['message_time']) > current_date, logs))
+    with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt', 'w') as file:
+        for log in filtred_logs:
+            json.dump(log, file, ensure_ascii=False)
+            file.write('\n')
 
 
 def time_handler(time: str) -> str:
@@ -280,6 +301,25 @@ def connect_1c(req: dict):
                     'GROUP_ID': '7',
                     'STAGE_ID': '65'
                 }})
+        elif 'Обновить 1С' in support_line_name:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task['id'],
+                'fields': {
+                    'UF_AUTO_499889542776': req['data']['treatment_id'],
+                    'GROUP_ID': '1',
+                }})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '19',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '153',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '133',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': '117',
+                'MESSAGE': f'Задача 1С:Коннект https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task["id"]}/ была перведена {get_name(req["author_id"])[0]} на службу техподдержки'})
         else:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task['id'],
@@ -297,6 +337,7 @@ def connect_1c(req: dict):
         authors = {}
         data = load_logs()
         event_count = 0
+        data = list(filter(lambda x: x['treatment_id'] == treatment_id, data))
         for event in data:
             if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
                 event_count += 1
@@ -311,6 +352,9 @@ def connect_1c(req: dict):
         if 'ЛК' in support_line_name:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'GROUP_ID': '7', 'STAGE_ID': '67', 'STATUS': '5'}})
+        elif 'Обновить 1С' in support_line_name:
+            send_bitrix_request('tasks.task.update',
+                                {'taskId': task['id'], 'fields': {'GROUP_ID': '1', 'STATUS': '5', 'STAGE_ID': '15'}})
         else:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
@@ -339,8 +383,7 @@ def connect_1c(req: dict):
     task = send_bitrix_request('tasks.task.get', data)['task']
     connect_user_name = get_name(req['author_id'])[0]
     connect_user_id = get_employee_id(connect_user_name)
-    if str(connect_user_id) in allow_id:
-        task_user_name = task['responsible']['name']
-        if task_user_name != connect_user_name:
-            data = {'taskId': task['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
-            requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)
+    task_user_name = task['responsible']['name']
+    if task_user_name != connect_user_name:
+        data = {'taskId': task['id'], 'fields': {'RESPONSIBLE_ID': connect_user_id, 'AUDITORS': []}}
+        requests.post(url=f"{authentication('Bitrix')}tasks.task.update", json=data)

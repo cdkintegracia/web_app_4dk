@@ -5,6 +5,7 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.ElementCallStatistic import rewrite_element
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -35,8 +36,6 @@ def rewrite_call_statistic(month, year):
         '2023': '2241'
     }
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
-    for element in elements:
-        b.call('lists.element.delete', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'ELEMENT_ID': element['ID']})
     companies = b.get_all('crm.company.list', {'select': ['TITLE']})
 
     errors = []
@@ -77,20 +76,10 @@ def rewrite_call_statistic(month, year):
             data.append([value, error[1], error[2]])
 
     for d in data:
-        b.call('lists.element.add', {
-            'IBLOCK_TYPE_ID': 'lists',
-            'IBLOCK_ID': '175',
-            'ELEMENT_CODE': time(),
-            'fields': {
-                'NAME': f"{month} {year}",  # Название == месяц и год
-                'PROPERTY_1303': d[1],  # Продолжительность звонка
-                'PROPERTY_1299': d[0],  # Привязка к компании
-                'PROPERTY_1305': d[2],  # Количество звонков
-                'PROPERTY_1339': month_codes[month],    # Месяц
-                'PROPERTY_1341': year_codes[year],    # Год
-            }
-        }
-               )
+        for element in elements:
+            company_id = list(element['PROPERTY_1299'].values())[0]
+            if d[0] == company_id:
+                rewrite_element(element, d[1], d[2])
 
     if new_errors:
         task_text = 'Компания Длительность звонков Количество звонков\n'

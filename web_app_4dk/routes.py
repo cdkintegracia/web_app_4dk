@@ -29,6 +29,7 @@ from web_app_4dk.modules.CreateRpdReport import create_rpd_report
 from web_app_4dk.modules.CreateCompaniesActivityReport import create_companies_activity_report
 from web_app_4dk.modules.MegafonCallsHandler import megafon_calls_handler
 from web_app_4dk.modules.CreateInfoSmartProcess import create_info_smart_process
+from web_app_4dk.modules.SeminarDataHandler import seminar_data_handler
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -121,6 +122,15 @@ def main_page():
             newsub_file.save('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
             megafon_calls_handler('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
+        elif request.files['registrants_file'] and request.files['questionnaire_file'] and request.form.get('event_id'):
+            registrants_file = request.files['registrants_file']
+            questionnaire_file = request.files['questionnaire_file']
+            event_id = request.form.get('event_id')
+            registrants_file.save('/root/web_app_4dk/web_app_4dk/seminar_registrants.xlsx')
+            questionnaire_file.save('/root/web_app_4dk/web_app_4dk/seminar_questionnaire.xlsx')
+            seminar_data_handler(event_id, '/root/web_app_4dk/web_app_4dk/seminar_registrants.xlsx', '/root/web_app_4dk/web_app_4dk/seminar_questionnaire.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/seminar_registrants.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/seminar_questionnaire.xlsx')
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

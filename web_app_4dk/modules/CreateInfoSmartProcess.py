@@ -15,7 +15,7 @@ def create_info_smart_process(req):
     })[0]
     element_company = list(element_info['PROPERTY_1557'].values())[0]
     element_contact = list(element_info['PROPERTY_1559'].values())[0]
-    element_comment = f"Проблемы и пожелания: {list(element_info['PROPERTY_1559'].values())[0]}\n" \
+    element_comment = f"Проблемы и пожелания: {list(element_info['PROPERTY_1539'].values())[0]}\n" \
                       f"Смена ЭЦП: {list(element_info['PROPERTY_1553'].values())[0]}\n" \
                       f"Долги по ЭДО: {list(element_info['PROPERTY_1555'].values())[0]}\n" \
                       f"Опрос по КС: {list(element_info['PROPERTY_1561'].values())[0]['TEXT'].replace('<br>', ' ')}\n"

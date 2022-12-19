@@ -144,9 +144,9 @@ def get_company_contact_by_surname(company_id, fio):
                 return contact['ID']
 
 
-def seminar_data_handler():
-    registrants_data = read_file('seminar_registrants.xlsx')
-    questionnaire_data = read_file('seminar_questionnaire.xlsx')
+def seminar_data_handler(event_id, registrants_file, questionnaire_file):
+    registrants_data = read_file(registrants_file)
+    questionnaire_data = read_file(questionnaire_file)
     companies = b.get_all('crm.company.list', {'select': ['*', 'UF_*', 'EMAIL', 'PHONE']})
     contacts = b.get_all('crm.contact.list', {'select': ['*', 'UF_*', 'EMAIL', 'PHONE']})
     for registrant in registrants_data:
@@ -203,7 +203,7 @@ def seminar_data_handler():
             'ELEMENT_CODE': time(),
             'FIELDS': {
                 'NAME': registrant['ФИО'],
-                'PROPERTY_399': '278943',       # Мероприятие (ссылка)
+                'PROPERTY_399': event_id,
                 'CREATED_BY': '173',
                 'PROPERTY_401': registrant['Контакт ID'],
                 'PROPERTY_403': registrant['Компания ID'],
@@ -215,5 +215,3 @@ def seminar_data_handler():
                 'PROPERTY_1521': registrant['Ответы'],
                 'PROPERTY_1533': registrant['E-mail']
             }})
-
-seminar_data_handler()

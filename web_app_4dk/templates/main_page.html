@@ -45,6 +45,9 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
       Обновить статистику звонков
     </button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Обработка данных семинара
+    </button>
     </div>
     </div>
     <!-- Модальное окно "Сверка по отчетности"-->
@@ -116,6 +119,30 @@
       </div>
     </div>
   </div>
+    <!-- Модальное окно "Обработка данных семинара"-->
+    <div class="modal fade" id="SeminarDataHandlerModal" tabindex="-1" aria-labelledby="SeminarDataHandlerLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="SeminarDataHandlerLabel">Обработка данных семинара</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <div class="input-block">
+            .xlsx файл, в котором есть колонка "Компания" c названиями компаний
+            <input name="change_responsible_file" type="file" accept=".xlsx">
+            <div class="input-block">
+              ID нового ответсвенного
+              <input name="new_responsible" type="text">
+          </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" value="Сменить" name="submit_button">
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
   <!-- Модальное окно "Обработка статистики Мегафона"-->
   <div class="modal fade" id="MegafonCallsHandlerModal" tabindex="-1" aria-labelledby="MegafonCallsHandlerLabel" aria-hidden="true">
     <div class="modal-dialog">

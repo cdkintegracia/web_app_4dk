@@ -98,32 +98,29 @@ def login():
 def main_page():
     if current_user != 1:
         return redirect(url_for('login'))
-    try:
-        if request.method == 'POST' and request.form.get('submit_button'):
-            if request.files['new_call_statistic_file']:
-                new_call_statistic_file = request.files['new_call_statistic_file']
-                new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
-                month = request.form.get('month')
-                year = request.form.get('year')
-                rewrite_call_statistic(month, year)
-                os.remove('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
-            elif request.files['revise_accounting_deals_file']:
-                revise_accounting_deals_file = request.files['revise_accounting_deals_file']
-                revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-                revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-                os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
-            elif request.files['newsub_file']:
-                newsub_file = request.files['newsub_file']
-                newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
-                revise_new_sub('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
-                os.remove('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
-            elif request.files['megafon_file']:
-                newsub_file = request.files['megafon_file']
-                newsub_file.save('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
-                megafon_calls_handler('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
-                os.remove('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
-    except:
-        pass
+    if request.method == 'POST' and request.form.get('submit_button'):
+        if request.files['new_call_statistic_file']:
+            new_call_statistic_file = request.files['new_call_statistic_file']
+            new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
+            month = request.form.get('month')
+            year = request.form.get('year')
+            rewrite_call_statistic(month, year)
+            os.remove('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
+        elif request.files['revise_accounting_deals_file']:
+            revise_accounting_deals_file = request.files['revise_accounting_deals_file']
+            revise_accounting_deals_file.save('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+            revise_accounting_deals('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/revise_accounting_deals_file.xlsx')
+        elif request.files['newsub_file']:
+            newsub_file = request.files['newsub_file']
+            newsub_file.save('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
+            revise_new_sub('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/newsub_file.xlsx')
+        elif request.files['megafon_file']:
+            newsub_file = request.files['megafon_file']
+            newsub_file.save('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
+            megafon_calls_handler('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/megafon_file.xlsx')
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

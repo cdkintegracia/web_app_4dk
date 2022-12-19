@@ -92,7 +92,7 @@ def create_task(req) -> dict:
     data = list(filter(lambda x: x['treatment_id'] == req['treatment_id'], data))
     for event in data[::-1]:
         if event['treatment_id'] == req['treatment_id'] and event['message_type'] != 80:
-            task_text = event['text']
+            task_text = get_event_info(event)
             break
 
     # Проверка на наличие хотя бы одного русского символа в сообщении

@@ -196,7 +196,8 @@ def seminar_data_handler(event_id, registrants_file, questionnaire_file):
             if potential_client:
                 registrant['Потенциальный'] = potential_client
 
-
+        print('ok')
+        continue
         b.call('lists.element.add', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '49',

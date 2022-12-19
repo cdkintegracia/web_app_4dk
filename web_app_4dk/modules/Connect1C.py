@@ -368,6 +368,7 @@ def connect_1c(req: dict):
         ufCrmTask = task['ufCrmTask']
         company_id = list(filter(lambda x: 'CO' in x, ufCrmTask))[0].replace('CO_', '')
         update_element(company_id=company_id, connect_treatment=True)
+        clear_logs()
 
     # Смена ответственного
     data = {

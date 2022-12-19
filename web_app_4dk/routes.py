@@ -28,6 +28,7 @@ from web_app_4dk.modules.ReviseNewSub import revise_new_sub
 from web_app_4dk.modules.CreateRpdReport import create_rpd_report
 from web_app_4dk.modules.CreateCompaniesActivityReport import create_companies_activity_report
 from web_app_4dk.modules.MegafonCallsHandler import megafon_calls_handler
+from web_app_4dk.modules.CreateInfoSmartProcess import create_info_smart_process
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -44,6 +45,7 @@ custom_webhooks = {
     'create_line_consultation_report': create_line_consultation_report,
     'create_rpd_report': create_rpd_report,
     'create_companies_activity_report': create_companies_activity_report,
+    'create_info_smart_process': create_info_smart_process,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

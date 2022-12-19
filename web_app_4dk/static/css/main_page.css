@@ -70,6 +70,9 @@ li {
 .input-block {
     display: flex;
     flex-direction: column;
+}
+
+.input-block input{
     margin-bottom: 25px;
 }
 

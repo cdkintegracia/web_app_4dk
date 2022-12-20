@@ -30,6 +30,7 @@ from web_app_4dk.modules.CreateCompaniesActivityReport import create_companies_a
 from web_app_4dk.modules.MegafonCallsHandler import megafon_calls_handler
 from web_app_4dk.modules.CreateInfoSmartProcess import create_info_smart_process
 from web_app_4dk.modules.SeminarDataHandler import seminar_data_handler
+from web_app_4dk.modules.FNSTaskComplete import fns_task_complete
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -47,6 +48,7 @@ custom_webhooks = {
     'create_rpd_report': create_rpd_report,
     'create_companies_activity_report': create_companies_activity_report,
     'create_info_smart_process': create_info_smart_process,
+    'fns_task_complete': fns_task_complete,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

@@ -31,6 +31,7 @@ from web_app_4dk.modules.MegafonCallsHandler import megafon_calls_handler
 from web_app_4dk.modules.CreateInfoSmartProcess import create_info_smart_process
 from web_app_4dk.modules.SeminarDataHandler import seminar_data_handler
 from web_app_4dk.modules.FNSTaskComplete import fns_task_complete
+from web_app_4dk.modules.CreateVacation import create_vacation
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -133,6 +134,11 @@ def main_page():
             seminar_data_handler(event_id, '/root/web_app_4dk/web_app_4dk/seminar_registrants.xlsx', '/root/web_app_4dk/web_app_4dk/seminar_questionnaire.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/seminar_registrants.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/seminar_questionnaire.xlsx')
+        elif request.files['vacation_file']:
+            vacation_file = request.files['vacation_file']
+            vacation_file.save('/root/web_app_4dk/web_app_4dk/vacation_file.xlsx')
+            create_vacation('/root/web_app_4dk/web_app_4dk/vacation_file.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/vacation_file.xlsx')
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

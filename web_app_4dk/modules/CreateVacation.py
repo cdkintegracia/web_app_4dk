@@ -8,8 +8,8 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
-def read_xlsx_file() -> dict:
-    workbook = openpyxl.load_workbook('График ЧДИ.xlsx')
+def read_xlsx_file(filename) -> dict:
+    workbook = openpyxl.load_workbook(filename)
     worksheet = workbook.active
     max_rows = worksheet.max_row
     max_columns = worksheet.max_column
@@ -62,8 +62,8 @@ def find_employee_id(users, fio):
         }})
 
 
-def create_vacation():
-    file_data = read_xlsx_file()
+def create_vacation(filename):
+    file_data = read_xlsx_file(filename)
     users = b.get_all('user.get')
     for fio in file_data:
         employee_id = find_employee_id(users, fio)
@@ -87,6 +87,3 @@ def create_vacation():
                     'old_end': '',
                 }
             })
-
-
-create_vacation()

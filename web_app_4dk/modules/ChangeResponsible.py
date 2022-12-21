@@ -24,8 +24,6 @@ def read_xlsx_file(file_name) -> list:
 
 
 def change_responsible(new_responsible, file_name):
-    print(new_responsible, file_name)
-    exit()
     company_names = read_xlsx_file(file_name)
     companies_info = b.get_all('crm.company.list', {'filter': {'TITLE': company_names}})
     for company in companies_info:

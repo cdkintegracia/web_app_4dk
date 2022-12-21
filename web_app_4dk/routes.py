@@ -32,6 +32,7 @@ from web_app_4dk.modules.CreateInfoSmartProcess import create_info_smart_process
 from web_app_4dk.modules.SeminarDataHandler import seminar_data_handler
 from web_app_4dk.modules.FNSTaskComplete import fns_task_complete
 from web_app_4dk.modules.CreateVacation import create_vacation
+from web_app_4dk.modules.ChangeResponsible import change_responsible
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -139,6 +140,13 @@ def main_page():
             vacation_file.save('/root/web_app_4dk/web_app_4dk/vacation_file.xlsx')
             create_vacation('/root/web_app_4dk/web_app_4dk/vacation_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/vacation_file.xlsx')
+        elif request.files['change_responsible_file'] and request.form.get('new_responsible'):
+            new_responsible = request.form.get('new_responsible')
+            change_responsible_file = request.files['change_responsible_file']
+            change_responsible_file.save('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+            change_responsible(new_responsible, '/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

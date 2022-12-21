@@ -33,6 +33,7 @@ from web_app_4dk.modules.SeminarDataHandler import seminar_data_handler
 from web_app_4dk.modules.FNSTaskComplete import fns_task_complete
 from web_app_4dk.modules.CreateVacation import create_vacation
 from web_app_4dk.modules.ChangeResponsible import change_responsible
+from web_app_4dk.modules.CompleteDocumentFlowTask import complete_document_flow_task
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -51,6 +52,7 @@ custom_webhooks = {
     'create_companies_activity_report': create_companies_activity_report,
     'create_info_smart_process': create_info_smart_process,
     'fns_task_complete': fns_task_complete,
+    'complete_document_flow_task': complete_document_flow_task,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

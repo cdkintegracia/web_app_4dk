@@ -34,6 +34,7 @@ from web_app_4dk.modules.FNSTaskComplete import fns_task_complete
 from web_app_4dk.modules.CreateVacation import create_vacation
 from web_app_4dk.modules.ChangeResponsible import change_responsible
 from web_app_4dk.modules.CompleteDocumentFlowTask import complete_document_flow_task
+from web_app_4dk.modules.CreateTaskWithChecklist import create_task_with_checklist
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -53,6 +54,7 @@ custom_webhooks = {
     'create_info_smart_process': create_info_smart_process,
     'fns_task_complete': fns_task_complete,
     'complete_document_flow_task': complete_document_flow_task,
+    'create_task_with_checklist': create_task_with_checklist
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

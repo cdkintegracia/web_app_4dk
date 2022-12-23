@@ -166,4 +166,3 @@ def edo_info_handler(month: str, year: str, filename: str):
         'RESPONSIBLE_ID': '173'
     }})
 
-edo_info_handler('Октябрь', '2022', '11-2022.xlsx')

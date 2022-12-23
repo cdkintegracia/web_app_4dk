@@ -35,6 +35,7 @@ from web_app_4dk.modules.CreateVacation import create_vacation
 from web_app_4dk.modules.ChangeResponsible import change_responsible
 from web_app_4dk.modules.CompleteDocumentFlowTask import complete_document_flow_task
 from web_app_4dk.modules.CreateTaskWithChecklist import create_task_with_checklist
+from web_app_4dk.modules.EdoInfoHandler import edo_info_handler
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -150,6 +151,13 @@ def main_page():
             change_responsible_file.save('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
             change_responsible(new_responsible, '/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
+        elif request.files['edo_info_handler_file']:
+            edo_info_handler_file = request.files['edo_info_handler_file']
+            month = request.form.get('month')
+            year = request.form.get('year')
+            edo_info_handler_file.save('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
+            edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
+            os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
     return render_template('main_page.html', web_app_logs=read_logs())
 

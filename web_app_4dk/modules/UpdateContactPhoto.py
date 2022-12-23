@@ -10,6 +10,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def update_contact_photo(req: dict):
+    return
     contact_id = req['data[FIELDS][ID]']
     data = {
         'select': ['PHOTO'],

@@ -379,7 +379,7 @@ def connect_1c(req: dict):
             {'UF_AUTO_499889542776': req['treatment_id']}
     }
     task = send_bitrix_request('tasks.task.list', data)['tasks']
-    if not task or task['group_id'] == '11':
+    if not task or task[0]['group_id'] == '11':
         return
     else:
         task = task[0]

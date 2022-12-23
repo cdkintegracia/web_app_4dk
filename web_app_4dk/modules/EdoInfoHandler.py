@@ -1,4 +1,7 @@
 from time import time
+import os
+import base64
+from datetime import datetime
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -48,10 +51,8 @@ def read_xlsx(filename: str) -> list:
                     continue
                 temp.setdefault(titles[column], cell_value)
         if temp:
-            '''
             if temp['Сумма для клиента'] in ignore_client_values and temp['Сумма пакетов по владельцу'] in ignore_package_count:
                 continue
-            '''
             data.append(temp)
 
     return data
@@ -75,6 +76,19 @@ def create_edo_list_element(month:str, year:str, data:dict):
         'PROPERTY_1579': data['Владелец ИТС'] if 'Владелец ИТС' in data else '',
         'PROPERTY_1581': data['Ответственный за ИТС'] if 'Ответственный за ИТС' in data else ''
     }})
+
+
+def upload_file_to_b24(report_name):
+    bitrix_folder_id = '268033'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    return upload_report["DETAIL_URL"]
 
 
 def edo_info_handler(month: str, year: str, filename: str):
@@ -124,13 +138,32 @@ def edo_info_handler(month: str, year: str, filename: str):
 
         #create_edo_list_element(month, year, data)
 
-    not_found_titles = list(not_found[0].keys())
-    workbook = openpyxl.Workbook()
-    worksheet = workbook.active
-    worksheet.append(not_found_titles)
-    for row in not_found:
-        worksheet.append(list(row.values()))
-    file_name = f"Ошибки за {month} {year}.xlsx"
-    workbook.save(file_name)
+    task_descriprtion = f'Данные за {month} {year} файла по ЭДО загружены '
 
-edo_info_handler('Ноябрь', '2022', '11-2022.xlsx')
+    if not_found:
+        workbook = openpyxl.Workbook()
+        worksheet = workbook.active
+        not_found_titles = list(not_found[0].keys())
+        worksheet.append(not_found_titles)
+        for row in not_found:
+            worksheet.append(list(row.values()))
+        report_created_time = datetime.now()
+        report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
+        report_name = f"Ошибки_по_ЭДО_за_{month}_{year}_{report_name_time}.xlsx"
+        report_name = f'{report_name}'.replace(' ', '_')
+        workbook.save(report_name)
+        file_url = upload_file_to_b24(report_name)
+        os.remove(report_name)
+        task_descriprtion += f'не полностью\nОтчет по ошибкам: {file_url}'
+    else:
+        task_descriprtion += 'полностью'
+
+    b.call('tasks.task.add', {'fields': {
+        'TITLE': f"Файл ЭДО обработан",
+        'DESCRIPTION': task_descriprtion,
+        'GROUP_ID': '13',
+        'CREATED_BY': '173',
+        'RESPONSIBLE_ID': '173'
+    }})
+
+edo_info_handler('Октябрь', '2022', '11-2022.xlsx')

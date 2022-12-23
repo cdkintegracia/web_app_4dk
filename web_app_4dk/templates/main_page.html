@@ -24,6 +24,9 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ChangeResponsibleModal">
           Смена ответственного
         </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EdoInfoHandlerModal">
+          Загрузка файла ЭДО
+        </button>
       </div>
       <div class="logs_block" align="center">
       <h2>Логи веб-приложения</h2>
@@ -121,6 +124,27 @@
       </div>
     </div>
   </div>
+    <!-- Модальное окно "Загрузка файла ЭДО"-->
+    <div class="modal fade" id="EdoInfoHandlerModal" tabindex="-1" aria-labelledby="EdoInfoHandlerLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="EdoInfoHandlerLabel">Загрузка файла ЭДО</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <div class="input-block">
+            .xlsx файл ЭДО
+            <input name="edo_info_handler_file" type="file" accept=".xlsx">
+          </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" value="Сменить" name="submit_button">
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Модальное окно "Создание отпуска"-->
     <div class="modal fade" id="CreateVacationModal" tabindex="-1" aria-labelledby="CreateVacationLabel" aria-hidden="true">
       <div class="modal-dialog">

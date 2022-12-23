@@ -192,6 +192,7 @@ def load_logs():
 
 
 def clear_logs():
+    return
     logs = load_logs()
     utc = pytz.UTC
     logs = list(sorted(logs, key=lambda x: dateutil.parser.isoparse(x['message_time'])))

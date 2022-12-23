@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/UpdateContactPhoto.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/UpdateContactPhoto.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/EdoInfoHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/EdoInfoHandler.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +87,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.fs">
+  <component name="RunManager" selected="Python.EdoInfoHandler">
     <configuration name="CreateTaskWithChecklist" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -229,8 +230,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.fs" />
         <item itemvalue="Python.EdoInfoHandler" />
+        <item itemvalue="Python.fs" />
         <item itemvalue="Python.temp" />
         <item itemvalue="Python.CreateTaskWithChecklist" />
         <item itemvalue="Python.ReviseMegafonB24" />
@@ -349,6 +350,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/web_app_4dk$EdoInfoHandler.coverage" NAME="EdoInfoHandler Coverage Results" MODIFIED="1671783462484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$EdoInfoHandler.coverage" NAME="EdoInfoHandler Coverage Results" MODIFIED="1671798796919" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

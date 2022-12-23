@@ -48,8 +48,10 @@ def read_xlsx(filename: str) -> list:
                     continue
                 temp.setdefault(titles[column], cell_value)
         if temp:
+            '''
             if temp['Сумма для клиента'] in ignore_client_values and temp['Сумма пакетов по владельцу'] in ignore_package_count:
                 continue
+            '''
             data.append(temp)
 
     return data
@@ -120,7 +122,7 @@ def edo_info_handler(month: str, year: str, filename: str):
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
                 data.setdefault('Регномер', company_its[0]['UF_CRM_1640523562691'])
 
-        create_edo_list_element(month, year, data)
+        #create_edo_list_element(month, year, data)
 
     not_found_titles = list(not_found[0].keys())
     workbook = openpyxl.Workbook()

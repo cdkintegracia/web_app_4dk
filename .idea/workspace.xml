@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/EdoInfoHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/EdoInfoHandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/График ЧДА.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/График ЧДИ.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/Connect1C.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/static/logs/connect.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -350,5 +349,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/web_app_4dk$EdoInfoHandler.coverage" NAME="EdoInfoHandler Coverage Results" MODIFIED="1671783462484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

@@ -152,7 +152,6 @@ def main_page():
             change_responsible(new_responsible, '/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/change_responsible_file.xlsx')
         elif request.files['edo_info_handler_file']:
-            print('fdssssssssssssssssss')
             edo_info_handler_file = request.files['edo_info_handler_file']
             month = request.form.get('month')
             year = request.form.get('year')

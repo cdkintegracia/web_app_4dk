@@ -136,7 +136,7 @@ def edo_info_handler(month: str, year: str, filename: str):
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
                 data.setdefault('Регномер', company_its[0]['UF_CRM_1640523562691'])
 
-        #create_edo_list_element(month, year, data)
+        create_edo_list_element(month, year, data)
 
     task_descriprtion = f'Данные за {month} {year} файла по ЭДО загружены '
 

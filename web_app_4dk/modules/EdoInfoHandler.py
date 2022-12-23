@@ -1,10 +1,9 @@
 from time import time
-from decimal import *
 
 from fast_bitrix24 import Bitrix
 import openpyxl
 
-a = Decimal(1).qu
+
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
 
 month_codes = {
@@ -36,7 +35,7 @@ def read_xlsx(filename: str) -> list:
     data = []
     titles = {}
     ignore_client_values = [None, '0', 'None']
-    ignore_package_count = [None, '0', '1', 'None']
+    ignore_package_count = [None, '0', 'None']
     for row in range(1, max_rows + 1):
         temp = {}
         for column in range(1, max_columns + 1):
@@ -49,7 +48,7 @@ def read_xlsx(filename: str) -> list:
                     continue
                 temp.setdefault(titles[column], cell_value)
         if temp:
-            if temp['Сумма для клиента'] in ignore_client_values and temp['Кол-во пакетов'] in ignore_package_count:
+            if temp['Сумма для клиента'] in ignore_client_values and temp['Сумма пакетов по владельцу'] in ignore_package_count:
                 continue
             data.append(temp)
 
@@ -68,7 +67,7 @@ def create_edo_list_element(month:str, year:str, data:dict):
         'PROPERTY_1567': month_codes[month],
         'PROPERTY_1569': year_codes[year],
         'PROPERTY_1571': data['Компания'],
-        'PROPERTY_1573': data['Кол-во пакетов'] if data['Кол-во пакетов'] != 'None' else '0',
+        'PROPERTY_1573': data['Сумма пакетов по владельцу'] if data['Сумма пакетов по владельцу'] != 'None' else '0',
         'PROPERTY_1575': data['Сумма для клиента'] if data['Сумма для клиента'] != 'None' else '0',
         'PROPERTY_1577': data['Регномер'] if 'Регномер' in data else '',
         'PROPERTY_1579': data['Владелец ИТС'] if 'Владелец ИТС' in data else '',
@@ -76,7 +75,7 @@ def create_edo_list_element(month:str, year:str, data:dict):
     }})
 
 
-def edo_info_handler(month:str, year:str, filename:str):
+def edo_info_handler(month: str, year: str, filename: str):
     not_found = []
     file_data = read_xlsx(filename)
     service_list_elements = get_service_list_elements()
@@ -86,8 +85,12 @@ def edo_info_handler(month:str, year:str, filename:str):
 
         # Поиск компании по ИНН
         company = list(filter(lambda x: x['UF_CRM_1656070716'] == data['ИНН клиента'], companies))
+        company_link_company = None
         if company:
-            data.setdefault('Компания', company[0]['ID'])
+            company = company[0]
+            data.setdefault('Компания', company['ID'])
+            if company['UF_CRM_1662385947']:
+                company_link_company = company['UF_CRM_1662385947'][0]
         else:
 
             # Поиск компании по коду подписчика в УС "Отчет по сервисам"
@@ -100,7 +103,7 @@ def edo_info_handler(month:str, year:str, filename:str):
                 not_found.append(data)
                 continue
 
-        # Поиск ИТС
+        # Поиск ИТС по компании
         company_deal = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'], deals))
         if company_deal:
             data.setdefault('Регномер', company_deal[0]['UF_CRM_1640523562691'])
@@ -109,7 +112,15 @@ def edo_info_handler(month:str, year:str, filename:str):
                 data.setdefault('Владелец ИТС', company_its[0]['COMPANY_ID'])
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
 
-        #create_edo_list_element(month, year, data)
+        # Поиск ИТС по значению поля компании "Связан с"
+        if 'Владелец ИТС' not in data and company_link_company:
+            company_its = list(filter(lambda x: x['COMPANY_ID'] == company_link_company and x['UF_CRM_1657878818384'] == '859', deals))
+            if company_its:
+                data.setdefault('Владелец ИТС', company_its[0]['COMPANY_ID'])
+                data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
+                data.setdefault('Регномер', company_its[0]['UF_CRM_1640523562691'])
+
+        create_edo_list_element(month, year, data)
 
     not_found_titles = list(not_found[0].keys())
     workbook = openpyxl.Workbook()
@@ -117,7 +128,7 @@ def edo_info_handler(month:str, year:str, filename:str):
     worksheet.append(not_found_titles)
     for row in not_found:
         worksheet.append(list(row.values()))
-    file_name = f"Ошибки.xlsx"
+    file_name = f"Ошибки за {month} {year}.xlsx"
     workbook.save(file_name)
 
-edo_info_handler('Сентябрь', '2022', '11-2022.xlsx')
+edo_info_handler('Ноябрь', '2022', '11-2022.xlsx')

@@ -307,7 +307,7 @@ def connect_1c(req: dict):
                 'taskId': task['id'],
                 'fields': {
                     'UF_AUTO_499889542776': req['data']['treatment_id'],
-                    'GROUP_ID': '1',
+                    'GROUP_ID': '11',
                 }})
             '''
             send_bitrix_request('im.notify.system.add', {
@@ -357,7 +357,7 @@ def connect_1c(req: dict):
                                 {'taskId': task['id'], 'fields': {'GROUP_ID': '7', 'STAGE_ID': '67', 'STATUS': '5'}})
         elif 'Обновить 1С' in support_line_name:
             send_bitrix_request('tasks.task.update',
-                                {'taskId': task['id'], 'fields': {'GROUP_ID': '1', 'STATUS': '5', 'STAGE_ID': '15'}})
+                                {'taskId': task['id'], 'fields': {'GROUP_ID': '11', 'STATUS': '5'}})
         else:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})

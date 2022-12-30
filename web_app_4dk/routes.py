@@ -36,6 +36,7 @@ from web_app_4dk.modules.ChangeResponsible import change_responsible
 from web_app_4dk.modules.CompleteDocumentFlowTask import complete_document_flow_task
 from web_app_4dk.modules.CreateTaskWithChecklist import create_task_with_checklist
 from web_app_4dk.modules.EdoInfoHandler import edo_info_handler
+from web_app_4dk.modules.AutoFailure import auto_failure
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -55,7 +56,8 @@ custom_webhooks = {
     'create_info_smart_process': create_info_smart_process,
     'fns_task_complete': fns_task_complete,
     'complete_document_flow_task': complete_document_flow_task,
-    'create_task_with_checklist': create_task_with_checklist
+    'create_task_with_checklist': create_task_with_checklist,
+    'auto_failure': auto_failure,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

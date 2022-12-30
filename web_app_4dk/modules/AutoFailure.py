@@ -11,6 +11,7 @@ def auto_failure(req):
     filter_date = datetime.strptime(req['date'], '%d.%m.%Y')
     filter_date = datetime.strftime(filter_date, '%Y-%m-%d')
     deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'UF_CRM_1638958630625': filter_date}})
+    companies = b.get_all('crm.company.list')
     deal_types = [
         'UC_HT9G9H',  # ПРОФ Земля
         'UC_XIYCTV',  # ПРОФ Земля+Помощник
@@ -24,7 +25,11 @@ def auto_failure(req):
         if deal['TYPE_ID'] not in deal_types:
             continue
         #b.call('bizproc.workflow.start', {'TEMPLATE_ID': '759', 'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + deal['ID']]})
-        logs += f'{deal["ID"]} {deal["TITLE"]}\n'
+        company = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))
+        if company:
+            logs += f'{deal["ID"]} {deal["TITLE"]} {company[0]["TITLE"]}\n'
+        else:
+            logs += f'{deal["ID"]} {deal["TITLE"]}\n'
 
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],

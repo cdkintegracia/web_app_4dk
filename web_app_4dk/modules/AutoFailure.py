@@ -39,4 +39,3 @@ def auto_failure(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': logs})
 
-auto_failure({'date': '31.03.2022'})

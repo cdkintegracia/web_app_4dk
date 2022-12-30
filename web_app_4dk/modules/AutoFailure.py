@@ -10,8 +10,6 @@ def auto_failure(req):
     logs = 'Обработанные сделки:\n\n'
     filter_date = datetime.strptime(req['date'], '%d.%m.%Y')
     filter_date = datetime.strftime(filter_date, '%Y-%m-%d')
-    deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'UF_CRM_1638958630625': filter_date, 'UF_CRM_1637933869479': '1'}})
-    companies = b.get_all('crm.company.list')
     deal_types = [
         'UC_HT9G9H',  # ПРОФ Земля
         'UC_XIYCTV',  # ПРОФ Земля+Помощник
@@ -21,9 +19,15 @@ def auto_failure(req):
         'UC_92H9MN',  # Индивидуальный
         'UC_81T8ZR',  # АОВ
     ]
+    deals = b.get_all('crm.deal.list', {
+        'select': ['*', 'UF_*'],
+        'filter': {'UF_CRM_1638958630625': filter_date,
+                   'UF_CRM_1637933869479': '1',
+                   'TYPE_ID': deal_types
+                   }})
+    companies = b.get_all('crm.company.list', {'filter': {'ID': list(map(lambda x: x['COMPANY_ID'], deals))}})
+
     for deal in deals:
-        if deal['TYPE_ID'] not in deal_types:
-            continue
         b.call('bizproc.workflow.start', {'TEMPLATE_ID': '759', 'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + deal['ID']]})
         company = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))
         if company:
@@ -35,4 +39,4 @@ def auto_failure(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': logs})
 
-
+auto_failure({'date': '31.03.2022'})

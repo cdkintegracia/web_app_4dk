@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/AutoFailure.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/AutoFailure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/flask.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flask.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +89,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.AutoFailure">
+  <component name="RunManager" selected="Python.CreateServiceSaleReport (1)">
     <configuration name="AutoFailure" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,6 +102,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/AutoFailure.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -120,6 +124,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -163,6 +168,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/fsdf.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -226,8 +232,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.AutoFailure" />
         <item itemvalue="Python.CreateServiceSaleReport (1)" />
+        <item itemvalue="Python.AutoFailure" />
         <item itemvalue="Python.fsdf" />
         <item itemvalue="Python.CreateServiceSaleReport" />
         <item itemvalue="Python.temp" />
@@ -330,6 +336,7 @@
       <workItem from="1671017650029" duration="675000" />
       <workItem from="1671877301851" duration="13000" />
       <workItem from="1672035161022" duration="11107000" />
+      <workItem from="1672754202537" duration="1015000" />
     </task>
     <servers />
   </component>
@@ -346,5 +353,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/web_app_4dk$CreateServiceSaleReport__1_.coverage" NAME="CreateServiceSaleReport (1) Coverage Results" MODIFIED="1672754622623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

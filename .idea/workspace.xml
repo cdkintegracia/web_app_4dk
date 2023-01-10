@@ -5,10 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/flask.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flask.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSalesReport.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672318377.4572659.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672319543.4904985.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672324420.9376264.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672324621.6800241.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672324788.5123625.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672325106.6208074.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672325526.1583333.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672325770.7724614.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672325970.622478.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672326202.3350067.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672327273.610661.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672392817.1517837.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672403750.0636678.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/Отчет_по_сумме_сервисов1672754852.1149106.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +101,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CreateServiceSaleReport (1)">
+  <component name="RunManager" selected="Python.CreateServiceSalesReport">
     <configuration name="AutoFailure" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -112,20 +124,21 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="CreateServiceSaleReport (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="CreateServiceSalesReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\esmec\AppData\Local\Microsoft\WindowsApps\python3.9.exe" />
+      <option name="SDK_NAME" value="Python 3.9" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSaleReport.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\modules\CreateServiceSalesReport.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -134,7 +147,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="CreateServiceSaleReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="CreateServiceSalesReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -147,7 +160,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\modules\CreateServiceSaleReport.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\modules\CreateServiceSalesReport.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -224,18 +237,17 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.CreateServiceSalesReport" />
       <item itemvalue="Python.AutoFailure" />
-      <item itemvalue="Python.CreateServiceSaleReport (1)" />
       <item itemvalue="Python.fsdf" />
-      <item itemvalue="Python.CreateServiceSaleReport" />
       <item itemvalue="Python.temp" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.CreateServiceSaleReport (1)" />
+        <item itemvalue="Python.CreateServiceSalesReport" />
         <item itemvalue="Python.AutoFailure" />
         <item itemvalue="Python.fsdf" />
-        <item itemvalue="Python.CreateServiceSaleReport" />
+        <item itemvalue="Python.CreateServiceSalesReport" />
         <item itemvalue="Python.temp" />
       </list>
     </recent_temporary>
@@ -353,8 +365,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateServiceSaleReport__1_.coverage" NAME="CreateServiceSaleReport (1) Coverage Results" MODIFIED="1672754622623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

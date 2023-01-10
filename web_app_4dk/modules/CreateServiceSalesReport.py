@@ -6,9 +6,9 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/wkq0a0mvsvfmoseo/')
+b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
 
-service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО']
+service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
 service_deal_values = {'Контрагент': 4800, 'Кабинет сотрудника': None, 'Линк': None, 'МДЛП': None, '1Спарк 3000': 3000, '1СпаркПЛЮС 22500': 22500,
                           'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'РПД': None, 'ЭТП': None, '1СПАРК Риски': 3000, '1Спарк в договоре': 3000,
                       'Кабинет садовода': 1000, '1Спарк': 3000, 'ЭДО': None, 'Спарк сумма': None}
@@ -55,6 +55,9 @@ def read_deals_from_xlsx(filename: str) -> list:
 
 def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal_date_start):
     current_year = datetime.now().year
+    current_month = datetime.now().month
+    if current_month < 6 and month in ['Декабрь', 'Ноябрь', 'Октябрь', 'Сентябрь', 'Август', 'Июль']:
+        current_year -= 1
     if deal_type in service_deal_current_month:
         return f'{month_number[month]}.{current_year}'
     elif deal_type == 'Кабинет садовода':
@@ -156,6 +159,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
     for responsible in rpd_data:
         rpd_values = list(rpd_data[responsible].values())
+        handled_data[responsible][service_deal_value_field] += sum(rpd_values)
         handled_data[responsible]['Сервисы'][f'{month} РПД'] = sum(rpd_values)
 
     add_month_edo_value(edo_list_elements, month, users_info)
@@ -183,16 +187,26 @@ def get_services_summary():
 
 
 def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count=None):
+
+    """
+    Лист 'Сводные показатели'
+    """
+
     service_names = copy.deepcopy(service_deal_types)
     workbook = openpyxl.Workbook()
     filename = f'Отчет по сумме сервисов{time()}.xlsx'.replace(' ', '_')
-    departments = ['ГО4', 'ГО3', 'ОВ', 'Прочие']
+    departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие']
 
     worksheet = workbook.active
     worksheet.title = 'Сводные показатели'
     summary_titles = ['Сотрудник', 'Подразделение', f'ИТС сред({month_count})', f'Сумма сервисов сред({month_count})', 'Результат']
     employee_to_delete = []
     worksheet.append(summary_titles)
+    department_summary_its = dict(zip(departments, [0 for _ in departments]))
+    department_summary_services = dict(zip(departments, [0 for _ in departments]))
+    department_employee_counters = dict(zip(departments, [0 for _ in departments]))
+    its_months_summary = dict(zip(month_names, [0 for _ in month_names]))
+    services_months_summary = dict(zip(month_names, [0 for _ in month_names]))
     for department in departments:
         for employee in data:
             row = []
@@ -221,11 +235,45 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
                 result_value = 0
 
             if data[employee]['Подразделение'] == department:
+                department_summary_its[department] += summary_its
+                department_summary_services[department] += summary_service
+                department_employee_counters[department] += 1
                 row = [employee, data[employee]['Подразделение'], summary_its, summary_service, result_value]
             elif department == 'Прочие' and data[employee]['Подразделение'] not in departments:
+                department_summary_its[department] += summary_its
+                department_summary_services[department] += summary_service
+                department_employee_counters[department] += 1
                 row = [employee, data[employee]['Подразделение'], summary_its, summary_service, result_value]
             if row:
                 worksheet.append(row)
+
+    worksheet.append([''])
+    worksheet.append(['', 'СредИТС', 'СредСервисы', 'СредСумма'])
+    for department in departments:
+        worksheet.append([
+            department,
+            round(department_summary_its[department] / department_employee_counters[department], 2),
+            round(department_summary_services[department] / department_employee_counters[department], 2),
+            round(department_summary_services[department] / department_summary_its[department], 2),
+        ])
+
+    worksheet.append([''])
+    worksheet.append([''] + month_names + ['6 месяцев'])
+    for month in month_names:
+        for employee in data:
+            its_months_summary[month] += data[employee][f'{month} ИТС']
+            services_months_summary[month] += data[employee][f'{month} Сервисы']
+    worksheet.append(['ИТС'] + list(its_months_summary.values()) + [sum(list(its_months_summary.values()))])
+    worksheet.append(['Сервисы'] + list(services_months_summary.values()) + [sum(list(services_months_summary.values()))])
+    month_results = []
+    for month in month_names:
+        month_results.append(round(services_months_summary[month]/its_months_summary[month], 2))
+    month_results.append(round(sum(list(services_months_summary.values())) / sum(list(its_months_summary.values())), 2))
+    worksheet.append(['Результат'] + month_results)
+
+    """
+    Лист 'Детализация по месяцам'
+    """
 
     for employee in employee_to_delete:
         data.pop(employee, None)
@@ -247,11 +295,16 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
             if row:
                 worksheet.append(row)
 
+    """
+    Лист 'Детализация по сервисам'
+    """
+
     worksheet = workbook.create_sheet('Детализация по сервисам')
     worksheet.append(service_titles)
     services_summary = get_services_summary()
     first_employee_row = True
     service_title_count = 0
+    services_month_summary = None
     for department in departments:
         worksheet.append([department, ])
         for employee in service_report:
@@ -273,16 +326,25 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
                         data_to_write.append(service_sum)
 
                     if first_employee_row:
+                        if not services_month_summary:
+                            services_month_summary = dict(zip(month_names, [0 for _ in month_names]))
                         if service_title_count < len(service_deal_types):
                             data_to_write += ['', service_deal_types[service_title_count]]
                             for month_name in services_summary:
                                 for summary_service_name in services_summary[month_name]:
                                     if summary_service_name == service_deal_types[service_title_count]:
                                         data_to_write.append(services_summary[month_name][summary_service_name])
-                    service_title_count += 1
+                                        if service_deal_types[service_title_count] != 'Спарк сумма':
+                                            services_month_summary[month_name] += services_summary[month_name][summary_service_name]
 
+                    service_title_count += 1
                     worksheet.append(data_to_write)
                 first_employee_row = False
+
+                if services_month_summary:
+                    worksheet.append([''])
+                    worksheet.append(['' for _ in range(12)] + list(services_month_summary.values()))
+                    services_month_summary = None
 
             elif department == 'Прочие' and service_report[employee]['Подразделение'] not in departments:
                 worksheet.append(['', employee, ])

@@ -58,11 +58,13 @@ def revise_accounting_deals(filename):
                        }})
         if not company_info:
             file_line.setdefault('Расхождение', 'Нет ИНН')
+            file_line.pop('Цена')
             continue
         company_id = company_info[0]['ID']
         company_deals = b.get_all('crm.deal.list', {'filter': {'TYPE_ID': 'UC_O99QUW', 'COMPANY_ID': company_id}})
         if not company_deals:
             file_line.setdefault('Расхождение', 'Нет отчетности')
+            file_line.pop('Цена')
             continue
         company_deal = company_deals[0]
         if int(float(company_deal['OPPORTUNITY'])) < int(float(file_line['Цена'])):
@@ -70,12 +72,10 @@ def revise_accounting_deals(filename):
         else:
             file_line.setdefault('Расхождение', 'Нет')
         price = file_line.pop('Цена')
-        for value in what_remove:
-            file_line.pop(value)
         file_line.setdefault('Сумма из Битрикса', int(float(company_deal['OPPORTUNITY'])))
         file_line.setdefault('Цена', price)
         job_counter += 1
-        #print(f"{job_counter} | {len(file_data['data'])}")
+        print(f"{job_counter} | {len(file_data['data'])}")
 
     ind = 0
     for i in range(len(file_data['titles'])):
@@ -89,6 +89,8 @@ def revise_accounting_deals(filename):
     worksheet = workbook.active
     worksheet.append(file_data['titles'])
     for data in file_data['data']:
+        for value in what_remove:
+            data.pop(value)
         worksheet.append(list(data.values()))
     create_time = datetime.now().strftime('%d-%m-%Y-%f')
     report_name = f'Сверка_отчетности_{create_time}.xlsx'
@@ -107,12 +109,11 @@ def revise_accounting_deals(filename):
     b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
-            'RESPONSIBLE_ID': '311',
+            'RESPONSIBLE_ID': '19',
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})
     os.remove(f'Сверка_отчетности_{create_time}.xlsx')
-
 
 
 

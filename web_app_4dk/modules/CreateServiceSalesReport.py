@@ -115,9 +115,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
         deal_info['Сумма'] = int(float(deal_info['Сумма']))
 
-        if deal_info['Тип'] == 'ЭДО':
-            continue
-
         if deal_info['Группа'] == 'ИТС' and deal_info['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'] and 'ГРМ' not in deal_info['Тип']:
             handled_data[deal_info['Ответственный']][its_deal_value_field] += 1
 
@@ -283,7 +280,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
 
     worksheet = workbook.create_sheet('Детализация по месяцам')
     if month_titles:
-        worksheet.append(month_titles)
+        worksheet.append(month_titles + ['Сумма сервисов'])
     for department in departments:
         for employee in month_report:
             month_report[employee].pop('Сервисы', None)
@@ -293,6 +290,11 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
             elif department == 'Прочие' and month_report[employee]['Подразделение'] not in departments:
                 row = [employee, ] + list(month_report[employee].values())
             if row:
+                services_summary = 0
+                for key in month_report[employee]:
+                    if 'Сервисы' in key:
+                        services_summary += month_report[employee][key]
+                row.append(services_summary)
                 worksheet.append(row)
 
     """

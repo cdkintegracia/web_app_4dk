@@ -104,10 +104,10 @@ def revise_accounting_deals(filename):
         'data': {'NAME': report_name},
         'fileContent': report_file_base64
     })
-    task = b.call('tasks.task.add', {
+    b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
-            'RESPONSIBLE_ID': '19',
+            'RESPONSIBLE_ID': '311',
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})

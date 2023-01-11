@@ -12,7 +12,7 @@ b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
 
 
 def create_current_month_deals_data_file(user_data, user_id):
-    deals_info_files_directory = os.path.abspath(os.curdir) + '/deals_info_files/'
+    deals_info_files_directory = '/root/web_app_4dk_web_app_4dk/modules/deals_info_files/'
     month_int_names = {
         1: 'Январь',
         2: 'Февраль',

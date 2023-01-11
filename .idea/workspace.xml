@@ -5,14 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/300920222.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSalesReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSalesReport.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/DEAL_20220731_6d490055_62e6c5642f727TONIGHT.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/DEAL_20220831_66154768_630ef62fa45bb.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/DEAL_20221031_d0ba71b5_635f5c9e736a7.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/DEAL_20221130_a67f2b14_6386e8c656b60.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/DEAL_20221231_d33ea5db_63afc361a0eba.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -366,7 +358,7 @@
       <workItem from="1672754202537" duration="1015000" />
       <workItem from="1673332279385" duration="17000" />
       <workItem from="1673332329362" duration="82000" />
-      <workItem from="1673334095888" duration="5693000" />
+      <workItem from="1673334095888" duration="6064000" />
     </task>
     <servers />
   </component>

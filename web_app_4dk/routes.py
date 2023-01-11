@@ -193,7 +193,7 @@ def update_logs(text, req):
 
 # Вывод на экран логов веб-приложения
 def read_logs():
-    return ['Логи не пишутся']
+    return ['Логирование отключено', 'test']
     final_text = []
     with open('/root/web_app_4dk/web_app_4dk/static/logs/logs.txt', 'r') as log_file:
         logs = log_file.readlines()

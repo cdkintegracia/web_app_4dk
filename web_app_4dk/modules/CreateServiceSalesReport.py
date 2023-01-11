@@ -7,7 +7,7 @@ import base64
 from fast_bitrix24 import Bitrix
 import openpyxl
 
-from CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
+from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
 
 
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')

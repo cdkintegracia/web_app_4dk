@@ -15,7 +15,7 @@ service_deal_values = {'Контрагент': 4800, 'Кабинет сотру�
 spark_names = ['1Спарк', '1Спарк в договоре', '1СПАРК Риски', '1СпаркПЛЮС 22500', '1Спарк 3000']
 service_deal_types = list(service_deal_values.keys())
 titles_for_sorting = []
-month_names = ['Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+month_names = []
 month_number = {
     'Январь': '01',
     'Февраль': '02',
@@ -472,8 +472,30 @@ def sort_handled_data_keys():
     return sorted_handled_data
 
 
+def get_month_range(with_current_month=None):
+    month_numbers = {
+        1: 'Январь',
+        2: 'Февраль',
+        3: 'Март',
+        4: 'Апрель',
+        5: 'Май',
+        6: 'Июнь',
+        7: 'Июль',
+        8: 'Август',
+        9: 'Сентябрь',
+        10: 'Октябрь',
+        11: 'Ноябрь',
+        12: 'Декабрь',
+    }
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+
+
 def create_report_service_sales():
     global handled_data
+    get_month_range()
+    exit()
     current_month = ''
     current_year = ''
     users_data = b.get_all('user.get')

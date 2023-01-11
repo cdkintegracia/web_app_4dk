@@ -179,6 +179,7 @@ def update_connect_logs():
 
 # Обновление логов веб-приложения
 def update_logs(text, req):
+    return
     file_path = '/root/web_app_4dk/web_app_4dk/static/logs/logs.txt'
     log_dct = {}
     for key in req:
@@ -192,6 +193,7 @@ def update_logs(text, req):
 
 # Вывод на экран логов веб-приложения
 def read_logs():
+    return
     final_text = []
     with open('/root/web_app_4dk/web_app_4dk/static/logs/logs.txt', 'r') as log_file:
         logs = log_file.readlines()

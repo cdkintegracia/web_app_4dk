@@ -79,3 +79,7 @@ def create_current_month_deals_data_file(user_data, user_id):
         worksheet.append(list(deal.values()))
     filename = f'{month_int_names[current_month]}_{current_year}.xlsx'
     workbook.save(f'{deals_info_files_directory}{filename}')
+
+
+if __name__ == '__main__':
+    create_current_month_deals_data_file()

@@ -575,5 +575,3 @@ def create_service_sales_report(req):
     os.remove(report_name)
 
 
-create_service_sales_report({'user_id': 'user_311', 'with_current_month': 'Y'})
-

@@ -1,22 +1,29 @@
 from datetime import datetime, timedelta
 from time import time
 import copy
+import os
+import base64
 
 from fast_bitrix24 import Bitrix
 import openpyxl
 
+from CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
+
 
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
+deals_info_files_directory = os.path.abspath(os.curdir) + '\\deals_info_files\\'
+
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
-service_deal_values = {'Контрагент': 4800, 'Кабинет сотрудника': None, 'Линк': None, 'МДЛП': None, '1Спарк 3000': 3000, '1СпаркПЛЮС 22500': 22500,
-                          'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'РПД': None, 'ЭТП': None, '1СПАРК Риски': 3000, '1Спарк в договоре': 3000,
-                      'Кабинет садовода': 1000, '1Спарк': 3000, 'ЭДО': None, 'Спарк сумма': None}
+service_deal_values = {'Контрагент': 4800, 'Кабинет сотрудника': None, 'Линк': None, 'МДЛП': None, '1Спарк 3000': 3000,
+                       '1СпаркПЛЮС 22500': 22500, 'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'РПД': None,
+                       'ЭТП': None, '1СПАРК Риски': 3000, '1Спарк в договоре': 3000, 'Кабинет садовода': 1000,
+                       '1Спарк': 3000, 'ЭДО': None, 'Спарк сумма': None}
 spark_names = ['1Спарк', '1Спарк в договоре', '1СПАРК Риски', '1СпаркПЛЮС 22500', '1Спарк 3000']
 service_deal_types = list(service_deal_values.keys())
 titles_for_sorting = []
 month_names = []
-month_number = {
+month_names_numbers = {
     'Январь': '01',
     'Февраль': '02',
     'Март': '03',
@@ -31,6 +38,7 @@ month_number = {
     'Декабрь': '12',
 }
 handled_data = {}
+file_names_months = {}
 
 
 def read_deals_from_xlsx(filename: str) -> list:
@@ -42,7 +50,7 @@ def read_deals_from_xlsx(filename: str) -> list:
     titles = {}
     for row in range(1, max_rows + 1):
         temp = {}
-        for column in range(1, max_columns):
+        for column in range(1, max_columns + 1):
             cell_value = worksheet.cell(row, column).value
             if row == 1:
                 titles.setdefault(column, cell_value)
@@ -50,6 +58,7 @@ def read_deals_from_xlsx(filename: str) -> list:
                 temp.setdefault(titles[column], cell_value)
         if temp:
             data.append(temp)
+
     return data
 
 
@@ -59,9 +68,9 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
     if current_month < 6 and month in ['Декабрь', 'Ноябрь', 'Октябрь', 'Сентябрь', 'Август', 'Июль']:
         current_year -= 1
     if deal_type in service_deal_current_month:
-        return f'{month_number[month]}.{current_year}'
+        return f'{month_names_numbers[month]}.{current_year}'
     elif deal_type == 'Кабинет садовода':
-        return {'Месяц': int(month_number[month]), 'Год': int(current_year)}
+        return {'Месяц': int(month_names_numbers[month]), 'Год': int(current_year)}
     elif deal_type == 'Подпись 1000' and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
         return f'{deal_date_start.month}.{deal_date_start.year}'
     else:
@@ -115,6 +124,12 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
         deal_info['Сумма'] = int(float(deal_info['Сумма']))
 
+        if type(deal_info['Дата начала']) == str:
+            deal_info['Дата начала'] = datetime.strptime(deal_info['Дата начала'], '%d.%m.%Y')
+        if type(deal_info['Предполагаемая дата закрытия']) == str:
+            deal_info['Предполагаемая дата закрытия'] = datetime.strptime(deal_info['Предполагаемая дата закрытия'], '%d.%m.%Y')
+
+
         if deal_info['Группа'] == 'ИТС' and deal_info['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'] and 'ГРМ' not in deal_info['Тип']:
             handled_data[deal_info['Ответственный']][its_deal_value_field] += 1
 
@@ -141,7 +156,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_start_date == f'{month_number[month]}.2022':
+                if deal_start_date == f'{month_names_numbers[month]}.2022':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600
                     elif deal_info['Тип'] == 'Подпись':
@@ -166,7 +181,7 @@ def get_services_summary():
     month_services_summary = {}
     for month in month_names:
         spark_names_with_months = list(map(lambda x: f'{month} {x}', spark_names))
-        services_summary = dict(zip(service_deal_types, [0 for _  in service_deal_types]))
+        services_summary = dict(zip(service_deal_types, [0 for _ in service_deal_types]))
         for service_name in service_deal_types:
             if service_name == 'Спарк сумма':
                 continue
@@ -286,7 +301,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
             month_report[employee].pop('Сервисы', None)
             row = []
             if month_report[employee]['Подразделение'] == department:
-                row = [employee,] + list(month_report[employee].values())
+                row = [employee, ] + list(month_report[employee].values())
             elif department == 'Прочие' and month_report[employee]['Подразделение'] not in departments:
                 row = [employee, ] + list(month_report[employee].values())
             if row:
@@ -314,7 +329,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
                 if first_employee_row:
                     worksheet.append(['', employee, ] + ['' for _ in month_names] + ['', '', '', ''] + month_names)
                 else:
-                    worksheet.append(['', employee,])
+                    worksheet.append(['', employee, ])
                 for service_name in service_names:
                     data_to_write = ['', '', service_name]
                     service_sum = 0
@@ -360,6 +375,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
                     data_to_write.append(service_sum)
                     worksheet.append(data_to_write)
     workbook.save(filename)
+    return filename
 
 
 def get_edo_list_elements():
@@ -472,8 +488,9 @@ def sort_handled_data_keys():
     return sorted_handled_data
 
 
-def get_month_range(with_current_month=None):
-    month_numbers = {
+def get_month_range(with_current_month='N'):
+    global month_names, file_names_months
+    month_int_names = {
         1: 'Январь',
         2: 'Февраль',
         3: 'Март',
@@ -487,36 +504,76 @@ def get_month_range(with_current_month=None):
         11: 'Ноябрь',
         12: 'Декабрь',
     }
-    current_year = datetime.now().year
-    current_month = datetime.now().month
+    file_year = datetime.now().year
+    file_month = datetime.now().month
+    file_names_list = []
+    if with_current_month == 'Y':
+        file_month += 1
+    for _ in range(6):
+        file_month -= 1
+        if file_month == 0:
+            file_month = 12
+            file_year -= 1
+        file_name = f'{month_int_names[file_month]}_{file_year}.xlsx'
+        file_names_list.append(file_name)
+        month_names.append(month_int_names[file_month])
+    file_names_list = list(reversed(file_names_list))
+    month_names = list(reversed(month_names))
+    file_names_months = dict(zip(file_names_list, month_names))
 
 
+def get_second_sheet_titles():
+    titles = ['Сотрудник', 'Подразделение']
+    for month in month_names:
+        titles.append(f'{month} ИТС')
+        titles.append(f'{month} Сервисы')
+    return titles
 
-def create_report_service_sales():
+
+def get_third_sheet_titles():
+    titles = ['Подразделение', 'ФИО', 'Сервис']
+    titles += month_names
+    titles.append('Сумма')
+    return titles
+
+
+def create_service_sales_report(req):
     global handled_data
-    get_month_range()
-    exit()
-    current_month = ''
-    current_year = ''
+    get_month_range(req['with_current_month'])
     users_data = b.get_all('user.get')
     edo_list_elements = get_edo_list_elements()
-    filenames = ['DEAL_20220731_6d490055_62e6c5642f727TONIGHT.xlsx', 'DEAL_20220831_66154768_630ef62fa45bb.xlsx', '300920222.xlsx', 'DEAL_20221031_d0ba71b5_635f5c9e736a7.xlsx', 'DEAL_20221130_a67f2b14_6386e8c656b60.xlsx', 'DEAL_20221231_d33ea5db_63afc361a0eba.xlsx']
-    file_months = {'DEAL_20220731_6d490055_62e6c5642f727TONIGHT.xlsx': 'Июль', 'DEAL_20220831_66154768_630ef62fa45bb.xlsx': 'Август', '300920222.xlsx': 'Сентябрь', 'DEAL_20221031_d0ba71b5_635f5c9e736a7.xlsx': 'Октябрь', 'DEAL_20221130_a67f2b14_6386e8c656b60.xlsx': 'Ноябрь', 'DEAL_20221231_d33ea5db_63afc361a0eba.xlsx': 'Декабрь'}
-    for filename in filenames:
-        print(f'Поиск ответственных за {file_months[filename]}')
-        file_data = read_deals_from_xlsx(filename)
-        find_all_responsibles(file_data, file_months[filename], users_data)
+    if req['with_current_month'] == 'Y':
+        create_current_month_deals_data_file(users_data, req['user_id'])
+    for filename in file_names_months.keys():
+        print(f'Поиск ответственных за {file_names_months[filename]}')
+        file_data = read_deals_from_xlsx(f'{deals_info_files_directory}{filename}')
+        find_all_responsibles(file_data, file_names_months[filename], users_data)
     add_month_titles_to_responsibles()
     titles_for_sorting.insert(0, 'Подразделение')
     handled_data = sort_handled_data_keys()
-    for filename in filenames:
-        print(f'Подсчет сделок за {file_months[filename]}')
-        file_data = read_deals_from_xlsx(filename)
-        deal_info_handler(file_data, users_data, file_months[filename], edo_list_elements=edo_list_elements)
-    month_titles = ['Сотрудник', 'Подразделение', 'Июль ИТС', 'Июль Сервисы', 'Август ИТС', 'Август Сервисы', 'Сентябрь ИТС', 'Сентябрь Сервисы', 'Октябрь ИТС', 'Октябрь Сервисы', 'Ноябрь ИТС', 'Ноябрь Сервисы', 'Декабрь ИТС', 'Декабрь Сервисы']
-    service_titles = ['Подразделение', 'ФИО', 'Сервис', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь', 'Сумма']
-    write_data_to_xlsx(handled_data, month_titles=month_titles, service_titles=service_titles, month_count=len(filenames))
+    for filename in file_names_months.keys():
+        print(f'Подсчет сделок за {file_names_months[filename]}')
+        file_data = read_deals_from_xlsx(f'{deals_info_files_directory}{filename}')
+        deal_info_handler(file_data, users_data, file_names_months[filename], edo_list_elements=edo_list_elements)
+    second_sheet_titles = get_second_sheet_titles()
+    third_sheet_titles = get_third_sheet_titles()
+    report_name = write_data_to_xlsx(handled_data, month_titles=second_sheet_titles, service_titles=third_sheet_titles, month_count=len(file_names_months.keys()))
+
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '283853'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Отчет по сумме сервисов сформирован. {upload_report["DETAIL_URL"]}'})
+    os.remove(report_name)
 
 
-create_report_service_sales()
+create_service_sales_report({'user_id': 'user_311', 'with_current_month': 'Y'})
 

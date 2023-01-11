@@ -37,6 +37,8 @@ from web_app_4dk.modules.CompleteDocumentFlowTask import complete_document_flow_
 from web_app_4dk.modules.CreateTaskWithChecklist import create_task_with_checklist
 from web_app_4dk.modules.EdoInfoHandler import edo_info_handler
 from web_app_4dk.modules.AutoFailure import auto_failure
+from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
+from web_app_4dk.modules.CreateServiceSalesReport import create_service_sales_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -58,6 +60,7 @@ custom_webhooks = {
     'complete_document_flow_task': complete_document_flow_task,
     'create_task_with_checklist': create_task_with_checklist,
     'auto_failure': auto_failure,
+    'create_service_sales_report': create_service_sales_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

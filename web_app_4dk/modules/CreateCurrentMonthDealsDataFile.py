@@ -9,10 +9,12 @@ from web_app_4dk.modules.field_values import deals_category_1_types, deals_categ
 
 
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
+deals_info_files_directory = f'{os.path.abspath(__file__)}deals_info_files/'
 
 
-def create_current_month_deals_data_file(user_data, user_id):
-    deals_info_files_directory = '/root/web_app_4dk_web_app_4dk/modules/deals_info_files/'
+def create_current_month_deals_data_file(user_data=None, user_id='311'):
+    if not user_data:
+        user_data = b.get_all('user.get')
     month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -78,7 +80,7 @@ def create_current_month_deals_data_file(user_data, user_id):
     for deal in formatted_deals_info:
         worksheet.append(list(deal.values()))
     filename = f'{month_int_names[current_month]}_{current_year}.xlsx'
-    workbook.save(f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/{filename}')
+    workbook.save(f'{deals_info_files_directory}{filename}')
 
 
 if __name__ == '__main__':

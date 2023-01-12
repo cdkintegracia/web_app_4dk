@@ -11,7 +11,7 @@ from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_m
 
 
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
-deals_info_files_directory = '/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+deals_info_files_directory = f'{os.path.abspath(__file__)}deals_info_files/'
 
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
@@ -517,9 +517,11 @@ def get_month_range(with_current_month='N'):
         file_name = f'{month_int_names[file_month]}_{file_year}.xlsx'
         file_names_list.append(file_name)
         month_names.append(month_int_names[file_month])
+        print(file_month)
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
+    exit()
 
 
 def get_second_sheet_titles():

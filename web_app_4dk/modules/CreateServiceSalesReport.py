@@ -490,6 +490,7 @@ def sort_handled_data_keys():
 
 def get_month_range(with_current_month='N'):
     global month_names, file_names_months
+    month_names = []
     month_int_names = {
         1: 'Январь',
         2: 'Февраль',

@@ -521,6 +521,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
+    print(month_names)
 
 
 def get_second_sheet_titles():

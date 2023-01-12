@@ -510,6 +510,7 @@ def get_month_range(with_current_month='N'):
     if with_current_month == 'Y':
         file_month += 1
     for _ in range(6):
+        print(file_month)
         file_month -= 1
         if file_month == 0:
             file_month = 12

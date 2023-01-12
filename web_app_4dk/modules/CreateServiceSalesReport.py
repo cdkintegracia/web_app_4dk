@@ -510,11 +510,11 @@ def get_month_range(with_current_month='N'):
     if with_current_month == 'Y':
         file_month += 1
     for _ in range(6):
-        print(file_month)
         file_month -= 1
         if file_month == 0:
             file_month = 12
             file_year -= 1
+        print(file_month)
         file_name = f'{month_int_names[file_month]}_{file_year}.xlsx'
         file_names_list.append(file_name)
         month_names.append(month_int_names[file_month])

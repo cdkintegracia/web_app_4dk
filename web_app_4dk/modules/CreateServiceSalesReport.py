@@ -517,11 +517,9 @@ def get_month_range(with_current_month='N'):
         file_name = f'{month_int_names[file_month]}_{file_year}.xlsx'
         file_names_list.append(file_name)
         month_names.append(month_int_names[file_month])
-        print(file_month)
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
-    exit()
 
 
 def get_second_sheet_titles():
@@ -544,6 +542,8 @@ def create_service_sales_report(req):
     get_month_range(req['with_current_month'])
     users_data = b.get_all('user.get')
     edo_list_elements = get_edo_list_elements()
+    print(month_names)
+    exit()
     if req['with_current_month'] == 'Y':
         create_current_month_deals_data_file(users_data, req['user_id'])
     for filename in file_names_months.keys():

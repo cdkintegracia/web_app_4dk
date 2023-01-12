@@ -11,7 +11,7 @@ from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_m
 
 
 b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
-deals_info_files_directory = f'{os.path.abspath(__file__)}deals_info_files/'
+deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']

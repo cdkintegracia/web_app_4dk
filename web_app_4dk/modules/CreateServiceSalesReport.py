@@ -118,9 +118,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
     service_deal_value_field = f'{month} Сервисы'
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))
     for deal_info in deals_info:
-        if deal_info['Тип'] == '1Спарк 3000' and month == 'Январь':
-            print(deal_info['ID'])
-            print(get_service_deal_start_dates(month, deal_info['Тип'], deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала']))
 
         if deal_info['Ответственный'] not in handled_data:
             continue
@@ -159,7 +156,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_start_date == f'{month_names_numbers[month]}.2022':
+                check_year = str(datetime.now().year)
+                if deal_start_date == f'{month_names_numbers[month]}.{check_year}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600
                     elif deal_info['Тип'] == 'Подпись':

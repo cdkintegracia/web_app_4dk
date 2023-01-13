@@ -157,7 +157,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_info['Ответственный'] == 'Мария Скороходова' and deal_info['Тип'] == '1Спарк 3000':
+                if deal_info['Ответственный'] == 'Полина Александрова' and deal_info['Тип'] == '1Спарк 3000':
                     print(deal_info)
                     print(deal_start_date, f'{month_names_numbers[month]}.{months_and_years[month]}')
                     print(deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}')

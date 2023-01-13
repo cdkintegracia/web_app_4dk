@@ -295,6 +295,7 @@ def rewrite_element(element_data, calls_duration, calls_count):
         }
     }
     element = send_bitrix_request('lists.element.update', request_data)
+    print(element)
     exit()
 
 

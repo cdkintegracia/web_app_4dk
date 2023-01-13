@@ -160,8 +160,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_info['Тип'] == '1Спарк 3000' and month == 'Январь' and deal_info['Ответственный'] == 'Мария Скороходова':
-                    print(deal_info['ID'], deal_start_date)
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600
@@ -268,11 +266,23 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     worksheet.append([''])
     worksheet.append(['', 'СредИТС', 'СредСервисы', 'СредСумма'])
     for department in departments:
+        try:
+            result_its = round(department_summary_its[department] / department_employee_counters[department], 2)
+        except ZeroDivisionError:
+            result_its = 0
+        try:
+            result_services = round(department_summary_services[department] / department_employee_counters[department], 2)
+        except ZeroDivisionError:
+            result_services = 0
+        try:
+            result_summary = round(department_summary_services[department] / department_summary_its[department], 2)
+        except ZeroDivisionError:
+            result_summary = 0
         worksheet.append([
             department,
-            round(department_summary_its[department] / department_employee_counters[department], 2),
-            round(department_summary_services[department] / department_employee_counters[department], 2),
-            round(department_summary_services[department] / department_summary_its[department], 2),
+            result_its,
+            result_services,
+            result_summary,
         ])
 
     worksheet.append([''])

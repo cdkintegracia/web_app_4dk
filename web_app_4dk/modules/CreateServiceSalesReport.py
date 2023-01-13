@@ -115,7 +115,10 @@ def add_month_edo_value(edo_list_elements=None, month=None, users_info=None):
 
 
 def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
+    global months_and_years
     print(months_and_years)
+    print('Завершение')
+    exit()
     its_deal_value_field = f'{month} ИТС'
     service_deal_value_field = f'{month} Сервисы'
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))

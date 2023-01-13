@@ -126,6 +126,9 @@ def main_page():
             new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
             month = request.form.get('month')
             year = request.form.get('year')
+            print(month)
+            print(year)
+            exit()
             rewrite_call_statistic(month, year)
             os.remove('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
         elif request.files['revise_accounting_deals_file']:

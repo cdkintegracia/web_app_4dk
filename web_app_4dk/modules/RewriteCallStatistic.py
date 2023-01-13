@@ -35,9 +35,6 @@ def rewrite_call_statistic(month, year):
         '2022': '2239',
         '2023': '2241'
     }
-    print(month)
-    print(year)
-    exit()
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
     companies = b.get_all('crm.company.list', {'select': ['TITLE']})
 

@@ -170,6 +170,9 @@ def main_page():
             edo_info_handler_file = request.files['edo_info_handler_file']
             month = request.form.get('month')
             year = request.form.get('year')
+            print(month)
+            print(year)
+            exit()
             edo_info_handler_file.save('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')

@@ -66,10 +66,6 @@ def read_deals_from_xlsx(filename: str) -> list:
 def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal_date_start):
     current_year = datetime.now().year
     current_month = datetime.now().month
-    if type(deal_date_start) == str:
-        deal_date_start = datetime.strptime(deal_date_start, '%Y-%m-%d')
-    if type(deal_date_end) == str:
-        deal_date_end = datetime.strptime(deal_date_end, '%Y-%m-%d')
     if current_month < 6 and month in ['Декабрь', 'Ноябрь', 'Октябрь', 'Сентябрь', 'Август', 'Июль']:
         current_year -= 1
     if deal_type in service_deal_current_month:
@@ -84,7 +80,7 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         if month == 'Январь' and deal_type == '1Спарк 3000' and deal_date_end.year == 2024:
             print(type(deal_date_end))
             print(f'Дата конца сделки: {deal_date_end}')
-            print(f'Новая дата начала сделки: {new_deal_date_start}')
+            print(f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}")
         return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
 
 

@@ -121,11 +121,11 @@ def main_page():
     if current_user != 1:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):
-        if request.files['new_call_statistic_file'] and request.form.get('month') and request.form.get('year'):
+        if request.files['new_call_statistic_file'] and request.form.get('rewrite_calls_month') and request.form.get('rewrite_calls_year'):
             new_call_statistic_file = request.files['new_call_statistic_file']
             new_call_statistic_file.save('/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx')
-            month = request.form.get('month')
-            year = request.form.get('year')
+            month = request.form.get('rewrite_calls_month')
+            year = request.form.get('rewrite_calls_year')
             print(month)
             print(year)
             exit()
@@ -170,9 +170,6 @@ def main_page():
             edo_info_handler_file = request.files['edo_info_handler_file']
             month = request.form.get('month')
             year = request.form.get('year')
-            print(month)
-            print(year)
-            exit()
             edo_info_handler_file.save('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')

@@ -36,6 +36,8 @@ def rewrite_call_statistic(month, year):
         '2023': '2241'
     }
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
+    print(elements)
+    exit()
     companies = b.get_all('crm.company.list', {'select': ['TITLE']})
 
     errors = []
@@ -78,7 +80,6 @@ def rewrite_call_statistic(month, year):
     for d in data:
         for element in elements:
             company_id = list(element['PROPERTY_1299'].values())[0]
-            print(company_id)
             if d[0] == company_id:
                 rewrite_element(element, d[1], d[2])
 

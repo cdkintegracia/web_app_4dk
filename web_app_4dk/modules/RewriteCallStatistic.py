@@ -80,6 +80,7 @@ def rewrite_call_statistic(month, year):
             company_id = list(element['PROPERTY_1299'].values())[0]
             if d[0] == company_id:
                 rewrite_element(element, d[1], d[2])
+                exit()
 
     if new_errors:
         task_text = 'Компания Длительность звонков Количество звонков\n'

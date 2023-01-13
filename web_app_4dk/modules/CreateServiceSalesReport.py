@@ -77,8 +77,8 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
     else:
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)
-        if month == 'Январь' and deal_type == '1Спарк 3000':
-            print(f'Дата начала сделки: {deal_date_start}')
+        if month == 'Январь' and deal_type == '1Спарк 3000' and deal_date_end.year == 2023:
+            print(f'Дата конца сделки: {deal_date_start}')
             print(f'Новая дата начала сделки: {new_deal_date_start}')
         return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
 

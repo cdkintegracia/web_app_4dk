@@ -39,6 +39,7 @@ month_names_numbers = {
 }
 handled_data = {}
 file_names_months = {}
+months_and_years = {}
 
 
 def read_deals_from_xlsx(filename: str) -> list:
@@ -492,6 +493,7 @@ def sort_handled_data_keys():
 def get_month_range(with_current_month='N'):
     global month_names, file_names_months
     month_names = []
+    months_and_years = {}
     month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -516,12 +518,15 @@ def get_month_range(with_current_month='N'):
         if file_month == 0:
             file_month = 12
             file_year -= 1
+        months_and_years[month_int_names[file_month]] = file_year
         file_name = f'{month_int_names[file_month]}_{file_year}.xlsx'
         file_names_list.append(file_name)
         month_names.append(month_int_names[file_month])
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
+    print(months_and_years)
+    exit()
 
 
 def get_second_sheet_titles():

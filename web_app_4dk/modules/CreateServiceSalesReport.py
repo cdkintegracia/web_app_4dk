@@ -78,8 +78,8 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)
         if month == 'Январь' and deal_type == '1Спарк 3000':
-            print(deal_date_start)
-            print(new_deal_date_start)
+            print(f'Дата начала сделки: {deal_date_start}')
+            print(f'Новая дата начала сделки: {new_deal_date_start}')
         return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
 
 
@@ -527,7 +527,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(6):
+    for _ in range(1):
         file_month -= 1
         if file_month == 0:
             file_month = 12

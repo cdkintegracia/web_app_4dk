@@ -77,10 +77,6 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
     else:
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)
-        if month == 'Январь' and deal_type == '1Спарк 3000' and deal_date_end.year == 2024:
-            print(type(deal_date_end))
-            print(f'Дата конца сделки: {deal_date_end}')
-            print(f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}")
         return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
 
 
@@ -161,6 +157,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
+                if deal_info['Ответственный'] == 'Мария Скороходова' and deal_info['Тип'] == '1Спарк 3000':
+                    print(deal_info)
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600

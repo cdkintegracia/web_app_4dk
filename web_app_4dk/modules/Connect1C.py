@@ -123,6 +123,10 @@ def create_task(req) -> dict:
         company_id = user_info[1]
     else:
         company_id = author_info[1]
+    if company_id:
+        UF_CRM_TASK = [f"CO_{company_id}"]
+    else:
+        UF_CRM_TASK = ''
 
     support_info = get_name(req['author_id'], req['treatment_id'])
     support_id = get_employee_id(support_info[0])
@@ -148,7 +152,7 @@ def create_task(req) -> dict:
             'GROUP_ID': '11',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_CRM_TASK': UF_CRM_TASK,
             'UF_AUTO_499889542776': req['treatment_id'],
         }})
         return new_task['task']
@@ -274,6 +278,37 @@ def get_name(user_id: str, *args) -> list:
                     return [user_name, company_id]
 
 
+def add_commentary(req, task):
+    task_text = ''
+    treatment_id = req['treatment_id']
+    authors = {}
+    data = load_logs()
+    event_count = 0
+    data = list(filter(lambda x: x['treatment_id'] == treatment_id, data))
+    for event in data:
+        if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
+            event_count += 1
+            if event_count < 2:
+                continue
+            if event['author_id'] not in authors:
+                authors.setdefault(event['author_id'], get_name(event['author_id']))
+            task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
+            task_text += f"{get_event_info(event)}\n"
+    task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()[
+        'result']
+    for comment in task_comments:
+        params = {0: task['id'], 1: comment['ID']}
+        requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
+    b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task['responsibleId']}],
+           raw=True)
+    elapsed_time = req['treatment']['treatment_duration']
+    b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
+    ufCrmTask = task['ufCrmTask']
+    company_id = list(filter(lambda x: 'CO' in x, ufCrmTask))[0].replace('CO_', '')
+    update_element(company_id=company_id, connect_treatment=True)
+    clear_logs()
+
+
 def connect_1c(req: dict):
     if req['event_type'] != 'line':
         return
@@ -294,6 +329,7 @@ def connect_1c(req: dict):
         if 'error' in task:
             return
         support_line_name = get_support_line_name(req)
+        add_commentary(req, task)
         if 'ЛК' in support_line_name:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task['id'],
@@ -335,22 +371,7 @@ def connect_1c(req: dict):
         task = check_task_existence(req)
         if 'error' in task:
             return
-        task_text = ''
-        treatment_id = req['treatment_id']
-        authors = {}
-        data = load_logs()
-        event_count = 0
-        data = list(filter(lambda x: x['treatment_id'] == treatment_id, data))
-        for event in data:
-            if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
-                event_count += 1
-                if event_count < 2:
-                    continue
-                if event['author_id'] not in authors:
-                    authors.setdefault(event['author_id'], get_name(event['author_id']))
-                task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
-                task_text += f"{get_event_info(event)}\n"
-
+        add_commentary(req, task)
         support_line_name = get_support_line_name(req)
         if 'ЛК' in support_line_name:
             send_bitrix_request('tasks.task.update',
@@ -361,17 +382,7 @@ def connect_1c(req: dict):
         else:
             send_bitrix_request('tasks.task.update',
                                 {'taskId': task['id'], 'fields': {'STAGE_ID': '1167', 'STATUS': '5'}})
-        task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()['result']
-        for comment in task_comments:
-            params = {0: task['id'], 1: comment['ID']}
-            requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
-        b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task['responsibleId']}], raw=True)
-        elapsed_time = req['treatment']['treatment_duration']
-        b.call('task.elapseditem.add', [task['id'], {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
-        ufCrmTask = task['ufCrmTask']
-        company_id = list(filter(lambda x: 'CO' in x, ufCrmTask))[0].replace('CO_', '')
-        update_element(company_id=company_id, connect_treatment=True)
-        clear_logs()
+
 
     # Смена ответственного
     data = {

@@ -77,6 +77,9 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
     else:
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)
+        if month == 'Январь' and deal_type == '1Спарк 3000':
+            print(deal_date_start)
+            print(new_deal_date_start)
         return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
 
 
@@ -94,7 +97,7 @@ def get_deal_value(deal_value, deal_type, deal_id):
             return 0
 
 
-def add_month_edo_value(edo_list_elements=None, month=None, users_info=None):
+def add_month_edo_value(edo_list_elements=None, month=None, users_info=None, year=None):
     service_deal_value_field = f'{month} Сервисы'
     for responsible in handled_data:
         user_name = responsible.split()[0]
@@ -107,7 +110,7 @@ def add_month_edo_value(edo_list_elements=None, month=None, users_info=None):
         if not user_info:
             continue
         user_id = str(user_info[0]['ID'])
-        edo_elements = list(filter(lambda x: x['Месяц'] == month and x['Ответственный'] == user_id, edo_list_elements))
+        edo_elements = list(filter(lambda x: x['Месяц'] == month and x['Ответственный'] == user_id and x['Год'] == year, edo_list_elements))
         if edo_elements:
             for element in edo_elements:
                 handled_data[responsible][service_deal_value_field] += element['Сумма']
@@ -159,7 +162,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
             else:
                 if deal_info['Тип'] == '1Спарк 3000' and month == 'Январь' and deal_info['Ответственный'] == 'Мария Скороходова':
                     print(deal_info['ID'], deal_start_date)
-                if deal_start_date == f'{month_names_numbers[month]}.{str(months_and_years[month])}':
+                if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600
                     elif deal_info['Тип'] == 'Подпись':
@@ -177,7 +180,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
         handled_data[responsible][service_deal_value_field] += sum(rpd_values)
         handled_data[responsible]['Сервисы'][f'{month} РПД'] = sum(rpd_values)
 
-    add_month_edo_value(edo_list_elements, month, users_info)
+    add_month_edo_value(edo_list_elements, month, users_info, months_and_years[month])
 
 
 def get_services_summary():
@@ -519,7 +522,7 @@ def get_month_range(with_current_month='N'):
         if file_month == 0:
             file_month = 12
             file_year -= 1
-        months_and_years[month_int_names[file_month]] = file_year
+        months_and_years[month_int_names[file_month]] = str(file_year)
         file_name = f'{month_int_names[file_month]}_{file_year}.xlsx'
         file_names_list.append(file_name)
         month_names.append(month_int_names[file_month])

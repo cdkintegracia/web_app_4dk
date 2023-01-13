@@ -115,6 +115,7 @@ def add_month_edo_value(edo_list_elements=None, month=None, users_info=None):
 
 
 def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
+    print(months_and_years)
     its_deal_value_field = f'{month} ИТС'
     service_deal_value_field = f'{month} Сервисы'
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))
@@ -526,8 +527,6 @@ def get_month_range(with_current_month='N'):
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
-    print(months_and_years)
-    exit()
 
 
 def get_second_sheet_titles():

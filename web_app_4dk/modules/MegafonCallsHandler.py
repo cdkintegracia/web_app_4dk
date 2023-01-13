@@ -286,7 +286,7 @@ def megafon_calls_handler(file_name):
     b24_contacts = list(filter(lambda x: 'PHONE' in x, b24_contacts_handler(b24_contacts_info)))
     result_titles = [
         'Компания', 'Топ тип', 'ЛК минут', 'ЛК количество', 'ЦС минут',
-        'ЦС количество', 'АДМ минут', 'АДМ количество', 'Длительность', 'Количество'
+        'ЦС количество', 'АДМ минут', 'АДМ количество', 'Длительность', 'Количество',
     ]
 
     result = {}
@@ -312,7 +312,8 @@ def megafon_calls_handler(file_name):
                                             'АДМ минут': timedelta(),
                                             'АДМ количество': 0,
                                             'Длительность': timedelta(),
-                                            'Количество': 0})
+                                            'Количество': 0,
+                                            })
             for key in processed_data[company_name]:
                 result[company_name][key] += processed_data[company_name][key]
                 if isinstance(result[company_name][key], timedelta):

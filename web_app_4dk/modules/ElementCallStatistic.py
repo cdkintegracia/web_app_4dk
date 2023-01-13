@@ -219,8 +219,16 @@ def create_element(company_id, outgoing_email=False, connect_treatment=False, ca
 
 
 def rewrite_element(element_data, calls_duration, calls_count):
-    property_1303 = calls_duration
-    property_1305 = calls_count
+    property_1583 = calls_duration
+    property_1585 = calls_count
+    if 'PROPERTY_1303' not in element_data:
+        property_1303 = '00:00:00'
+    else:
+        property_1303 = list(element_data['PROPERTY_1303'].values())[0]
+    if 'PROPERTY_1305' not in element_data:
+        property_1305 = '0'
+    else:
+        property_1305 = list(element_data['PROPERTY_1305'].values())[0]
     if 'PROPERTY_1307' not in element_data:
         property_1307 = '00:00:00'
     else:
@@ -281,10 +289,13 @@ def rewrite_element(element_data, calls_duration, calls_count):
             'PROPERTY_1365': property_1365,  # Обращений в 1С:Коннект
             'PROPERTY_1369': property_1369,  # Входящие звонки
             'PROPERTY_1375': property_1375,  # Исходящие (остальные)
-            'PROPERTY_1377': property_1377  # Топ сделка
+            'PROPERTY_1377': property_1377,  # Топ сделка
+            'PROPERTY_1583': property_1583,  # Продолжительность исх. зв. (Мегафон)
+            'PROPERTY_1585': property_1585,  # Кол-во исх. зв. (Мегафон)
         }
     }
     element = send_bitrix_request('lists.element.update', request_data)
+    exit()
 
 
 def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False):

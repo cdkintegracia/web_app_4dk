@@ -63,7 +63,7 @@ def read_deals_from_xlsx(filename: str) -> list:
     return data
 
 
-def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal_date_start):
+def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal_date_start, id):
     current_year = datetime.now().year
     current_month = datetime.now().month
     if current_month < 6 and month in ['Декабрь', 'Ноябрь', 'Октябрь', 'Сентябрь', 'Август', 'Июль']:
@@ -75,6 +75,12 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
     elif deal_type == 'Подпись 1000' and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
         return f'{deal_date_start.month}.{deal_date_start.year}'
     else:
+        if id == '80395':
+            print(deal_date_end)
+            new_deal_date_start_year = deal_date_end.year - 1
+            new_deal_date_start = deal_date_end + timedelta(days=1)
+            print(new_deal_date_start_year)
+            print(new_deal_date_start)
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)
         return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
@@ -157,10 +163,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_info['Ответственный'] == 'Полина Александрова' and deal_info['Тип'] == '1Спарк 3000':
-                    print(deal_info)
-                    print(deal_start_date, f'{month_names_numbers[month]}.{months_and_years[month]}')
-                    print(deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}')
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600

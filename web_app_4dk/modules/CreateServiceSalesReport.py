@@ -76,12 +76,10 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         return f'{deal_date_start.month}.{deal_date_start.year}'
     else:
         new_deal_date_start_year = deal_date_end.year - 1
-        deal_date_end_month = datetime.strftime(deal_date_end, '%m')
-        deal_date_end_day = datetime.strftime(deal_date_end, '%d')
-        deal_date_end_str = f'{deal_date_end_day}.{deal_date_end_month}.{new_deal_date_start_year}'
-        deal_date_end = datetime.strptime(deal_date_end_str, '%d.%m.%Y')
         new_deal_date_start = deal_date_end + timedelta(days=1)
-        return f"{new_deal_date_start.strftime('%m.%Y')}"
+        if datetime.strftime(new_deal_date_start, '%d.%m') == '01.01':
+            new_deal_date_start_year += 1
+        return f"{new_deal_date_start.strftime('%m')}.{new_deal_date_start_year}"
 
 
 def get_deal_value(deal_value, deal_type, deal_id):

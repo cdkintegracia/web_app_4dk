@@ -76,6 +76,7 @@ def rewrite_call_statistic(month, year):
             data.append([value, error[1], error[2]])
 
     for d in data:
+        print(d)
         for element in elements:
             company_id = list(element['PROPERTY_1299'].values())[0]
             if d[0] == company_id:

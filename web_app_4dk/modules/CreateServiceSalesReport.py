@@ -22,8 +22,6 @@ service_deal_values = {'Контрагент': 4800, 'Кабинет сотру�
                        '1Спарк': 3000, 'ЭДО': None, 'Спарк сумма': None}
 spark_names = ['1Спарк', '1Спарк в договоре', '1СПАРК Риски', '1СпаркПЛЮС 22500', '1Спарк 3000']
 service_deal_types = list(service_deal_values.keys())
-titles_for_sorting = []
-month_names = []
 month_names_numbers = {
     'Январь': '01',
     'Февраль': '02',
@@ -38,6 +36,8 @@ month_names_numbers = {
     'Ноябрь': '11',
     'Декабрь': '12',
 }
+titles_for_sorting = []
+month_names = []
 handled_data = {}
 file_names_months = {}
 months_and_years = {}
@@ -506,8 +506,6 @@ def sort_handled_data_keys():
 
 def get_month_range(with_current_month='N'):
     global month_names, file_names_months, months_and_years
-    month_names = []
-    months_and_years = {}
     month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -557,7 +555,13 @@ def get_third_sheet_titles():
 
 
 def create_service_sales_report(req):
-    global handled_data
+    global month_names, file_names_months, months_and_years, titles_for_sorting, handled_data
+    titles_for_sorting = []
+    month_names = []
+    handled_data = {}
+    file_names_months = {}
+    months_and_years = {}
+
     get_month_range(req['with_current_month'])
     users_data = b.get_all('user.get')
     edo_list_elements = get_edo_list_elements()

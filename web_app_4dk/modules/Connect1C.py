@@ -279,11 +279,25 @@ def get_name(user_id: str, *args) -> list:
 
 
 def add_commentary(req, task):
+    ignore_comments = ['Необходимо указать крайний срок, иначе задача не будет выполнена вовремя',
+                       'вы назначены ответственным',
+                       'Проект задачи изменен на']
     task_text = ''
     treatment_id = req['treatment_id']
     authors = {}
     data = load_logs()
     event_count = 0
+    task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()[
+        'result']
+    for comment in task_comments:
+        params = {0: task['id'], 1: comment['ID']}
+        requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
+        comment_flag = True
+        for ignore_comment in ignore_comments:
+            if ignore_comment in comment['POST_MESSAGE']:
+                comment_flag = False
+        if comment_flag:
+            task_text += f"{comment['POST_MESSAGE']}\n"
     data = list(filter(lambda x: x['treatment_id'] == treatment_id, data))
     for event in data:
         if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:
@@ -294,11 +308,6 @@ def add_commentary(req, task):
                 authors.setdefault(event['author_id'], get_name(event['author_id']))
             task_text += f"{time_handler(event['message_time'])} {authors[event['author_id']][0]}\n{connect_codes[event['message_type']]}\n"
             task_text += f"{get_event_info(event)}\n"
-    task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task["id"]}').json()[
-        'result']
-    for comment in task_comments:
-        params = {0: task['id'], 1: comment['ID']}
-        requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
     b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': task_text, 'AUTHOR_ID': task['responsibleId']}],
            raw=True)
     elapsed_time = req['treatment']['treatment_duration']

@@ -8,9 +8,10 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 
 from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
+from web_app_4dk.modules.authentication import authentication
 
 
-b = Bitrix('https://vc4dk.bitrix24.ru/rest/311/78nouvwz9drsony0/')
+b = Bitrix(authentication('Bitrix'))
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 
 

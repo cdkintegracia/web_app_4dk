@@ -9,28 +9,6 @@ from web_app_4dk.modules.field_values import deals_category_1_types, departments
 from web_app_4dk.modules.EdoInfoHandler import month_codes, year_codes
 from web_app_4dk.modules.authentication import authentication
 
-month_codes = {
-    'Январь': '2371',
-    'Февраль': '2373',
-    'Март': '2375',
-    'Апрель': '2377',
-    'Май': '2379',
-    'Июнь': '2381',
-    'Июль': '2383',
-    'Август': '2385',
-    'Сентябрь': '2387',
-    'Октябрь': '2389',
-    'Ноябрь': '2391',
-    'Декабрь': '2393'
-}
-
-year_codes = {
-    '2022': '2395',
-    '2023': '2397'
-}
-
-
-
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -48,6 +26,7 @@ def create_services_coverage_report(req):
             'UF_CRM_1640523562691',      # Регномер
             'UF_CRM_1657878818384',      # Группа
             'UF_CRM_1640523703',         # Подразделение
+            'UF_CRM_1651071211',         # Льготная отчетность
         ],
         'filter': {
             'STAGE_ID': ['C1:NEW', 'C1:UC_0KJKTY', 'C1:UC_3J0IH6', 'C1:UC_KZSOR2', 'C1:UC_VQ5HJD'],
@@ -80,6 +59,9 @@ def create_services_coverage_report(req):
             if deal['COMPANY_ID']:
                 company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies_info))[0]
                 company_name = company_info['TITLE']
+            deal_reporting_in_its = 'Нет'
+            if deal['UF_CRM_1651071211']:
+                deal_reporting_in_its = 'Да'
             field_values = {
                 'Компания': company_name,
                 'ИТС': deals_category_1_types[deal['TYPE_ID']],
@@ -92,7 +74,7 @@ def create_services_coverage_report(req):
                 'РПД': '',
                 'ЭДО': 0,
                 'Отчетность': 0,
-                'Отчетность в рамках ИТС': 'Нет',
+                'Отчетность в рамках ИТС': deal_reporting_in_its,
                 'Допы Облако': '',
             }
             result_data[deal['COMPANY_ID']].append(field_values)
@@ -152,10 +134,6 @@ def create_services_coverage_report(req):
     # Подсчет отчетностей
     for company_id in result_data:
         for data_counter in range(len(result_data[company_id])):
-            deal_reporting_in_its = list(filter(lambda x: x['TYPE_ID'] == 'UC_OV4T7K' and x['COMPANY_ID'] == company_id, deals_info))
-            if deal_reporting_in_its:
-                result_data[company_id][data_counter]['Отчетность в рамках ИТС'] = 'Да'
-
             deals_reporting = list(filter(lambda x: x['TYPE_ID'] == 'UC_O99QUW' and x['COMPANY_ID'] == company_id, deals_info))
             if deals_reporting:
                 result_data[company_id][data_counter]['Отчетность'] = len(deals_reporting)

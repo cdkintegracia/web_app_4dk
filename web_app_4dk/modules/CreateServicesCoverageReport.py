@@ -5,7 +5,7 @@ import base64
 from fast_bitrix24 import Bitrix
 import openpyxl
 
-from field_values import deals_category_1_types, departments_id_name, month_int_names
+from web_app_4dk.modules.field_values import deals_category_1_types, departments_id_name, month_int_names
 from web_app_4dk.modules.EdoInfoHandler import month_codes, year_codes
 from web_app_4dk.modules.authentication import authentication
 

@@ -40,6 +40,7 @@ from web_app_4dk.modules.AutoFailure import auto_failure
 from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
 from web_app_4dk.modules.CreateServiceSalesReport import create_service_sales_report
 from web_app_4dk.modules.AddTaskCommentary import add_task_commentary
+from web_app_4dk.modules.CreateServicesCoverageReport import create_services_coverage_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -63,6 +64,7 @@ custom_webhooks = {
     'auto_failure': auto_failure,
     'create_service_sales_report': create_service_sales_report,
     'add_task_commentary': add_task_commentary,
+    'create_services_coverage_report': create_services_coverage_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

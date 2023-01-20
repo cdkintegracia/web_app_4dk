@@ -87,7 +87,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.xbxb">
+  <component name="RunManager" selected="Python.CreateServicesCoverageReport">
     <configuration name="выа" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -102,28 +102,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/выа.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="ими" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="flask" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/ими.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -168,6 +146,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateServicesCoverageReport.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ими" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="flask" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/ими.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -225,14 +225,12 @@
       <item itemvalue="Python.CreateServicesCoverageReport" />
       <item itemvalue="Python.xbxb" />
       <item itemvalue="Python.выа" />
-      <item itemvalue="Python.ими" />
       <item itemvalue="Python.CreateCurrentMonthDealsDataFile" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.xbxb" />
         <item itemvalue="Python.CreateServicesCoverageReport" />
-        <item itemvalue="Python.ими" />
+        <item itemvalue="Python.xbxb" />
         <item itemvalue="Python.выа" />
         <item itemvalue="Python.CreateCurrentMonthDealsDataFile" />
       </list>
@@ -339,7 +337,9 @@
       <workItem from="1673332329362" duration="82000" />
       <workItem from="1673334095888" duration="28613000" />
       <workItem from="1673614377912" duration="6578000" />
-      <workItem from="1673860563156" duration="17220000" />
+      <workItem from="1673860563156" duration="18197000" />
+      <workItem from="1673964059921" duration="11196000" />
+      <workItem from="1674136475665" duration="1587000" />
     </task>
     <servers />
   </component>
@@ -359,8 +359,8 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/web_app_4dk$ReviseAccountingDeals.coverage" NAME="ReviseAccountingDeals Coverage Results" MODIFIED="1673354108703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateServicesCoverageReport.coverage" NAME="CreateServicesCoverageReport Coverage Results" MODIFIED="1673955152092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$xbxb.coverage" NAME="xbxb Coverage Results" MODIFIED="1673959549147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$CreateServicesCoverageReport.coverage" NAME="CreateServicesCoverageReport Coverage Results" MODIFIED="1674126153329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$gdg.coverage" NAME="gdg Coverage Results" MODIFIED="1673517483923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$tools.coverage" NAME="tools Coverage Results" MODIFIED="1673444656150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk" />
     <SUITE FILE_PATH="coverage/web_app_4dk$dfdfd.coverage" NAME="dfdfd Coverage Results" MODIFIED="1673441248373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />

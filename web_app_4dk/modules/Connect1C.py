@@ -130,7 +130,6 @@ def create_task(req) -> dict:
 
     support_info = get_name(req['author_id'], req['treatment_id'])
     support_id = get_employee_id(support_info[0])
-    responsible_id = '173'
     responsible_id = support_id
     support_line_name = get_support_line_name(req)
     if 'ЛК' in support_line_name:
@@ -221,7 +220,7 @@ def get_employee_id(name: str) -> str:
     try:
         return employee_id[0]['ID']
     except:
-        return '0'
+        return '173'
 
 
 def get_event_info(event: dict) -> str:

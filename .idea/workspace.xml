@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateGrowthTasks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/authentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CompleteDocumentFlowTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CompleteDocumentFlowTask.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +88,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CreateServicesCoverageReport">
+  <component name="RunManager" selected="Python.CreateGrowthTasks">
     <configuration name="выа" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -124,6 +125,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CreateGrowthTasks" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="flask" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateGrowthTasks.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -222,6 +245,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.CreateGrowthTasks" />
       <item itemvalue="Python.CreateServicesCoverageReport" />
       <item itemvalue="Python.xbxb" />
       <item itemvalue="Python.выа" />
@@ -229,6 +253,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CreateGrowthTasks" />
         <item itemvalue="Python.CreateServicesCoverageReport" />
         <item itemvalue="Python.xbxb" />
         <item itemvalue="Python.выа" />
@@ -340,7 +365,8 @@
       <workItem from="1673860563156" duration="18197000" />
       <workItem from="1673964059921" duration="11196000" />
       <workItem from="1674136475665" duration="1587000" />
-      <workItem from="1674194786558" duration="979000" />
+      <workItem from="1674194786558" duration="1197000" />
+      <workItem from="1674217372500" duration="2221000" />
     </task>
     <servers />
   </component>
@@ -368,5 +394,6 @@
     <SUITE FILE_PATH="coverage/web_app_4dk$CreateServiceSalesReport__1_.coverage" NAME="CreateServiceSalesReport (1) Coverage Results" MODIFIED="1673449483525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$.coverage" NAME="ими Coverage Results" MODIFIED="1673954409663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$CreateCurrentMonthDealsDataFile.coverage" NAME="CreateCurrentMonthDealsDataFile Coverage Results" MODIFIED="1673517856347" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$CreateGrowthTasks.coverage" NAME="CreateGrowthTasks Coverage Results" MODIFIED="1674222303222" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

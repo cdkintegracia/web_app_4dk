@@ -177,7 +177,9 @@ def check_task_existence(req) -> dict:
     }
     task_existence = send_bitrix_request('tasks.task.list', data)['tasks']
     if not task_existence:
-        return create_task(req)
+        new_task =  create_task(req)
+        print(new_task)
+        return new_task
     else:
         return task_existence[0]
 

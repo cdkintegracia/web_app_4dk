@@ -5,8 +5,11 @@ from datetime import datetime
 from fast_bitrix24 import Bitrix
 import openpyxl
 
-from web_app_4dk.modules.field_values import deals_category_1_types, deals_category_1_stage_ids, UF_CRM_1657878818384_values
-from web_app_4dk.modules.authentication import authentication
+#from web_app_4dk.modules.field_values import deals_category_1_types, deals_category_1_stage_ids, UF_CRM_1657878818384_values
+#from web_app_4dk.modules.authentication import authentication
+
+from field_values import deals_category_1_types, deals_category_1_stage_ids, UF_CRM_1657878818384_values
+from authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -65,7 +68,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
             temp['Дата начала'] = datetime.strftime(begindate, '%d.%m.%Y')
         else:
             temp['Дата начала'] = ''
-
+        print(deal['ID'])
         temp['Ответственный'] = user_name
         temp['Тип'] = deals_category_1_types[deal['TYPE_ID']]
         temp['Сумма'] = int(float(deal['OPPORTUNITY']))

@@ -84,8 +84,8 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.vsv">
-    <configuration name="выа" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.CreateCurrentMonthDealsDataFile">
+    <configuration name="CreateCurrentMonthDealsDataFile" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -98,7 +98,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/выа.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -241,19 +241,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.CreateCurrentMonthDealsDataFile" />
       <item itemvalue="Python.CreateGrowthTasks" />
       <item itemvalue="Python.vsv" />
       <item itemvalue="Python.CreateServicesCoverageReport" />
       <item itemvalue="Python.xbxb" />
-      <item itemvalue="Python.выа" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CreateCurrentMonthDealsDataFile" />
         <item itemvalue="Python.vsv" />
         <item itemvalue="Python.CreateGrowthTasks" />
         <item itemvalue="Python.CreateServicesCoverageReport" />
         <item itemvalue="Python.xbxb" />
-        <item itemvalue="Python.выа" />
       </list>
     </recent_temporary>
   </component>
@@ -364,6 +364,7 @@
       <workItem from="1674194786558" duration="1197000" />
       <workItem from="1674217372500" duration="3503000" />
       <workItem from="1674477276564" duration="602000" />
+      <workItem from="1674478193954" duration="64000" />
     </task>
     <servers />
   </component>

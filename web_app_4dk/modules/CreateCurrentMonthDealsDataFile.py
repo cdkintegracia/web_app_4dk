@@ -65,7 +65,6 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
             temp['Дата начала'] = datetime.strftime(begindate, '%d.%m.%Y')
         else:
             temp['Дата начала'] = ''
-        print(deal['ID'])
         temp['Ответственный'] = user_name
         temp['Тип'] = deals_category_1_types[deal['TYPE_ID']]
         temp['Сумма'] = int(float(deal['OPPORTUNITY']))

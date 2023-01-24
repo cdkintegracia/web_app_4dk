@@ -114,7 +114,7 @@ def create_task(req) -> dict:
     # Проверка на инициатора обращения
     author_info = get_name(event['author_id'], req['treatment_id'])
     is_author_support = get_employee_id(author_info[0])
-    if is_author_support != '0':
+    if is_author_support != '173':
         return {'error': 'Инициатор сообщения - сотрудник'}
 
     message_time = time_handler(req['message_time'])

@@ -56,7 +56,8 @@ deals_category_1_types = {
     'UC_6TCS2E': 'Линк',
     '1': 'Не указан',
     'UC_D7TC4I': 'ГРМ Спец',
-    'UC_GP5FR3': 'ДУО'
+    'UC_GP5FR3': 'ДУО',
+    '': ''
 }
 
 UF_CRM_1657878818384_values = {

@@ -41,6 +41,7 @@ from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_m
 from web_app_4dk.modules.CreateServiceSalesReport import create_service_sales_report
 from web_app_4dk.modules.AddTaskCommentary import add_task_commentary
 from web_app_4dk.modules.CreateServicesCoverageReport import create_services_coverage_report
+from web_app_4dk.modules.AddInvoiceToList import add_invoice_to_list
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -78,6 +79,7 @@ default_webhooks = {
     'ONTASKADD': update_user_statistics,
     'ONTASKUPDATE': update_user_statistics,
     'ONCRMCONTACTUPDATE': update_contact_photo,
+    'ONCRMIVOICEADD': add_invoice_to_list,
 }
 
 

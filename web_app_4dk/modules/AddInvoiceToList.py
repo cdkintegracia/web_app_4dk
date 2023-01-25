@@ -1,6 +1,6 @@
 from fast_bitrix24 import Bitrix
 
-from authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 import requests
 
 b = Bitrix(authentication('Bitrix'))

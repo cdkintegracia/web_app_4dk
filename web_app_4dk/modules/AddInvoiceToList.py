@@ -6,4 +6,5 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def add_invoice_to_list(req):
+    print('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
     print(req)

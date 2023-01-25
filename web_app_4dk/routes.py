@@ -66,6 +66,7 @@ custom_webhooks = {
     'create_service_sales_report': create_service_sales_report,
     'add_task_commentary': add_task_commentary,
     'create_services_coverage_report': create_services_coverage_report,
+    'add_invoice_to_list': add_invoice_to_list,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом
@@ -79,7 +80,6 @@ default_webhooks = {
     'ONTASKADD': update_user_statistics,
     'ONTASKUPDATE': update_user_statistics,
     'ONCRMCONTACTUPDATE': update_contact_photo,
-    'ONCRMINVOICEADD': add_invoice_to_list,
 }
 
 

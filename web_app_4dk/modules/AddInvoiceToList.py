@@ -10,4 +10,4 @@ def add_invoice_to_list(req):
     data = {'order': {'id': 'desc'}, 'filter': {'entityTypeId': req['id']}}
     documents_info = requests.post(url=f"{authentication('Bitrix')}crm.documentgenerator.document.list").json()['result']['documents']
     for document in documents_info:
-        print(document)
+        print(document['id'])

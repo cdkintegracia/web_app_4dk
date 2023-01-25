@@ -79,7 +79,7 @@ default_webhooks = {
     'ONTASKADD': update_user_statistics,
     'ONTASKUPDATE': update_user_statistics,
     'ONCRMCONTACTUPDATE': update_contact_photo,
-    'ONCRMIVOICEADD': add_invoice_to_list,
+    'ONCRMINVOICEADD': add_invoice_to_list,
 }
 
 

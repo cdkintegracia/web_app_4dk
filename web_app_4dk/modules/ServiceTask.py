@@ -8,7 +8,8 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 import requests
 
-from web_app_4dk.modules.authentication import authentication
+#from web_app_4dk.modules.authentication import authentication
+from authentication import authentication
 
 # Считывание файла authentication.txt
 

@@ -170,6 +170,7 @@ def update_user_statistics(req: dict):
     :param req: request.form
     :return:
     """
+    return
     funcs = {
         'ONVOXIMPLANTCALLEND': add_call,
         'ONCRMACTIVITYADD': add_mail,

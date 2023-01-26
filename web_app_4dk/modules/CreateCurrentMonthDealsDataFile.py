@@ -34,6 +34,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
     current_year = datetime.now().year
     deals_info = b.get_all('crm.deal.list', {
         'select': [
+            'TITLE',
             'TYPE_ID',
             'ASSIGNED_BY_ID',
             'BEGINDATE',
@@ -71,6 +72,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
         temp['Стадия сделки'] = deals_category_1_stage_ids[deal['STAGE_ID']]
         temp['Группа'] = UF_CRM_1657878818384_values[deal['UF_CRM_1657878818384']]
         temp['ID'] = deal['ID']
+        temp['Название'] = deal['TITLE']
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

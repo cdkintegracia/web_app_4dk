@@ -88,7 +88,7 @@ def get_deal_value(deal_value, deal_type, deal_id, deal_name = None):
         rpd_values = {'100': 600, '500': 2500, '1000': 4500, '10000': 40000}
         for page_count in rpd_values:
             if page_count in deal_name:
-                return rpd_values[page_count]        
+                return rpd_values[page_count]
     if deal_value:
         return deal_value
     else:
@@ -171,7 +171,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                     elif deal_info['Тип'] == 'Подпись':
                         deal_value = 0
                     elif deal_info['Тип'] == 'РПД':
-                        rpd_data[deal_info['Ответственный']][deal_info['ID']] = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
+                        rpd_data[deal_info['Ответственный']][deal_info['ID']] = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'], deal_info['TITLE'])
                         continue
                     else:
                         deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])

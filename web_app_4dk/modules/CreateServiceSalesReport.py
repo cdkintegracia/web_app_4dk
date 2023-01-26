@@ -85,7 +85,7 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
 
 def get_deal_value(deal_value, deal_type, deal_id, deal_name=None):
     if deal_type == 'РПД' and deal_name:
-        rpd_values = {'100': 600, '500': 2500, '1000': 4500, '10000': 40000}
+        rpd_values = {'10000': 40000, '1000': 4500, '100': 600, '500': 2500, }
         for page_count in rpd_values:
             if page_count in deal_name:
                 b.call('im.notify.system.add', {

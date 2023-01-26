@@ -85,12 +85,9 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
 
 def get_deal_value(deal_value, deal_type, deal_id, deal_name=None):
     if deal_type == 'РПД' and deal_name:
-        rpd_values = {'10000': 40000, '1000': 4500, '100': 600, '500': 2500, }
+        rpd_values = {'10000': 40000, '1000': 4500, '100': 600, '500': 2500}
         for page_count in rpd_values:
             if page_count in deal_name:
-                b.call('im.notify.system.add', {
-                    'USER_ID': '311',
-                    'MESSAGE': f'{deal_name}, {deal_id}, {rpd_values[page_count]}'})
                 return rpd_values[page_count]
     if deal_value:
         return deal_value
@@ -533,7 +530,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(1):
+    for _ in range(6):
         file_month -= 1
         if file_month == 0:
             file_month = 12

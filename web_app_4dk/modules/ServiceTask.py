@@ -9,7 +9,7 @@ from openpyxl.utils import get_column_letter
 import requests
 
 from web_app_4dk.modules.authentication import authentication
-#from authentication import authentication
+
 
 # Считывание файла authentication.txt
 
@@ -262,8 +262,10 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, sta
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 
-def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, year, month, current_month_days, task_text, dct):
+def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, year, month, current_month_days, task_text, dct, companies_name):
     deals = list(filter(lambda x: x['ASSIGNED_BY_ID'] == employee, quarter_deals))
+    deals = list(map(lambda x: {'ASSIGNED_BY_ID': x['ASSIGNED_BY_ID'], 'COMPANY_ID': x['COMPANY_ID'], 'ID': x['ID'], 'TITLE': x['TITLE'], 'COMPANY_NAME': list(filter(lambda y: y['ID'] == x['COMPANY_ID'], companies_name))[0]['TITLE']}, deals))
+    deals = list(sorted(deals, key=lambda x: x['COMPANY_NAME']))
     for deal in deals:
 
         company = b.get_all('crm.company.list', {
@@ -324,6 +326,7 @@ def create_service_tasks(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
+    companies_name = b.get_all('crm.company.list', {'select': ['TITLE']})
     task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description']
     task_text = task_text.replace('[LIST]', '').replace('/[LIST]', '')
     employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
@@ -452,10 +455,11 @@ def create_service_tasks(dct):
 
             if dct['quarter'] == 'Y' and dct['month'] in ['Декабрь', 'Март', 'Июнь', 'Сентябрь']:
                 create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
-                                           current_month_days, task_text, dct)
+                                           current_month_days, task_text, dct, companies_name)
 
         # Перебор значений выбранного выше ключа
-
+        employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
+        employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
         for value in employees[employee]:
             if employee in [None, 'None'] or not deals:
                 continue
@@ -570,6 +574,7 @@ def create_service_tasks_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по ЗСВ за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
     os_remove(report_name)
+
 
 
 

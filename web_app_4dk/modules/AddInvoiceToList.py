@@ -24,4 +24,3 @@ def add_invoice_to_list(req):
             }
         })
 
-add_invoice_to_list({'id': '159'})

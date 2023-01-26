@@ -274,7 +274,7 @@ def get_name(user_id: str, *args) -> list:
                                 'GROUP_ID': '75',
                                 'STAGE_ID': '0',
                             }})
-                        company_id = '12'
+                        company_id = '11045'
                     return [user_name, company_id]
 
 

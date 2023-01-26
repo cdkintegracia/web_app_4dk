@@ -171,7 +171,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                     elif deal_info['Тип'] == 'Подпись':
                         deal_value = 0
                     elif deal_info['Тип'] == 'РПД':
-                        rpd_data[deal_info['Ответственный']][deal_info['ID']] = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'], deal_info['Название'])
+                        rpd_data[deal_info['Ответственный']][deal_info['ID']] = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'], deal_info['Название сделки'])
                         continue
                     else:
                         deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])

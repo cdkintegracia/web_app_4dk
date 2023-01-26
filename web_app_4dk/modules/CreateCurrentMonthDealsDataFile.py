@@ -72,7 +72,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
         temp['Стадия сделки'] = deals_category_1_stage_ids[deal['STAGE_ID']]
         temp['Группа'] = UF_CRM_1657878818384_values[deal['UF_CRM_1657878818384']]
         temp['ID'] = deal['ID']
-        temp['Название'] = deal['TITLE']
+        temp['Название сделки'] = deal['TITLE']
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

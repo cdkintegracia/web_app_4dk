@@ -19,5 +19,13 @@ def create_info_smart_process(req):
                       f"Смена ЭЦП: {list(element_info['PROPERTY_1553'].values())[0]}\n" \
                       f"Долги по ЭДО: {list(element_info['PROPERTY_1555'].values())[0]}\n" \
                       f"Опрос по КС: {list(element_info['PROPERTY_1561'].values())[0]['TEXT'].replace('<br>', ' ')}\n"
-    b.call('crm.item.add', {'entityTypeId': '141', 'fields': {'companyId': element_company, 'contactId': element_contact, 'ufCrm25_1666342439': element_comment, 'createdBy': req['created_by']}})
+    b.call('crm.item.add', {
+        'entityTypeId': '141',
+        'fields': {
+            'companyId': element_company,
+            'contactId': element_contact,
+            'ufCrm25_1666342439': element_comment,
+            'createdBy': req['created_by'],
+            'assignedById': req['created_by']
+        }})
 

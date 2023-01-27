@@ -282,7 +282,7 @@ def add_commentary(req, task):
     ignore_comments = ['Необходимо указать крайний срок, иначе задача не будет выполнена вовремя',
                        'вы назначены ответственным',
                        'Проект задачи изменен на']
-    task_text = ''
+    task_text = '_____\n'
     treatment_id = req['treatment_id']
     authors = {}
     data = load_logs()
@@ -291,13 +291,15 @@ def add_commentary(req, task):
         'result']
     for comment in task_comments:
         params = {0: task['id'], 1: comment['ID']}
+        if '_____' not in comment['POST_MESSAGE']:
+            continue
         requests.post(f"{authentication('Bitrix')}task.commentitem.delete", json=params)
         comment_flag = True
         for ignore_comment in ignore_comments:
             if ignore_comment in comment['POST_MESSAGE']:
                 comment_flag = False
         if comment_flag:
-            task_text += f"{comment['POST_MESSAGE']}\n"
+                task_text += f"{comment['POST_MESSAGE']}\n"
     data = list(filter(lambda x: x['treatment_id'] == treatment_id, data))
     for event in data:
         if event['treatment_id'] == treatment_id and event['message_type'] not in [80, 81]:

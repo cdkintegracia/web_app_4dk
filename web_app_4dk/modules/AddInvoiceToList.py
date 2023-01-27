@@ -20,7 +20,7 @@ def add_invoice_to_list(req):
             'fields': {
                 'NAME': document['number'],
                 'PROPERTY_1595': req['company_id'],
-                'PROPERTY_1597': req['id'],
+                'PROPERTY_1597': req['deal_id'],
             }
         })
 

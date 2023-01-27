@@ -65,7 +65,7 @@ def update_call_statistic(req):
     :return: Обновление или создание элемента в УС "Статистика звонков"
     """
 
-    add_call(req)     # Запись в статистику пользователя
+    #add_call(req)     # Запись в статистику пользователя
     if req['data[CALL_FAILED_CODE]'] != '200':
         return
 

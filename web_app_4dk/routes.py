@@ -42,6 +42,7 @@ from web_app_4dk.modules.CreateServiceSalesReport import create_service_sales_re
 from web_app_4dk.modules.AddTaskCommentary import add_task_commentary
 from web_app_4dk.modules.CreateServicesCoverageReport import create_services_coverage_report
 from web_app_4dk.modules.AddInvoiceToList import add_invoice_to_list
+from web_app_4dk.modules.ChangeTaskCreatedBy import change_task_created_by
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -67,6 +68,7 @@ custom_webhooks = {
     'add_task_commentary': add_task_commentary,
     'create_services_coverage_report': create_services_coverage_report,
     'add_invoice_to_list': add_invoice_to_list,
+    'change_task_created_by': change_task_created_by,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

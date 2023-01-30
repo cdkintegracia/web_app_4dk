@@ -2,7 +2,7 @@ from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
 
-b = Bitrix('Bitrix')
+b = Bitrix(authentication('Bitrix'))
 
 def change_task_created_by(req):
     b.call('tasks.task.update', {

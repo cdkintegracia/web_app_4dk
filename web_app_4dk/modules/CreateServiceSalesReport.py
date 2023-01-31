@@ -221,11 +221,11 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     filename = f'Отчет по сумме сервисов{time()}.xlsx'.replace(' ', '_')
     departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие']
 
-    worksheet_data_to_write = []
     if update:
         google_access = gspread.service_account(f"/root/credentials/{authentication('Google')}")
         spreadsheet = google_access.open('Отчет по сумме сервисов')
-        worksheet = spreadsheet.worksheet(sheet_name)
+        google_worksheet = spreadsheet.worksheet(sheet_name)
+        worksheet = []
         worksheet.clear()
         departments = ['ГО4', 'ГО3', 'ЦС']
     else:
@@ -233,10 +233,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
         worksheet.title = sheet_name
     summary_titles = ['Сотрудник', 'Подразделение', f'ИТС сред({month_count})', f'Сумма сервисов сред({month_count})', 'Результат']
     employee_to_delete = []
-    if update:
-        worksheet_data_to_write.append(summary_titles)
-    else:
-        worksheet.append(summary_titles)
+    worksheet.append(summary_titles)
     department_summary_its = dict(zip(departments, [0 for _ in departments]))
     department_summary_services = dict(zip(departments, [0 for _ in departments]))
     department_employee_counters = dict(zip(departments, [0 for _ in departments]))
@@ -280,14 +277,8 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
                 department_employee_counters[department] += 1
                 row = [employee, data[employee]['Подразделение'], summary_its, summary_service, result_value]
             if row:
-                if update:
-                    worksheet_data_to_write.append(row)
-                else:
-                    worksheet.append(row)
+                worksheet.append(row)
 
-    if update:
-        worksheet.update('A1', worksheet_data_to_write)
-        return
 
     worksheet.append([''])
     worksheet.append(['', 'СредИТС', 'СредСервисы', 'СредСумма'])
@@ -324,6 +315,10 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
         month_results.append(round(services_months_summary[month]/its_months_summary[month], 2))
     month_results.append(round(sum(list(services_months_summary.values())) / sum(list(its_months_summary.values())), 2))
     worksheet.append(['Результат'] + month_results)
+
+    if update:
+        google_worksheet.update('A1', worksheet)
+        return
 
     """
     Лист 'Детализация по месяцам'

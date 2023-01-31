@@ -317,6 +317,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     worksheet.append(['Результат'] + month_results)
 
     if update:
+        print('Отчет по сумме сервисов обновлен')
         google_worksheet.update('A1', worksheet)
         return
 

@@ -123,6 +123,7 @@ def create_current_month_deals_data_file_route():
 
 @app.route('/update_service_sales_report', methods=['GET'])
 def update_service_sales_report():
+    print('gfdsgsd')
     create_service_sales_report({'update': True, 'with_current_month': 'N'})
 
 

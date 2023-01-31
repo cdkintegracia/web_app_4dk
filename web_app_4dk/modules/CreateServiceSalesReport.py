@@ -233,7 +233,10 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
         worksheet.title = sheet_name
     summary_titles = ['Сотрудник', 'Подразделение', f'ИТС сред({month_count})', f'Сумма сервисов сред({month_count})', 'Результат']
     employee_to_delete = []
-    worksheet.append(summary_titles)
+    if update:
+        worksheet_data_to_write.append(summary_titles)
+    else:
+        worksheet.append(summary_titles)
     department_summary_its = dict(zip(departments, [0 for _ in departments]))
     department_summary_services = dict(zip(departments, [0 for _ in departments]))
     department_employee_counters = dict(zip(departments, [0 for _ in departments]))

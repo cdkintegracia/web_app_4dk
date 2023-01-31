@@ -611,7 +611,7 @@ def create_service_sales_report(req):
         update_report = True
     report_name = write_data_to_xlsx(handled_data, month_titles=second_sheet_titles, service_titles=third_sheet_titles, month_count=len(file_names_months.keys()), update=update_report)
 
-    if req['update']:
+    if update_report:
         return
 
     # Загрузка отчета в Битрикс

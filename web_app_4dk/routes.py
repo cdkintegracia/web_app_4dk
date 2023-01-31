@@ -119,12 +119,13 @@ def login():
 @app.route('/create_current_month_deals_data_file', methods=['GET'])
 def create_current_month_deals_data_file_route():
     create_current_month_deals_data_file()
+    return 'OK'
 
 
 @app.route('/update_service_sales_report', methods=['GET'])
 def update_service_sales_report():
-    print('gfdsgsd')
     create_service_sales_report({'update': True, 'with_current_month': 'N'})
+    return 'OK'
 
 
 

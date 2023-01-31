@@ -6,6 +6,7 @@ import base64
 
 from fast_bitrix24 import Bitrix
 import openpyxl
+import gspread
 
 from web_app_4dk.modules.CreateCurrentMonthDealsDataFile import create_current_month_deals_data_file
 from web_app_4dk.modules.authentication import authentication
@@ -207,19 +208,29 @@ def get_services_summary():
     return month_services_summary
 
 
-def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count=None):
+def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count=None, update=False):
 
     """
     Лист 'Сводные показатели'
     """
+
+    sheet_name = 'Сводные показатели'
 
     service_names = copy.deepcopy(service_deal_types)
     workbook = openpyxl.Workbook()
     filename = f'Отчет по сумме сервисов{time()}.xlsx'.replace(' ', '_')
     departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие']
 
-    worksheet = workbook.active
-    worksheet.title = 'Сводные показатели'
+    worksheet_data_to_write = []
+    if update:
+        google_access = gspread.service_account(f"/root/credentials/{authentication('Google')}")
+        spreadsheet = google_access.open('Отчет по сумме сервисов')
+        worksheet = spreadsheet.worksheet(sheet_name)
+        worksheet.clear()
+        departments = ['ГО4', 'ГО3', 'ЦС']
+    else:
+        worksheet = workbook.active
+        worksheet.title = sheet_name
     summary_titles = ['Сотрудник', 'Подразделение', f'ИТС сред({month_count})', f'Сумма сервисов сред({month_count})', 'Результат']
     employee_to_delete = []
     worksheet.append(summary_titles)
@@ -266,7 +277,14 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
                 department_employee_counters[department] += 1
                 row = [employee, data[employee]['Подразделение'], summary_its, summary_service, result_value]
             if row:
-                worksheet.append(row)
+                if update:
+                    worksheet_data_to_write.append(row)
+                else:
+                    worksheet.append(row)
+
+    if update:
+        worksheet.update('A1', worksheet_data_to_write)
+        return
 
     worksheet.append([''])
     worksheet.append(['', 'СредИТС', 'СредСервисы', 'СредСумма'])
@@ -585,7 +603,13 @@ def create_service_sales_report(req):
         deal_info_handler(file_data, users_data, file_names_months[filename], edo_list_elements=edo_list_elements)
     second_sheet_titles = get_second_sheet_titles()
     third_sheet_titles = get_third_sheet_titles()
-    report_name = write_data_to_xlsx(handled_data, month_titles=second_sheet_titles, service_titles=third_sheet_titles, month_count=len(file_names_months.keys()))
+    update_report = False
+    if 'update' in req:
+        update_report = True
+    report_name = write_data_to_xlsx(handled_data, month_titles=second_sheet_titles, service_titles=third_sheet_titles, month_count=len(file_names_months.keys()), update=update_report)
+
+    if req['update']:
+        return
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '283853'

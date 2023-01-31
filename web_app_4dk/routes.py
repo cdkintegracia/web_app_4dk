@@ -121,6 +121,12 @@ def create_current_month_deals_data_file_route():
     create_current_month_deals_data_file()
 
 
+@app.route('/update_service_sales_report', methods=['GET'])
+def update_service_sales_report():
+    create_service_sales_report({'update': True, 'with_current_month': 'N'})
+
+
+
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():

@@ -276,8 +276,6 @@ def create_services_coverage_report(req):
         data_to_write[employee]['% Два и более сервисов'] = round(data_to_write[employee]['Два и более сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         data_to_write[employee]['% ИТС без платных сервисов'] = round(data_to_write[employee]['ИТС без платных сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         data_to_write_list.append(list(data_to_write[employee].values()))
-    print(data_to_write[0])
-    exit()
     if not to_all_employees:
         data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])
         for department in departments:
@@ -292,7 +290,8 @@ def create_services_coverage_report(req):
         color_cells(report_name)
         upload_report_to_bitrix(report_name=report_name, user_id=req['user_id'][5:])
     else:
-        print(data_to_write[0])
+        for employee in data_to_write:
+            print(employee, data_to_write[employee])
 
 
 

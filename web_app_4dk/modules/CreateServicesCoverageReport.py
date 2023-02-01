@@ -6,13 +6,49 @@ from fast_bitrix24 import Bitrix
 import openpyxl
 from openpyxl.styles import PatternFill
 
-#from field_values import deals_category_1_types, departments_id_name, month_int_names
-from web_app_4dk.modules.field_values import deals_category_1_types, departments_id_name, month_int_names
-from web_app_4dk.modules.EdoInfoHandler import month_codes, year_codes
-from web_app_4dk.modules.authentication import authentication
+from field_values import deals_category_1_types, departments_id_name, month_int_names
+#from web_app_4dk.modules.field_values import deals_category_1_types, departments_id_name, month_int_names
+#from web_app_4dk.modules.EdoInfoHandler import month_codes, year_codes
+#from web_app_4dk.modules.authentication import authentication
+from authentication import authentication
+
+month_codes = {
+    'Январь': '2371',
+    'Февраль': '2373',
+    'Март': '2375',
+    'Апрель': '2377',
+    'Май': '2379',
+    'Июнь': '2381',
+    'Июль': '2383',
+    'Август': '2385',
+    'Сентябрь': '2387',
+    'Октябрь': '2389',
+    'Ноябрь': '2391',
+    'Декабрь': '2393'
+}
+
+year_codes = {
+    '2022': '2395',
+    '2023': '2397'
+}
 
 
 b = Bitrix(authentication('Bitrix'))
+
+
+def get_folder_id(storages, user_id, folder_name):
+    folder_id = None
+    user_storage = list(filter(lambda x: x['ENTITY_ID'] == user_id, storages))
+    if user_storage:
+        user_storage = user_storage[0]
+        storage_folders = b.get_all('disk.storage.getchildren', {'id': user_storage['ID']})
+        for folder in storage_folders:
+            if folder['NAME'] == folder_name:
+                folder_id = folder['ID']
+                break
+        if not folder_id:
+            folder_id = b.call('disk.storage.addfolder', {'id': user_storage['ID'], 'data': {'NAME': folder_name}})['ID']
+    return folder_id
 
 
 def color_cells(report_name):
@@ -32,7 +68,7 @@ def color_cells(report_name):
     workbook.save(report_name)
 
 
-def upload_report_to_bitrix(user_id, report_name, bitrix_folder_id='293499'):
+def upload_report_to_bitrix(users_id, report_name, bitrix_folder_id='293499'):
     # Загрузка отчета в Битрикс
     with open(report_name, 'rb') as file:
         report_file = file.read()
@@ -42,17 +78,15 @@ def upload_report_to_bitrix(user_id, report_name, bitrix_folder_id='293499'):
         'data': {'NAME': report_name},
         'fileContent': report_file_base64
     })
-    b.call('im.notify.system.add', {
-        'USER_ID': user_id,
-        'MESSAGE': f'Отчет по охвату сервисами сформирован. {upload_report["DETAIL_URL"]}'})
+    for user_id in users_id:
+        b.call('im.notify.system.add', {
+            'USER_ID': user_id,
+            'MESSAGE': f'Отчет по охвату сервисами сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
 
 
 
 def create_services_coverage_report(req):
-    to_all_employees = False
-    if 'to_all_employees' in req:
-        to_all_employees = True
     result_data = {}
     companies_info = b.get_all('crm.company.list')
     users_info = b.get_all('user.get')
@@ -195,40 +229,40 @@ def create_services_coverage_report(req):
                                 deals_reporting_id.append(deal_reporting_by_regnumber['ID'])
 
     # Запись отчета
-    report_name = f"Отчет_по_охвату_сервисами_{datetime.now().strftime('%d-%m-%Y-%f')}.xlsx"
+    main_report_name = f"Отчет_по_охвату_сервисами_{datetime.now().strftime('%d-%m-%Y-%f')}.xlsx"
     workbook = openpyxl.Workbook()
 
     # Первый лист
     worksheet = workbook.active
     worksheet.title = 'Компании'
     data_to_write = []
-    titles = []
+    first_list_titles = []
     for company_id in result_data:
-        if not titles:
-            titles = list(result_data[company_id][0].keys())
+        if not first_list_titles:
+            first_list_titles = list(result_data[company_id][0].keys())
         for data in result_data[company_id]:
             data['РПД платный'] = data['РПД платный'].rstrip(', ')
             data['Допы Облако'] = data['Допы Облако'].rstrip(', ')
             data_to_write.append(list(data.values()))
     data_to_write = sorted(data_to_write, key=lambda x: (x[3].split()[1], x[0]))
-    worksheet.append(titles)
+    worksheet.append(first_list_titles)
     for row in data_to_write:
         worksheet.append(row)
 
     # Второй лист
     worksheet = workbook.create_sheet('% Сервисов')
     departments = ['ГО3', 'ГО4', 'ОВ', 'ЦС', 'Остальные']
-    titles = ['Подразделение', 'Имя Фамилия сотрудника', 'Всего ИТС', 'Всего ПРОФ', 'ИТС без сервисов',
+    second_list_titles = ['Подразделение', 'Имя Фамилия сотрудника', 'Всего ИТС', 'Всего ПРОФ', 'ИТС без сервисов',
               '% ИТС без сервисов', 'ИТС без платных сервисов', '% ИТС без платных сервисов', 'Льготных отчетностей',
               '% Льготных отчетностей от ПРОФ', 'Только 1 сервис',
               '% Только 1 сервис', 'Два и более сервисов', '% Два и более сервисов']
-    worksheet.append(titles)
+    worksheet.append(second_list_titles)
     data_to_write = {}
     for company_id in result_data:
         for row in range(len(result_data[company_id])):
             employee = result_data[company_id][row]['Ответственный за сделку ИТС']
             if employee not in data_to_write:
-                data_to_write.setdefault(employee, dict(zip(titles, [0 for _ in titles])))
+                data_to_write.setdefault(employee, dict(zip(second_list_titles, [0 for _ in second_list_titles])))
                 data_to_write[employee]['Подразделение'] = result_data[company_id][row]['Подразделение ответственного']
                 data_to_write[employee]['Имя Фамилия сотрудника'] = employee
 
@@ -276,22 +310,108 @@ def create_services_coverage_report(req):
         data_to_write[employee]['% Два и более сервисов'] = round(data_to_write[employee]['Два и более сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         data_to_write[employee]['% ИТС без платных сервисов'] = round(data_to_write[employee]['ИТС без платных сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         data_to_write_list.append(list(data_to_write[employee].values()))
-    if not to_all_employees:
-        data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])
-        for department in departments:
-            for row in data_to_write_list:
-                if row[0] == department:
-                    worksheet.append(row)
-                elif department == 'Остальные' and row[0] not in departments:
-                    worksheet.append(row)
 
-        workbook.save(report_name)
+    data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])
+    for department in departments:
+        for row in data_to_write_list:
+            if row[0] == department:
+                worksheet.append(row)
+            elif department == 'Остальные' and row[0] not in departments:
+                worksheet.append(row)
 
-        color_cells(report_name)
-        upload_report_to_bitrix(report_name=report_name, user_id=req['user_id'][5:])
+    workbook.save(main_report_name)
+    color_cells(main_report_name)
+
+    if req['to_all_employees'] == 'N':
+        upload_report_to_bitrix(report_name=main_report_name, users_id=[req['user_id'][5:]])
     else:
-        for employee in data_to_write:
-            print(employee, data_to_write[employee])
+        main_report_name_users = [
+            '1',
+            '157',
+            '311'
+        ]
+        upload_report_to_bitrix(report_name=main_report_name, users_id=main_report_name_users)
 
+    if req['to_all_employees'] == 'Y':
 
+        storages = b.get_all('disk.storage.getlist')
+        folder_name = 'Отчеты_по_охвату_сервисами'
+        allowed_departments = ['ГО3', 'ГО4', 'ЦС']
+        departments_info = b.get_all('department.get')
+        ignore_users = set()
+        for department in departments_info:
+            if 'UF_HEAD' in department:
+                ignore_users.add(department['UF_HEAD'])
+
+        # Рассылка отчетов сотрудникам
+        for user in users_info:
+            user_name = f"{user['NAME']} {user['LAST_NAME']}"
+            report_name = f"Отчет_по_охвату_сервисами_{user_name}_{datetime.now().strftime('%d-%m-%Y-%f')}.xlsx".replace(' ', '_')
+            workbook = openpyxl.Workbook()
+    
+            # Первый лист
+            flag = False
+            worksheet = workbook.active
+            worksheet.title = 'Компании'
+            worksheet.append(first_list_titles)
+            for company in result_data:
+                for row in result_data[company]:
+                    if row['Подразделение ответственного'] not in allowed_departments:
+                        continue
+                    if user_name in row['Ответственный за сделку ИТС']:
+                        worksheet.append(list(row.values()))
+                        flag = True
+            if flag:
+                
+                # Второй лист
+                worksheet = workbook.create_sheet('% Сервисов')
+                worksheet.append(second_list_titles)
+                for row in data_to_write_list:
+                    if user_name in row[1]:
+                        worksheet.append(row)
+                
+                if user['ID'] in ignore_users:
+                    continue
+                workbook.save(report_name)
+                color_cells(report_name)
+                folder_id = get_folder_id(storages=storages, folder_name=folder_name, user_id=user['ID'])
+                if folder_id:
+                    upload_report_to_bitrix(users_id=[user['ID']], report_name=report_name, bitrix_folder_id=folder_id)
+
+        # Рассылка руководителям
+        # Первый лист
+        departments_companies_data = {}
+        allowed_departments = ['ГО3', 'ГО4']
+        for company in result_data:
+            for row in result_data[company]:
+                if row['Подразделение ответственного'] in allowed_departments:
+                    if row['Подразделение ответственного'] not in departments_companies_data:
+                        departments_companies_data.setdefault(row['Подразделение ответственного'], [])
+                    else:
+                        departments_companies_data[row['Подразделение ответственного']].append(row)
+
+        for department_name in departments_companies_data:
+            report_name = f"Отчет_по_охвату_сервисами_{department_name}_{datetime.now().strftime('%d-%m-%Y-%f')}.xlsx".replace(' ', '_')
+            workbook = openpyxl.Workbook()
+            worksheet = workbook.active
+            worksheet.title = 'Компании'
+            worksheet.append(first_list_titles)
+            for row in departments_companies_data[department_name]:
+                worksheet.append(list(row.values()))
+
+            # Второй лист
+            worksheet = workbook.create_sheet('% Сервисов')
+            worksheet.append(second_list_titles)
+            for row in data_to_write_list:
+                if row[0] in department_name:
+                    worksheet.append(row)
+
+            department_head = list(filter(lambda x: x['NAME'] == department_name, departments_info))
+            if department_head:
+                department_head = department_head[0]['UF_HEAD']
+                folder_id = get_folder_id(storages=storages, folder_name=folder_name, user_id=department_head)
+                if folder_id:
+                    workbook.save(report_name)
+                    color_cells(report_name)
+                    upload_report_to_bitrix(users_id=[department_head], report_name=report_name, bitrix_folder_id=folder_id)
 

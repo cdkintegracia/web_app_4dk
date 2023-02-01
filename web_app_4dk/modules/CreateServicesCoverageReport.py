@@ -358,7 +358,7 @@ def create_services_coverage_report(req):
                 for row in result_data[company]:
                     if row['Подразделение ответственного'] not in allowed_departments:
                         continue
-                    if user_name in row['Ответственный за сделку ИТС']:
+                    if user_name == row['Ответственный за сделку ИТС']:
                         worksheet.append(list(row.values()))
                         flag = True
             if flag:
@@ -367,7 +367,7 @@ def create_services_coverage_report(req):
                 worksheet = workbook.create_sheet('% Сервисов')
                 worksheet.append(second_list_titles)
                 for row in data_to_write_list:
-                    if user_name in row[1]:
+                    if user_name == row[1]:
                         worksheet.append(row)
                 
                 if user['ID'] in ignore_users:
@@ -414,4 +414,5 @@ def create_services_coverage_report(req):
                     workbook.save(report_name)
                     color_cells(report_name)
                     upload_report_to_bitrix(users_id=[department_head], report_name=report_name, bitrix_folder_id=folder_id)
+
 

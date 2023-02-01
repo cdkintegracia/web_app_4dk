@@ -291,7 +291,7 @@ def create_services_coverage_report(req):
         color_cells(report_name)
         upload_report_to_bitrix(report_name=report_name, user_id=req['user_id'][5:])
     else:
-        pass
+        print(data_to_write[0])
 
 
 

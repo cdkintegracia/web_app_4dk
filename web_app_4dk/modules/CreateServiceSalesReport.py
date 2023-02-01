@@ -306,8 +306,6 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     worksheet.append([''] + month_names + ['6 месяцев'])
     for month in month_names:
         for employee in data:
-            if update and data[employee]['Подразделение'] not in departments:
-                continue
             its_months_summary[month] += data[employee][f'{month} ИТС']
             services_months_summary[month] += data[employee][f'{month} Сервисы']
     worksheet.append(['ИТС'] + list(its_months_summary.values()) + [sum(list(its_months_summary.values()))])

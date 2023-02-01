@@ -15,7 +15,44 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 
+def color_cells(report_name):
+    # Закрашивание ячеек
+    cell_red_color = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
+    cell_number_to_letter = {1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E', 6: 'F', 7: 'G', 8: 'H', 9: 'I', 10: 'J', 11: 'K',
+                             12: 'L', 13: 'M', 14: 'N', 15: 'O', 16: 'P', 17: 'Q', 18: 'R', 19: 'S', 20: 'T', 21: 'U'}
+    workbook = openpyxl.load_workbook(report_name)
+    worksheet = workbook['Компании']
+    max_rows = worksheet.max_row
+    max_columns = worksheet.max_column
+    for row in range(2, max_rows + 1):
+        for column in range(1, max_columns + 1):
+            cell_value = worksheet.cell(row, column).value
+            if cell_value == 'Нет':
+                worksheet[f"{cell_number_to_letter[column]}{row}"].fill = cell_red_color
+    workbook.save(report_name)
+
+
+def upload_report_to_bitrix(user_id, report_name, bitrix_folder_id='293499'):
+    # Загрузка отчета в Битрикс
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('im.notify.system.add', {
+        'USER_ID': user_id,
+        'MESSAGE': f'Отчет по охвату сервисами сформирован. {upload_report["DETAIL_URL"]}'})
+    os.remove(report_name)
+
+
+
 def create_services_coverage_report(req):
+    to_all_employees = False
+    if 'to_all_employees' in req:
+        to_all_employees = True
     result_data = {}
     companies_info = b.get_all('crm.company.list')
     users_info = b.get_all('user.get')
@@ -240,43 +277,21 @@ def create_services_coverage_report(req):
         data_to_write[employee]['% ИТС без платных сервисов'] = round(data_to_write[employee]['ИТС без платных сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         data_to_write_list.append(list(data_to_write[employee].values()))
 
-    data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])
-    for department in departments:
-        for row in data_to_write_list:
-            if row[0] == department:
-                worksheet.append(row)
-            elif department == 'Остальные' and row[0] not in departments:
-                worksheet.append(row)
+    if not to_all_employees:
+        data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])
+        for department in departments:
+            for row in data_to_write_list:
+                if row[0] == department:
+                    worksheet.append(row)
+                elif department == 'Остальные' and row[0] not in departments:
+                    worksheet.append(row)
 
-    workbook.save(report_name)
+        workbook.save(report_name)
 
-    # Закрашивание ячеек
-    cell_red_color = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
-    cell_number_to_letter = {1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E', 6: 'F', 7: 'G', 8: 'H', 9: 'I', 10: 'J', 11: 'K',
-                             12: 'L', 13: 'M', 14: 'N', 15: 'O', 16: 'P', 17: 'Q', 18: 'R', 19: 'S', 20: 'T', 21: 'U'}
-    workbook = openpyxl.load_workbook(report_name)
-    worksheet = workbook['Компании']
-    max_rows = worksheet.max_row
-    max_columns = worksheet.max_column
-    for row in range(2, max_rows + 1):
-        for column in range(1, max_columns + 1):
-            cell_value = worksheet.cell(row, column).value
-            if cell_value == 'Нет':
-                worksheet[f"{cell_number_to_letter[column]}{row}"].fill = cell_red_color
-    workbook.save(report_name)
+        color_cells(report_name)
+        upload_report_to_bitrix(report_name=report_name, user_id=req['user_id'][5:])
+    else:
+        pass
 
-    # Загрузка отчета в Битрикс
-    bitrix_folder_id = '293499'
-    with open(report_name, 'rb') as file:
-        report_file = file.read()
-    report_file_base64 = str(base64.b64encode(report_file))[2:]
-    upload_report = b.call('disk.folder.uploadfile', {
-        'id': bitrix_folder_id,
-        'data': {'NAME': report_name},
-        'fileContent': report_file_base64
-    })
-    b.call('im.notify.system.add', {
-        'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по охвату сервисами сформирован. {upload_report["DETAIL_URL"]}'})
-    os.remove(report_name)
+
 

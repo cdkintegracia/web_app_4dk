@@ -128,6 +128,12 @@ def update_service_sales_report():
     return 'OK'
 
 
+@app.route('/send_request_create_service_coverage_report', methods=['GET'])
+def send_service_coverage_report_to_employees():
+    create_services_coverage_report({'to_all_employees': True})
+    return 'OK'
+
+
 
 @login_required
 @app.route('/', methods=['GET', 'POST'])

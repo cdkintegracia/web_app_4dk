@@ -87,8 +87,6 @@ def upload_report_to_bitrix(users_id, report_name, bitrix_folder_id='293499'):
 
 
 def create_services_coverage_report(req):
-    print(req)
-    exit()
     result_data = {}
     companies_info = b.get_all('crm.company.list')
     users_info = b.get_all('user.get')

@@ -69,7 +69,6 @@ def color_cells(report_name):
 
 
 def upload_report_to_bitrix(users_id, report_name, bitrix_folder_id='293499'):
-    '''
     # Загрузка отчета в Битрикс
     with open(report_name, 'rb') as file:
         report_file = file.read()
@@ -83,14 +82,11 @@ def upload_report_to_bitrix(users_id, report_name, bitrix_folder_id='293499'):
         b.call('im.notify.system.add', {
             'USER_ID': user_id,
             'MESSAGE': f'Отчет по охвату сервисами сформирован. {upload_report["DETAIL_URL"]}'})
-    '''
-    print(report_name)
     os.remove(report_name)
 
 
 
 def create_services_coverage_report(req):
-    print(req['to_all_employees'])
     result_data = {}
     companies_info = b.get_all('crm.company.list')
     users_info = b.get_all('user.get')

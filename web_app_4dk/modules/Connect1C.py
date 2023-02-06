@@ -13,6 +13,7 @@ from zeep.transports import Transport
 
 from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.modules.UpdateCallStatistic import update_element
+from web_app_4dk.modules.New1cConnect import connect_database, write_logs_to_database
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -327,6 +328,7 @@ def connect_1c(req: dict):
     with open('/root/web_app_4dk/web_app_4dk/static/logs/connect_logs.txt', 'a') as file:
         json.dump(req, file, ensure_ascii=False)
         file.write('\n')
+    write_logs_to_database(req)
 
     # Новое обращение
     if req['message_type'] == 80:

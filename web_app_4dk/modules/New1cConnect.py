@@ -57,8 +57,3 @@ def write_logs_to_database(log):
     )
     with connect:
         connect.execute(sql, data)
-
-
-
-
-connect_database(table_name='logs')

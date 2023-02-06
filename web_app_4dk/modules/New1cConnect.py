@@ -57,3 +57,4 @@ def write_logs_to_database(log):
     )
     with connect:
         connect.execute(sql, data)
+    print('SQL записаны')

@@ -190,5 +190,5 @@ def get_bitrix_user_name(connect_user_id):
 
 
 
-print(get_bitrix_company_id('2a7d1ebd-c1df-45f7-933f-6f2263491b47'))
+#print(get_bitrix_company_id('2a7d1ebd-c1df-45f7-933f-6f2263491b47'))
 

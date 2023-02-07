@@ -5,5 +5,5 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 def complete_call_activity(req):
-    for key in req:
-        print(key, req[key])
+    activity_id = req['data[FIELDS][ID]']
+    print(activity_id)

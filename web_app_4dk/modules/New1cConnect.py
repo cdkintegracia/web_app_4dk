@@ -187,6 +187,7 @@ def get_bitrix_company_id(author_id):
 
 
 def get_bitrix_user_name(connect_user_id):
+    pass
 
 
 

@@ -15,6 +15,3 @@ def complete_call_activity(req):
         }})
     if activity_info:
         b.get_all('crm.activity.update', {'id': activity_id, 'fields': {'COMPLETED': 'Y'}})
-        b.call('im.notify.system.add', {
-            'USER_ID': '311',
-            'MESSAGE': f'Автоматически завершено дело. ID: {activity_id}'})

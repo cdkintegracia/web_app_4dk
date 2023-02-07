@@ -43,6 +43,7 @@ from web_app_4dk.modules.AddTaskCommentary import add_task_commentary
 from web_app_4dk.modules.CreateServicesCoverageReport import create_services_coverage_report
 from web_app_4dk.modules.AddInvoiceToList import add_invoice_to_list
 from web_app_4dk.modules.ChangeTaskCreatedBy import change_task_created_by
+from web_app_4dk.modules.CompleteCallActivity import complete_call_activity
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -78,7 +79,7 @@ default_webhooks = {
     'ONCRMDEALDELETE': update_company_value,
     'ONVOXIMPLANTCALLEND': update_call_statistic,
     'ONCRMDEALADD': create_deal,
-    'ONCRMACTIVITYADD': update_user_statistics,
+    'ONCRMACTIVITYADD': complete_call_activity,
     'ONTASKADD': update_user_statistics,
     'ONTASKUPDATE': update_user_statistics,
     'ONCRMCONTACTUPDATE': update_contact_photo,

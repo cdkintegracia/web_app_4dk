@@ -12,8 +12,8 @@ def complete_call_activity(req):
             'ID': activity_id
         }}
     activity_info = requests.post(url=f"{authentication('Bitrix')}crm.activity.list", json=req_data).json()['result']
-    print(activity_info)
-    '''
     if activity_info:
-        b.get_all('crm.activity.update', {'id': activity_id, 'fields': {'COMPLETED': 'Y'}})
-    '''
+        req_data = {'id': activity_id, 'fields': {'COMPLETED': 'Y'}}
+        requests.post(url=f"{authentication('Bitrix')}crm.activity.update", json=req_data)
+
+

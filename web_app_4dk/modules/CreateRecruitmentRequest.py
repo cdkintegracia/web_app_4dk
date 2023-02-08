@@ -13,7 +13,7 @@ def create_recruitment_request(req):
     b.call('crm.item.add', {
         'entityTypeId': '130',
         'fields': {
-            'TITLE': req['responsible'][5:],
+            'TITLE': f"{req['responsible'][5:]} {department_name} {req['file_id']}",
             'UF_CRM_15_1655883348': req['responsible'][5:],
             #'UF_CRM_15_1655883493': req['file_id'],
             #'UF_CRM_15_1655883421': department_name,

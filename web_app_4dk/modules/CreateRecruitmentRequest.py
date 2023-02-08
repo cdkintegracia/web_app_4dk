@@ -8,4 +8,11 @@ b = Bitrix(authentication('Bitrix'))
 
 def create_recruitment_request(req):
     department_info = b.get_all('department.get', {'ID': req['department']})
-    print(department_info)
+    department_name = department_info[0]['NAME']
+    b.call('crm.item.add', {
+        'entityTypeId': '130', {
+            'fields': {
+                'UF_CRM_15_1655883348': req['responsible'][5:],
+                'UF_CRM_15_1655883493': req['file_id'],
+                'UF_CRM_15_1655883421': department_name,
+            }}})

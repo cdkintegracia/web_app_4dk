@@ -12,5 +12,5 @@ def create_recruitment_request(req):
         'fields': {
             'ufCrm15_1655883348': req['responsible'][5:],
             'ufCrm15_1675868673': req['file_url'],
-            'ufCrm15_1655883421': req['department_id'],
+            'ufCrm15_1655883421': req['department'],
             }})

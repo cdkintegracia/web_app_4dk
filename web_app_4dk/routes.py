@@ -44,6 +44,7 @@ from web_app_4dk.modules.CreateServicesCoverageReport import create_services_cov
 from web_app_4dk.modules.AddInvoiceToList import add_invoice_to_list
 from web_app_4dk.modules.ChangeTaskCreatedBy import change_task_created_by
 from web_app_4dk.modules.CompleteCallActivity import complete_call_activity
+from web_app_4dk.modules.CreateRecruitmentRequest import create_recruitment_request
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -70,6 +71,7 @@ custom_webhooks = {
     'create_services_coverage_report': create_services_coverage_report,
     'add_invoice_to_list': add_invoice_to_list,
     'change_task_created_by': change_task_created_by,
+    'create_recruitment_request': create_recruitment_request,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

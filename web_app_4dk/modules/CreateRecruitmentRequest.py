@@ -7,5 +7,5 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_recruitment_request(req):
-    department_info = b.get_all('department.get', {'ID': req['department'][0]})
+    department_info = b.get_all('department.get', {'ID': req['department']})
     print(department_info)

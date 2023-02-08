@@ -523,7 +523,6 @@ def connect_1c_event_handler(req):
         pass
         #task = check_task_existence(req)
 
-complete_database_update()
 
 
 

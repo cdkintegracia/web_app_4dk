@@ -45,6 +45,7 @@ from web_app_4dk.modules.AddInvoiceToList import add_invoice_to_list
 from web_app_4dk.modules.ChangeTaskCreatedBy import change_task_created_by
 from web_app_4dk.modules.CompleteCallActivity import complete_call_activity
 from web_app_4dk.modules.CreateRecruitmentRequest import create_recruitment_request
+from web_app_4dk.modules.CreateTasksActiveSales import create_tasks_active_sales
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -72,6 +73,7 @@ custom_webhooks = {
     'add_invoice_to_list': add_invoice_to_list,
     'change_task_created_by': change_task_created_by,
     'create_recruitment_request': create_recruitment_request,
+    'create_tasks_active_sales': create_tasks_active_sales,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

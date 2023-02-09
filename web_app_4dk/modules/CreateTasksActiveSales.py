@@ -22,13 +22,13 @@ def create_tasks_active_sales(req):
             'fields': {
                 'TITLE': f"Проработка",
                 'DESCRIPTION': task_text,
-                'RESPONSIBLE_ID': '311',
+                'RESPONSIBLE_ID': responsible_id,
                 'CREATED_BY': '173',
                 'DEADLINE': f"{datetime.strftime(datetime.now(), '%Y-%m-%d')} 19:00",
                 'UF_CRM_TASK': ['CO_' + company['ID']],
                 'GROUP_ID': '101',
+                'AUDITORS': ['391', ]
             }})
-        exit()
 
     b.call('im.notify.system.add', {
         'USER_ID': '1',

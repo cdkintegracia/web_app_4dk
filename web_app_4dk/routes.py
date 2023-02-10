@@ -209,8 +209,8 @@ def load_user(user):
 @app.route('/1c-connect', methods=['POST'])
 def update_connect_logs():
     update_logs("Получен 1С-Коннект вебхук", request.json)
-    connect_1c(request.json)
     connect_1c_event_handler(request.json)
+    connect_1c(request.json)
     return 'OK'
 
 

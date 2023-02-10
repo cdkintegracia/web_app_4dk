@@ -550,6 +550,8 @@ def connect_1c_event_handler(req):
     # Новое обращение
     if req['message_type'] == 80:
         create_treatment_task(req['treatment_id'], req['user_id'], req['line_id'])
+    elif req['message_type'] in [82, 90, 91, 92, 93]:
+        close_treatment_task(req['treatment_id'])
 
 
 

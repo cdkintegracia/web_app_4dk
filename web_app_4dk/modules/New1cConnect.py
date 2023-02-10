@@ -358,6 +358,7 @@ def create_treatment_task(treatment_id, author_id, line_id):
     '''
 
     company_id = get_bitrix_company_id(author_id)
+    print(f'Компани ID {company_id}')
     if not company_id:
         return
 
@@ -397,7 +398,6 @@ def create_treatment_task(treatment_id, author_id, line_id):
     task_description = f"{message_time} {author_name}\n{additional_info}"
     group_id = '75'     # Задачи из Коннекта
     responsible_id = '311'
-    author_name = ge
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",

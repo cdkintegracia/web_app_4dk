@@ -522,6 +522,7 @@ def connect_1c_event_handler(req):
     if req['event_type'] != 'line':
         return
     write_logs_to_database(req)
+    print(req)
 
     # Новое обращение
     if req['message_type'] == 80:

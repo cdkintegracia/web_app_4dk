@@ -129,14 +129,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))
     for deal_info in deals_info:
 
-        if deal_info['ID'] in ['89703', '93773']:
-            deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'],
-                                                           deal_info['Предполагаемая дата закрытия'],
-                                                           deal_info['Дата начала'], deal_info['ID'])
-            print(
-                f"Вычесляемая дата: {deal_start_date}, текущая дата{month_names_numbers[month]}.{months_and_years[month]}")
-
         if deal_info['Ответственный'] not in handled_data:
+            print(deal_info['ID'])
             continue
 
         deal_info['Сумма'] = int(float(deal_info['Сумма']))

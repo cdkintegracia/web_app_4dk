@@ -132,6 +132,9 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
         if deal_info['Ответственный'] not in handled_data:
             continue
 
+        if deal_info['ID'] in ['93773', '89703']:
+            print(deal_info)
+
         deal_info['Сумма'] = int(float(deal_info['Сумма']))
 
         if type(deal_info['Дата начала']) == str:
@@ -167,8 +170,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_info['ID'] in ['93773', '89703']:
-                    print(deal_info)
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600

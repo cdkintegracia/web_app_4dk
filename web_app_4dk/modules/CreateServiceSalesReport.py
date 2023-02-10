@@ -139,6 +139,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
         if type(deal_info['Предполагаемая дата закрытия']) == str:
             deal_info['Предполагаемая дата закрытия'] = datetime.strptime(deal_info['Предполагаемая дата закрытия'], '%d.%m.%Y')
 
+        if deal_info['ID'] in ['93773', '89703']:
+            print(deal_info)
 
         if deal_info['Группа'] == 'ИТС' and deal_info['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'] and 'ГРМ' not in deal_info['Тип']:
             handled_data[deal_info['Ответственный']][its_deal_value_field] += 1
@@ -146,9 +148,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
         elif deal_info['Тип'] in service_deal_types and deal_info['Стадия сделки'] == 'Услуга активна':
             deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'], deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
 
-            if deal_info['ID'] in ['93773', '89703']:
-                print(deal_info)
-                
             if deal_info['Тип'] in service_deal_current_month:
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
                     deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])

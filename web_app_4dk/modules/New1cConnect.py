@@ -526,7 +526,7 @@ def connect_1c_event_handler(req):
 
     # Новое обращение
     if req['message_type'] == 80:
-        create_treatment_task(req['treatment_id'], req['author_id'], req['line_id'])
+        create_treatment_task(req['treatment_id'], req['user_id'], req['line_id'])
 
 
 

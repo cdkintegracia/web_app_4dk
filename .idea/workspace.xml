@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSalesReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateServiceSalesReport.py" afterDir="false" />
-    </list>
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -351,7 +349,7 @@
       <workItem from="1674829735384" duration="14000" />
       <workItem from="1675079067949" duration="2020000" />
       <workItem from="1675162582700" duration="50617000" />
-      <workItem from="1676029193329" duration="1557000" />
+      <workItem from="1676029193329" duration="1877000" />
     </task>
     <servers />
   </component>

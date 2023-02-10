@@ -237,6 +237,7 @@ def get_bitrix_company_id(author_id: str) -> str:
         return bitrix_company_id[0]
     else:
         connect_company_info = get_connect_company_id(author_id)
+        print('ghbsdfdsgsd', connect_company_info)
         if connect_company_info:
             bitrix_company_info = b.get_all(
                 'crm.company.list',

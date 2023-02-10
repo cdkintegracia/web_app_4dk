@@ -446,6 +446,18 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         connect.execute(sql, data)
 
 
+def create_logs_commentary(treatment_id):
+    connect = connect_database('logs')
+    sql = 'SELECT user_id, message_type, additional_info FROM logs WHERE treatment_id=?'
+    data = (
+        treatment_id,
+    )
+    with connect:
+        logs = connect.execute(sql, data).fetchall()
+    for log in logs:
+        print(log)
+
+
 def close_treatment_task(treatment_id: str):
     connect = connect_database('tasks')
     sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
@@ -454,9 +466,13 @@ def close_treatment_task(treatment_id: str):
     )
     with connect:
         task_id = connect.execute(sql, data).fetchone()
-    if task_id:
-        task_id = task_id[0]
-    print(task_id * 100)
+    if not task_id:
+        return
+    commentary = create_logs_commentary(treatment_id)
+
+    task_id = task_id[0]
+
+
 
 
 

@@ -396,36 +396,41 @@ def create_treatment_task(treatment_id, author_id, line_id):
     line_name = get_line_name(line_id)
     task_description = f"{message_time} {author_name}\n{additional_info}"
     group_id = '75'     # Задачи из Коннекта
+    responsible_id = '311'
+    author_name = ge
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
-            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
-            'GROUP_ID': '7',
+            'DESCRIPTION': f"{message_time} {task_description}",
+            #'GROUP_ID': '7',
+            'GROUP_ID': '19',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': req['treatment_id'],
+            'UF_AUTO_499889542776': treatment_id,
             'STAGE_ID': '65'
         }})
     elif 'Обновить 1С' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект ТЛП",
-            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
-            'GROUP_ID': '11',
-            'CREATED_BY': '173',
-            'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': UF_CRM_TASK,
-            'UF_AUTO_499889542776': req['treatment_id'],
-        }})
-    else:
-        new_task = send_bitrix_request('tasks.task.add', {'fields': {
-            'TITLE': f"1С:Коннект {support_line_name}",
-            'DESCRIPTION': f"{message_time} {author_info[0]}\n{task_text}",
-            'GROUP_ID': '75',
+            'DESCRIPTION': f"{message_time} {task_description}",
+            #'GROUP_ID': '11',
+            'GROUP_ID': '19',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': req['treatment_id'],
+            'UF_AUTO_499889542776': treatment_id,
+        }})
+    else:
+        new_task = send_bitrix_request('tasks.task.add', {'fields': {
+            'TITLE': f"1С:Коннект {line_name}",
+            'DESCRIPTION': f"{message_time} {task_description}",
+            #'GROUP_ID': '75',
+            'GROUP_ID': '19',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': responsible_id,
+            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_AUTO_499889542776': treatment_id,
             'STAGE_ID': '1165',
         }})
     new_task_id = new_task['task']
@@ -520,8 +525,7 @@ def connect_1c_event_handler(req):
 
     # Новое обращение
     if req['message_type'] == 80:
-        pass
-        #task = check_task_existence(req)
+        create_treatment_task(req['treatment_id'], req['author_id'], req['line_id'])
 
 
 

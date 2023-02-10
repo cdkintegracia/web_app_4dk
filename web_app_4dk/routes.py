@@ -46,6 +46,7 @@ from web_app_4dk.modules.ChangeTaskCreatedBy import change_task_created_by
 from web_app_4dk.modules.CompleteCallActivity import complete_call_activity
 from web_app_4dk.modules.CreateRecruitmentRequest import create_recruitment_request
 from web_app_4dk.modules.CreateTasksActiveSales import create_tasks_active_sales
+from web_app_4dk.modules.New1cConnect import connect_1c_event_handler
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -209,6 +210,7 @@ def load_user(user):
 def update_connect_logs():
     update_logs("Получен 1С-Коннект вебхук", request.json)
     connect_1c(request.json)
+    connect_1c_event_handler(request.json)
     return 'OK'
 
 

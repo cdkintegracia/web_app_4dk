@@ -13,7 +13,6 @@ from zeep.transports import Transport
 
 from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.modules.UpdateCallStatistic import update_element
-from web_app_4dk.modules.New1cConnect import connect_database, write_logs_to_database
 
 
 b = Bitrix(authentication('Bitrix'))

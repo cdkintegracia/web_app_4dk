@@ -436,7 +436,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         }})
     new_task_id = new_task['task']
     connect = connect_database('tasks')
-    sql = 'INSERT INTO tasks (treatment_id, task_id, responsible_id) WHERE (?, ?, ?)'
+    sql = 'INSERT INTO tasks (treatment_id, task_id, responsible_id) VALUES (?, ?, ?)'
     data = (
         treatment_id,
         new_task_id['id'],

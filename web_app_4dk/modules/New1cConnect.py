@@ -312,7 +312,7 @@ def get_bitrix_user_name(connect_user_id: str) -> str:
                 return f"{connect_first_name} {connect_last_name}"
 
 
-def get_line_name(line_id):
+def get_line_name(line_id: str) -> str:
     connect = connect_database('line_names')
     sql = 'SELECT line_name FROM line_names WHERE line_id=?'
     data = (
@@ -338,7 +338,7 @@ def get_line_name(line_id):
                     return line_name
 
 
-def create_treatment_task(treatment_id, author_id, line_id):
+def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
     connect = connect_database('tasks')
 
     '''
@@ -359,7 +359,7 @@ def create_treatment_task(treatment_id, author_id, line_id):
     '''
 
     company_id = get_bitrix_company_id(author_id)
-    print(f'Компани ID {company_id}')
+
     if not company_id:
         return
 
@@ -402,7 +402,7 @@ def create_treatment_task(treatment_id, author_id, line_id):
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
-            'DESCRIPTION': f"{message_time} {task_description}",
+            'DESCRIPTION': f"{task_description}",
             #'GROUP_ID': '7',
             'GROUP_ID': '19',
             'CREATED_BY': '173',
@@ -414,7 +414,7 @@ def create_treatment_task(treatment_id, author_id, line_id):
     elif 'Обновить 1С' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект ТЛП",
-            'DESCRIPTION': f"{message_time} {task_description}",
+            'DESCRIPTION': f"{task_description}",
             #'GROUP_ID': '11',
             'GROUP_ID': '19',
             'CREATED_BY': '173',
@@ -425,7 +425,7 @@ def create_treatment_task(treatment_id, author_id, line_id):
     else:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
-            'DESCRIPTION': f"{message_time} {task_description}",
+            'DESCRIPTION': f"{task_description}",
             #'GROUP_ID': '75',
             'GROUP_ID': '19',
             'CREATED_BY': '173',
@@ -435,6 +435,17 @@ def create_treatment_task(treatment_id, author_id, line_id):
             'STAGE_ID': '1165',
         }})
     new_task_id = new_task['task']
+    print(new_task_id)
+    connect = connect_database('tasks')
+    sql = 'INSERT INTO tasks (treatment_id, task_id, responsible_id) WHERE (?, ?, ?)'
+    data = (
+        treatment_id,
+        new_task_id['id'],
+
+    )
+
+def close_treatment_task(treatment_id: str):
+    pass
 
 
 def complete_database_update():

@@ -166,6 +166,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
+                if deal_info['ID'] in ['89703', '93773']:
+                    print(f"Вычесляемая дата: {deal_start_date}, текущая дата{month_names_numbers[month]}.{months_and_years[month]}")
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600
@@ -547,7 +549,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(6):
+    for _ in range(1):
         file_month -= 1
         if file_month == 0:
             file_month = 12

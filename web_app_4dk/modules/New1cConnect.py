@@ -349,7 +349,7 @@ def create_treatment_task(treatment_id, author_id, line_id):
         treatment_id,
     )
     with connect:
-        task_id = connect.execute(sql,data).fetchone()
+        task_id = connect.execute(sql, data).fetchone()
     if task_id:
         return
 
@@ -522,11 +522,11 @@ def connect_1c_event_handler(req):
     if req['event_type'] != 'line':
         return
     write_logs_to_database(req)
-    print(req)
 
     # Новое обращение
     if req['message_type'] == 80:
         create_treatment_task(req['treatment_id'], req['author_id'], req['line_id'])
+
 
 
 

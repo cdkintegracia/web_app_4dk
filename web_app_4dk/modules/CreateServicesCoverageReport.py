@@ -304,11 +304,26 @@ def create_services_coverage_report(req):
 
     data_to_write_list = []
     for employee in data_to_write:
-        data_to_write[employee]['% ИТС без сервисов'] = round(data_to_write[employee]['ИТС без сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
-        data_to_write[employee]['% Льготных отчетностей от ПРОФ'] = round(data_to_write[employee]['Льготных отчетностей'] / data_to_write[employee]['Всего ПРОФ'], 2) * 100
-        data_to_write[employee]['% Только 1 сервис'] = round(data_to_write[employee]['Только 1 сервис'] / data_to_write[employee]['Всего ИТС'], 2) * 100
-        data_to_write[employee]['% Два и более сервисов'] = round(data_to_write[employee]['Два и более сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
-        data_to_write[employee]['% ИТС без платных сервисов'] = round(data_to_write[employee]['ИТС без платных сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        try:
+            data_to_write[employee]['% ИТС без сервисов'] = round(data_to_write[employee]['ИТС без сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% ИТС без сервисов'] = 0
+        try:
+            data_to_write[employee]['% Льготных отчетностей от ПРОФ'] = round(data_to_write[employee]['Льготных отчетностей'] / data_to_write[employee]['Всего ПРОФ'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% Льготных отчетностей от ПРОФ'] = 0
+        try:
+            data_to_write[employee]['% Только 1 сервис'] = round(data_to_write[employee]['Только 1 сервис'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% Только 1 сервис'] = 0
+        try:
+            data_to_write[employee]['% Два и более сервисов'] = round(data_to_write[employee]['Два и более сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% Два и более сервисов'] = 0
+        try:
+            data_to_write[employee]['% ИТС без платных сервисов'] = round(data_to_write[employee]['ИТС без платных сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% ИТС без платных сервисов'] = 0
         data_to_write_list.append(list(data_to_write[employee].values()))
 
     data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])

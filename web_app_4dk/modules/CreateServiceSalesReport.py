@@ -145,6 +145,9 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
         elif deal_info['Тип'] in service_deal_types and deal_info['Стадия сделки'] == 'Услуга активна':
             deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'], deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
+            if deal_info['ID'] in ['89703', '93773']:
+                print(
+                    f"Вычесляемая дата: {deal_start_date}, текущая дата{month_names_numbers[month]}.{months_and_years[month]}")
             if deal_info['Тип'] in service_deal_current_month:
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
                     deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
@@ -166,8 +169,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
             else:
-                if deal_info['ID'] in ['89703', '93773']:
-                    print(f"Вычесляемая дата: {deal_start_date}, текущая дата{month_names_numbers[month]}.{months_and_years[month]}")
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':
                     if deal_info['Тип'] == 'Подпись 1000':
                         deal_value = 600

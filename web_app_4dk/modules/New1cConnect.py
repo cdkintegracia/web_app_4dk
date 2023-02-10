@@ -435,17 +435,29 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
             'STAGE_ID': '1165',
         }})
     new_task_id = new_task['task']
-    print(new_task_id)
     connect = connect_database('tasks')
     sql = 'INSERT INTO tasks (treatment_id, task_id, responsible_id) WHERE (?, ?, ?)'
     data = (
         treatment_id,
         new_task_id['id'],
-
+        responsible_id,
     )
+    with connect:
+        connect.execute(sql, data)
+
 
 def close_treatment_task(treatment_id: str):
-    pass
+    connect = connect_database('tasks')
+    sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
+    data = (
+        treatment_id,
+    )
+    with connect:
+        task_id = connect.execute(sql, data).fetchone()
+    if task_id:
+        task_id = task_id[0]
+    print(task_id * 100)
+
 
 
 def complete_database_update():

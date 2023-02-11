@@ -154,7 +154,7 @@ def write_logs_to_database(log):
         log['treatment_id'],
         log['line_id'],
         log['message_id'],
-        datetime.strftime(dateutil.parser.isoparse(log['message_time']), '%Y.%m.%d %H:%M:%S'),
+        datetime.strftime(dateutil.parser.isoparse(log['message_time']), '%H:%M:%S %Y.%m.%d'),
         log['user_id'],
         additional_info,
     )
@@ -476,7 +476,7 @@ def create_logs_commentary(treatment_id: str, update=False) -> str:
                 user_name = result[0]
 
         commentary += f'{log[3]}\n{user_name}\n{connect_codes[log[1]]}\n{log[2]}\n\n'
-        return commentary
+    return commentary
 
 
 def close_treatment_task(treatment_id: str):

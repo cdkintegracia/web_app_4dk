@@ -475,7 +475,7 @@ def create_logs_commentary(treatment_id: str, update=False) -> str:
             if result:
                 user_name = result[0]
 
-        commentary += f'{log[4]}\n{user_name}\n{connect_codes[log[1]]}\n{log[2]}\n\n'
+        commentary += f'{log[3]}\n{user_name}\n{connect_codes[log[1]]}\n{log[2]}\n\n'
         return commentary
 
 

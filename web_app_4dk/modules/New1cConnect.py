@@ -154,7 +154,7 @@ def write_logs_to_database(log):
         log['treatment_id'],
         log['line_id'],
         log['message_id'],
-        datetime.strftime(dateutil.parser.isoparse(log['message_time']) + timedelta(hours=3), '%H:%M:%S %Y.%m.%d'),
+        datetime.strftime(dateutil.parser.isoparse(log['message_time']) + timedelta(hours=3), '%H:%M:%S %d.%m.%Y'),
         log['user_id'],
         additional_info,
     )
@@ -448,13 +448,13 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
 
 def create_logs_commentary(treatment_id: str, update=False) -> str:
     connect = connect_database('logs')
-    sql = 'SELECT user_id, message_type, additional_info, message_time FROM logs WHERE treatment_id=? and message_type!=80'
+    sql = 'SELECT author_id, message_type, additional_info, message_time FROM logs WHERE treatment_id=? and message_type!=80'
     data = (
         treatment_id,
     )
     with connect:
         logs = connect.execute(sql, data).fetchall()[1:]
-    commentary = 'История обращения 1С:Коннект\n' + '-' * 30 + '\n\n' if not update else ''
+    commentary = 'История обращения 1С:Коннект\n' + '-' * 40 + '\n\n' if not update else ''
 
     for log in logs:
 

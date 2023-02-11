@@ -1,6 +1,6 @@
 import sqlite3
 import dateutil.parser
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from requests import Session
@@ -154,7 +154,7 @@ def write_logs_to_database(log):
         log['treatment_id'],
         log['line_id'],
         log['message_id'],
-        datetime.strftime(dateutil.parser.isoparse(log['message_time']), '%H:%M:%S %Y.%m.%d'),
+        datetime.strftime(dateutil.parser.isoparse(log['message_time']) + timedelta(hours=3), '%H:%M:%S %Y.%m.%d'),
         log['user_id'],
         additional_info,
     )

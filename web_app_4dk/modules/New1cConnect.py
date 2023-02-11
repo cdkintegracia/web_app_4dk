@@ -397,7 +397,6 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
     message_time = row[1]
     line_name = get_line_name(line_id)
     task_description = f"{message_time} {author_name}\n{additional_info}"
-    group_id = '75'     # Задачи из Коннекта
     responsible_id = '311'
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -426,7 +425,6 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
             'DESCRIPTION': f"{task_description}",
-            #'GROUP_ID': '75',
             'GROUP_ID': '19',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,

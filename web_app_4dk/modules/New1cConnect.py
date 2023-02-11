@@ -597,7 +597,7 @@ def connect_1c_event_handler(req):
         connect = connect_database('tasks')
         sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
         data = (
-            req['treatment_id']
+            req['treatment_id'],
         )
         with connect:
             task_id = connect.execute(sql, data).fetchone()

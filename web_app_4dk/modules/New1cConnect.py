@@ -257,7 +257,7 @@ def get_bitrix_company_id(author_id: str) -> str:
                     connect.execute(sql, data)
                 return bitrix_company_id
             else:
-                b.call('tasks.task.add', {
+                send_bitrix_request('tasks.task.add', {
                             'fields': {
                                 'TITLE': '1С:Коннект Не найдена компания по ИНН',
                                 'DESCRIPTION': f"ИНН: {connect_company_info['inn']}\n",
@@ -408,8 +408,8 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': treatment_id,
-            'STAGE_ID': '65'
+            'STAGE_ID': '65',
+            'UF_AUTO_499889542776': treatment_id
         }})
     elif 'Обновить 1С' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -420,7 +420,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': treatment_id,
+            'UF_AUTO_499889542776': treatment_id
         }})
     else:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
@@ -431,8 +431,8 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
-            'UF_AUTO_499889542776': treatment_id,
             'STAGE_ID': '1165',
+            'UF_AUTO_499889542776': treatment_id
         }})
     new_task_id = new_task['task']
     connect = connect_database('tasks')
@@ -446,16 +446,37 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         connect.execute(sql, data)
 
 
-def create_logs_commentary(treatment_id):
+def create_logs_commentary(treatment_id: str, update=False) -> str:
     connect = connect_database('logs')
-    sql = 'SELECT user_id, message_type, additional_info FROM logs WHERE treatment_id=?'
+    sql = 'SELECT user_id, message_type, additional_info, message_time FROM logs WHERE treatment_id=? and message_type!=80'
     data = (
         treatment_id,
     )
     with connect:
-        logs = connect.execute(sql, data).fetchall()
+        logs = connect.execute(sql, data).fetchall()[1:]
+    commentary = 'История обращения 1С:Коннект\n' + '-' * 30 + '\n\n' if not update else ''
+
     for log in logs:
-        print(log)
+
+        # ID пользователя в имя
+        user_name = ''
+        sql = 'SELECT author_name FROM companies WHERE author_id=?'
+        data = (
+            log[0],
+        )
+        with connect:
+            result = connect.execute(sql,data).fetchone()
+        if result:
+            user_name = result[0]
+        if not user_name:
+            sql = 'SELECT name FROM users WHERE connect_id=?'
+            with connect:
+                result = connect.execute(sql, data).fetchone()
+            if result:
+                user_name = result[0]
+
+        commentary += f'{log[4]}\n{user_name}\n{connect_codes[log[1]]}\n{log[2]}\n\n'
+        return commentary
 
 
 def close_treatment_task(treatment_id: str):
@@ -468,12 +489,12 @@ def close_treatment_task(treatment_id: str):
         task_id = connect.execute(sql, data).fetchone()
     if not task_id:
         return
-    commentary = create_logs_commentary(treatment_id)
 
     task_id = task_id[0]
-
-
-
+    commentary = create_logs_commentary(treatment_id)
+    b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
+           raw=True)
+    send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {'STATUS': '5'}})
 
 
 def complete_database_update():
@@ -566,8 +587,79 @@ def connect_1c_event_handler(req):
     # Новое обращение
     if req['message_type'] == 80:
         create_treatment_task(req['treatment_id'], req['user_id'], req['line_id'])
+
+    # Завершение обращения
     elif req['message_type'] in [82, 90, 91, 92, 93]:
         close_treatment_task(req['treatment_id'])
+
+    # Перевод обращения на другую линию
+    elif req['message_type'] == 89 and req['data']['direction'] == 'to':
+        connect = connect_database('tasks')
+        sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
+        data = (
+            req['treatment_id']
+        )
+        with connect:
+            task_id = connect.execute(sql, data).fetchone()
+        if not task_id:
+            return
+        task_id = task_id[0]
+        sql = 'UPDATE tasks SET treatment_id=? WHERE task_id=?'
+        data = (
+            req['data']['treatment_id'],
+            task_id,
+        )
+        with connect:
+            connect.execute(sql, data)
+        line_name = get_line_name(req['line_id'])
+
+        if 'ЛК' in line_name:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'GROUP_ID': '7',
+                    'STAGE_ID': '65',
+                    'UF_AUTO_499889542776': req['data']['treatment_id']
+                }})
+        elif 'Обновить 1С' in line_name:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'GROUP_ID': '11',
+                    'UF_AUTO_499889542776': req['data']['treatment_id']
+                }})
+
+        task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()[
+            'result']
+        for comment in task_comments:
+            if 'История обращения 1С:Коннект' not in comment['POST_MESSAGE']:
+                continue
+            send_bitrix_request('task.commentitem.delete', {0: task_id, 1: comment['ID']})
+            commentary = comment['POST_MESSAGE'] + create_logs_commentary(req['treatment_id'], update=True)
+            b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
+                   raw=True)
+
+        # Ответственный за задачу != сотрудник поддержки
+        connect = connect_database('users')
+        sql = 'SELECT bitrix_id FROM users WHERE connect_id=?'
+        data = (
+            req['user_id'],
+        )
+        with connect:
+            user_bitrix_id = connect.execute(sql, data).fetchone()
+        if not user_bitrix_id:
+            return
+        user_bitrix_id = user_bitrix_id[0]
+        sql = 'SELECT responsible_id FROM tasks WHERE treatment_id=?'
+        data = (
+            req['treatment_id'],
+        )
+        with connect:
+            responsible_id = connect.execute(sql, data).fetchone()[0]
+        if responsible_id != user_bitrix_id:
+            send_bitrix_request('tasks.task.update', {'fields': {'RESPONSIBLE_ID': user_bitrix_id, 'AUDITORS': []}})
+
+
 
 
 

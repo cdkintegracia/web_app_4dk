@@ -634,8 +634,8 @@ def connect_1c_event_handler(req):
                 continue
             send_bitrix_request('task.commentitem.delete', {0: task_id, 1: comment['ID']})
             commentary = comment['POST_MESSAGE'] + create_logs_commentary(req['treatment_id'], update=True)
-            b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
-                   raw=True)
+        b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
+               raw=True)
 
         # Ответственный за задачу != сотрудник поддержки
         connect = connect_database('users')

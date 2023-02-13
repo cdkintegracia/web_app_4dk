@@ -639,7 +639,6 @@ def connect_1c_event_handler(req):
                 'fields': {
                     'UF_AUTO_499889542776': req['data']['treatment_id']
                 }})
-            print(req['data']['treatment_id'])
 
         commentary = create_logs_commentary(req['treatment_id'])
         b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],

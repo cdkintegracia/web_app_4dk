@@ -602,6 +602,7 @@ def connect_1c_event_handler(req):
 
     # Завершение обращения
     elif req['message_type'] in [82, 90, 91, 92, 93]:
+        print(req)
         close_treatment_task(req['treatment_id'], req['treatment']['treatment_duration'])
 
     # Перевод обращения на другую линию

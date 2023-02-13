@@ -614,13 +614,6 @@ def connect_1c_event_handler(req):
         if not task_id:
             return
         task_id = task_id[0]
-        sql = 'UPDATE tasks SET treatment_id=? WHERE task_id=?'
-        data = (
-            req['data']['treatment_id'],
-            task_id,
-        )
-        with connect:
-            connect.execute(sql, data)
         line_name = get_line_name(req['line_id'])
 
         if 'ЛК' in line_name:
@@ -641,6 +634,14 @@ def connect_1c_event_handler(req):
         commentary = create_logs_commentary(req['treatment_id'])
         b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
                raw=True)
+
+        sql = 'UPDATE tasks SET treatment_id=? WHERE task_id=?'
+        data = (
+            req['data']['treatment_id'],
+            task_id,
+        )
+        with connect:
+            connect.execute(sql, data)
 
         # Ответственный за задачу != сотрудник поддержки
         connect = connect_database('users')

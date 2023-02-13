@@ -444,7 +444,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         connect.execute(sql, data)
 
 
-def create_logs_commentary(treatment_id: str, update=False) -> str:
+def create_logs_commentary(treatment_id: str) -> str:
     connect = connect_database('logs')
     sql = 'SELECT author_id, message_type, additional_info, message_time FROM logs WHERE treatment_id=? and message_type!=80'
     data = (
@@ -452,7 +452,19 @@ def create_logs_commentary(treatment_id: str, update=False) -> str:
     )
     with connect:
         logs = connect.execute(sql, data).fetchall()[1:]
-    commentary = 'История обращения 1С:Коннект\n' + '-' * 40 + '\n\n' if not update else ''
+    sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
+    with connect:
+        task_id = connect.execute(sql, data).fetchone()[0]
+    task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()[
+        'result']
+    commentary = ''
+    for comment in task_comments:
+        if 'История обращения 1С:Коннект' not in comment['POST_MESSAGE']:
+            continue
+        send_bitrix_request('task.commentitem.delete', {0: task_id, 1: comment['ID']})
+        commentary = comment['POST_MESSAGE']
+    if not commentary:
+        commentary = 'История обращения 1С:Коннект\n' + '-' * 40 + '\n\n'
 
     for log in logs:
 
@@ -626,16 +638,7 @@ def connect_1c_event_handler(req):
                     'GROUP_ID': '11',
                     'UF_AUTO_499889542776': req['data']['treatment_id']
                 }})
-        commentary = ''
-        task_comments = requests.get(f'{authentication("Bitrix")}task.commentitem.getlist?ID={task_id}').json()[
-            'result']
-        for comment in task_comments:
-            if 'История обращения 1С:Коннект' not in comment['POST_MESSAGE']:
-                continue
-            send_bitrix_request('task.commentitem.delete', {0: task_id, 1: comment['ID']})
-            commentary = comment['POST_MESSAGE'] + create_logs_commentary(req['treatment_id'], update=True)
-        if not commentary:
-            commentary = create_logs_commentary(req['treatment_id'])
+        commentary = create_logs_commentary(req['treatment_id'])
         b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
                raw=True)
 

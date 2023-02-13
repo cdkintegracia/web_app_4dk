@@ -489,7 +489,7 @@ def create_logs_commentary(treatment_id: str) -> str:
     return commentary
 
 
-def close_treatment_task(treatment_id: str):
+def close_treatment_task(treatment_id: str, trearment_duration: str):
     connect = connect_database('tasks')
     sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
     data = (
@@ -505,6 +505,8 @@ def close_treatment_task(treatment_id: str):
     b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],
            raw=True)
     send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {'STATUS': '5'}})
+    elapsed_time = treatment_duration
+    b.call('task.elapseditem.add', [task_id, {'SECONDS': elapsed_time, 'USER_ID': '173'}], raw=True)
 
 
 def complete_database_update():
@@ -600,7 +602,7 @@ def connect_1c_event_handler(req):
 
     # Завершение обращения
     elif req['message_type'] in [82, 90, 91, 92, 93]:
-        close_treatment_task(req['treatment_id'])
+        close_treatment_task(req['treatment_id'], req['treatment']['treatment_duration'])
 
     # Перевод обращения на другую линию
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':

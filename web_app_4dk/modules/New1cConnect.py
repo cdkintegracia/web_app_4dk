@@ -489,7 +489,7 @@ def create_logs_commentary(treatment_id: str) -> str:
     return commentary
 
 
-def close_treatment_task(treatment_id: str, trearment_duration: str):
+def close_treatment_task(treatment_id: str, treatment_duration: int):
     connect = connect_database('tasks')
     sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
     data = (

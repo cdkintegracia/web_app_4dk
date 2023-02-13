@@ -613,7 +613,6 @@ def connect_1c_event_handler(req):
         )
         with connect:
             task_id = connect.execute(sql, data).fetchone()
-        print(task_id)
         if not task_id:
             return
         task_id = task_id[0]
@@ -640,6 +639,7 @@ def connect_1c_event_handler(req):
                 'fields': {
                     'UF_AUTO_499889542776': req['data']['treatment_id']
                 }})
+            print(req['data']['treatment_id'])
 
         commentary = create_logs_commentary(req['treatment_id'])
         b.call('task.commentitem.add', [task_id, {'POST_MESSAGE': commentary, 'AUTHOR_ID': '173'}],

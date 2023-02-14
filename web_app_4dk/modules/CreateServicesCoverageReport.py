@@ -245,6 +245,8 @@ def create_services_coverage_report(req):
             data['Допы Облако'] = data['Допы Облако'].rstrip(', ')
             data['Отчетность в рамках ИТС'] = 'Не предусмотрено' if data['Отчетность в рамках ИТС'] == 'Нет' and 'Базовый' in data['ИТС'] else data['Отчетность в рамках ИТС']
             data_to_write.append(list(data.values()))
+            if data['Отчетность в рамках ИТС'] == 'Не предусмотрено':
+                data['Отчетность в рамках ИТС'] = 'Нет'
     data_to_write = sorted(data_to_write, key=lambda x: (x[3].split()[1], x[0]))
     worksheet.append(first_list_titles)
     for row in data_to_write:

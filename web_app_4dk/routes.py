@@ -210,7 +210,7 @@ def load_user(user):
 def update_connect_logs():
     connect_1c_event_handler(request.json)
 
-    #update_logs("Получен 1С-Коннект вебхук", request.json)
+    update_logs("Получен 1С-Коннект вебхук", request.json)
     #connect_1c(request.json)
 
     return 'OK'

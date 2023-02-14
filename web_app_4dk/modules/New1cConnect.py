@@ -462,7 +462,7 @@ def create_logs_commentary(treatment_id: str) -> str:
         if 'История обращения 1С:Коннект' not in comment['POST_MESSAGE']:
             continue
         send_bitrix_request('task.commentitem.delete', {0: task_id, 1: comment['ID']})
-        commentary = f"\n\n{comment['POST_MESSAGE']}"
+        commentary = f"{comment['POST_MESSAGE']}\n\n"
     if not commentary:
         commentary = 'История обращения 1С:Коннект\n' + '-' * 40 + '\n\n'
 

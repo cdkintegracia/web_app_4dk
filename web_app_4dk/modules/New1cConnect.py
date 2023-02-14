@@ -237,7 +237,6 @@ def get_bitrix_company_id(author_id: str) -> str:
         return bitrix_company_id[0]
     else:
         connect_company_info = get_connect_company_id(author_id)
-        print('ghbsdfdsgsd', connect_company_info)
         if connect_company_info:
             bitrix_company_info = b.get_all(
                 'crm.company.list',
@@ -397,13 +396,20 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
     message_time = row[1]
     line_name = get_line_name(line_id)
     task_description = f"{message_time} {author_name}\n{additional_info}"
-    responsible_id = '311'
+    sql = 'SELECT bitrix_id FROM users WHERE connect_id=?'
+    data = (
+        author_id,
+    )
+    responsible_id = '173'
+    with connect:
+        bitrix_id = connect.execute(sql, data).fetchone()
+    if bitrix_id:
+        responsible_id = bitrix_id[0]
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
             'DESCRIPTION': f"{task_description}",
-            #'GROUP_ID': '7',
-            'GROUP_ID': '19',
+            'GROUP_ID': '7',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
@@ -414,8 +420,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект ТЛП",
             'DESCRIPTION': f"{task_description}",
-            #'GROUP_ID': '11',
-            'GROUP_ID': '19',
+            'GROUP_ID': '11',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],
@@ -425,7 +430,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
             'DESCRIPTION': f"{task_description}",
-            'GROUP_ID': '19',
+            'GROUP_ID': '75',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
             'UF_CRM_TASK': [f"CO_{company_id}"],

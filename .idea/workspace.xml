@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/New1cConnect.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/New1cConnect.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +86,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\123" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CreateTasksActiveSales">
+  <component name="RunManager" selected="Python.New1cConnect">
     <configuration name="CreateTasksActiveSales" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -230,8 +229,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.CreateTasksActiveSales" />
         <item itemvalue="Python.New1cConnect" />
+        <item itemvalue="Python.CreateTasksActiveSales" />
         <item itemvalue="Python.segsdgs" />
         <item itemvalue="Python.dsfs" />
         <item itemvalue="Python.bfbf" />
@@ -355,7 +354,7 @@
       <workItem from="1676029193329" duration="19793000" />
       <workItem from="1676297088347" duration="54000" />
       <workItem from="1676297223402" duration="1213000" />
-      <workItem from="1676375861405" duration="4748000" />
+      <workItem from="1676375861405" duration="5696000" />
     </task>
     <servers />
   </component>
@@ -390,7 +389,7 @@
     <SUITE FILE_PATH="coverage/web_app_4dk$bfbf.coverage" NAME="bfbf Coverage Results" MODIFIED="1675867494325" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/static" />
     <SUITE FILE_PATH="coverage/web_app_4dk$CreateServiceSalesReport__1_.coverage" NAME="CreateServiceSalesReport (1) Coverage Results" MODIFIED="1673449483525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$.coverage" NAME="ими Coverage Results" MODIFIED="1673954409663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$New1cConnect.coverage" NAME="New1cConnect Coverage Results" MODIFIED="1676378910685" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$New1cConnect.coverage" NAME="New1cConnect Coverage Results" MODIFIED="1676422507390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$dsfs.coverage" NAME="dsfs Coverage Results" MODIFIED="1675868963036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$ServiceTask.coverage" NAME="ServiceTask Coverage Results" MODIFIED="1674742966683" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$vsv.coverage" NAME="vsv Coverage Results" MODIFIED="1674474690633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />

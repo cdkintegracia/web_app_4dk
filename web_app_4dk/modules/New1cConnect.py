@@ -661,21 +661,30 @@ def connect_1c_event_handler(req):
         connect = connect_database('users')
         sql = 'SELECT bitrix_id FROM users WHERE connect_id=?'
         data = (
-            req['user_id'],
+            req['author_id'],
         )
         with connect:
-            user_bitrix_id = connect.execute(sql, data).fetchone()
-        if not user_bitrix_id:
+            author_bitrix_id = connect.execute(sql, data).fetchone()
+        if not author_bitrix_id:
             return
-        user_bitrix_id = user_bitrix_id[0]
-        sql = 'SELECT responsible_id FROM tasks WHERE treatment_id=?'
+        author_bitrix_id = author_bitrix_id[0]
+        sql = 'SELECT responsible_id, task_id FROM tasks WHERE treatment_id=?'
         data = (
             req['treatment_id'],
         )
         with connect:
-            responsible_id = connect.execute(sql, data).fetchone()[0]
-        if responsible_id != user_bitrix_id:
-            send_bitrix_request('tasks.task.update', {'fields': {'RESPONSIBLE_ID': user_bitrix_id, 'AUDITORS': []}})
+            result = connect.execute(sql, data).fetchone()
+        responsible_id = result[0]
+        task_id = result[1]
+        if responsible_id != author_bitrix_id:
+            send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {'RESPONSIBLE_ID': author_bitrix_id, 'AUDITORS': []}})
+            sql = 'UPDATE tasks SET responsible_id=? WHERE task_id=?'
+            data = (
+                author_bitrix_id,
+                task_id,
+            )
+            with connect:
+                connect.execute(sql, data)
 
 
 

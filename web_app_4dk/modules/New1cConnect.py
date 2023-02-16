@@ -337,7 +337,7 @@ def get_line_name(line_id: str) -> str:
                     return line_name
 
 
-def create_treatment_task(treatment_id: str, user_id: str, line_id: str, author_id: str):
+def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
     connect = connect_database('tasks')
 
     '''
@@ -395,7 +395,7 @@ def create_treatment_task(treatment_id: str, user_id: str, line_id: str, author_
 
     message_time = row[1]
     line_name = get_line_name(line_id)
-    task_description = f"{message_time} {user_id}\n{additional_info}"
+    task_description = f"{message_time} {author_name}\n{additional_info}"
     sql = 'SELECT bitrix_id FROM users WHERE connect_id=?'
     data = (
         author_id,
@@ -603,7 +603,7 @@ def connect_1c_event_handler(req):
 
     # Новое обращение
     if req['message_type'] == 80:
-        create_treatment_task(req['treatment_id'], req['user_id'], req['line_id'], req['author_id'])
+        create_treatment_task(req['treatment_id'], req['user_id'], req['line_id'])
 
     # Завершение обращения
     elif req['message_type'] in [82, 90, 91, 92, 93]:

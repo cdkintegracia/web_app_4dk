@@ -337,7 +337,7 @@ def get_line_name(line_id: str) -> str:
                     return line_name
 
 
-def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
+def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_id: str):
     connect = connect_database('tasks')
 
     '''
@@ -364,7 +364,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str):
 
     sql = 'SELECT author_name FROM companies WHERE author_id=?'
     data = (
-        author_id,
+        user_id,
     )
     with connect:
         author_name = connect.execute(sql, data).fetchone()[0]
@@ -603,7 +603,7 @@ def connect_1c_event_handler(req):
 
     # Новое обращение
     if req['message_type'] == 80:
-        create_treatment_task(req['treatment_id'], req['user_id'], req['line_id'])
+        create_treatment_task(req['treatment_id'], req['author_id'], req['line_id'], req['user_id'])
 
     # Завершение обращения
     elif req['message_type'] in [82, 90, 91, 92, 93]:

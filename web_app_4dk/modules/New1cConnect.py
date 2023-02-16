@@ -357,7 +357,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
     Создание задачи
     '''
 
-    company_id = get_bitrix_company_id(author_id)
+    company_id = get_bitrix_company_id(user_id)
 
     if not company_id:
         return

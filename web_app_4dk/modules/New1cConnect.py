@@ -665,9 +665,6 @@ def connect_1c_event_handler(req):
     )
     with connect:
         author_bitrix_id = connect.execute(sql, data).fetchone()
-    b.call('im.notify.system.add', {
-        'USER_ID': '311',
-        'MESSAGE': f"Юзер АЙДИ: {req['author_id']}', {req['treatment_id']}"})
     if not author_bitrix_id:
         return
     author_bitrix_id = author_bitrix_id[0]
@@ -677,9 +674,6 @@ def connect_1c_event_handler(req):
     )
     with connect:
         result = connect.execute(sql, data).fetchone()
-        b.call('im.notify.system.add', {
-            'USER_ID': '311',
-            'MESSAGE': f"Юзер АЙДИ: {author_bitrix_id}', {req['treatment_id']} {result}"})
     responsible_id = result[0]
     task_id = result[1]
     if responsible_id != author_bitrix_id:

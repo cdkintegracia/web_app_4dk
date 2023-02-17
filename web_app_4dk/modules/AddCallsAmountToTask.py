@@ -47,7 +47,6 @@ def find_top_deal_type(deals):
                 return deal
 
 
-
 def add_calls_amount_to_task(req):
     task_id = req['task_id']
     company_id = req['company_id']
@@ -80,7 +79,6 @@ def add_calls_amount_to_task(req):
     for element in elements:
         call_value = list(element['PROPERTY_1303'].values())[0]
         call_value = datetime.strptime(call_value, '%H:%M:%S')
-        print(call_value)
         call_value = (call_value.hour * 3600) + (call_value.minute * 60) + (call_value.second)
         if not calls_sum:
             calls_sum = call_value
@@ -90,8 +88,9 @@ def add_calls_amount_to_task(req):
     minutes = (calls_sum % 3600) // 60
     seconds = (calls_sum % 3600) % 60
     calls_sum = f"{hours}:{minutes}:{seconds}"
+    if len(str(filter_month)) == 1:
+        filter_month = '0' + str(filter_month)
     task = b.get_all('tasks.task.get', {'taskId': task_id})['task']
-    b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nРасход с начала договора = {calls_sum}"}})
-
+    b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nРасход с начала договора (01.{filter_month}.{filter_year}) = {calls_sum}"}})
 
 

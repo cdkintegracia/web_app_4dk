@@ -25,11 +25,13 @@ def create_tasks_active_sales(req):
             user_info = list(filter(lambda x: x['ID'] == company['ASSIGNED_BY_ID'], users))
             user_department = str(user_info[0]['UF_DEPARTMENT'][0])
             user_department_head = list(filter(lambda x: x['ID'] == user_department, departments))
+            print(user_info)
             auditors.append(user_department_head[0]['UF_HEAD'])
         responsible_id = '405'
         if count % 2 == 0:
             responsible_id = '403'
         count += 1
+        '''
         b.call('tasks.task.add', {
             'fields': {
                 'TITLE': f"Проработка",
@@ -45,4 +47,4 @@ def create_tasks_active_sales(req):
     b.call('im.notify.system.add', {
         'USER_ID': '1',
         'MESSAGE': 'Задачи на активные продажи поставлены'})
-
+    '''

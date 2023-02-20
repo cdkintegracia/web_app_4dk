@@ -33,7 +33,7 @@ def create_tasks_active_sales(req):
         if count % 2 == 0:
             responsible_id = '403'
         count += 1
-        '''
+
         b.call('tasks.task.add', {
             'fields': {
                 'TITLE': f"Проработка",
@@ -49,4 +49,4 @@ def create_tasks_active_sales(req):
     b.call('im.notify.system.add', {
         'USER_ID': '1',
         'MESSAGE': 'Задачи на активные продажи поставлены'})
-    '''
+    

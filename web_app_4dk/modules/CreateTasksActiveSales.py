@@ -16,8 +16,11 @@ def create_tasks_active_sales(req):
     task_text = b.get_all('tasks.task.get', {'taskId': req['task_id']})['task']['description']
     task_text = task_text.replace('[P]', '').replace('[/P]', '')
     companies_id = req['companies_id'].split(' ')
-    companies_info = b.get_all('crm.company.list', {'filter': {'ID': companies_id}})
+    companies_info = b.get_all('crm.company.list', {'select': ['*', 'UF_*'], 'filter': {'ID': companies_id}})
     for company in companies_info:
+        if 'UF_CRM_1675063192' in company:
+            if company['UF_CRM_1675063192']:
+                continue
         auditors = ['391', ]
         if company['ASSIGNED_BY_ID'] in department_heads:
             auditors.append(company['ASSIGNED_BY_ID'])

@@ -675,7 +675,7 @@ def connect_1c_event_handler(req):
     with connect:
         result = connect.execute(sql, data).fetchone()
     if not result:
-        return 
+        return
     responsible_id = result[0]
     task_id = result[1]
     if responsible_id != author_bitrix_id:

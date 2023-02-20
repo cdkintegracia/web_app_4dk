@@ -49,4 +49,4 @@ def create_tasks_active_sales(req):
     b.call('im.notify.system.add', {
         'USER_ID': '1',
         'MESSAGE': 'Задачи на активные продажи поставлены'})
-    
+

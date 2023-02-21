@@ -17,6 +17,7 @@ def check_product_nomenclature(req):
     product_nomenclature = product_info['productRow']['productId']
     product_info = b.get_all('crm.product.get', {'id': product_nomenclature})
     product_period = product_info['PROPERTY_1619']['value']
+    price = product_info['PRICE']
     '''
     if product_info['SECTION_ID'] not in [
         '219',  # Земля
@@ -37,6 +38,7 @@ def check_product_nomenclature(req):
         'PARAMETERS': {
             'contract_type': req['contract_type'],
             'product_period': product_period,
+            'price': price,
         }
     })
 

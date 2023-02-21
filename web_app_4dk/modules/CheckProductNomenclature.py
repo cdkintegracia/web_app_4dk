@@ -25,7 +25,7 @@ def check_product_nomenclature(req):
             'MESSAGE': f'Используйте правильную номенклатуру для формирования договора ИТС'})
         return
     b.call('bizproc.workflow.start', {
-        'TEMPLATE_ID': '1433',
+        'TEMPLATE_ID': '1435',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],
         'PARAMETERS': {
             'document_type': req['document_type'],

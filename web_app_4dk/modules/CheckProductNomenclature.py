@@ -40,5 +40,4 @@ def check_product_nomenclature(req):
         }
     })
 
-check_product_nomenclature({})
 

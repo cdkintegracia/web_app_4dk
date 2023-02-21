@@ -19,7 +19,7 @@ def check_product_nomenclature(req):
     print(product_info['SECTION_ID'])
     if product_info['SECTION_ID'] not in [
         '219',  # Земля
-        '331'   # Облако
+        '321'   # Облако
     ]:
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],

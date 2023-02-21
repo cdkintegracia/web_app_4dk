@@ -48,6 +48,7 @@ from web_app_4dk.modules.CreateRecruitmentRequest import create_recruitment_requ
 from web_app_4dk.modules.CreateTasksActiveSales import create_tasks_active_sales
 from web_app_4dk.modules.New1cConnect import connect_1c_event_handler
 from web_app_4dk.modules.AddCallsAmountToTask import add_calls_amount_to_task
+from web_app_4dk.modules.CheckProductNomenclature import check_product_nomenclature
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -77,6 +78,7 @@ custom_webhooks = {
     'create_recruitment_request': create_recruitment_request,
     'create_tasks_active_sales': create_tasks_active_sales,
     'add_calls_amount_to_task': add_calls_amount_to_task,
+    'check_product_nomenclature': check_product_nomenclature,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

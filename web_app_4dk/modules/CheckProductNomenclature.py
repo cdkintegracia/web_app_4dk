@@ -28,7 +28,7 @@ def check_product_nomenclature(req):
         'TEMPLATE_ID': '1435',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],
         'PARAMETERS': {
-            'document_type': req['document_type'],
+            'contract_type': req['contract_type'],
         }
     })
 

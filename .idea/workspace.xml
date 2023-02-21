@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CheckProductNomenclature.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CheckProductNomenclature.py" afterDir="false" />
-    </list>
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -358,7 +356,7 @@
       <workItem from="1676502060030" duration="3393000" />
       <workItem from="1676633962431" duration="15000" />
       <workItem from="1676638286560" duration="9814000" />
-      <workItem from="1676895838535" duration="7581000" />
+      <workItem from="1676895838535" duration="8473000" />
     </task>
     <servers />
   </component>

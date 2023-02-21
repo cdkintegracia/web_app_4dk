@@ -16,20 +16,29 @@ def check_product_nomenclature(req):
     product_info = b.get_all('crm.item.productrow.get', {'id': product_id})
     product_nomenclature = product_info['productRow']['productId']
     product_info = b.get_all('crm.product.get', {'id': product_nomenclature})
-    print(product_info['SECTION_ID'])
+    product_period = list(product_info['PROPERTY_1619'].values())[0]
+    '''
     if product_info['SECTION_ID'] not in [
         '219',  # Земля
-        '321'   # Облако
+        '331',  # Облако
+        '351',  # ИТСааС Бизнесстарт
+        '347',  # ИТСааС МСП
+        '309',  # ИТСааС Садовод
+        ''
     ]:
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f'Используйте правильную номенклатуру для формирования договора ИТС'})
         return
+    '''
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1435',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + req['deal_id']],
         'PARAMETERS': {
             'contract_type': req['contract_type'],
+            'product_period': product_period,
         }
     })
+
+check_product_nomenclature({})
 

@@ -7,4 +7,5 @@ except ModuleNotFoundError:
 
 
 def check_product_nomenclature(req):
-    print(req)
+    products = req['products']
+    print(products)

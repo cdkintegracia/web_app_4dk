@@ -28,6 +28,7 @@ def find_top_deal_type(deals):
         'UC_ZKPT1B',  # ПРОФ Облако
         'UC_92H9MN',  # Индивидуальный,
         'UC_7V8HWF',  # Индивидуальный+Облако
+        'UC_HT9G9H',  # ПРОФ Земля
     ]
     sort_3 = [
         'UC_1UPOTU',  # ИТС Бесплатный

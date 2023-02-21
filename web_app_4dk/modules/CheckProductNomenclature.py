@@ -16,6 +16,7 @@ def check_product_nomenclature(req):
     product_info = b.get_all('crm.item.productrow.get', {'id': product_id})
     product_nomenclature = product_info['productRow']['productId']
     product_info = b.get_all('crm.product.get', {'id': product_nomenclature})
+    print(product_info['SECTION_ID'])
     if product_info['SECTION_ID'] not in [
         '219',  # Земля
         '331'   # Облако

@@ -634,6 +634,10 @@ def connect_1c_event_handler(req):
         task_id = task_id[0]
         line_name = get_line_name(req['line_id'])
 
+        b.call('im.notify.system.add', {
+            'USER_ID': '311',
+            'MESSAGE': f'{line_name} {"ЛК" in line_name}'})
+
         if 'ЛК' in line_name:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,

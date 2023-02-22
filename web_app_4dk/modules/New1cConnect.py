@@ -426,6 +426,17 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
             'UF_CRM_TASK': [f"CO_{company_id}"],
             'UF_AUTO_499889542776': treatment_id
         }})
+    elif 'персональный менеджер' in line_name:
+        new_task = send_bitrix_request('tasks.task.add', {'fields': {
+            'TITLE': f"1С:Коннект ВПМ",
+            'DESCRIPTION': f"{task_description}",
+            'GROUP_ID': '75',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': responsible_id,
+            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'STAGE_ID': '1165',
+            'UF_AUTO_499889542776': treatment_id
+        }})
     else:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",

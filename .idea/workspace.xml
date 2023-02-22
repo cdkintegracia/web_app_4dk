@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -358,7 +356,7 @@
       <workItem from="1676502060030" duration="3393000" />
       <workItem from="1676633962431" duration="15000" />
       <workItem from="1676638286560" duration="9814000" />
-      <workItem from="1676895838535" duration="11779000" />
+      <workItem from="1676895838535" duration="12040000" />
     </task>
     <servers />
   </component>
@@ -381,12 +379,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/web_app_4dk/modules/New1cConnect.py</url>
-          <line>677</line>
+          <line>688</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/web_app_4dk/modules/New1cConnect.py</url>
-          <line>676</line>
+          <line>687</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

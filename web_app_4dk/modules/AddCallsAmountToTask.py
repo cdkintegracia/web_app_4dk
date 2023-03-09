@@ -68,7 +68,6 @@ def add_calls_amount_to_task(req):
             filter_month = 12
             filter_year -= 1
         filter_names.append(f'{month_int_names[filter_month]} {filter_year}')
-    print(filter_names)
     elements = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '175',

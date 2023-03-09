@@ -62,7 +62,7 @@ def add_calls_amount_to_task(req):
     filter_year = closedate.year
     month_range = int(deal_info['UF_CRM_1638100416'])
     filter_names = []
-    for i in range(0, month_range):
+    for i in range(0, month_range - 1):
         filter_month -= 1
         if filter_month == 0:
             filter_month = 12

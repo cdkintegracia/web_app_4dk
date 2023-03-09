@@ -241,6 +241,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     services_months_summary = dict(zip(month_names, [0 for _ in month_names]))
     for department in departments:
         for employee in data:
+            print(employee)
             row = []
             its_value = 0
             service_value = 0
@@ -547,7 +548,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(6):
+    for _ in range(1):
         file_month -= 1
         if file_month == 0:
             file_month = 12

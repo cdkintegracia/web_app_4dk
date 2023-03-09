@@ -68,6 +68,7 @@ def add_calls_amount_to_task(req):
             filter_month = 12
             filter_year -= 1
         filter_names.append(f'{month_int_names[filter_month]} {filter_year}')
+    print(filter_names)
     elements = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '175',
@@ -79,7 +80,6 @@ def add_calls_amount_to_task(req):
     calls_sum = None
     for element in elements:
         call_value = list(element['PROPERTY_1303'].values())[0]
-        print('Значение', call_value)
         call_value = datetime.strptime(call_value, '%H:%M:%S')
         call_value = (call_value.hour * 3600) + (call_value.minute * 60) + (call_value.second)
         if not calls_sum:

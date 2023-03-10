@@ -10,6 +10,7 @@ def complete_document_flow_task(req):
     company_name = req['company_name']
     task_name_search = f"Как будем обмениваться документами с {company_name}"
     tasks = b.get_all('tasks.task.list', {'filter': {'TITLE': task_name_search, '!STATUS': '5'}})
+    print(tasks)
     if tasks:
         for task in tasks:
             b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STATUS': '5'}})

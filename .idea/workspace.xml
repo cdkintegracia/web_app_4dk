@@ -221,11 +221,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
-      <item itemvalue="Python.CheckProductNomenclature" />
-      <item itemvalue="Python.xvdv" />
       <item itemvalue="Python.AddCallsAmountToTask" />
+      <item itemvalue="Python.CheckProductNomenclature" />
       <item itemvalue="Python.CreateTasksActiveSales" />
       <item itemvalue="Python.New1cConnect" />
+      <item itemvalue="Python.xvdv" />
     </list>
     <recent_temporary>
       <list>

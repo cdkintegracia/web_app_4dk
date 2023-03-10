@@ -49,6 +49,7 @@ from web_app_4dk.modules.CreateTasksActiveSales import create_tasks_active_sales
 from web_app_4dk.modules.New1cConnect import connect_1c_event_handler
 from web_app_4dk.modules.AddCallsAmountToTask import add_calls_amount_to_task
 from web_app_4dk.modules.CheckProductNomenclature import check_product_nomenclature
+from web_app_4dk.modules.FillTaskTitle import fill_task_title
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -89,7 +90,7 @@ default_webhooks = {
     'ONVOXIMPLANTCALLEND': update_call_statistic,
     'ONCRMDEALADD': create_deal,
     'ONCRMACTIVITYADD': complete_call_activity,
-    'ONTASKADD': update_user_statistics,
+    'ONTASKADD': fill_task_title,
     'ONTASKUPDATE': update_user_statistics,
     'ONCRMCONTACTUPDATE': update_contact_photo,
 }

@@ -9,5 +9,5 @@ except ModuleNotFoundError:
 b = Bitrix(authentication('Bitrix'))
 
 
-def fill_task_info(req):
+def fill_task_title(req):
     print(req)

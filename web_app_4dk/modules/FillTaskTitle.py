@@ -22,7 +22,6 @@ def fill_task_title(req):
     company_id = company_crm[0]
     company_info = b.get_all('crm.company.get', {
         'id': company_id,
-        'select': ['TITLE']
     })
     print(company_info)
     exit()

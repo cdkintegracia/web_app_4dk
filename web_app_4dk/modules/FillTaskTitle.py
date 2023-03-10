@@ -11,4 +11,44 @@ b = Bitrix(authentication('Bitrix'))
 
 def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
-    print(task_id)
+    task_info = b.get_all('tasks.task.get', {'taskId': task_id})
+    print(task_info)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

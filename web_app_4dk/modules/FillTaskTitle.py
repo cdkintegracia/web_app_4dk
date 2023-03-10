@@ -11,8 +11,8 @@ b = Bitrix(authentication('Bitrix'))
 
 def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
-    task_info = b.get_all('tasks.task.get', {'taskId': task_id})['task']
-    uf_crm = task_info['ufCrmTask']
+    task_info = b.get_all('tasks.task.get', {'taskId': task_id, 'select': ['TITLE', 'UF_CRM_TASK']})['task']
+    print(task_info)
 
 
 

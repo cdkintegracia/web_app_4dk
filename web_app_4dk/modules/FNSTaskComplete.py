@@ -6,6 +6,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def fns_task_complete(req):
+    print(req)
     uf_crm_task = 'CO_' + req['company_id']
     task = b.get_all('tasks.task.list', {'filter': {'UF_CRM_TASK': uf_crm_task, 'GROUP_ID': '89'}})
     print('TASK:', task)

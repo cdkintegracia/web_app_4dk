@@ -20,6 +20,7 @@ def fill_task_title(req):
     if not company_crm:
         return
     company_id = company_crm[0]
+    print(company_id)
     company_info = b.get_all('crm.company.get', {
         'ID': company_id,
     })

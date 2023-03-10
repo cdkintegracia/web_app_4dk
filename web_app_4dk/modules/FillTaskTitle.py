@@ -11,15 +11,30 @@ b = Bitrix(authentication('Bitrix'))
 
 def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
-    task_info = b.get_all('tasks.task.get', {'taskId': task_id, 'select': ['TITLE', 'UF_CRM_TASK']})['task']
-    uf_crm_task = ''
-    for crm_id in task_info['ufCrmTask']:
-        if 'CO' in crm_id:
-            uf_crm_task = crm_id[:3]
-            break
-    print(task_info['ufCrmTask'])
-    print(uf_crm_task)
-
+    task_info = b.get_all('tasks.task.get', {
+        'taskId': task_id,
+        'select': ['TITLE', 'UF_CRM_TASK']})['task']
+    if not task_info['ufCrmTask']:
+        return
+    company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
+    if not company_crm:
+        return
+    company_id = company_crm[0]
+    company_info = b.get_all('crm.company.get', {
+        'id': company_id,
+        'select': ['TITLE']
+    })
+    print(company_info)
+    exit()
+    if company_info['TITLE'] in task_info['TITLE']:
+        return
+    '''
+    b.call('tasks.task.update', {
+        'taskId': task_id,
+        'fields': {
+            'TITLE': f"{task_info['TITLE']} {company_info['TITLE']}"
+        }})
+    '''
 
 
 

@@ -24,7 +24,7 @@ def fill_task_title(req):
     company_info = b.get_all('crm.company.get', {
         'ID': company_id,
     })
-    if company_info['TITLE'] in task_info['TITLE']:
+    if company_info['TITLE'] in task_info['title']:
         return
     '''
     b.call('tasks.task.update', {

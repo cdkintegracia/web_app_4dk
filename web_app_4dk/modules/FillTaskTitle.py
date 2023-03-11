@@ -26,11 +26,13 @@ def fill_task_title(req):
     })
     if company_info['TITLE'] in task_info['TITLE']:
         return
+    '''
     b.call('tasks.task.update', {
         'taskId': task_id,
         'fields': {
             'TITLE': f"{task_info['TITLE']} {company_info['TITLE']}"
         }})
+    '''
 
 
 

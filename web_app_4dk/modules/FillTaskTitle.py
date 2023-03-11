@@ -1,18 +1,9 @@
-from fast_bitrix24 import Bitrix
-
-try:
-    from authentication import authentication
-except ModuleNotFoundError:
-    from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.tools import send_bitrix_request
-
-
-b = Bitrix(authentication('Bitrix'))
 
 
 def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
-    task_info = b.get_all('tasks.task.get', {
+    task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,
         'select': ['TITLE', 'UF_CRM_TASK']
     })
@@ -25,7 +16,7 @@ def fill_task_title(req):
         return
 
     company_id = company_crm[0][3:]
-    company_info = b.get_all('crm.company.get', {
+    company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })
     if company_info['TITLE'] in task_info['title']:

@@ -32,7 +32,7 @@ def fill_task_title(req):
     b.call('tasks.task.update', {
         'taskId': task_id,
         'fields': {
-            'TITLE': f"{task_info['TITLE']} {company_info['TITLE']}"
+            'TITLE': f"{task_info['title']} {company_info['TITLE']}"
         }})
 
 

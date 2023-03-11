@@ -91,7 +91,7 @@ default_webhooks = {
     'ONCRMDEALADD': create_deal,
     'ONCRMACTIVITYADD': complete_call_activity,
     'ONTASKADD': fill_task_title,
-    'ONTASKUPDATE': update_user_statistics,
+    'ONTASKUPDATE': fill_task_title,
     'ONCRMCONTACTUPDATE': update_contact_photo,
 }
 

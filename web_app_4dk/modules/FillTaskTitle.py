@@ -17,22 +17,23 @@ def fill_task_title(req):
     })['task']
     if not task_info['ufCrmTask']:
         return
+
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
     if not company_crm:
         return
+
     company_id = company_crm[0][3:]
     company_info = b.get_all('crm.company.get', {
         'ID': company_id,
     })
     if company_info['TITLE'] in task_info['title']:
         return
-    '''
+
     b.call('tasks.task.update', {
         'taskId': task_id,
         'fields': {
             'TITLE': f"{task_info['TITLE']} {company_info['TITLE']}"
         }})
-    '''
 
 
 

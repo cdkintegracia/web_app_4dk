@@ -4,6 +4,7 @@ try:
     from authentication import authentication
 except ModuleNotFoundError:
     from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.tools import send_bitrix_request
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -30,7 +31,7 @@ def fill_task_title(req):
     if company_info['TITLE'] in task_info['title']:
         return
 
-    b.call('tasks.task.update', {
+    send_bitrix_request('tasks.task.update', {
         'taskId': task_id,
         'fields': {
             'TITLE': f"{task_info['title']} {company_info['TITLE']}"

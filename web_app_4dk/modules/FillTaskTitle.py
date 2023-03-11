@@ -15,8 +15,12 @@ def fill_task_title(req):
     task_info = b.get_all('tasks.task.get', {
         'taskId': task_id,
         'select': ['TITLE', 'UF_CRM_TASK']
-    })['task']
-    if not task_info or not task_info['ufCrmTask']:
+    })
+    if not task_info:
+        return
+
+    task_info = task_info['task']
+    if not task_info['ufCrmTask']:
         return
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

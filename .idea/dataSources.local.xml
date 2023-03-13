@@ -13,5 +13,10 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="1C_Connect [2]" uuid="a7cdfd81-141a-4b0f-b2e9-c03de3ab4314">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
+      <auth-provider>no-auth</auth-provider>
+      <schema-mapping />
+    </data-source>
   </component>
 </project>

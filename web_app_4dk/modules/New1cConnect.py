@@ -98,7 +98,8 @@ def connect_database(table_name) -> sqlite3.Connection:
                 CREATE TABLE tasks (
                 treatment_id TEXT,
                 task_id TEXT,
-                responsible_id TEXT
+                responsible_id TEXT,
+                line_id TEXT
                 );
                 """)
                 connect.execute("""
@@ -450,11 +451,12 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
         }})
     new_task_id = new_task['task']
     connect = connect_database('tasks')
-    sql = 'INSERT INTO tasks (treatment_id, task_id, responsible_id) VALUES (?, ?, ?)'
+    sql = 'INSERT INTO tasks (treatment_id, task_id, responsible_id, line_id) VALUES (?, ?, ?, ?)'
     data = (
         treatment_id,
         new_task_id['id'],
         responsible_id,
+        line_id,
     )
     with connect:
         connect.execute(sql, data)
@@ -680,32 +682,55 @@ def connect_1c_event_handler(req):
     )
     with connect:
         author_bitrix_id = connect.execute(sql, data).fetchone()
-    if not author_bitrix_id:
-        return
-    author_bitrix_id = author_bitrix_id[0]
-    sql = 'SELECT responsible_id, task_id FROM tasks WHERE treatment_id=?'
-    data = (
-        req['treatment_id'],
-    )
-    with connect:
-        result = connect.execute(sql, data).fetchone()
-    if not result:
-        return
-    responsible_id = result[0]
-    task_id = result[1]
-    if responsible_id != author_bitrix_id:
-        send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {'RESPONSIBLE_ID': author_bitrix_id, 'AUDITORS': []}})
-        sql = 'UPDATE tasks SET responsible_id=? WHERE task_id=?'
+    if author_bitrix_id:
+        author_bitrix_id = author_bitrix_id[0]
+        sql = 'SELECT responsible_id, task_id, line_id FROM tasks WHERE treatment_id=?'
         data = (
-            author_bitrix_id,
-            task_id,
+            req['treatment_id'],
         )
         with connect:
-            connect.execute(sql, data)
+            result = connect.execute(sql, data).fetchone()
+        if result:
+            responsible_id = result[0]
+            task_id = result[1]
+            line_id = result[2]
+            if responsible_id != author_bitrix_id:
+                send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {'RESPONSIBLE_ID': author_bitrix_id, 'AUDITORS': []}})
+                sql = 'UPDATE tasks SET responsible_id=? WHERE task_id=?'
+                data = (
+                    author_bitrix_id,
+                    task_id,
+                )
+                with connect:
+                    connect.execute(sql, data)
 
-
-
-
-
-
-
+            # Изменилась линия
+            if line_id:
+                if req['line_id'] != line_id:
+                    line_name = get_line_name(req['line_id'])
+                    if 'ЛК' in line_name:
+                        send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {
+                            'GROUP_ID': '7',
+                            'STAGE_ID': '65',
+                        }})
+                    elif 'Обновить 1С' in line_name:
+                        send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {
+                            'GROUP_ID': '11',
+                        }})
+                    elif 'персональный менеджер' in line_name:
+                        send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {
+                            'GROUP_ID': '75',
+                            'STAGE_ID': '1165',
+                        }})
+                    else:
+                        send_bitrix_request('tasks.task.update', {'taskId': task_id, 'fields': {
+                            'GROUP_ID': '75',
+                            'STAGE_ID': '1165',
+                        }})
+                    sql = 'UPDATE tasks SET line_id=? WHERE task_id=?'
+                    data = (
+                        req['line_id'],
+                        task_id,
+                    )
+                    with connect:
+                        connect.execute(sql, data)

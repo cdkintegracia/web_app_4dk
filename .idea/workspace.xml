@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CheckoAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CheckoAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/AddTableColumnDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/AddTableColumnDB.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +59,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -369,6 +371,8 @@
       <workItem from="1678868871951" duration="6051000" />
       <workItem from="1678880828422" duration="2599000" />
       <workItem from="1678890012197" duration="329000" />
+      <workItem from="1678913356516" duration="571000" />
+      <workItem from="1678913935487" duration="73000" />
     </task>
     <servers />
   </component>

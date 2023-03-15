@@ -2,7 +2,7 @@ import sqlite3
 
 
 def connect_database(table_name) -> sqlite3.Connection:
-    connect = sqlite3.connect('1C_Connect.db')
+    connect = sqlite3.connect('/root/web_app_4dk/1C_Connect.db')
     data = connect.execute(f"select count(*) from sqlite_master where type='table' and name='{table_name}'")
     for row in data:
         if row[0] == 0:
@@ -63,4 +63,3 @@ def add_table_column_db():
 
 if __name__ == '__main__':
     add_table_column_db()
-    

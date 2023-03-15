@@ -21,7 +21,7 @@ def create_tasks_active_sales(req):
         if 'UF_CRM_1675063192' in company:
             if company['UF_CRM_1675063192']:
                 continue
-        auditors = ['391', ]
+        auditors = []
         if company['ASSIGNED_BY_ID'] in department_heads:
             auditors.append(company['ASSIGNED_BY_ID'])
         else:

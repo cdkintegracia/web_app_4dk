@@ -75,7 +75,7 @@ def connect_1c():
 
 
 def connect_database(table_name) -> sqlite3.Connection:
-    connect = sqlite3.connect('1C_Connect.db')
+    connect = sqlite3.connect('/root/web_app_4dk/web_app_4dk/modules/1C_Connect.db')
     data = connect.execute(f"select count(*) from sqlite_master where type='table' and name='{table_name}'")
     for row in data:
         if row[0] == 0:

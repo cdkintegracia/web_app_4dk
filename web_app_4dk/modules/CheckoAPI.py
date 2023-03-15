@@ -8,7 +8,7 @@ from authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
-api_key = 'eF5kqvvyrN2eqCaU'
+api_key = 'jMw7CIIIJtOKSNUb'
 api_methods = ['entrepreneur', 'finances', 'company']
 b24_list_element_fields = {
     'Выручка 2021': 'PROPERTY_1621',
@@ -18,8 +18,10 @@ b24_list_element_fields = {
     'ОКВЭД (Наим)': 'PROPERTY_1629',
     'Компания': 'PROPERTY_1631',
     'Топ сделка': 'PROPERTY_1633',
+    'Выручка в млн': 'PROPERTY_1635',
+    'Дата регистрации': 'PROPERTY_1637',
 }
-
+inn = 10
 
 def create_request(method:str, parameters:list) -> str:
     return f"{checko_url}{method}?key={api_key}&{'&'.join(parameters)}"
@@ -92,59 +94,59 @@ def find_top_deal(company_id):
                'UC_6TCS2E',                         # Линк
                ]
     type_element_codes = {
-        'SALE': '2251',
-        'COMPLEX': '2253',
-        'UC_APUWEW': '2255',
-        'UC_1UPOTU': '2257',
-        'UC_O99QUW': '2259',
-        'UC_OV4T7K': '2261',
-        'UC_2B0CK2': '2263',
-        'UC_86JXH1': '2265',
-        'UC_WUGAZ7': '2267',
-        'UC_A7G0AM': '2269',
-        'GOODS': '2271',
-        'UC_GZFC63': '2273',
-        'UC_QQPYF0': '2275',
-        'UC_8Z4N1O': '2277',
-        'UC_FOKY52': '2279',
-        'UC_D1DN7U': '2281',
-        'UC_34QFP9': '2283',
-        'UC_J426ZW': '2285',
-        'UC_H8S037': '2287',
-        'UC_8LW09Y': '2289',
-        'UC_3SKJ5M': '2291',
-        'UC_4B5UQD': '2293',
-        'UC_H7HOD0': '2295',
-        'UC_USDKKM': '2297',
-        'SERVICE': '2299',
-        'SERVICES': '2301',
-        'UC_XJFZN4': '2303',
-        'UC_BZYY0D': '2305',
-        'UC_66Z1ZF': '2307',
-        'UC_40Q6MC': '2309',
-        'UC_74DPBQ': '2311',
-        'UC_IV3HX1': '2313',
-        'UC_HT9G9H': '2315',
-        'UC_XIYCTV': '2317',
-        'UC_5T4MAW': '2319',
-        'UC_N113M9': '2321',
-        'UC_ZKPT1B': '2323',
-        'UC_2SJOEJ': '2325',
-        'UC_AVBW73': '2327',
-        'UC_GPT391': '2329',
-        'UC_92H9MN': '2331',
-        'UC_7V8HWF': '2333',
-        'UC_IUJR81': '2335',
-        'UC_2R01AE': '2337',
-        'UC_81T8ZR': '2339',
-        'UC_SV60SP': '2341',
-        'UC_D7TC4I': '2343',
-        'UC_K9QJDV': '2345',
-        'UC_DBLSP5': '2347',
-        'UC_GP5FR3': '2349',
-        'UC_YIAJC8': '2351',
-        '1': '2353',
-        'UC_6TCS2E': '2357'
+        #'SALE': '2251',
+        #'COMPLEX': '2253',
+        #'UC_APUWEW': '2255',
+        'UC_1UPOTU': '2405',
+        'UC_O99QUW': '2407',
+        'UC_OV4T7K': '2409',
+        'UC_2B0CK2': '2411',
+        'UC_86JXH1': '2413',
+        'UC_WUGAZ7': '2415',
+        'UC_A7G0AM': '2417',
+        'GOODS': '2419',
+        'UC_GZFC63': '2421',
+        'UC_QQPYF0': '2423',
+        'UC_8Z4N1O': '2425',
+        'UC_FOKY52': '2427',
+        'UC_D1DN7U': '2429',
+        'UC_34QFP9': '2431',
+        'UC_J426ZW': '2433',
+        'UC_H8S037': '2435',
+        'UC_8LW09Y': '2437',
+        'UC_3SKJ5M': '2439',
+        'UC_4B5UQD': '2441',
+        'UC_H7HOD0': '2443',
+        'UC_USDKKM': '2445',
+        'SERVICE': '2447',
+        'SERVICES': '2449',
+        'UC_XJFZN4': '2451',
+        'UC_BZYY0D': '2453',
+        'UC_66Z1ZF': '2455',
+        'UC_40Q6MC': '2457',
+        'UC_74DPBQ': '2459',
+        'UC_IV3HX1': '2461',
+        'UC_HT9G9H': '2463',
+        'UC_XIYCTV': '2465',
+        'UC_5T4MAW': '2467',
+        'UC_N113M9': '2469',
+        'UC_ZKPT1B': '2471',
+        'UC_2SJOEJ': '2473',
+        'UC_AVBW73': '2475',
+        'UC_GPT391': '2477',
+        'UC_92H9MN': '2479',
+        'UC_7V8HWF': '2481',
+        'UC_IUJR81': '2483',
+        'UC_2R01AE': '2485',
+        'UC_81T8ZR': '2487',
+        'UC_SV60SP': '2489',
+        'UC_D7TC4I': '2491',
+        'UC_K9QJDV': '2493',
+        'UC_DBLSP5': '2495',
+        'UC_GP5FR3': '2497',
+        'UC_YIAJC8': '2499',
+        '1': '2501',
+        'UC_6TCS2E': '2505'
     }
     for type in level_1:
         if type in types:
@@ -158,66 +160,79 @@ def find_top_deal(company_id):
     for type in level_4:
         if type in types:
             return type_element_codes[type]
-    return '2355'
+    return '2503'
 
 
 def get_info_from_checko():
     errors = []
-    inn = '7813291736'
-    company_id = '549'
-    company_name = 'АСБО 7813291736'
-    for method in api_methods:
-        checko_request = requests.get(url=create_request(method, [f'inn={inn}']))
-        if checko_request.status_code == 200:
-            result = checko_request.json()
-            revenue_2021 = -1
-            average_number_of_employees = -1
-            if method == 'entrepreneur' and result['data']:
-                b.call('lists.element.add', {
+    b24_list_elements = b.get_all('lists.element.get', {
                     'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '257',
-                    'ELEMENT_CODE': time(),
-                    'fields': {
-                        'NAME': company_name,
-                        b24_list_element_fields['ОКВЭД (Код)']: result['data']['ОКВЭД']['Код'],
-                        b24_list_element_fields['ОКВЭД (Наим)']: result['data']['ОКВЭД']['Наим'],
-                        b24_list_element_fields['Компания']: company_id,
-                    }
-                })
+                    'IBLOCK_ID': '257'
+    })
+    b24_list_elements = list(map(lambda x: list(x['PROPERTY_1631'].values())[0], b24_list_elements))
+    companies = b.get_all('crm.company.list', {
+        'select': [
+            'ID',
+            'TITLE',
+            'UF_CRM_1656070716',     # СлужИНН
+        ]})
+    companies = list(filter(lambda x: x['ID'] not in b24_list_elements and x['UF_CRM_1656070716'], companies))
+    for company_info in companies:
+        revenue_2021 = -1
+        average_number_of_employees = -1
+        for method in api_methods:
+            if method == 'entrepreneur' and len(company_info['UF_CRM_1656070716']) == 10:
+                continue
+            elif method != 'entrepreneur' and len(company_info['UF_CRM_1656070716']) != 10:
+                continue
+            checko_request = requests.get(url=create_request(method, [f"inn={company_info['UF_CRM_1656070716']}"]))
+            if checko_request.status_code == 200:
+                result = checko_request.json()
+                if method == 'entrepreneur' and result['data']:
+                    b.call('lists.element.add', {
+                        'IBLOCK_TYPE_ID': 'lists',
+                        'IBLOCK_ID': '257',
+                        'ELEMENT_CODE': time(),
+                        'fields': {
+                            'NAME': company_info['TITLE'],
+                            b24_list_element_fields['ОКВЭД (Код)']: result['data']['ОКВЭД']['Код'],
+                            b24_list_element_fields['ОКВЭД (Наим)']: result['data']['ОКВЭД']['Наим'],
+                            b24_list_element_fields['Компания']: company_info['ID'],
+                            b24_list_element_fields['Топ сделка']: find_top_deal(company_info['ID']),
+                            b24_list_element_fields['Дата регистрации']: result['data']['ДатаРег'],
+                        }
+                    })
+                    break
+                elif method == 'finances':
+                    if '2021' in result['data'] and '2110' in result['data']['2021']:
+                        revenue_2021 = result['data']['2021']['2110']
+                elif method == 'company':
+                    if 'СЧР' in result['data'] and result['data']['СЧР']:
+                        average_number_of_employees = result['data']['СЧР']
+                    b.call('lists.element.add', {
+                        'IBLOCK_TYPE_ID': 'lists',
+                        'IBLOCK_ID': '257',
+                        'ELEMENT_CODE': time(),
+                        'fields': {
+                            'NAME': company_info['TITLE'],
+                            b24_list_element_fields['Выручка 2021']: revenue_2021,
+                            b24_list_element_fields['ОКВЭД (Код)']: result['data']['ОКВЭД']['Код'],
+                            b24_list_element_fields['ОКВЭД (Наим)']: result['data']['ОКВЭД']['Наим'],
+                            b24_list_element_fields['Среднесписочная численность']: average_number_of_employees,
+                            b24_list_element_fields['Компания']: company_info['ID'],
+                            b24_list_element_fields['Топ сделка']: find_top_deal(company_info['ID']),
+                            b24_list_element_fields['Выручка в млн']: round(revenue_2021 / 1_000_000, 3),
+                            b24_list_element_fields['Дата регистрации']: result['data']['ДатаРег'],
+                        }
+                    })
+
+            else:
+                errors.append(company_info['UF_CRM_1656070716'])
                 break
-            elif method == 'finances':
-                if '2021' in result['data'] and '2110' in result['data']['2021']:
-                    revenue_2021 = result['data']['2021']['2110']
-            elif method == 'company':
-                if result['data']['СЧР']:
-                    average_number_of_employees = result['data']['СЧР']
-                b.call('lists.element.add', {
-                    'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '257',
-                    'ELEMENT_CODE': time(),
-                    'fields': {
-                        'NAME': company_name,
-                        b24_list_element_fields['Выручка 2021']: revenue_2021,
-                        b24_list_element_fields['ОКВЭД (Код)']: result['data']['ОКВЭД']['Код'],
-                        b24_list_element_fields['ОКВЭД (Наим)']: result['data']['ОКВЭД']['Наим'],
-                        b24_list_element_fields['Среднесписочная численность']: average_number_of_employees,
-                        b24_list_element_fields['Компания']: company_id,
-                    }
-                })
 
-        else:
-            errors.append(inn)
-    print(errors)
+    print('Ошибочные ИНН:', errors)
 
 
-def test():
-    a = b.get_all('lists.element.get', {
-                    'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '257',
-                    'ELEMENT_ID': '405841'})
-    print(a)
-#test()
-exit()
-#get_info_from_checko()
+get_info_from_checko()
 
 

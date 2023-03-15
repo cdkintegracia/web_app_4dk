@@ -63,3 +63,4 @@ def add_table_column_db():
 
 if __name__ == '__main__':
     add_table_column_db()
+    

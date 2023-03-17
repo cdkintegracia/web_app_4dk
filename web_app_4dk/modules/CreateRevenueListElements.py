@@ -8,10 +8,10 @@ from authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
+api_key = 'jMw7CIIIJtOKSNUb'
 api_methods = ['entrepreneur', 'finances', 'company']
 b24_list_element_fields = {
-    'Выручка 2021': 'PROPERTY_1621',
-    'Выручка 2022': 'PROPERTY_1623',
+    'Выручка': 'PROPERTY_1621',
     'Среднесписочная численность': 'PROPERTY_1625',
     'ОКВЭД (Код)': 'PROPERTY_1627',
     'ОКВЭД (Наим)': 'PROPERTY_1629',
@@ -20,8 +20,9 @@ b24_list_element_fields = {
     'Выручка в млн': 'PROPERTY_1635',
     'Дата регистрации': 'PROPERTY_1637',
     'Ответственный за компанию': 'PROPERTY_1639',
+    'Год': 'PROPERTY_1643',
 }
-inn = 10
+
 
 def create_request(method: str, parameters: list) -> str:
     return f"{checko_url}{method}?key={api_key}&{'&'.join(parameters)}"
@@ -163,11 +164,37 @@ def find_top_deal(company_id: str) -> str:
     return '2503'
 
 
-def get_info_from_checko():
+def get_result_values(result: dict) -> dict:
+    average_number_of_employees = -1
+    OKVED_code = ''
+    OKVED_name = ''
+    registration_date = ''
+    if 'СЧР' in result['data'] and result['data']['СЧР']:
+        average_number_of_employees = result['data']['СЧР']
+    if 'Код' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Код']:
+        OKVED_code = result['data']['ОКВЭД']['Код']
+    if 'Наим' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Наим']:
+        OKVED_name = result['data']['ОКВЭД']['Наим']
+    if 'ДатаРег' in result['data'] and result['data']['ДатаРег']:
+        registration_date = result['data']['ДатаРег']
+
+    return {
+        'Среднесписочная численность': average_number_of_employees,
+        'ОКВЭД (Код)': OKVED_code,
+        'ОКВЭД (Наим)': OKVED_name,
+        'Дата регистрации': registration_date
+    }
+
+
+def get_info_from_checko(req):
+    year = req['year']
     errors = []
     b24_list_elements = b.get_all('lists.element.get', {
                     'IBLOCK_TYPE_ID': 'lists',
-                    'IBLOCK_ID': '257'
+                    'IBLOCK_ID': '257',
+                    'filter': {
+                        'PROPERTY_1643': year,
+                    }
     })
     b24_list_elements = list(map(lambda x: list(x['PROPERTY_1631'].values())[0], b24_list_elements))
     companies = b.get_all('crm.company.list', {
@@ -181,14 +208,10 @@ def get_info_from_checko():
     count = 0
     for company_info in companies:
         print(count)
-        if count == 29:
+        if count == 1:
             break
         count += 1
-        revenue_2021 = -1
-        average_number_of_employees = -1
-        OKVED_code = ''
-        OKVED_name = ''
-        registration_date = ''
+        revenue = -1
         for method in api_methods:
             if method == 'entrepreneur' and len(company_info['UF_CRM_1656070716']) == 10:
                 continue
@@ -198,61 +221,52 @@ def get_info_from_checko():
             if checko_request.status_code == 200:
                 result = checko_request.json()
                 if method == 'entrepreneur' and result['data']:
-                    if 'Код' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Код']:
-                        OKVED_code = result['data']['ОКВЭД']['Код']
-                    if 'Наим' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Наим']:
-                        OKVED_name = result['data']['ОКВЭД']['Наим']
-                    if 'ДатаРег' in result['data'] and result['data']['ДатаРег']:
-                        registration_date = result['data']['ДатаРег']
+                    values = get_result_values(result)
                     b.call('lists.element.add', {
                         'IBLOCK_TYPE_ID': 'lists',
                         'IBLOCK_ID': '257',
                         'ELEMENT_CODE': time(),
                         'fields': {
-                            'NAME': company_info['TITLE'],
-                            b24_list_element_fields['ОКВЭД (Код)']: OKVED_code,
-                            b24_list_element_fields['ОКВЭД (Наим)']: OKVED_name,
+                            'NAME': year,
+                            b24_list_element_fields['ОКВЭД (Код)']: values['ОКВЭД (Код)'],
+                            b24_list_element_fields['ОКВЭД (Наим)']: values['ОКВЭД (Наим)'],
                             b24_list_element_fields['Компания']: company_info['ID'],
                             b24_list_element_fields['Топ сделка']: find_top_deal(company_info['ID']),
-                            b24_list_element_fields['Дата регистрации']: registration_date,
+                            b24_list_element_fields['Дата регистрации']: values['Дата регистрации'],
                             b24_list_element_fields['Ответственный за компанию']: company_info['ASSIGNED_BY_ID'],
+                            b24_list_element_fields['Год']: year,
                         }
                     })
                     break
                 elif method == 'finances':
-                    if '2021' in result['data'] and '2110' in result['data']['2021']:
-                        revenue_2021 = result['data']['2021']['2110']
+                    if year in result['data'] and '2110' in result['data'][year]:
+                        revenue = result['data'][year]['2110']
                 elif method == 'company':
-                    if 'СЧР' in result['data'] and result['data']['СЧР']:
-                        average_number_of_employees = result['data']['СЧР']
-                    if 'Код' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Код']:
-                        OKVED_code = result['data']['ОКВЭД']['Код']
-                    if 'Наим' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Наим']:
-                        OKVED_name = result['data']['ОКВЭД']['Наим']
-                    if 'ДатаРег' in result['data'] and result['data']['ДатаРег']:
-                        registration_date = result['data']['ДатаРег']
+                    values = get_result_values(result)
                     b.call('lists.element.add', {
                         'IBLOCK_TYPE_ID': 'lists',
                         'IBLOCK_ID': '257',
                         'ELEMENT_CODE': time(),
                         'fields': {
-                            'NAME': company_info['TITLE'],
-                            b24_list_element_fields['Выручка 2021']: revenue_2021,
-                            b24_list_element_fields['ОКВЭД (Код)']: OKVED_code,
-                            b24_list_element_fields['ОКВЭД (Наим)']: OKVED_name,
-                            b24_list_element_fields['Среднесписочная численность']: average_number_of_employees,
+                            'NAME': year,
+                            b24_list_element_fields['Выручка']: revenue,
+                            b24_list_element_fields['ОКВЭД (Код)']: values['ОКВЭД (Код)'],
+                            b24_list_element_fields['ОКВЭД (Наим)']: values['ОКВЭД (Наим)'],
+                            b24_list_element_fields['Среднесписочная численность']: values['Среднесписочная численность'],
                             b24_list_element_fields['Компания']: company_info['ID'],
                             b24_list_element_fields['Топ сделка']: find_top_deal(company_info['ID']),
-                            b24_list_element_fields['Выручка в млн']: round(revenue_2021 / 1_000_000, 3),
-                            b24_list_element_fields['Дата регистрации']: registration_date,
+                            b24_list_element_fields['Выручка в млн']: round(revenue / 1_000_000, 3),
+                            b24_list_element_fields['Дата регистрации']: values['Дата регистрации'],
                             b24_list_element_fields['Ответственный за компанию']: company_info['ASSIGNED_BY_ID'],
+                            b24_list_element_fields['Год']: year,
+
                         }
                     })
 
             else:
                 errors.append(company_info['UF_CRM_1656070716'])
                 break
-    count = 500
+
     users_for_notifications = ['311', '1']
     if errors:
         count -= len(errors)
@@ -265,4 +279,27 @@ def get_info_from_checko():
             'MESSAGE': notification_text})
 
 
-get_info_from_checko()
+def update_elements(company_id: str):
+    b24_list_elements = b.get_all('lists.element.get', {
+        'IBLOCK_TYPE_ID': 'lists',
+        'IBLOCK_ID': '257',
+        'filter': {
+            'PROPERTY_1631': company_id,
+        }
+    })
+    for element in b24_list_elements:
+        b.call('bizproc.workflow.start', {
+            'TEMPLATE_ID': '1451',
+            'DOCUMENT_ID': ['lists', 'Bitrix\Lists\BizprocDocumentLists', element['ID']]
+        })
+
+
+def create_revenue_list_elements(req: dict):
+    if 'process' in req and req['process'] == 'update_elements':
+        update_elements(req['company_id'])
+    else:
+        get_info_from_checko(req)
+
+
+get_info_from_checko({'year': '2021'})
+

@@ -3,12 +3,16 @@ from time import time
 from fast_bitrix24 import Bitrix
 import requests
 
-from authentication import authentication
+try:
+    from authentication import authentication
+except ModuleNotFoundError:
+    from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
-api_key = 'jMw7CIIIJtOKSNUb'
+with open('/root/web_app_4dk/web_app_4dk/modules/CheckoAPI.txt', 'r') as file:
+    api_key = file.read()
 api_methods = ['entrepreneur', 'finances', 'company']
 b24_list_element_fields = {
     'Выручка': 'PROPERTY_1621',

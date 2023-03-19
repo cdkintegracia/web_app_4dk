@@ -11,8 +11,7 @@ except ModuleNotFoundError:
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
-with open('/root/web_app_4dk/web_app_4dk/modules/CheckoAPI.txt', 'r') as file:
-    api_key = file.read()
+api_key = 'jMw7CIIIJtOKSNUb'
 api_methods = ['entrepreneur', 'finances', 'company']
 b24_list_element_fields = {
     'Выручка': 'PROPERTY_1621',
@@ -299,6 +298,7 @@ def update_elements(company_id: str):
 
 
 def create_revenue_list_elements(req: dict):
+    print(req)
     if 'process' in req and req['process'] == 'update_elements':
         update_elements(req['company_id'])
     else:

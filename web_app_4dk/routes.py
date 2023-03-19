@@ -50,6 +50,7 @@ from web_app_4dk.modules.New1cConnect import connect_1c_event_handler
 from web_app_4dk.modules.AddCallsAmountToTask import add_calls_amount_to_task
 from web_app_4dk.modules.CheckProductNomenclature import check_product_nomenclature
 from web_app_4dk.modules.FillTaskTitle import fill_task_title
+from web_app_4dk.modules.CreateRevenueListElements import create_revenue_list_elements
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -80,6 +81,7 @@ custom_webhooks = {
     'create_tasks_active_sales': create_tasks_active_sales,
     'add_calls_amount_to_task': add_calls_amount_to_task,
     'check_product_nomenclature': check_product_nomenclature,
+    'create_revenue_list_elements': create_revenue_list_elements,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

@@ -208,7 +208,7 @@ def get_info_from_checko(req):
     count = 0
     for company_info in companies:
         print(count)
-        if count == 1:
+        if count == 499:
             break
         count += 1
         revenue = -1
@@ -301,5 +301,5 @@ def create_revenue_list_elements(req: dict):
         get_info_from_checko(req)
 
 
-get_info_from_checko({'year': '2021'})
+#get_info_from_checko({'year': '2021'})
 

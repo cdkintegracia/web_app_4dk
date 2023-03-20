@@ -76,19 +76,22 @@ def add_calls_amount_to_task(req):
             'PROPERTY_1299': company_id
         }
     })
-    calls_sum = None
-    for element in elements:
-        call_value = list(element['PROPERTY_1303'].values())[0]
-        call_value = datetime.strptime(call_value, '%H:%M:%S')
-        call_value = (call_value.hour * 3600) + (call_value.minute * 60) + (call_value.second)
-        if not calls_sum:
-            calls_sum = call_value
-        else:
-            calls_sum += call_value
-    hours = calls_sum // 3600
-    minutes = (calls_sum % 3600) // 60
-    seconds = (calls_sum % 3600) % 60
-    calls_sum = f"{hours}:{minutes}:{seconds}"
+    if elements:
+        calls_sum = None
+        for element in elements:
+            call_value = list(element['PROPERTY_1303'].values())[0]
+            call_value = datetime.strptime(call_value, '%H:%M:%S')
+            call_value = (call_value.hour * 3600) + (call_value.minute * 60) + (call_value.second)
+            if not calls_sum:
+                calls_sum = call_value
+            else:
+                calls_sum += call_value
+        hours = calls_sum // 3600
+        minutes = (calls_sum % 3600) // 60
+        seconds = (calls_sum % 3600) % 60
+        calls_sum = f"{hours}:{minutes}:{seconds}"
+    else:
+        calls_sum = '00:00:00'
     if len(str(filter_month)) == 1:
         filter_month = '0' + str(filter_month)
     task = b.get_all('tasks.task.get', {'taskId': task_id})['task']

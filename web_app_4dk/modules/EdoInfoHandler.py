@@ -1,4 +1,4 @@
-цfrom time import time
+from time import time
 import os
 import base64
 from datetime import datetime

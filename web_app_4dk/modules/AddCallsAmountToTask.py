@@ -76,6 +76,7 @@ def add_calls_amount_to_task(req):
             'PROPERTY_1299': company_id
         }
     })
+    task = b.get_all('tasks.task.get', {'taskId': task_id})['task']
     if elements:
         calls_sum = None
         for element in elements:
@@ -90,11 +91,11 @@ def add_calls_amount_to_task(req):
         minutes = (calls_sum % 3600) // 60
         seconds = (calls_sum % 3600) % 60
         calls_sum = f"{hours}:{minutes}:{seconds}"
+        if len(str(filter_month)) == 1:
+            filter_month = '0' + str(filter_month)
+        b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nРасход с начала договора (01.{filter_month}.{filter_year}) = {calls_sum}"}})
     else:
-        calls_sum = '00:00:00'
-    if len(str(filter_month)) == 1:
-        filter_month = '0' + str(filter_month)
-    task = b.get_all('tasks.task.get', {'taskId': task_id})['task']
-    b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nРасход с начала договора (01.{filter_month}.{filter_year}) = {calls_sum}"}})
+        b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nВ Б24 сделка начинается позже текущей даты, поэтому посчитайте суммарное время самостоятельно"}})
+
 
 

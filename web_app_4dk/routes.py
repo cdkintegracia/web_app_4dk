@@ -96,7 +96,7 @@ default_webhooks = {
     'ONTASKADD': fill_task_title,
     'ONTASKUPDATE': fill_task_title,
     'ONCRMCONTACTUPDATE': update_contact_photo,
-    'ONCALENDARENTRYADD': add_calendar_event,
+    'ONCALENDARENTRYUPDATE': add_calendar_event,
 }
 
 

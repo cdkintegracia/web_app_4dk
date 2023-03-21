@@ -11,6 +11,7 @@ except ModuleNotFoundError:
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
+api_key = 'jMw7CIIIJtOKSNUb'
 api_methods = ['entrepreneur', 'finances', 'company']
 b24_list_element_fields = {
     'Выручка': 'PROPERTY_1621',
@@ -173,10 +174,11 @@ def get_result_values(result: dict) -> dict:
     registration_date = ''
     if 'СЧР' in result['data'] and result['data']['СЧР']:
         average_number_of_employees = result['data']['СЧР']
-    if 'Код' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Код']:
-        OKVED_code = result['data']['ОКВЭД']['Код']
-    if 'Наим' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Наим']:
-        OKVED_name = result['data']['ОКВЭД']['Наим']
+    if 'ОКВЭД' in result['data']:
+        if 'Код' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Код']:
+            OKVED_code = result['data']['ОКВЭД']['Код']
+        if 'Наим' in result['data']['ОКВЭД'] and result['data']['ОКВЭД']['Наим']:
+            OKVED_name = result['data']['ОКВЭД']['Наим']
     if 'ДатаРег' in result['data'] and result['data']['ДатаРег']:
         registration_date = result['data']['ДатаРег']
 
@@ -210,7 +212,7 @@ def get_info_from_checko(req):
     count = 0
     for company_info in companies:
         print(count)
-        if count == 499:
+        if count == 1500:
             break
         count += 1
         revenue = -1
@@ -303,5 +305,5 @@ def create_revenue_list_elements(req: dict):
         get_info_from_checko(req)
 
 
-#get_info_from_checko({'year': '2021'})
+get_info_from_checko({'year': '2021'})
 

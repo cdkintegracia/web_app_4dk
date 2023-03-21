@@ -51,6 +51,7 @@ from web_app_4dk.modules.AddCallsAmountToTask import add_calls_amount_to_task
 from web_app_4dk.modules.CheckProductNomenclature import check_product_nomenclature
 from web_app_4dk.modules.FillTaskTitle import fill_task_title
 from web_app_4dk.modules.CreateRevenueListElements import create_revenue_list_elements
+from web_app_4dk.modules.AddCalendarEvent import add_calendar_event
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -95,6 +96,7 @@ default_webhooks = {
     'ONTASKADD': fill_task_title,
     'ONTASKUPDATE': fill_task_title,
     'ONCRMCONTACTUPDATE': update_contact_photo,
+    'ONCALENDARENTRYADD': add_calendar_event,
 }
 
 

@@ -304,6 +304,6 @@ def create_revenue_list_elements(req: dict):
     else:
         get_info_from_checko(req)
 
-
-get_info_from_checko({'year': '2021'})
+if __name__ == '__main__':
+    get_info_from_checko({'year': '2021'})
 

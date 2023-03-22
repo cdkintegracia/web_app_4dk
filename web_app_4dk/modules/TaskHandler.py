@@ -32,7 +32,7 @@ def fill_task_title(req):
 
 def send_notification(task_info):
     users_notification_list = ['311']
-    if not task_info['task'] or not task_info['task']['auditors']:
+    if not task_info or not task_info['task'] or not task_info['task']['auditors']:
         return
     auditors = task_info['task']['auditors']
     task_id = task_info['task']['id']

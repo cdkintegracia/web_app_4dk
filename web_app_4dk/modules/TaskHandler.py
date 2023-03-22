@@ -1,7 +1,4 @@
-from fast_bitrix24 import Bitrix
-
 from web_app_4dk.tools import send_bitrix_request
-from web_app_4dk.modules.authentication import authentication
 
 
 def fill_task_title(req):
@@ -11,33 +8,33 @@ def fill_task_title(req):
         'select': ['TITLE', 'UF_CRM_TASK']
     })
     if not task_info or not task_info['task']['ufCrmTask']:
-        return
+        return task_info
 
     task_info = task_info['task']
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
     if not company_crm:
-        return
+        return task_info
 
     company_id = company_crm[0][3:]
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })
     if company_info['TITLE'] in task_info['title']:
-        return
+        return task_info
 
     send_bitrix_request('tasks.task.update', {
         'taskId': task_id,
         'fields': {
             'TITLE': f"{task_info['title']} {company_info['TITLE']}"
         }})
+    return task_info
 
 
-def send_notification(req):
-    b = Bitrix(authentication('Bitrix'))
+def send_notification(task_info):
     users_notification_list = ['311']
-    b.call('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': req})
+    send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': task_info})
 
 
 def task_handler(req):
-    fill_task_title(req)
-    send_notification(req)
+    task_info = fill_task_title(req)
+    send_notification(task_info)

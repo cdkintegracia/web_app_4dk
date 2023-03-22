@@ -27,7 +27,7 @@ def fill_task_title(req):
         'fields': {
             'TITLE': f"{task_info['title']} {company_info['TITLE']}"
         }})
-    return task_info['task']
+    return task_info
 
 
 def send_notification(task_info):

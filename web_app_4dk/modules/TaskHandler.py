@@ -27,12 +27,13 @@ def fill_task_title(req):
         'fields': {
             'TITLE': f"{task_info['title']} {company_info['TITLE']}"
         }})
-    return task_info
+    return task_info['task']
 
 
 def send_notification(task_info):
+    print(task_info)
     users_notification_list = ['311']
-    if not task_info or not task_info['task'] or not task_info['task']['auditors']:
+    if not task_info or not task_info['auditors']:
         return
     auditors = task_info['task']['auditors']
     task_id = task_info['task']['id']

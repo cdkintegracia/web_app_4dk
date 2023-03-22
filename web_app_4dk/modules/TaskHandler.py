@@ -39,7 +39,7 @@ def send_notification(task_info):
     task_id = task_info['id']
     for user in users_notification_list:
         if user in auditors:
-            send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': f"https://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
+            send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': f"Была создана новая задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
 
 
 def task_handler(req):

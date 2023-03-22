@@ -1,4 +1,7 @@
+from fast_bitrix24 import Bitrix
+
 from web_app_4dk.tools import send_bitrix_request
+from web_app_4dk.modules.authentication import authentication
 
 
 def fill_task_title(req):
@@ -30,8 +33,9 @@ def fill_task_title(req):
 
 
 def send_notification(req):
+    b = Bitrix(authentication('Bitrix'))
     users_notification_list = ['311']
-    send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': req})
+    b.call('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': req})
 
 
 def task_handler(req):

@@ -31,8 +31,11 @@ def fill_task_title(req):
 
 
 def send_notification(task_info):
+    if not task_info or not task_info['task']['AUDITORS']:
+        return
+    auditors = task_info['task']['AUDITORS']
     users_notification_list = ['311']
-    send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': '1'})
+    send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': auditors})
 
 
 def task_handler(req):

@@ -5,7 +5,7 @@ def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,
-        'select': ['TITLE', 'UF_CRM_TASK', 'AUDIOTS']
+        'select': ['TITLE', 'UF_CRM_TASK', 'AUDITORS']
     })
     if not task_info or not task_info['task']['ufCrmTask']:
         return task_info

@@ -5,7 +5,7 @@ def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,
-        'select': ['TITLE', 'UF_CRM_TASK']
+        'select': ['TITLE', 'UF_CRM_TASK', 'AUDIOTS']
     })
     if not task_info or not task_info['task']['ufCrmTask']:
         return task_info
@@ -32,9 +32,9 @@ def fill_task_title(req):
 
 def send_notification(task_info):
     print(task_info)
-    if not task_info['task'] or not task_info['task']['AUDITORS']:
+    if not task_info['task'] or not task_info['task']['auditors']:
         return
-    auditors = task_info['task']['AUDITORS']
+    auditors = task_info['task']['auditors']
     users_notification_list = ['311']
     send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': auditors})
 

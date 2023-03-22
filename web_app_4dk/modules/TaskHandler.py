@@ -31,6 +31,7 @@ def fill_task_title(req):
 
 
 def send_notification(task_info):
+    print(task_info)
     if not task_info['task'] or not task_info['task']['AUDITORS']:
         return
     auditors = task_info['task']['AUDITORS']

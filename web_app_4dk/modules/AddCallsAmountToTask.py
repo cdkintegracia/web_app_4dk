@@ -6,10 +6,10 @@ from fast_bitrix24 import Bitrix
 
 try:
     from authentication import authentication
-    from field_values import month_int_names
+    from TaskHandler import month_int_names
 except ModuleNotFoundError:
     from web_app_4dk.modules.authentication import authentication
-    from web_app_4dk.modules.field_values import month_int_names
+    from web_app_4dk.modules.TaskHandler import month_int_names
 
 
 b = Bitrix(authentication('Bitrix'))

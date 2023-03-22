@@ -7,7 +7,7 @@ import openpyxl
 from openpyxl.styles import PatternFill
 
 #from field_values import deals_category_1_types, departments_id_name, month_int_names
-from web_app_4dk.modules.field_values import deals_category_1_types, departments_id_name, month_int_names
+from web_app_4dk.modules.TaskHandler import deals_category_1_types, departments_id_name, month_int_names
 from web_app_4dk.modules.EdoInfoHandler import month_codes, year_codes
 from web_app_4dk.modules.authentication import authentication
 #from authentication import authentication

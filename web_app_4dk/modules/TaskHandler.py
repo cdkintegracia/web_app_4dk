@@ -27,3 +27,13 @@ def fill_task_title(req):
         'fields': {
             'TITLE': f"{task_info['title']} {company_info['TITLE']}"
         }})
+
+
+def send_notification(req):
+    users_notification_list = ['311']
+    send_bitrix_request('im.notify.system.add', {'USER_ID': '311', 'MESSAGE': req})
+
+
+def task_handler(req):
+    fill_task_title(req)
+    send_notification(req)

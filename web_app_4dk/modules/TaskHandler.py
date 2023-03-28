@@ -12,7 +12,7 @@ def fill_task_title(req):
         return
     task_info = task_info['task']
 
-    if task_info['closeDate'] and task_info['ufAuto934103382947'] not in [None, '1']:
+    if task_info['closedDate'] and task_info['ufAuto934103382947'] not in [None, '1']:
         send_notification(task_info, 'Завершение')
         send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
 

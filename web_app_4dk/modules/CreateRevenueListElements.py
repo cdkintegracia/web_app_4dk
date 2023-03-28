@@ -214,7 +214,6 @@ def get_info_from_checko(req):
         print(count)
         if count == 1500:
             break
-        count += 1
         revenue = -1
         for method in api_methods:
             if method == 'entrepreneur' and len(company_info['UF_CRM_1656070716']) == 10:
@@ -241,6 +240,7 @@ def get_info_from_checko(req):
                             b24_list_element_fields['Год']: year,
                         }
                     })
+                    count += 1
                     break
                 elif method == 'finances':
                     if year in result['data'] and '2110' in result['data'][year]:
@@ -266,6 +266,7 @@ def get_info_from_checko(req):
 
                         }
                     })
+                    count += 1
 
             else:
                 errors.append(company_info['UF_CRM_1656070716'])

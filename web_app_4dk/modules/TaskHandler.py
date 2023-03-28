@@ -14,7 +14,6 @@ def fill_task_title(req):
 
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
         send_notification(task_info, 'Завершение')
-        send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
 
     if not task_info['ufCrmTask']:
         return
@@ -44,6 +43,7 @@ def send_notification(task_info, notification_type):
         return
     auditors = task_info['auditors']
     task_id = task_info['id']
+    flag = False
     for user in users_notification_list:
         if user in auditors:
             if notification_type == 'Создание':
@@ -56,6 +56,9 @@ def send_notification(task_info, notification_type):
                                                              'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
                 send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
                                                              'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
+                if not flag:
+                    send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
+                    flag = True
 
 def task_handler(req):
     task_info = fill_task_title(req)

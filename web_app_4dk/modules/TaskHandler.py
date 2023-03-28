@@ -12,11 +12,12 @@ def fill_task_title(req):
         return
     task_info = task_info['task']
 
+    print(task_info['closedDate'], task_info['ufAuto934103382947'])
     if task_info['closedDate'] and task_info['ufAuto934103382947'] not in [None, '1']:
         send_notification(task_info, 'Завершение')
         send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
 
-    if not task_info['task']['ufCrmTask']:
+    if not task_info['ufCrmTask']:
         return
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

@@ -52,7 +52,7 @@ def send_notification(task_info, notification_type):
                 send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
                                                              'MESSAGE': f"Была создана новая задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
             elif notification_type == 'Завершение':
-                print9('111111111111111111111111111111')
+                print('111111111111111111111111111111')
                 send_bitrix_request('im.notify.system.add', {'USER_ID': user,
                                                              'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
                 send_bitrix_request('im.notify.system.add', {'USER_ID': '311',

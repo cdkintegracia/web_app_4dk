@@ -12,8 +12,10 @@ def fill_task_title(req):
         return
     task_info = task_info['task']
 
+    '''
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
         send_notification(task_info, 'Завершение')
+    '''
 
     if not task_info['ufCrmTask']:
         return
@@ -62,4 +64,6 @@ def send_notification(task_info, notification_type):
 
 def task_handler(req):
     task_info = fill_task_title(req)
+    '''
     send_notification(task_info, 'Создание')
+    '''

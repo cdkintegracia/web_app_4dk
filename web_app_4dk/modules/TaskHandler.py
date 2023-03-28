@@ -39,6 +39,7 @@ def fill_task_title(req):
 
 
 def send_notification(task_info, notification_type):
+    print(notification_type)
     users_notification_list = ['339']
     if not task_info or not task_info['auditors']:
         return

@@ -51,6 +51,7 @@ from web_app_4dk.modules.AddCallsAmountToTask import add_calls_amount_to_task
 from web_app_4dk.modules.CheckProductNomenclature import check_product_nomenclature
 from web_app_4dk.modules.TaskHandler import task_handler
 from web_app_4dk.modules.CreateRevenueListElements import create_revenue_list_elements
+from web_app_4dk.modules.GetRegnumberElements import get_regnumber_elements
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -82,6 +83,7 @@ custom_webhooks = {
     'add_calls_amount_to_task': add_calls_amount_to_task,
     'check_product_nomenclature': check_product_nomenclature,
     'create_revenue_list_elements': create_revenue_list_elements,
+    'get_regnumber_elements': get_regnumber_elements,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

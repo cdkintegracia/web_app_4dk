@@ -151,8 +151,9 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                     handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                     handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
-            '''
-            elif deal_info['Тип'] == 'Кабинет садовода':
+
+            #elif deal_info['Тип'] == 'Кабинет садовода':
+            elif deal_info['Тип'] == '123':
                 deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'],
                                                                deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
                 deal_end_date_month = deal_info['Предполагаемая дата закрытия'].month
@@ -165,7 +166,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
                 handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
-            '''
+
 
             else:
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':

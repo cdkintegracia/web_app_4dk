@@ -3,6 +3,7 @@ import openpyxl
 from time import sleep
 from authentication import authentication
 
+'''
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -77,6 +78,7 @@ worksheet = workbook.active
 for row in result:
     worksheet.append(row)
 workbook.save('Анализ регномеров.xlsx')
+'''
 
 
 

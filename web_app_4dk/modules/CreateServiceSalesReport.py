@@ -72,8 +72,8 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         current_year -= 1
     if deal_type in service_deal_current_month:
         return f'{month_names_numbers[month]}.{current_year}'
-    elif deal_type == 'Кабинет садовода':
-        return {'Месяц': int(month_names_numbers[month]), 'Год': int(current_year)}
+    #elif deal_type == 'Кабинет садовода':
+        #return {'Месяц': int(month_names_numbers[month]), 'Год': int(current_year)}
     elif deal_type == 'Подпись 1000' and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
         return f'{deal_date_start.month}.{deal_date_start.year}'
     else:
@@ -151,6 +151,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                     handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                     handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 
+            '''
             elif deal_info['Тип'] == 'Кабинет садовода':
                 deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'],
                                                                deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
@@ -164,6 +165,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                 deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
                 handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                 handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
+            '''
 
             else:
                 if deal_start_date == f'{month_names_numbers[month]}.{months_and_years[month]}':

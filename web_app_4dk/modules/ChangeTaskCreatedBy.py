@@ -4,6 +4,7 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
+
 def change_task_created_by(req):
     b.call('tasks.task.update', {
         'taskId': req['task_id'],
@@ -11,4 +12,3 @@ def change_task_created_by(req):
             'CREATED_BY': req['new_created_by']
         }
     })
-    print(req['new_created_by'])

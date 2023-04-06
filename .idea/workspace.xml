@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/TxtEmailsHandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateSaleReportingDeals.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateSaleReportingDeals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/ChangeTaskCreatedBy.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/ChangeTaskCreatedBy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -393,6 +391,7 @@
       <workItem from="1680528469846" duration="1343000" />
       <workItem from="1680591563148" duration="3855000" />
       <workItem from="1680704379581" duration="4000" />
+      <workItem from="1680778908630" duration="313000" />
     </task>
     <servers />
   </component>

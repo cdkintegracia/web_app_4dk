@@ -176,7 +176,7 @@ def seminar_data_handler(event_id, registrants_file, questionnaire_file):
             b24_company_id = company_in_b24(companies, company_name=registrant['Название организации'], phone=phone_handler(registrant['Телефон']), email=registrant['E-mail'])
             registrant['Компания ID'] = b24_company_id
 
-        if registrant['Компания ID'] and not registrant['Контакт ID']:
+        if registrant['Компания ID'] and not registrant['Контакт ID'] and registrant['ФИО']:
             contact = get_company_contact_by_surname(registrant['Компания ID'], registrant['ФИО'])
             if contact:
                 registrant['Контакт ID'] = contact

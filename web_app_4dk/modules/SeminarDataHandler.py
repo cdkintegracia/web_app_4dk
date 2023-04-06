@@ -140,7 +140,7 @@ def get_company_contact_by_surname(company_id, fio):
     if company_contacts:
         contacts = b.get_all('crm.contact.list', {'filter': {'ID': company_contacts}})
         for contact in contacts:
-            if contact['LAST_NAME'] in surname:
+            if contact['LAST_NAME'] and contact['LAST_NAME'] in surname:
                 return contact['ID']
 
 

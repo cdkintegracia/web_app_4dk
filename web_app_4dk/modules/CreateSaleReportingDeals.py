@@ -3,7 +3,7 @@ import openpyxl
 from time import sleep
 from authentication import authentication
 
-'''
+
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -13,26 +13,14 @@ reporting_deal_types = {
     'UC_OV4T7K': 'Отчетность (в рамках ИТС)',
 }
 result = [['Регномер', 'Отчетность', 'Ответственный за ИТС', 'Название компании']]
-workbook = openpyxl.load_workbook('Регномера для анализа.xlsx')
+workbook = openpyxl.load_workbook('Анализ регномеров (1) (1).xlsx')
 worksheet = workbook.active
 max_rows = worksheet.max_row
 regnumbers = []
 for row in range(2, max_rows + 1):
     regnumber = worksheet.cell(row=row, column=1).value
     regnumbers.append(regnumber)
-regnumbers = [
-801354748,
-800517569,
-801617495,
-9972245,
-9891249,
-801623294,
-801624336,
-802408267,
-801350495,
-802408468,
-803014962,
-]
+no_its = []
 deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'UF_CRM_1640523562691': regnumbers, '!STAGE_ID': ['C1:WON']}})
 companies_id = list(map(lambda x: x['COMPANY_ID'], deals))
 companies = b.get_all('crm.company.list', {'filter': {'ID': companies_id}})
@@ -58,17 +46,23 @@ for regnumber in regnumbers:
             'TITLE': 'Продажа',
             'COMPANY_ID': regnumber_its[0]['COMPANY_ID'],
             'UF_CRM_1680181516033': '1461',
-            'UF_CRM_1680191120': regnumber_its[0]['ASSIGNED_BY_ID'],
+            #'UF_CRM_1680191120': regnumber_its[0]['ASSIGNED_BY_ID'],
             'UF_CRM_1640523562691': regnumber,
             'UF_CRM_1680253793699': regnumber_its_stage,
-            'ASSIGNED_BY_ID': '173',
+            'ASSIGNED_BY_ID': regnumber_its[0]['ASSIGNED_BY_ID'],
+            'CLOSEDATE': '2023-04-21'
         }})
         sleep(5)
         b.call('crm.deal.update', {'ID': new_deal, 'fields': {
             'UF_CRM_1680181516033': '1461',
-            'UF_CRM_1680191120': regnumber_its[0]['ASSIGNED_BY_ID'],
+            #'UF_CRM_1680191120': regnumber_its[0]['ASSIGNED_BY_ID'],
             'UF_CRM_1680253793699': regnumber_its_stage,
+            'UF_CRM_1670409896': regnumber,
         }})
+    else:
+        no_its.append(regnumber)
+for i in no_its:
+    print(i)
 exit()
 
     #result.append([regnumber, reporting_deal_name, its_deal_responsible, company_name])
@@ -78,7 +72,7 @@ worksheet = workbook.active
 for row in result:
     worksheet.append(row)
 workbook.save('Анализ регномеров.xlsx')
-'''
+
 
 
 

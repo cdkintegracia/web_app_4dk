@@ -7,7 +7,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def change_task_group(req):
-    print(req['responsible_id'][:5])
+    print(req['responsible_id'][5:])
     groups_and_departments = {
         '9': [361, 225],
     }

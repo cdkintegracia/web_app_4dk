@@ -1,14 +1,18 @@
 from fast_bitrix24 import Bitrix
+from email_validate import validate
+import openpyxl
+from datetime import datetime
 
 from authentication import authentication
 
 
+'''
 b = Bitrix(authentication('Bitrix'))
 
-with open('Контакты 2.txt') as contacts_file_2:
+with open('Контакты 3.txt', encoding="utf8") as contacts_file_2:
     contacts_list_2 = list(map(lambda x: x.replace('\n', ''), contacts_file_2.readlines()))
 
-with open('контакты.txt') as contacts_file_1:
+with open('unique_emails.txt') as contacts_file_1:
     contacts_list_1 = list(map(lambda x: x.replace('\n', ''), contacts_file_1.readlines()))
 
 contacts_list = contacts_list_1 + contacts_list_2
@@ -30,8 +34,34 @@ for info in b24_companies_info:
 
 
 unique_emails = set(filter(lambda x: x not in b24_companies_emails and x not in b24_contacts_emails, file_emails_list))
-with open('unique_emails.txt', 'w') as new_file:
+with open('unique_emails_2.txt', 'w') as new_file:
     for row in unique_emails:
         new_file.write(f"{row}\n")
+'''
+emails_list = []
+with open('unique_emails_2.txt', 'r') as file:
+    for i in file:
+        emails_list.append(i.strip('\n'))
+
+validated_emails = []
+count = 0
+for email in emails_list:
+    try:
+        count += 1
+        print(count, len(emails_list))
+        email_validate = validate(
+            email_address=email,
+            check_blacklist=False,
+            check_dns=False,
+            #check_smtp=False,
+            smtp_timeout=60
+        )
+        if email_validate:
+            validated_emails.append(email)
+    except:
+        pass
+with open('validated_emails.txt', 'w') as file:
+    for email in validated_emails:
+        file.write(f'{email}\n')
 
 

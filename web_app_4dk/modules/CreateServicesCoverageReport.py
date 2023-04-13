@@ -279,7 +279,6 @@ def create_services_coverage_report(req):
             # Подсчет всех сервисов
             services_count = 0
             paid_services_count = 0
-            paid_reportings_count = 0
             if result_data[company_id][row]['Контрагент'] != 'Нет':
                 services_count += 1
                 if result_data[company_id][row]['Контрагент'] != 'Да (Тариф)':
@@ -308,6 +307,8 @@ def create_services_coverage_report(req):
                 data_to_write[employee]['ИТС без платных сервисов'] += 1
             if result_data[company_id][row]['Отчетность']:
                 data_to_write[employee]['Охвачено платной отчетностью'] += 1
+            if any([result_data[company_id][row]['Отчетность'], result_data[company_id][row]['Отчетность в рамках ИТС']]):
+                data_to_write[employee]['Любая отчетность'] += 1
 
 
     data_to_write_list = []
@@ -336,6 +337,10 @@ def create_services_coverage_report(req):
             data_to_write[employee]['% Охвата платной отчетностью'] = round(data_to_write[employee]['Охвачено платной отчетностью'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         except ZeroDivisionError:
             data_to_write[employee]['% Охвата платной отчетностью'] = 0
+        try:
+            data_to_write[employee]['% Любая отчетность'] = round(data_to_write[employee]['Любая отчетность'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% Любая отчетность'] = 0
 
         data_to_write_list.append(list(data_to_write[employee].values()))
 

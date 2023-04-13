@@ -212,8 +212,8 @@ def create_services_coverage_report(req):
                     result_data[edo_info_company_id][data_counter]['ЭДО'] = edo_info_value
 
     # Подсчет отчетностей
+    deals_reporting_id = []
     for company_id in result_data:
-        deals_reporting_id = []
         for data_counter in range(len(result_data[company_id])):
             deals_reporting = list(filter(lambda x: x['TYPE_ID'] in ['UC_O99QUW', 'UC_OV4T7K'] and x['UF_CRM_1640523562691'] == result_data[company_id][data_counter]['Регномер'], deals_info))
             for deal_reporting in deals_reporting:

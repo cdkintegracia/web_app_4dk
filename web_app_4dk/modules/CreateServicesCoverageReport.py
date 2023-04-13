@@ -275,8 +275,7 @@ def create_services_coverage_report(req):
                 data_to_write[employee]['Всего ПРОФ'] += 1
             if result_data[company_id][row]['Отчетность в рамках ИТС'] != 'Нет':
                 data_to_write[employee]['Льготных отчетностей'] += 1
-            print(result_data[company_id][row])
-            exit()
+
             # Подсчет всех сервисов
             services_count = 0
             paid_services_count = 0
@@ -307,6 +306,9 @@ def create_services_coverage_report(req):
                 data_to_write[employee]['Два и более сервисов'] += 1
             if paid_services_count == 0:
                 data_to_write[employee]['ИТС без платных сервисов'] += 1
+            if result_data[company_id][row]['Отчетность']:
+                data_to_write[employee]['Охвачено платной отчетностью'] += 1
+
 
     data_to_write_list = []
     for employee in data_to_write:

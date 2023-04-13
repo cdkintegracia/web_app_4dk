@@ -332,6 +332,11 @@ def create_services_coverage_report(req):
             data_to_write[employee]['% ИТС без платных сервисов'] = round(data_to_write[employee]['ИТС без платных сервисов'] / data_to_write[employee]['Всего ИТС'], 2) * 100
         except ZeroDivisionError:
             data_to_write[employee]['% ИТС без платных сервисов'] = 0
+        try:
+            data_to_write[employee]['% Охвата платной отчетностью'] = round(data_to_write[employee]['Охвачено платной отчетностью'] / data_to_write[employee]['Всего ИТС'], 2) * 100
+        except ZeroDivisionError:
+            data_to_write[employee]['% Охвата платной отчетностью'] = 0
+
         data_to_write_list.append(list(data_to_write[employee].values()))
 
     data_to_write_list = sorted(data_to_write_list, key=lambda x: x[1].split()[1])

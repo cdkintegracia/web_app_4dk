@@ -258,7 +258,8 @@ def create_services_coverage_report(req):
     second_list_titles = ['Подразделение', 'Имя Фамилия сотрудника', 'Всего ИТС', 'Всего ПРОФ', 'ИТС без сервисов',
               '% ИТС без сервисов', 'ИТС без платных сервисов', '% ИТС без платных сервисов', 'Льготных отчетностей',
               '% Льготных отчетностей от ПРОФ', 'Только 1 сервис',
-              '% Только 1 сервис', 'Два и более сервисов', '% Два и более сервисов']
+              '% Только 1 сервис', 'Два и более сервисов', '% Два и более сервисов',
+              'Охвачено платной отчетностью', '% Охвата платной отчетностью', 'Любая отчетность', '% Любая отчетность']
     worksheet.append(second_list_titles)
     data_to_write = {}
     for company_id in result_data:
@@ -274,10 +275,12 @@ def create_services_coverage_report(req):
                 data_to_write[employee]['Всего ПРОФ'] += 1
             if result_data[company_id][row]['Отчетность в рамках ИТС'] != 'Нет':
                 data_to_write[employee]['Льготных отчетностей'] += 1
-
+            print(result_data[company_id][row])
+            exit()
             # Подсчет всех сервисов
             services_count = 0
             paid_services_count = 0
+            paid_reportings_count = 0
             if result_data[company_id][row]['Контрагент'] != 'Нет':
                 services_count += 1
                 if result_data[company_id][row]['Контрагент'] != 'Да (Тариф)':

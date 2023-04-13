@@ -221,6 +221,8 @@ def create_services_coverage_report(req):
                     if deal_reporting['TYPE_ID'] == 'UC_O99QUW':
                         result_data[company_id][data_counter]['Отчетность'] += 1
                         deals_reporting_id.append(deal_reporting['ID'])
+            deals_reporting = list(filter(lambda x: x['TYPE_ID'] in ['UC_O99QUW', 'UC_OV4T7K'] and x['COMPANY_ID'] == company_id, deals_info))
+            for deal_reporting in deals_reporting:
                 if deal_reporting['UF_CRM_1640523562691'] != result_data[company_id][data_counter]['Регномер']:
                     deals_reporting_by_regnumber = list(filter(lambda x: x['UF_CRM_1640523562691'] == deal_reporting['UF_CRM_1640523562691'] and x['TYPE_ID'] == 'UC_O99QUW', deals_info))
                     for deal_reporting_by_regnumber in deals_reporting_by_regnumber:

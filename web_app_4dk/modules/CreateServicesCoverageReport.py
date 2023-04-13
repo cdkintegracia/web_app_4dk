@@ -307,7 +307,7 @@ def create_services_coverage_report(req):
                 data_to_write[employee]['ИТС без платных сервисов'] += 1
             if result_data[company_id][row]['Отчетность']:
                 data_to_write[employee]['Охвачено платной отчетностью'] += 1
-            if any([result_data[company_id][row]['Отчетность'], result_data[company_id][row]['Отчетность в рамках ИТС']]):
+            if any([result_data[company_id][row]['Отчетность'], result_data[company_id][row]['Отчетность в рамках ИТС'] != 'Нет']):
                 data_to_write[employee]['Любая отчетность'] += 1
 
 

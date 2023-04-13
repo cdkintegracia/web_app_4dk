@@ -214,11 +214,11 @@ def create_services_coverage_report(req):
     # Подсчет отчетностей
     deals_reporting_id = []
     for company_id in result_data:
-        if company_id == '1413':
-            print(result_data[company_id])
-            exit()
         for data_counter in range(len(result_data[company_id])):
             deals_reporting = list(filter(lambda x: x['TYPE_ID'] in ['UC_O99QUW', 'UC_OV4T7K'] and x['UF_CRM_1640523562691'] == result_data[company_id][data_counter]['Регномер'], deals_info))
+            if company_id == '1413':
+                print(len(deals_reporting))
+                exit()
             for deal_reporting in deals_reporting:
                 if deal_reporting['ID'] not in deals_reporting_id:
                     if deal_reporting['TYPE_ID'] == 'UC_O99QUW':

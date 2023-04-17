@@ -159,6 +159,7 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
     user = load_user(current_user)
+    print(user * 1000)
     if not user:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):
@@ -211,7 +212,7 @@ def main_page():
             edo_info_handler_file.save('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
-    print(current_user, )
+
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

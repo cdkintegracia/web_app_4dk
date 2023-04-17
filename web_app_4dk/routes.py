@@ -155,6 +155,7 @@ def send_service_coverage_report_to_employees():
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
+    print(current_user)
     user = UserAuth.query.filter_by(id=current_user).first()
     if not user:
         return redirect(url_for('login'))

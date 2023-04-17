@@ -212,7 +212,7 @@ def main_page():
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
-    print(session)
+    print(session['_user_id'])
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

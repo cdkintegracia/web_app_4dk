@@ -161,7 +161,7 @@ def main_page():
     users_db = UserAuth.query.filter_by()
     users = []
     for user in users_db:
-        user.append(user.id)
+        users.append(user.id)
     if current_user not in users:
         print(current_user, users)
         return redirect(url_for('login'))

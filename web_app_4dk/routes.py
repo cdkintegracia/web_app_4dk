@@ -160,6 +160,7 @@ def load_user(user_id):
 def main_page():
     users = list(filter(lambda x: x.id, UserAuth.query.filter_by()))
     if current_user not in users:
+        print(current_user, users)
         return redirect(url_for('login'))
 
     if request.method == 'POST' and request.form.get('submit_button'):

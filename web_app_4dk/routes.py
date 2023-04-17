@@ -213,7 +213,7 @@ def main_page():
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
     user = UserAuth.query.filter_by(id=session['_user_id']).first()
-    print(user)
+    print(user.group)
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

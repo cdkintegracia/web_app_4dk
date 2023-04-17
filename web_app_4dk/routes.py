@@ -158,9 +158,8 @@ def load_user(user_id):
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    user = UserAuth.query.filter_by(id=1).first()
-    print(type(current_user))
-    user = ''
+    if type(current_user) == int:
+        user = UserAuth.query.filter_by(id=current_user).first()
     if not user:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):

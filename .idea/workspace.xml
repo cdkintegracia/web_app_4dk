@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/templates/main_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/templates/main_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -401,7 +401,7 @@
       <workItem from="1681298386203" duration="1741000" />
       <workItem from="1681381042489" duration="8292000" />
       <workItem from="1681716071790" duration="2062000" />
-      <workItem from="1681739728297" duration="604000" />
+      <workItem from="1681739728297" duration="975000" />
     </task>
     <servers />
   </component>

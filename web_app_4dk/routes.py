@@ -150,10 +150,6 @@ def send_service_coverage_report_to_employees():
     create_services_coverage_report({'to_all_employees': True})
     return 'OK'
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
-
 
 @login_required
 @app.route('/', methods=['GET', 'POST'])
@@ -216,7 +212,7 @@ def main_page():
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
-    print(current_user)
+    print(current_user.password)
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

@@ -158,6 +158,11 @@ def load_user(user_id):
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
+    users = UserAuth.query.filter_by()
+    print(users)
+    if current_user not in [0]:
+        return redirect(url_for('login'))
+
 
     if request.method == 'POST' and request.form.get('submit_button'):
         if request.files['new_call_statistic_file']:

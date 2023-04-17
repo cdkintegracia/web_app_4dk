@@ -2,7 +2,7 @@ from time import asctime
 import os
 
 from flask import request, render_template, redirect, url_for
-from flask_login import login_user, login_required, current_user, LoginManager
+from flask_login import login_user, login_required, current_user, AnonymousUserMixin
 
 from web_app_4dk import app
 from web_app_4dk import login_manager
@@ -158,9 +158,8 @@ def load_user(user_id):
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    user = load_user(current_user)
-    print(current_user)
-    print('TEST', user)
+    print(current_user.is_authenticated)
+    user = ''
     if not user:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):

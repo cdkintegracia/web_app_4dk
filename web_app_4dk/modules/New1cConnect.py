@@ -370,29 +370,31 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
     with connect:
         author_name = connect.execute(sql, data).fetchone()[0]
 
-    sql = 'SELECT additional_info, message_time, line_id FROM logs WHERE treatment_id=? and message_type!=80'
+    sql = 'SELECT additional_info, message_time, line_id, message_type FROM logs WHERE treatment_id=? and message_type!=80'
     data = (
         treatment_id,
     )
     with connect:
         row = connect.execute(sql, data).fetchone()
     additional_info = row[0]
+    message_type = int(row[3])
+    
+    if message_type == 1:
+        # Проверка на наличие хотя бы одного русского символа в сообщении
+        russian_char_flag = False
+        for word in additional_info:
+            for char in word:
+                if 1040 <= ord(char) <= 1103:
+                    russian_char_flag = True
+        if russian_char_flag is False:
+            return
 
-    # Проверка на наличие хотя бы одного русского символа в сообщении
-    russian_char_flag = False
-    for word in additional_info:
-        for char in word:
-            if 1040 <= ord(char) <= 1103:
-                russian_char_flag = True
-    if russian_char_flag is False:
-        return
-
-    # Проверка сообщения через фильтр
-    filter_word_list = [
-        'спасибо',
-    ]
-    if additional_info.lower().strip('!-_/|\\+,.? ') in filter_word_list:
-        return
+        # Проверка сообщения через фильтр
+        filter_word_list = [
+            'спасибо',
+        ]
+        if additional_info.lower().strip('!-_/|\\+,.? ') in filter_word_list:
+            return
 
     message_time = row[1]
     line_name = get_line_name(line_id)

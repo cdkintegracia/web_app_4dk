@@ -208,7 +208,7 @@ def main_page():
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
-    return render_template('main_page.html', user_group=UserAuth.group, web_app_logs=read_logs())
+    return render_template('main_page.html', user_group=current_user.group, web_app_logs=read_logs())
 
 
 @login_manager.user_loader

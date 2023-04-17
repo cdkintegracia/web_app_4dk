@@ -2,7 +2,7 @@ from time import asctime
 import os
 
 from flask import request, render_template, redirect, url_for
-from flask_login import login_user, login_required, current_user, AnonymousUserMixin
+from flask_login import login_user, login_required, current_user
 
 from web_app_4dk import app
 from web_app_4dk import login_manager
@@ -158,7 +158,8 @@ def load_user(user_id):
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    print(current_user.is_authenticated)
+    user = UserAuth.query.filter_by(id=1).first()
+    print(user)
     user = ''
     if not user:
         return redirect(url_for('login'))

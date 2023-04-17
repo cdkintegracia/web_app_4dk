@@ -101,9 +101,6 @@ default_webhooks = {
     'ONCRMCONTACTUPDATE': update_contact_photo,
 }
 
-# Права пользователей
-
-
 
 # Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
@@ -158,7 +155,8 @@ def send_service_coverage_report_to_employees():
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    if not current_user.is_authenticated:
+    user = UserAuth.query.filter_by(id=current_user).first()
+    if not user:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):
         if request.files['new_call_statistic_file']:

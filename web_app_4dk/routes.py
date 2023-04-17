@@ -150,12 +150,15 @@ def send_service_coverage_report_to_employees():
     create_services_coverage_report({'to_all_employees': True})
     return 'OK'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    print(User.get(current_user))
+    print(load_user(1))
     user = ''
     if not user:
         return redirect(url_for('login'))

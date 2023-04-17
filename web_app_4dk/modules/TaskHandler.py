@@ -8,7 +8,7 @@ def fill_task_title(req):
         'select': ['*', 'UF_*']
     })
 
-    if not task_info:
+    if not task_info or 'task' not in task_info or not task_info['task']:
         return
     task_info = task_info['task']
 

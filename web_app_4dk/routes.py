@@ -1,7 +1,7 @@
 from time import asctime
 import os
 
-from flask import request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for, session
 from flask_login import login_user, login_required, current_user
 
 from web_app_4dk import app
@@ -212,7 +212,7 @@ def main_page():
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
-    print(current_user, type(current_user.id))
+    print(session["user_id"])
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

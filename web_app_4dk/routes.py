@@ -163,7 +163,6 @@ def main_page():
     for user in users_db:
         users.append(user.id)
     if current_user not in users:
-        print(current_user, users)
         return redirect(url_for('login'))
 
     if request.method == 'POST' and request.form.get('submit_button'):
@@ -216,7 +215,8 @@ def main_page():
             edo_info_handler_file.save('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
-
+    user = UserAuth.query.filter_by(id=current_user).first()
+    print(user.group)
     return render_template('main_page.html', web_app_logs=read_logs())
 
 

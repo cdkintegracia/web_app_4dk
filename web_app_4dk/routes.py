@@ -158,8 +158,7 @@ def load_user(user_id):
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    print(load_user(current_user))
-    user = ''
+    user = load_user(current_user)
     if not user:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):

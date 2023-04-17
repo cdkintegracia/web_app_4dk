@@ -158,7 +158,7 @@ def send_service_coverage_report_to_employees():
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    if current_user.is_anonymous:
+    if type(current_user) != int:
         return redirect(url_for('login'))
     if request.method == 'POST' and request.form.get('submit_button'):
         if request.files['new_call_statistic_file']:

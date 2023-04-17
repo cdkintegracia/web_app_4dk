@@ -2,7 +2,7 @@ from time import asctime
 import os
 
 from flask import request, render_template, redirect, url_for
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, login_required, current_user, LoginManager
 
 from web_app_4dk import app
 from web_app_4dk import login_manager
@@ -155,7 +155,7 @@ def send_service_coverage_report_to_employees():
 @login_required
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    print(current_user, type(current_user))
+    print(User.get(current_user))
     user = ''
     if not user:
         return redirect(url_for('login'))

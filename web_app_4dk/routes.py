@@ -159,7 +159,8 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
     users = UserAuth.query.filter_by()
-    print(users)
+    for user in users:
+        print(user.id)
     if current_user not in [0]:
         return redirect(url_for('login'))
 

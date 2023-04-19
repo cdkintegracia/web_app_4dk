@@ -55,6 +55,7 @@ def add_calls_amount_to_task(req):
         'select': ['COMPANY_ID', 'CLOSEDATE', 'TYPE_ID', 'UF_CRM_1638100416'],
         'filter': {'UF_CRM_1657878818384': '859', 'COMPANY_ID': company_id, '!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
     deal_info = find_top_deal_type(deals)
+    print(deal_info)
     if not deal_info:
         return
     closedate = dateutil.parser.isoparse(deal_info['CLOSEDATE'])

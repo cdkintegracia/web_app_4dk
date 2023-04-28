@@ -53,6 +53,7 @@ from web_app_4dk.modules.TaskHandler import task_handler
 from web_app_4dk.modules.CreateRevenueListElements import create_revenue_list_elements
 from web_app_4dk.modules.GetRegnumberElements import get_regnumber_elements
 from web_app_4dk.modules.ChangeTaskGroup import change_task_group
+from web_app_4dk.modules.UpdateRefusalDealElement import update_refusal_deal_element
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -86,6 +87,7 @@ custom_webhooks = {
     'create_revenue_list_elements': create_revenue_list_elements,
     'get_regnumber_elements': get_regnumber_elements,
     'change_task_group': change_task_group,
+    'update_refusal_deal_element': update_refusal_deal_element,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

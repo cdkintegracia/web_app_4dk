@@ -36,4 +36,4 @@ for el in elements:
         'TEMPLATE_ID': '1065',
         'DOCUMENT_ID': ['lists', 'Bitrix\Lists\BizprocDocumentLists', el['ID']]
     })
-    sleep(10)
+    sleep(5)

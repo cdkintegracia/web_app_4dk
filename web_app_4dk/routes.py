@@ -160,7 +160,7 @@ def main_page():
         users.append(user.id)
     if current_user not in users:
         return redirect(url_for('login'))
-    print(current_user)
+    print('Текущий юзер', current_user)
 
     if request.method == 'POST' and request.form.get('submit_button'):
         if request.files['new_call_statistic_file']:

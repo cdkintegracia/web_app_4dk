@@ -8,3 +8,4 @@ class UserAuth(db.Model, UserMixin):
     login = db.Column(db.String(128), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     group = db.Column(db.String(255), nullable=False)
+    b24_id = db.Column(db.Integer)

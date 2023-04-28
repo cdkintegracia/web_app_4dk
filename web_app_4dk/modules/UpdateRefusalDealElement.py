@@ -105,6 +105,11 @@ def update_refusal_deal_element(req: dict):
         'ELEMENT_ID': req['element_id']
     })[0]
 
+    if 'PROPERTY_1311' not in element_info:
+        PROPERTY_1311 = ''
+    else:
+        PROPERTY_1311 = element_info['PROPERTY_1311']
+
     b.call('lists.element.update', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '109',
@@ -118,7 +123,7 @@ def update_refusal_deal_element(req: dict):
             'PROPERTY_527': list(element_info['PROPERTY_527'].values())[0],
             'PROPERTY_531': list(element_info['PROPERTY_531'].values())[0],
             'PROPERTY_533': list(element_info['PROPERTY_533'].values())[0],
-            'PROPERTY_1311': list(element_info['PROPERTY_1311'].values())[0],
+            'PROPERTY_1311': PROPERTY_1311,
             'PROPERTY_1665': element_deal_type_code,
             'PROPERTY_1667': support_tasks,
             'PROPERTY_1669': consultation_tasks,

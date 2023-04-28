@@ -11,7 +11,7 @@ from web_app_4dk.modules.ElementCallStatistic import rewrite_element
 b = Bitrix(authentication('Bitrix'))
 
 
-def rewrite_call_statistic(month, year):
+def rewrite_call_statistic(month, year, b24_user_id):
     try:
         workbook = openpyxl.load_workbook("/root/web_app_4dk/web_app_4dk/new_call_statistic.xlsx")
         worksheet = workbook.active
@@ -98,6 +98,6 @@ def rewrite_call_statistic(month, year):
             'TITLE': f"ИЗМЕНИТЬ БП (ЗАДАЧИ НА ЛИМИТ). Cтатистика звонков за {month} {year} успешно перезаписана",
             'GROUP_ID': '13',
             'CREATED_BY': '173',
-            'RESPONSIBLE_ID': '173'
+            'RESPONSIBLE_ID': b24_user_id,
         }})
 

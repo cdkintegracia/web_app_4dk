@@ -37,7 +37,7 @@ def read_report_file(filename: str) -> dict:
     return {'titles': titles, 'data': file_data}
 
 
-def revise_accounting_deals(filename):
+def revise_accounting_deals(filename, b24_user_id):
     what_remove = [
         'ИНН партнёра',
         'КПП партнёра',
@@ -109,7 +109,7 @@ def revise_accounting_deals(filename):
     b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка отчетности',
-            'RESPONSIBLE_ID': '19',
+            'RESPONSIBLE_ID': b24_user_id,
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'
         }})

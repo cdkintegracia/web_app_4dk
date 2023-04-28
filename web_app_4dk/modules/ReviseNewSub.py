@@ -208,7 +208,7 @@ def revise_b24_deals(file_name, file_data, titles, companies):
     return report_data
 
 
-def revise_new_sub(filename):
+def revise_new_sub(filename, b24_user_id):
     try:
         workbook = openpyxl.load_workbook(filename)
         worksheet = workbook.active
@@ -372,7 +372,7 @@ def revise_new_sub(filename):
     task = b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Сверка по NewSub',
-            'RESPONSIBLE_ID': '173',
+            'RESPONSIBLE_ID': b24_user_id,
             'GROUP_ID': '13',
             'DESCRIPTION': upload_report["DETAIL_URL"],
             'CREATED_BY': '173'

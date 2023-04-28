@@ -278,7 +278,7 @@ def write_data_to_file(data_to_write, file_name):
     workbook.save(file_name)
 
 
-def megafon_calls_handler(file_name):
+def megafon_calls_handler(file_name, b24_user_id):
     get_bx24_data()
     megafon_data = read_megafon_file(key='data', file_name=file_name)
     megafon_titles = read_megafon_file(file_name, 'titles')
@@ -345,7 +345,7 @@ def megafon_calls_handler(file_name):
         'DESCRIPTION': upload_file["DETAIL_URL"],
         'GROUP_ID': '13',
         'CREATED_BY': '173',
-        'RESPONSIBLE_ID': '173'
+        'RESPONSIBLE_ID': b24_user_id
     }})
     os_remove(report_name)
 

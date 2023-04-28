@@ -93,7 +93,7 @@ def upload_file_to_b24(report_name):
     return upload_report["DETAIL_URL"]
 
 
-def edo_info_handler(month: str, year: str, filename: str):
+def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
     not_found = []
     file_data = read_xlsx(filename)
     service_list_elements = get_service_list_elements()
@@ -165,6 +165,6 @@ def edo_info_handler(month: str, year: str, filename: str):
         'DESCRIPTION': task_descriprtion,
         'GROUP_ID': '13',
         'CREATED_BY': '173',
-        'RESPONSIBLE_ID': '173'
+        'RESPONSIBLE_ID': b24_user_id,
     }})
 

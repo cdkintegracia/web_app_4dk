@@ -70,22 +70,22 @@ def update_refusal_deal_element(req: dict):
     refusal_date = datetime.strptime(req['refusal_date'], '%d.%m.%Y')
     start_date_filter = (refusal_date - timedelta(days=180)).strftime('%Y-%m-%d')
     end_date_filter = (refusal_date + timedelta(days=1)).strftime('%Y-%m-%d')
-    support_tasks = b.get_all('tasks.task.list', {
+    support_tasks = len(b.get_all('tasks.task.list', {
         'filter': {
             'GROUP_ID': '1',
             '>=CREATED_DATE': start_date_filter,
             '<CREATED_DATE': end_date_filter,
             'UF_CRM_TASK': ['CO_' + req['company_id']]
         }
-    })
-    consultation_tasks = b.get_all('tasks.task.list', {
+    }))
+    consultation_tasks = len(b.get_all('tasks.task.list', {
         'filter': {
             'GROUP_ID': '7',
             '>=CREATED_DATE': start_date_filter,
             '<CREATED_DATE': end_date_filter,
             'UF_CRM_TASK': ['CO_' + req['company_id']]
         }
-    })
+    }))
     contacts_number = len(b.get_all('crm.company.contact.items.get', {'id': req['company_id']}))
     revenue_element = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',

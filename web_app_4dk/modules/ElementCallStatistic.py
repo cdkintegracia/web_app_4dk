@@ -268,6 +268,10 @@ def rewrite_element(element_data, calls_duration, calls_count):
         property_1377 = ''
     else:
         property_1377 = list(element_data['PROPERTY_1377'].values())[0]
+    if 'PROPERTY_1663' not in element_data:
+        property_1663 = ''
+    else:
+        property_1663 = list(element_data['PROPERTY_1663'].values())[0]
     property_1361 = int(property_1359) + int(property_1365) + int(property_1369) + int(property_1375) + int(property_1305)
     request_data = {
         'IBLOCK_TYPE_ID': 'lists',
@@ -291,7 +295,8 @@ def rewrite_element(element_data, calls_duration, calls_count):
             'PROPERTY_1375': property_1375,  # Исходящие (остальные)
             'PROPERTY_1377': property_1377,  # Топ сделка
             'PROPERTY_1583': property_1583,  # Продолжительность исх. зв. (Мегафон)
-            'PROPERTY_1585': property_1585,  # Кол-во исх. зв. (Мегафон)
+            'PROPERTY_1585': property_1585,  # Кол-во исх. зв. (Мегафон),
+            'PROPERTY_1663': property_1663,
         }
     }
     element = send_bitrix_request('lists.element.update', request_data)
@@ -372,6 +377,11 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             outgoing_calls_others = element['PROPERTY_1375'][field_value]
     except:
         outgoing_calls_others = '0'
+    try:
+        for field_value in element['PROPERTY_1663']:
+            company_name = element['PROPERTY_1663'][field_value]
+    except:
+        company_name = ''
 
     # Форматирование времени в секунды и суммирование с длительностью звонка
 
@@ -404,7 +414,8 @@ def update_element(company_id=None, element=None, outgoing_email=False, connect_
             'PROPERTY_1365': str(int(connect_treatment_count) + connect_treatment),  # Обращений в 1С:Коннект
             'PROPERTY_1369': str(int(incoming_calls) + incoming_call),     # Входящие звонки
             'PROPERTY_1375': str(int(outgoing_calls_others) + outgoing_call_other),     # Исходящие (остальные)
-            'PROPERTY_1377': top_deal  # Топ сделка
+            'PROPERTY_1377': top_deal,  # Топ сделка
+            'PROPERTY_1663': company_name,
         }
     }
     send_bitrix_request('lists.element.update', request_data)

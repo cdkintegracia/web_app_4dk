@@ -161,7 +161,8 @@ def main_page():
     if current_user not in users:
         return redirect(url_for('login'))
     user = UserAuth.query.filter_by(id=session['_user_id']).first()
-    print('Текущий юзер', user)
+    user_b24_id = user.b24_id
+    print(user_b24_id)
 
     if request.method == 'POST' and request.form.get('submit_button'):
         if request.files['new_call_statistic_file']:

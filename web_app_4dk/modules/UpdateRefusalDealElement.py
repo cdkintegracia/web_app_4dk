@@ -95,7 +95,10 @@ def update_refusal_deal_element(req: dict):
         }
     })[0]
     okved = list(revenue_element['PROPERTY_1629'].values())[0]
-    employees_number = list(revenue_element['PROPERTY_1625'].values())[0]
+    try:
+        employees_number = list(revenue_element['PROPERTY_1625'].values())[0]
+    except KeyError:
+        employees_number = ''
     revenue = list(revenue_element['PROPERTY_1635'].values())[0]
     deal_type = b.get_all('crm.deal.get', {'ID': req['deal_id']})['TYPE_ID']
     element_deal_type_code = element_deal_type_codes[deals_category_1_types[deal_type]]

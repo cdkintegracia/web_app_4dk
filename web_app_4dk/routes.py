@@ -161,7 +161,7 @@ def main_page():
     if current_user not in users:
         return redirect(url_for('login'))
     user = UserAuth.query.filter_by(id=session['_user_id']).first()
-    user_b24_id = user.group
+    user_b24_id = user.b24_id
     print(user_b24_id)
 
     if request.method == 'POST' and request.form.get('submit_button'):

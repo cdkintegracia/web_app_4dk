@@ -160,7 +160,8 @@ def main_page():
         users.append(user.id)
     if current_user not in users:
         return redirect(url_for('login'))
-    print('Текущий юзер', current_user)
+    user = UserAuth.query.filter_by(id=session['_user_id']).first()
+    print('Текущий юзер', user)
 
     if request.method == 'POST' and request.form.get('submit_button'):
         if request.files['new_call_statistic_file']:
@@ -213,7 +214,6 @@ def main_page():
             edo_info_handler(month, year, '/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
             os.remove('/root/web_app_4dk/web_app_4dk/edo_info_handler_file.xlsx')
 
-    user = UserAuth.query.filter_by(id=session['_user_id']).first()
     return render_template('main_page.html', user_group = user.group, web_app_logs=read_logs())
 
 

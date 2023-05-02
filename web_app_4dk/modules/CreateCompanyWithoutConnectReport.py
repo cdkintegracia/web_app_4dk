@@ -39,8 +39,8 @@ def create_company_without_connect_report(req):
         'filter': {
             'UF_CRM_TASK': uf_crm_contacts,
             'GROUP_ID': '7',
-            '>=CREATED_BY': date_filter_start,
-            '<CREATED_BY': date_filter_end,
+            '>=CREATED_DATE': date_filter_start,
+            '<CREATED_DATE': date_filter_end,
         }})
 
     tlp_tasks = b.get_all('tasks.task.list', {
@@ -48,8 +48,8 @@ def create_company_without_connect_report(req):
         'filter': {
             'UF_CRM_TASK': uf_crm_contacts,
             'GROUP_ID': '1',
-            '>=CREATED_BY': date_filter_start,
-            '<CREATED_BY': date_filter_end,
+            '>=CREATED_DATE': date_filter_start,
+            '<CREATED_DATE': date_filter_end,
         }})
 
     data_to_write = [
@@ -90,3 +90,4 @@ def create_company_without_connect_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по обращениям контактов без Коннекта сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
+

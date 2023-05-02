@@ -283,7 +283,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
                                                )
         if is_quarter_sub_task_exists:
             continue
-
+        '''
         # Создание пунктов чек-листа для созданной задачи на сотрудника
         b.call('task.checklistitem.add', [
             task_id, {
@@ -292,6 +292,15 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
                 'PARENT_ID': check_list_id,
             }
         ], raw=True
+               )
+        '''
+        b.call('task.checklistitem.add', {
+            'TASKID': check_list_id,
+            'FIELDS': {
+                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
+            }
+        }
+        , raw=True
                )
 
         # Создание подзадачи для основной задачи

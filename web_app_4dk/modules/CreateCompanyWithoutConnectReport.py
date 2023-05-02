@@ -23,7 +23,6 @@ def create_company_without_connect_report(req):
     contacts = b.get_all('crm.contact.list', {
         'select': ['ID', 'COMPANY_ID', 'NAME', 'SECOND_NAME', 'LAST_NAME'],
         'filter': {
-            'ID': ['2479', '9', '1849'],
             'UF_CRM_1666098408': ['0', None],
         }})
 

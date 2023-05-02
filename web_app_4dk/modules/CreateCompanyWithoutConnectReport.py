@@ -61,7 +61,8 @@ def create_company_without_connect_report(req):
         lk_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], lk_tasks)))
         tlp_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], tlp_tasks)))
         company_name = ''
-        if contact['COMPANY_ID']:
+        if contact['COMPANY_ID'] not in [None, 'None']:
+            print(contact['COMPANY_ID'])
             company_name = list(filter(lambda x: contact['COMPANY_ID'] == x['ID'], companies))[0]['TITLE']
         if any([lk_tasks_count, tlp_tasks_count]):
             data_to_write.append([fio, company_name, lk_tasks_count, tlp_tasks_count])

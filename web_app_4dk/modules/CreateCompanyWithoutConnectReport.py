@@ -34,6 +34,7 @@ def create_company_without_connect_report(req):
 
     uf_crm_contacts = list(map(lambda x: 'C_' + x['ID'], contacts))
 
+    '''
     lk_tasks = b.get_all('tasks.task.list', {
         'select': ['*', 'UF_*'],
         'filter': {
@@ -51,15 +52,34 @@ def create_company_without_connect_report(req):
             '>=CREATED_DATE': date_filter_start,
             '<CREATED_DATE': date_filter_end,
         }})
-
+    '''
     data_to_write = [
         [f'Выбрано месяцев: {req["months"]} (с {date_filter_start} по {date_filter_end})'],
         ['Контакт', 'Компания', 'Обращения на ЛК', 'Обращения на ТЛП']
     ]
+    count = 0
     for contact in contacts:
+        count += 1
+        print(f"{count} | {len(contacts)}")
         fio = f'{contact["LAST_NAME"]} {contact["NAME"]} {contact["SECOND_NAME"]}'.strip('None').strip()
-        lk_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], lk_tasks)))
-        tlp_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], tlp_tasks)))
+        #lk_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], lk_tasks)))
+        lk_tasks_count = len(b.get_all('tasks.task.list', {
+            'select': ['*', 'UF_*'],
+            'filter': {
+                'UF_CRM_TASK': 'C_' + contact['ID'],
+                'GROUP_ID': '7',
+                '>=CREATED_DATE': date_filter_start,
+                '<CREATED_DATE': date_filter_end,
+            }}))
+        #tlp_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], tlp_tasks)))
+        tlp_tasks_count = len(b.get_all('tasks.task.list', {
+            'select': ['*', 'UF_*'],
+            'filter': {
+                'UF_CRM_TASK': 'C_' + contact['ID'],
+                'GROUP_ID': '1',
+                '>=CREATED_DATE': date_filter_start,
+                '<CREATED_DATE': date_filter_end,
+            }}))
         company_name = list(filter(lambda x: contact['COMPANY_ID'] == x['ID'], companies))
         if company_name:
             company_name = company_name[0]['TITLE']
@@ -91,3 +111,4 @@ def create_company_without_connect_report(req):
         'MESSAGE': f'Отчет по обращениям контактов без Коннекта сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
 
+create_company_without_connect_report({'months': 2, 'user_id': 'user_311'})

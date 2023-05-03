@@ -1,7 +1,6 @@
 import base64
 import os
 from datetime import datetime, timedelta
-from time import sleep
 
 from fast_bitrix24 import Bitrix
 import openpyxl

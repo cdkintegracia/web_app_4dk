@@ -1,6 +1,7 @@
 import base64
 import os
 from datetime import datetime, timedelta
+from time import sleep
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -20,6 +21,16 @@ def create_company_without_connect_report(req):
     if len(filter_month) == 1:
         filter_month = '0' + filter_month
     date_filter_start = f'{datetime.now().year}-{filter_month}-01'
+
+    tasks = b.get_all('tasks.task.list', {
+        'select': ['GROUP_ID', 'UF_CRM_TASK'],
+        'filter': {
+            'GROUP_ID': ['7', '1'],
+            '>=CREATED_DATE': date_filter_start,
+            '<CREATED_DATE': date_filter_end,
+            '!UF_CRM_TASK': False,
+        }})
+
     contacts = b.get_all('crm.contact.list', {
         'select': ['ID', 'COMPANY_ID', 'NAME', 'SECOND_NAME', 'LAST_NAME'],
         'filter': {
@@ -32,60 +43,22 @@ def create_company_without_connect_report(req):
             'ID': list(map(lambda x: x['COMPANY_ID'], contacts))
         }})
 
-    uf_crm_contacts = list(map(lambda x: 'C_' + x['ID'], contacts))
-
-    '''
-    lk_tasks = b.get_all('tasks.task.list', {
-        'select': ['*', 'UF_*'],
-        'filter': {
-            'UF_CRM_TASK': uf_crm_contacts,
-            'GROUP_ID': '7',
-            '>=CREATED_DATE': date_filter_start,
-            '<CREATED_DATE': date_filter_end,
-        }})
-
-    tlp_tasks = b.get_all('tasks.task.list', {
-        'select': ['*', 'UF_*'],
-        'filter': {
-            'UF_CRM_TASK': uf_crm_contacts,
-            'GROUP_ID': '1',
-            '>=CREATED_DATE': date_filter_start,
-            '<CREATED_DATE': date_filter_end,
-        }})
-    '''
     data_to_write = [
         [f'Выбрано месяцев: {req["months"]} (с {date_filter_start} по {date_filter_end})'],
         ['Контакт', 'Компания', 'Обращения на ЛК', 'Обращения на ТЛП']
     ]
-    count = 0
+
     for contact in contacts:
-        count += 1
-        print(f"{count} | {len(contacts)}")
         fio = f'{contact["LAST_NAME"]} {contact["NAME"]} {contact["SECOND_NAME"]}'.strip('None').strip()
-        #lk_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], lk_tasks)))
-        lk_tasks_count = len(b.get_all('tasks.task.list', {
-            'select': ['*', 'UF_*'],
-            'filter': {
-                'UF_CRM_TASK': 'C_' + contact['ID'],
-                'GROUP_ID': '7',
-                '>=CREATED_DATE': date_filter_start,
-                '<CREATED_DATE': date_filter_end,
-            }}))
-        #tlp_tasks_count = len(list(filter(lambda x: 'C_' + contact['ID'] in x['ufCrmTask'], tlp_tasks)))
-        tlp_tasks_count = len(b.get_all('tasks.task.list', {
-            'select': ['*', 'UF_*'],
-            'filter': {
-                'UF_CRM_TASK': 'C_' + contact['ID'],
-                'GROUP_ID': '1',
-                '>=CREATED_DATE': date_filter_start,
-                '<CREATED_DATE': date_filter_end,
-            }}))
-        company_name = list(filter(lambda x: contact['COMPANY_ID'] == x['ID'], companies))
-        if company_name:
-            company_name = company_name[0]['TITLE']
-        else:
-            company_name = ''
+        lk_tasks_count = len(list(filter(lambda x: x['groupId'] == '7' and 'C_' + contact['ID'] in x['ufCrmTask'], tasks)))
+        tlp_tasks_count = len(list(filter(lambda x: x['groupId'] == '1' and 'C_' + contact['ID'] in x['ufCrmTask'], tasks)))
+
         if any([lk_tasks_count, tlp_tasks_count]):
+            company_name = list(filter(lambda x: contact['COMPANY_ID'] == x['ID'], list(companies)))
+            if company_name:
+                company_name = company_name[0]['TITLE']
+            else:
+                company_name = ''
             data_to_write.append([fio, company_name, lk_tasks_count, tlp_tasks_count])
 
     workbook = openpyxl.Workbook()
@@ -96,7 +69,6 @@ def create_company_without_connect_report(req):
     report_name = f'Отчет_по_обращениям_контактов_без_Коннекта_{create_time}.xlsx'
     workbook.save(report_name)
 
-    # Загрузка отчета в Битрикс
     bitrix_folder_id = '443345'
     with open(report_name, 'rb') as file:
         report_file = file.read()
@@ -110,5 +82,3 @@ def create_company_without_connect_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по обращениям контактов без Коннекта сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
-
-#({'months': 2, 'user_id': 'user_311'})

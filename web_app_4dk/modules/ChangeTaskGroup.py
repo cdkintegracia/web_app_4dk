@@ -14,7 +14,6 @@ def change_task_group(req):
     print(user_info)
     for group in groups_and_departments:
         for department in groups_and_departments[group]:
-            print(department, user_info['UF_DEPARTMENT'])
-            if department in user_info['UF_DEPARTMENT']:
+            if department in user_info['UF_DEPARTMENT'] or user_info['ID'] == '109':
                 b.call('tasks.task.update', {'taskId': req['task_id'], 'fields': {'GROUP_ID': group}})
                 return

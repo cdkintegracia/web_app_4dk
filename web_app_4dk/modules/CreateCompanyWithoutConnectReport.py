@@ -111,4 +111,4 @@ def create_company_without_connect_report(req):
         'MESSAGE': f'Отчет по обращениям контактов без Коннекта сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
 
-create_company_without_connect_report({'months': 2, 'user_id': 'user_311'})
+#({'months': 2, 'user_id': 'user_311'})

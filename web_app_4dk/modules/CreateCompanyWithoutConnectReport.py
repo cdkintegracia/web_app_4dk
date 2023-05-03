@@ -53,7 +53,7 @@ def create_company_without_connect_report(req):
         tlp_tasks_count = len(list(filter(lambda x: x['groupId'] == '1' and 'C_' + contact['ID'] in x['ufCrmTask'], tasks)))
 
         if any([lk_tasks_count, tlp_tasks_count]):
-            company_name = list(filter(lambda x: contact['COMPANY_ID'] == x['ID'], list(companies)))
+            company_name = list(filter(lambda x: contact['COMPANY_ID'] == x['ID'], companies))
             if company_name:
                 company_name = company_name[0]['TITLE']
             else:

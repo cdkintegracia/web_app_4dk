@@ -380,6 +380,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
     message_type = int(row[3])
 
     if message_type == 1:
+        
         # Проверка на наличие хотя бы одного русского символа в сообщении
         russian_char_flag = False
         for word in additional_info:

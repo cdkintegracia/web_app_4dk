@@ -409,6 +409,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
     if bitrix_id:
         responsible_id = bitrix_id[0]
 
+    # Поиск контакта в Б24 по полю "1С Коннект ID"
     uf_crm_task = [f"CO_{company_id}"]
     user_in_bitrix = send_bitrix_request('crm.contact.list', {
         'filter': {
@@ -416,7 +417,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
         }
     })
     if user_in_bitrix:
-        uf_crm_task.append('C_' + user_in_bitrix[0]['ID'])
+        uf_crm_task.append(f"C_{user_in_bitrix[0]['ID']}")
 
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {

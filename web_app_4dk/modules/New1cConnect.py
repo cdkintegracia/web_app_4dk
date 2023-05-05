@@ -408,6 +408,16 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
         bitrix_id = connect.execute(sql, data).fetchone()
     if bitrix_id:
         responsible_id = bitrix_id[0]
+
+    uf_crm_task = [f"CO_{company_id}"]
+    user_in_bitrix = send_bitrix_request('crm.contact.list', {
+        'filter': {
+            'UF_CRM_1666338025722': user_id
+        }
+    })
+    if user_in_bitrix:
+        uf_crm_task.append('C_' + user_in_bitrix[0]['ID'])
+
     if 'ЛК' in line_name:
         new_task = send_bitrix_request('tasks.task.add', {'fields': {
             'TITLE': f"1С:Коннект {line_name}",
@@ -415,7 +425,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
             'GROUP_ID': '7',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_CRM_TASK': uf_crm_task,
             'STAGE_ID': '65',
             'UF_AUTO_499889542776': treatment_id
         }})
@@ -426,7 +436,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
             'GROUP_ID': '11',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_CRM_TASK': uf_crm_task,
             'UF_AUTO_499889542776': treatment_id
         }})
     elif 'персональный менеджер' in line_name:
@@ -436,7 +446,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
             'GROUP_ID': '75',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_CRM_TASK': uf_crm_task,
             'STAGE_ID': '1165',
             'UF_AUTO_499889542776': treatment_id
         }})
@@ -447,7 +457,7 @@ def create_treatment_task(treatment_id: str, author_id: str, line_id: str, user_
             'GROUP_ID': '75',
             'CREATED_BY': '173',
             'RESPONSIBLE_ID': responsible_id,
-            'UF_CRM_TASK': [f"CO_{company_id}"],
+            'UF_CRM_TASK': uf_crm_task,
             'STAGE_ID': '1165',
             'UF_AUTO_499889542776': treatment_id
         }})

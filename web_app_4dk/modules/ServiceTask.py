@@ -380,6 +380,8 @@ def create_service_tasks(dct):
         task_deadline = deadline_datetime.strftime('%Y-%m-%d 19:00:00')
     else:
         task_deadline = f"{str(year)}-{month}-{current_month_days} 19:00:00"
+    print(deadline_datetime)
+    print(task_deadline)
 
     # Получение массива сделок
 

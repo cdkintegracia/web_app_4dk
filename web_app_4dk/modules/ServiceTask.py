@@ -427,7 +427,7 @@ def create_service_tasks(dct):
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
             if dct['quarter'] == 'Только квартальные':
                 current_month_name = int_to_months[datetime.now().month]
-                if deadline_datetime:
+                if dct['deadline']:
                     main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year} - {int_to_months[deadline_datetime.month]} {deadline_datetime.year}"
                 else:
                     main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"

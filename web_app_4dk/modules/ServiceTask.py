@@ -296,7 +296,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
                        }
         }
                                                )
-        print(is_quarter_sub_task_exists)
+
         if is_quarter_sub_task_exists:
             continue
         '''
@@ -310,7 +310,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         ], raw=True
                )
         '''
-        b.call('task.checklistitem.add', {
+        sub_checklist = b.call('task.checklistitem.add', {
             'taskId': check_list_id,
             'FIELDS': {
                 'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
@@ -318,6 +318,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         }
         , raw=True
                )
+        print(sub_checklist, check_list_id)
 
         # Создание подзадачи для основной задачи
         b.call('tasks.task.add', {

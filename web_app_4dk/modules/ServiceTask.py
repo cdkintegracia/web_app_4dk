@@ -32,6 +32,21 @@ months = {
     'Декабрь': '12'
 }
 
+int_to_months = {
+    1: 'Январь',
+    2: 'Февраль',
+    3: 'Март',
+    4: 'Апрель',
+    5: 'Май',
+    6: 'Июнь',
+    7: 'Июль',
+    8: 'Август',
+    9: 'Сентябрь',
+    10: 'Октябрь',
+    11: 'Ноябрь',
+    12: 'Декабрь',
+}
+
 
 def get_employee_id(employees: str) -> list:
     id_list = set()
@@ -360,12 +375,17 @@ def create_service_tasks(dct):
     if month[0] == '0':
         month.replace('0', '')
     current_month_days = monthrange(int(year), int(month))[1]  # Количество дней в выбранном месяце
+    if dct['deadline']:
+        deadline_datetime = datetime.strptime(dct['deadline'], '%d.%m.%Y')
+        task_deadline = deadline_datetime.strftime('%Y-%m-%d 19:00:00')
+    else:
+        task_deadline = f"{str(year)}-{month}-{current_month_days} 19:00:00"
 
     # Получение массива сделок
 
     deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
     quarter_deals = []
-    if dct['quarter'] == 'Y':
+    if dct['quarter'] in ['Да', 'Только квартальные']:
         quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
 
     # Разделение ID сделок по ответственному
@@ -405,9 +425,18 @@ def create_service_tasks(dct):
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
 
+            if dct['quarter'] == 'Только квартальные':
+                current_month_name = int_to_months[datetime.now().month]
+                if deadline_datetime:
+                    main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
+                else:
+                    main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
+            else:
+                main_task_name = f"Сервисный выезд {employee_name} {dct['month']} {str(year)}"
+
             is_main_task_exists = b.get_all('tasks.task.list', {
                 'select': ['ID'],
-                'filter': {'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
+                'filter': {'TITLE': main_task_name,
                            'GROUP_ID': '71'
                            }
             }
@@ -416,8 +445,8 @@ def create_service_tasks(dct):
             if not is_main_task_exists:
                 task = b.call('tasks.task.add', {
                     'fields': {
-                        'TITLE': f"Сервисный выезд {employee_name} {dct['month']} {str(year)}",
-                        'DEADLINE': f"{str(year)}-{month}-{current_month_days} 19:00:00",
+                        'TITLE': main_task_name,
+                        'DEADLINE': task_deadline,
                         'RESPONSIBLE_ID': employee,
                         'ALLOW_CHANGE_DEADLINE': 'N',
                         'GROUP_ID': '71',
@@ -428,7 +457,7 @@ def create_service_tasks(dct):
                               )
                 main_task = task['task']['id']
                 quarter_check_list = ''
-                if dct['quarter'] == 'Y':
+                if dct['quarter'] in ['Да', 'Только квартальные']:
                     quarter_check_list = b.call('task.checklistitem.add', [
                         main_task, {
                             'TITLE': 'Квартальные', 'PARENT_ID': main_task,
@@ -437,12 +466,13 @@ def create_service_tasks(dct):
                                                 )['result']
                     quarter_check_list_flag = True
 
-                main_check_list = b.call('task.checklistitem.add', [
-                    main_task, {
-                        'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
-                    }
-                ], raw=True
-                                            )['result']
+                if dct['quarter'] != 'Только квартальные':
+                    main_check_list = b.call('task.checklistitem.add', [
+                        main_task, {
+                            'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                        }
+                    ], raw=True
+                                                )['result']
 
             else:
                 main_task = is_main_task_exists[0]['id']
@@ -454,7 +484,7 @@ def create_service_tasks(dct):
                         quarter_check_list = check_list['ID']
                         quarter_check_list_flag = True
 
-            if quarter_check_list_flag is False and dct['quarter'] == 'Y':
+            if quarter_check_list_flag is False and dct['quarter'] in ['Да', 'Только квартальные']:
                 quarter_check_list = b.call('task.checklistitem.add', [
                     main_task, {
                         'TITLE': 'Квартальные', 'PARENT_ID': main_task,
@@ -462,7 +492,7 @@ def create_service_tasks(dct):
                 ], raw=True
                                             )['result']
 
-            if dct['quarter'] == 'Y' and dct['month'] in ['Декабрь', 'Март', 'Июнь', 'Сентябрь']:
+            if dct['quarter'] in ['Да', 'Только квартальные']:
                 create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
                                            current_month_days, task_text, dct, companies_name)
 

@@ -492,7 +492,8 @@ def create_service_tasks(dct):
                                             )['result']
 
             if dct['quarter'] in ['Да', 'Только квартальные']:
-                print(quarter_check_list, main_task)
+                if dct['quarter'] == ['Только квартальные']:
+                    quarter_check_list = main_task
                 create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
                                            current_month_days, task_text, dct, companies_name)
 

@@ -380,8 +380,6 @@ def create_service_tasks(dct):
         task_deadline = deadline_datetime.strftime('%Y-%m-%d 19:00:00')
     else:
         task_deadline = f"{str(year)}-{month}-{current_month_days} 19:00:00"
-    print(deadline_datetime)
-    print(task_deadline)
 
     # Получение массива сделок
 
@@ -426,7 +424,7 @@ def create_service_tasks(dct):
 
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-
+            print(dct['quarter'])
             if dct['quarter'] == 'Только квартальные':
                 current_month_name = int_to_months[datetime.now().month]
                 if deadline_datetime:

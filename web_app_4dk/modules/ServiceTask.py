@@ -433,7 +433,7 @@ def create_service_tasks(dct):
                     main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
             else:
                 main_task_name = f"Сервисный выезд {employee_name} {dct['month']} {str(year)}"
-
+            print(main_task_name)
             is_main_task_exists = b.get_all('tasks.task.list', {
                 'select': ['ID'],
                 'filter': {'TITLE': main_task_name,

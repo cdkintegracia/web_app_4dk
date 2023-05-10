@@ -310,7 +310,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
                )
         '''
         b.call('task.checklistitem.add', {
-            'TASKID': check_list_id,
+            'taskId': check_list_id,
             'FIELDS': {
                 'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
             }

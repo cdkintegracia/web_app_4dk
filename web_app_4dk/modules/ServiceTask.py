@@ -282,7 +282,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
     deals = list(map(lambda x: {'ASSIGNED_BY_ID': x['ASSIGNED_BY_ID'], 'COMPANY_ID': x['COMPANY_ID'], 'ID': x['ID'], 'TITLE': x['TITLE'], 'COMPANY_NAME': list(filter(lambda y: y['ID'] == x['COMPANY_ID'], companies_name))[0]['TITLE']}, deals))
     deals = list(sorted(deals, key=lambda x: x['COMPANY_NAME']))
     for deal in deals:
-
+        print(deal)
         company = b.get_all('crm.company.list', {
             'filter': {
                 'ID': deal['COMPANY_ID']

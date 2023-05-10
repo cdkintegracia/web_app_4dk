@@ -518,13 +518,13 @@ def create_service_tasks(dct):
             if not is_sub_task_exists:
 
                 # Создание пунктов чек-листа для созданной задачи на сотрудника
-                b.call('task.checklistitem.add', [
-                    main_task, {
-                        # <Название компании> <Название сделки> <Ссылка на сделку>
-                        'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                        'PARENT_ID': main_check_list,
+                b.call('task.checklistitem.add', {
+                        'taskId': main_check_list,
+                        'FIELDS': {
+                            'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
+                        }
                     }
-                ], raw=True
+                , raw=True
                                     )
 
                 # Создание подзадачи для основной задачи

@@ -424,17 +424,14 @@ def create_service_tasks(dct):
 
             employee_fields = b.get_all('user.get', {"ID": employee})
             employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-            print(dct['quarter'])
             if dct['quarter'] == 'Только квартальные':
                 current_month_name = int_to_months[datetime.now().month]
-                print(deadline_datetime)
                 if deadline_datetime:
-                    main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
+                    main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year} - {int_to_months[deadline_datetime.month]} {deadline_datetime.year}"
                 else:
                     main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
             else:
                 main_task_name = f"Сервисный выезд {employee_name} {dct['month']} {str(year)}"
-            print(main_task_name)
             is_main_task_exists = b.get_all('tasks.task.list', {
                 'select': ['ID'],
                 'filter': {'TITLE': main_task_name,

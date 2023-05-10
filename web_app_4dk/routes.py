@@ -55,6 +55,7 @@ from web_app_4dk.modules.GetRegnumberElements import get_regnumber_elements
 from web_app_4dk.modules.ChangeTaskGroup import change_task_group
 from web_app_4dk.modules.UpdateRefusalDealElement import update_refusal_deal_element
 from web_app_4dk.modules.CreateCompanyWithoutConnectReport import create_company_without_connect_report
+from web_app_4dk.modules.ServiceTaskQuarterly import service_task_quarterly
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -90,6 +91,7 @@ custom_webhooks = {
     'change_task_group': change_task_group,
     'update_refusal_deal_element': update_refusal_deal_element,
     'create_company_without_connect_report': create_company_without_connect_report,
+    'service_task_quarterly': service_task_quarterly,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

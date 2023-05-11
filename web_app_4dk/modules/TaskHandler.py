@@ -25,6 +25,7 @@ def fill_task_title(req):
         return
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
+    uf_crm_task = []
     if not company_crm:
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
@@ -37,29 +38,34 @@ def fill_task_title(req):
                 'ID': contact_companies,
             }
         })
-        for company in contact_companies_info:
-            if not contact_companies_info[company['UF_CRM_1660818061808']]:
-                contact_companies_info[company['UF_CRM_1660818061808']] = 0
-        best_value_company = list(sorted(contact_companies_info, key=lambda x: int(x['UF_CRM_1660818061808'])))[0]['ID']
-        send_bitrix_request('tasks.task.update', {
-            'taskId': task_id,
-            'fields': {
-                'UF_CRM_TASK': ['CO_' + best_value_company]
-            }})
+        for i in range(len(contact_companies_info)):
+            if not contact_companies_info[i]['UF_CRM_1660818061808']:
+                contact_companies_info[i]['UF_CRM_1660818061808'] = 0
+        best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID']
+        uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm]
+        company_id = best_value_company
+    else:
+        company_id = company_crm[0][3:]
 
-    return
-    company_id = company_crm[0][3:]
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })
     if company_info['TITLE'] in task_info['title']:
         return
 
-    send_bitrix_request('tasks.task.update', {
-        'taskId': task_id,
-        'fields': {
-            'TITLE': f"{task_info['title']} {company_info['TITLE']}"
-        }})
+    if not uf_crm_task:
+        send_bitrix_request('tasks.task.update', {
+            'taskId': task_id,
+            'fields': {
+                'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+            }})
+    else:
+        send_bitrix_request('tasks.task.update', {
+            'taskId': task_id,
+            'fields': {
+                'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                'UF_CRM_TASK': uf_crm_task,
+            }})
     return task_info
 
 

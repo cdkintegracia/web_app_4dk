@@ -1,13 +1,17 @@
 from web_app_4dk.tools import send_bitrix_request
 
 
+def fill_uf_crm_task(req):
+    pass
+
+
 def fill_task_title(req):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
-
+    print(task_info['ufCrmTask'])
     if not task_info or 'task' not in task_info or not task_info['task']:
         return
     task_info = task_info['task']
@@ -61,6 +65,7 @@ def send_notification(task_info, notification_type):
                 if not flag:
                     send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
                     flag = True
+
 
 def task_handler(req):
     task_info = fill_task_title(req)

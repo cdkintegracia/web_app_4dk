@@ -520,7 +520,7 @@ def create_service_tasks(dct):
 
                 # Создание пунктов чек-листа для созданной задачи на сотрудника
                 b.call('task.checklistitem.add', {
-                        'taskId': main_check_list,
+                        'taskId': main_task,
                         'FIELDS': {
                             'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
                         }

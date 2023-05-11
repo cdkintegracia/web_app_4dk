@@ -29,10 +29,24 @@ def fill_task_title(req):
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
             return
-        print(contact_crm)
         contact_crm = contact_crm[0][2:]
         contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
-        print(contact_companies)
+        contact_companies_info = send_bitrix_request('crm.company.list', {
+            'select': ['UF_CRM_1660818061808'],     # Вес сделок
+            'filter': {
+                'ID': contact_companies,
+            }
+        })
+        for company in contact_companies_info:
+            if not contact_companies_info[company['UF_CRM_1660818061808']]:
+                contact_companies_info[company['UF_CRM_1660818061808']] = 0
+        best_value_company = list(sorted(contact_companies_info, key=lambda x: int(x['UF_CRM_1660818061808'])))[0]['ID']
+        send_bitrix_request('tasks.task.update', {
+            'taskId': task_id,
+            'fields': {
+                'UF_CRM_TASK': ['CO_' + best_value_company]
+            }})
+
     return
     company_id = company_crm[0][3:]
     company_info = send_bitrix_request('crm.company.get', {

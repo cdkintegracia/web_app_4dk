@@ -112,6 +112,7 @@ def update_refusal_deal_element(req: dict):
             revenue = ''
 
     if req['deal_id']:
+        print('deal', req['deal_id'])
         deal_type = b.get_all('crm.deal.get', {'ID': req['deal_id']})['TYPE_ID']
         element_deal_type_code = element_deal_type_codes[deals_category_1_types[deal_type]]
 

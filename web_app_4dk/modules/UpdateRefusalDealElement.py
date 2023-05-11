@@ -93,16 +93,24 @@ def update_refusal_deal_element(req: dict):
         'filter': {
             'PROPERTY_1631': req['company_id']
         }
-    })[0]
-    okved = list(revenue_element['PROPERTY_1629'].values())[0]
-    try:
-        employees_number = list(revenue_element['PROPERTY_1625'].values())[0]
-    except KeyError:
-        employees_number = ''
-    try:
-        revenue = list(revenue_element['PROPERTY_1635'].values())[0]
-    except KeyError:
-        revenue = ''
+    })
+
+    okved = ''
+    employees_number = ''
+    revenue = ''
+
+    if revenue_element:
+        revenue_element = revenue_element[0]
+        okved = list(revenue_element['PROPERTY_1629'].values())[0]
+        try:
+            employees_number = list(revenue_element['PROPERTY_1625'].values())[0]
+        except KeyError:
+            employees_number = ''
+        try:
+            revenue = list(revenue_element['PROPERTY_1635'].values())[0]
+        except KeyError:
+            revenue = ''
+
     deal_type = b.get_all('crm.deal.get', {'ID': req['deal_id']})['TYPE_ID']
     element_deal_type_code = element_deal_type_codes[deals_category_1_types[deal_type]]
     element_info = b.get_all('lists.element.get', {

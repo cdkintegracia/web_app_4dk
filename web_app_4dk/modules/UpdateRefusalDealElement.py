@@ -138,7 +138,7 @@ def update_refusal_deal_element(req: dict):
             'PROPERTY_521': list(element_info['PROPERTY_521'].values())[0],
             'PROPERTY_523': list(element_info['PROPERTY_523'].values())[0],
             'PROPERTY_525': list(element_info['PROPERTY_525'].values())[0],
-            'PROPERTY_527': list(element_info['PROPERTY_527'].values())[0],
+            'PROPERTY_527': list(element_info['PROPERTY_527'].values())[0] if 'PROPERTY_527' in element_info else '',
             'PROPERTY_531': list(element_info['PROPERTY_531'].values())[0],
             'PROPERTY_533': list(element_info['PROPERTY_533'].values())[0],
             'PROPERTY_1311': PROPERTY_1311,

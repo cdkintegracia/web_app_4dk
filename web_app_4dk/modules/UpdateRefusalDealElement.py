@@ -101,7 +101,7 @@ def update_refusal_deal_element(req: dict):
 
     if revenue_element:
         revenue_element = revenue_element[0]
-        okved = list(revenue_element['PROPERTY_1629'].values())[0]
+        okved = list(revenue_element['PROPERTY_1629'].values())[0] if 'PROPERTY_1629' in revenue_element else ''
         try:
             employees_number = list(revenue_element['PROPERTY_1625'].values())[0]
         except KeyError:

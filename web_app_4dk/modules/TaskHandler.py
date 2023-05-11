@@ -29,10 +29,12 @@ def fill_task_title(req):
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
             return
+        print(contact_crm)
+        '''
         contact_crm = contact_crm[0][2:]
         contact_companies = send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})
         print(contact_companies)
-
+        '''
     company_id = company_crm[0][3:]
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,

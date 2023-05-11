@@ -11,7 +11,7 @@ def fill_task_title(req):
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
-    print(task_info['ufCrmTask'])
+
     if not task_info or 'task' not in task_info or not task_info['task']:
         return
     task_info = task_info['task']
@@ -26,7 +26,12 @@ def fill_task_title(req):
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
     if not company_crm:
-        return
+        contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+        if not contact_crm:
+            return
+        contact_crm = contact_crm[0][2:]
+        contact_companies = send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})
+        print(contact_companies)
 
     company_id = company_crm[0][3:]
     company_info = send_bitrix_request('crm.company.get', {

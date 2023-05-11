@@ -115,7 +115,7 @@ def update_refusal_deal_element(req: dict):
         deal_type = b.get_all('crm.deal.get', {'ID': req['deal_id']})['TYPE_ID']
         element_deal_type_code = element_deal_type_codes[deals_category_1_types[deal_type]]
     except:
-        pass
+        element_deal_type_code = ''
 
     element_info = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',

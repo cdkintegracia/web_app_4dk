@@ -4,7 +4,7 @@ from web_app_4dk.tools import send_bitrix_request
 
 
 def check_similar_tasks_this_hour(task_info, company_id):
-    users_id = [task_info['createdBy'], '311']
+    users_id = [task_info['createdBy'], '1']
     if task_info['groupId'] not in ['1', '7', '13']:
         return
     end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -23,8 +23,9 @@ def check_similar_tasks_this_hour(task_info, company_id):
         for user_id in users_id:
             send_bitrix_request('im.notify.system.add', {
                 'USER_ID': user_id,
-                'MESSAGE': f"Текущая: https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{task_info['id']}/\n"
-                           f"Остальные: {similar_tasks_url}"
+                'MESSAGE': f"Для текущей компании уже были поставлены задачи за прошедший час\n"
+                           f"Новая задача: https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{task_info['id']}/\n\n"
+                           f"Поставленные: {similar_tasks_url}"
             })
 
 

@@ -9,7 +9,8 @@ def check_similar_tasks_this_hour(task_info, company_id):
         return
     group_names = {
         '1': 'ТЛП',
-        '7': 'ЛК'
+        '7': 'ЛК',
+        '13': 'Битрикс',
     }
     end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')

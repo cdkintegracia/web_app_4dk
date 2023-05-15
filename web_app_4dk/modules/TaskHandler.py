@@ -28,7 +28,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
 
 
 
-def fill_task_title(req):
+def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,
@@ -71,7 +71,10 @@ def fill_task_title(req):
         company_id = best_value_company
     else:
         company_id = company_crm[0][3:]
-    check_similar_tasks_this_hour(task_info, company_id)
+
+    if event == 'ONTASKADD':
+        check_similar_tasks_this_hour(task_info, company_id)
+
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })

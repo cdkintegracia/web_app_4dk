@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/ChatTest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/chat_bot_routes/reply.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/ChatTest.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +90,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ChatTest">
+  <component name="RunManager" selected="Python.reply">
     <configuration name="еуые" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,7 +155,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="temp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="reply" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -162,12 +163,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/chat_bot_routes" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/temp.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/chat_bot_routes/reply.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -222,18 +222,18 @@
     <list>
       <item itemvalue="Python.web_app_4dk" />
       <item itemvalue="Python.ChatTest" />
+      <item itemvalue="Python.reply" />
       <item itemvalue="Python.tools" />
       <item itemvalue="Python.еуые" />
       <item itemvalue="Python.CreateCompanyWithoutConnectReport" />
-      <item itemvalue="Python.temp" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.reply" />
         <item itemvalue="Python.ChatTest" />
         <item itemvalue="Python.tools" />
         <item itemvalue="Python.еуые" />
         <item itemvalue="Python.CreateCompanyWithoutConnectReport" />
-        <item itemvalue="Python.temp" />
       </list>
     </recent_temporary>
   </component>

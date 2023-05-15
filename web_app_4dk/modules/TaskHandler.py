@@ -19,11 +19,12 @@ def check_similar_tasks_this_hour(task_info, company_id):
         }
     })['tasks']
     i = list(map(lambda x: x['id'], similar_tasks))
-    for user_id in users_id:
-        send_bitrix_request('im.notify.system.add', {
-            'USER_ID': user_id,
-            'MESSAGE': f"Текущая: {task_info['id']}\nОстальные: {i}"
-        })
+    if similar_tasks:
+        for user_id in users_id:
+            send_bitrix_request('im.notify.system.add', {
+                'USER_ID': user_id,
+                'MESSAGE': f"Текущая: {task_info['id']}\nОстальные: {i}"
+            })
 
 
 

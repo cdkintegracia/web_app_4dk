@@ -106,6 +106,11 @@ default_webhooks = {
 }
 
 
+@app.route('/debug-sentry')
+def trigger_error():
+    division_by_zero = 1 / 0
+
+
 # Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():

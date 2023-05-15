@@ -5,12 +5,11 @@ from web_app_4dk.tools import send_bitrix_request
 
 def check_similar_tasks_this_hour(task_info, company_id):
     users_id = [task_info['createdBy'], '1']
-    if task_info['groupId'] not in ['1', '7', '13']:
+    if task_info['groupId'] not in ['1', '7']:
         return
     group_names = {
         '1': 'ТЛП',
         '7': 'ЛК',
-        '13': 'Битрикс',
     }
     end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')

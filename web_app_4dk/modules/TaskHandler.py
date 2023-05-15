@@ -27,7 +27,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
             })
 
 
-def fill_task_title(req, event=None):
+def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,
@@ -121,8 +121,8 @@ def send_notification(task_info, notification_type):
                     flag = True
 
 
-def task_handler(req):
-    task_info = fill_task_title(req)
+def task_handler(req, event=None):
+    task_info = fill_task_title(req, event)
     '''
     send_notification(task_info, 'Создание')
     '''

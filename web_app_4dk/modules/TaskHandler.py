@@ -18,12 +18,13 @@ def check_similar_tasks_this_hour(task_info, company_id):
             'UF_CRM_TASK': ['CO_' + company_id]
         }
     })['tasks']
-    i = list(map(lambda x: x['id'], similar_tasks))
+    similar_tasks_url = list(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/", similar_tasks))
     if similar_tasks:
         for user_id in users_id:
             send_bitrix_request('im.notify.system.add', {
                 'USER_ID': user_id,
-                'MESSAGE': f"Текущая: {task_info['id']}\nОстальные: {i}"
+                'MESSAGE': f"Текущая: https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{task_info['id']}/\n"
+                           f"Остальные: {similar_tasks_url}"
             })
 
 
@@ -70,7 +71,7 @@ def fill_task_title(req, event):
         company_id = best_value_company
     else:
         company_id = company_crm[0][3:]
-    
+
     if event == 'ONTASKADD':
         check_similar_tasks_this_hour(task_info, company_id)
 

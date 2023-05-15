@@ -1,8 +1,31 @@
+from datetime import datetime, timedelta
+
 from web_app_4dk.tools import send_bitrix_request
 
 
-def fill_uf_crm_task(req):
-    pass
+def check_similar_tasks_this_hour(task_info, company_id):
+    users_id = [task_info['CREATED_BY'], '311']
+    if task_info['groupId'] not in ['1', '7']:
+        return
+    end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')
+    similar_tasks = send_bitrix_request('tasks.task.list', {
+        'filter': {
+            '>=CREATED_DATE': start_time_filter,
+            '<CREATED_DATE': end_time_filter,
+            'GROUP_ID': task_info['groupId'],
+            'UF_CRM_TASK': ['CO_' + company_id]
+        }
+    })
+    print(similar_tasks)
+    '''
+    for user_id in users_id:
+        send_bitrix_request('im.notify.system.add', {
+            'USER_ID': user_id,
+            'MESSAGE': f""
+        })
+    '''
+
 
 
 def fill_task_title(req):
@@ -48,7 +71,7 @@ def fill_task_title(req):
         company_id = best_value_company
     else:
         company_id = company_crm[0][3:]
-
+    check_similar_tasks_this_hour(task_info, company_id)
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })

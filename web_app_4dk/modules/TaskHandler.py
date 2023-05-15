@@ -17,8 +17,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
             'UF_CRM_TASK': ['CO_' + company_id]
         }
     })
-    i = list(map(lambda x: x['id'], similar_tasks))
-    print(task_info)
+    print(similar_tasks)
     for user_id in users_id:
         send_bitrix_request('im.notify.system.add', {
             'USER_ID': user_id,

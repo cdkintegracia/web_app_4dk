@@ -11,6 +11,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
     start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')
     similar_tasks = send_bitrix_request('tasks.task.list', {
         'filter': {
+            '!ID': task_info['id'],
             '>=CREATED_DATE': start_time_filter,
             '<CREATED_DATE': end_time_filter,
             'GROUP_ID': task_info['groupId'],

@@ -112,7 +112,8 @@ def default_webhook():
     update_logs("Получен дефолтный вебхук", request.form)
     if request.form['event'] == 'ONTASKADD':
         default_webhooks[request.form['event']](request.form, 'ONTASKADD')
-    default_webhooks[request.form['event']](request.form)
+    else:
+        default_webhooks[request.form['event']](request.form)
     return 'OK'
 
 

@@ -126,6 +126,11 @@ def custom_webhook():
     return 'OK'
 
 
+@app.route('/bitrix/chat_bot', methods=['POST', 'HEAD'])
+def chat_bot():
+    print(request.args)
+    return
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

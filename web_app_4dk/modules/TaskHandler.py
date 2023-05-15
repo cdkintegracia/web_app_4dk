@@ -27,9 +27,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
             })
 
 
-def fill_task_title(req, *args):
-    print(args)
-    print(*args)
+def fill_task_title(req, event=None):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
         'taskId': task_id,

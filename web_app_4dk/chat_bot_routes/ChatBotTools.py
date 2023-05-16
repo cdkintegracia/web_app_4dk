@@ -4,7 +4,7 @@ class Message:
         self.bot_code = request_data['data[BOT][495][BOT_CODE]']
         self.bot_id = request_data['data[BOT][495][BOT_ID]']
         self.from_user_id = request_data['data[PARAMS][FROM_USER_ID]']
-        self.message = request_data['data[PARAMS][MESSAGE]']
+        self.text = request_data['data[PARAMS][MESSAGE]']
         self.message_type = request_data['data[PARAMS][MESSAGE_TYPE]']
         self.url_id = request_data['data[PARAMS][PARAMS][URL_ID][0]']
         self.skip_url_index = request_data['data[PARAMS][SKIP_URL_INDEX]']

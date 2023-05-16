@@ -21,7 +21,11 @@ def check_similar_tasks_this_hour(task_info, company_id):
             'GROUP_ID': task_info['groupId'],
             'UF_CRM_TASK': ['CO_' + company_id]
         }
-    })['tasks']
+    })
+    if similar_tasks:
+        similar_tasks = similar_tasks['tasks']
+    else:
+        return
     similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
     if similar_tasks:
         for user_id in users_id:
@@ -84,7 +88,7 @@ def fill_task_title(req, event):
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })
-    if company_info['TITLE'] in task_info['title']:
+    if company_info and company_info['TITLE'] in task_info['title']:
         return
 
     if not uf_crm_task:

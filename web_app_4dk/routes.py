@@ -134,10 +134,10 @@ def custom_webhook():
     return 'OK'
 
 
+# Обработчик запросов чат-бота
 @app.route('/bitrix/chat_bot', methods=['POST', 'HEAD'])
 def chat_bot():
     job = request.args['job']
-    print(request.args)
     bot_custom_webhooks[job](request.args)
     return 'OK'
 

@@ -148,7 +148,7 @@ def chat_bot():
     if 'job' in request.args:
         bot_custom_webhooks[request.args['job']](request.args)
     elif 'event' in request.form:
-        bot_default_webhooks[request.form['event']](request.args)
+        bot_default_webhooks[request.form['event']](request.form)
     return 'OK'
 
 

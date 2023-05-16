@@ -1,7 +1,7 @@
 import requests
 
-from web_app_4dk.chat_bot_routes.ChatBotTools import Message
-from web_app_4dk.chat_bot_routes.SendMessage import bot_send_message
+from web_app_4dk.chat_bot.ChatBotTools import Message
+from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 
 def message_add_handler(message):

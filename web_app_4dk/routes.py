@@ -137,8 +137,8 @@ def custom_webhook():
 @app.route('/bitrix/chat_bot', methods=['POST', 'HEAD'])
 def chat_bot():
     job = request.args['job']
-    bot_custom_webhooks[job](request.args)
     print(request.args)
+    bot_custom_webhooks[job](request.args)
     return 'OK'
 
 

@@ -17,6 +17,7 @@ def bot_send_message(req: dict) -> None:
     """
     dialog_id = req['dialog_id'][5:] if 'user' in req['dialog_id'] else req['dialog_id']
     message_text = req['message']
+    message_list_type = '2657' if 'message_list_type' not in req else req['message_list_type']
     data = {
         'BOT_ID': '495',
         'CLIENT_ID': 'vv58t6uleb5nyr3li47xp2mj5r3n46tb',
@@ -32,6 +33,7 @@ def bot_send_message(req: dict) -> None:
             'NAME': 'Сообщение от чат-бота',
             'PROPERTY_1687': req['message'],
             'PROPERTY_1689': dialog_id,
+            'PROPERTY_1691': message_list_type,
         }
     })
 

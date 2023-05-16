@@ -13,6 +13,7 @@ def message_handler(req):
     events = {
         'ONIMBOTMESSAGEADD': message_add_handler,
     }
-    message = Message(req)
-    events[message.event](message)
+    if req['event'] in events:
+        message = Message(req)
+        events[message.event](message)
 

@@ -4,6 +4,7 @@ from web_app_4dk.modules.authentication import authentication
 
 
 def bot_send_message(req: dict) -> None:
+
     """
     :param req: {
     dialog_id: числовое значение id пользователя или id чата в формате <chat13>,
@@ -11,7 +12,6 @@ def bot_send_message(req: dict) -> None:
     }
     :return:
     """
-
 
     data = {
         'BOT_ID': '495',

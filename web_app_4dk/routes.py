@@ -56,7 +56,7 @@ from web_app_4dk.modules.ChangeTaskGroup import change_task_group
 from web_app_4dk.modules.UpdateRefusalDealElement import update_refusal_deal_element
 from web_app_4dk.modules.CreateCompanyWithoutConnectReport import create_company_without_connect_report
 from web_app_4dk.chat_bot_routes.SendMessage import bot_send_message
-from web_app_4dk.chat_bot_routes.MessageAddHandler import message_add_handler
+from web_app_4dk.chat_bot_routes.MessageHandler import message_handler
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -115,13 +115,6 @@ bot_custom_webhooks = {
 }
 
 
-# Словарь функций для вызова из запроса со стандартным методом
-
-bot_default_webhooks = {
-    'ONIMBOTMESSAGEADD': message_add_handler,
-}
-
-
 # Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
@@ -148,7 +141,7 @@ def chat_bot():
     if 'job' in request.args:
         bot_custom_webhooks[request.args['job']](request.args)
     elif 'event' in request.form:
-        bot_default_webhooks[request.form['event']](request.form)
+        message_handler(request.form)
     return 'OK'
 
 

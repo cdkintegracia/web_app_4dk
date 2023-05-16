@@ -1,5 +1,7 @@
 import requests
 
+from web_app_4dk.modules.authentication import authentication
+
 
 def send_message(dialog_id: str, message: str) -> None:
 
@@ -15,5 +17,5 @@ def send_message(dialog_id: str, message: str) -> None:
         'DIALOG_ID': dialog_id,
         'MESSAGE': message,
     }
-    r = requests.post(url='https://vc4dk.bitrix24.ru/rest/311/5we272zatpjbdqsl/imbot.message.add', json=data)
+    r = requests.post(url=f'{authentication("Chat-bot")}imbot.message.add', json=data)
 

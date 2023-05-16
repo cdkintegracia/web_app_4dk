@@ -6,7 +6,6 @@ class Message:
         self.from_user_id = request_data['data[PARAMS][FROM_USER_ID]']
         self.text = request_data['data[PARAMS][MESSAGE]']
         self.message_type = request_data['data[PARAMS][MESSAGE_TYPE]']
-        self.url_id = request_data['data[PARAMS][PARAMS][URL_ID][0]']
         self.skip_url_index = request_data['data[PARAMS][SKIP_URL_INDEX]']
         self.template_id = request_data['data[PARAMS][TEMPLATE_ID]']
         self.to_user_id = request_data['data[PARAMS][TO_USER_ID]']

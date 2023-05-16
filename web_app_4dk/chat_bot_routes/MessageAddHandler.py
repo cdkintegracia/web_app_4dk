@@ -2,5 +2,6 @@ from web_app_4dk.chat_bot_routes.ChatBotTools import Message
 
 
 def message_add_handler(req):
+    print(req)
     message = Message(req)
     print(message)

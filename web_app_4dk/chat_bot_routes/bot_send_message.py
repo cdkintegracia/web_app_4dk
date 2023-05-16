@@ -3,7 +3,7 @@ import requests
 from web_app_4dk.modules.authentication import authentication
 
 
-def send_message(req) -> None:
+def bot_send_message(req) -> None:
 
     """
     :param dialog_id: числовое значение id пользователя или id чата в формате <chat13>

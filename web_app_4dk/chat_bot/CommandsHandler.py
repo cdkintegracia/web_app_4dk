@@ -6,7 +6,7 @@ from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 def command_add_handler(message):
     data = {
-        'COMMAND_ID': '39',
+        #'COMMAND_ID': '39',
         'MESSAGE_ID': message.message_id,
         'MESSAGE': 'Клавиатура',
     },

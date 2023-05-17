@@ -6,12 +6,10 @@ from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 def command_add_handler(message):
     data = {
-        'CLIENT_ID': 'vv58t6uleb5nyr3li47xp2mj5r3n46tb',
-        'DIALOG_ID': '311',
-        'MESSAGE': 'Клавиатура',
         'COMMAND_ID': '39',
         'COMMAND': 'commands',
         'MESSAGE_ID': message.message_id,
+        'MESSAGE': 'Клавиатура',
         'KEYBOARD': [{
             "TEXT": "Bitrix24",
             "LINK": "http://bitrix24.com",

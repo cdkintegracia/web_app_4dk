@@ -17,6 +17,13 @@ def command_add_handler(message):
                 'BG_COLOR': "#29619b",
                 'TEXT_COLOR': "#fff",
                 'DISPLAY': 'LINE'
+            },
+            {
+                'TEXT': "BitBucket",
+                'LINK': "https://bitbucket.org/Bitrix24com/rest-bot-echotest",
+                'BG_COLOR': "#2a4c7c",
+                'TEXT_COLOR': "#fff",
+                'DISPLAY': 'LINE'
             }
         ]
     }

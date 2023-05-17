@@ -20,4 +20,4 @@ def command_add_handler(message):
     },
 
     r = requests.post(url=f'{authentication("Chat-bot")}imbot.command.answer', json=data)
-    print(r.text)
+    print(r.json())

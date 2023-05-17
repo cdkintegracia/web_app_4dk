@@ -12,15 +12,15 @@ def command_add_handler(message):
         'CLIENT_ID': 'vv58t6uleb5nyr3li47xp2mj5r3n46tb',
         'KEYBOARD': [
             {
-                'TEXT': "Bitrix24",
-                'LINK': "http://bitrix24.com",
+                'TEXT': "Сверка по NewSub",
+                'LINK': "http://141.8.195.67:5000/",
                 'BG_COLOR': "#29619b",
                 'TEXT_COLOR': "#fff",
                 'DISPLAY': 'LINE'
             },
             {
-                'TEXT': "BitBucket",
-                'LINK': "https://bitbucket.org/Bitrix24com/rest-bot-echotest",
+                'TEXT': "Сверка по отчетности",
+                'LINK': "http://141.8.195.67:5000/",
                 'BG_COLOR': "#2a4c7c",
                 'TEXT_COLOR': "#fff",
                 'DISPLAY': 'LINE'

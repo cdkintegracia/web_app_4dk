@@ -1,15 +1,15 @@
 import requests
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 
 def command_add_handler(message):
     data = {
-        #'COMMAND_ID': '39',
+        'COMMAND_ID': '39',
+        'COMMAND': 'commands',
         'MESSAGE_ID': message.message_id,
-        'MESSAGE': 'Клавиатура',
-    },
-
+        'MESSAGE': 'Отвечаю',
+        'CLIENT_ID': 'vv58t6uleb5nyr3li47xp2mj5r3n46tb',
+    }
     r = requests.post(url=f'{authentication("Chat-bot")}imbot.command.answer', json=data)
-    bot_send_message({'dialog_id': '311', 'message': r.status_code})
+    print(r.text)

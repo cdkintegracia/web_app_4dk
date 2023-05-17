@@ -1,6 +1,7 @@
 import requests
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 
 def command_add_handler(message):
@@ -20,4 +21,4 @@ def command_add_handler(message):
     },
 
     r = requests.post(url=f'{authentication("Chat-bot")}imbot.command.answer', json=data)
-    print(r.json())
+    bot_send_message({'dialog_id': '311', 'message': r.url})

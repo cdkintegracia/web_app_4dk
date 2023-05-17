@@ -21,4 +21,4 @@ def command_add_handler(message):
     },
 
     r = requests.post(url=f'{authentication("Chat-bot")}imbot.command.answer', json=data)
-    bot_send_message({'dialog_id': '311', 'message': r.text})
+    bot_send_message({'dialog_id': '311', 'message': r.content})

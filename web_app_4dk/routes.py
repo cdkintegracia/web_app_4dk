@@ -56,7 +56,7 @@ from web_app_4dk.modules.ChangeTaskGroup import change_task_group
 from web_app_4dk.modules.UpdateRefusalDealElement import update_refusal_deal_element
 from web_app_4dk.modules.CreateCompanyWithoutConnectReport import create_company_without_connect_report
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
-from web_app_4dk.chat_bot.MessageHandler import message_handler
+from web_app_4dk.chat_bot.BotHandler import message_handler
 
 
 # Словарь функций для вызова из кастомного запроса

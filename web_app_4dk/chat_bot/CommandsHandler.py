@@ -1,5 +1,5 @@
 import requests
 
 
-def commands_handler():
-    pass
+def command_add_handler(message):
+    print(message)

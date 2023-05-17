@@ -10,13 +10,6 @@ def command_add_handler(message):
         'COMMAND': 'commands',
         'MESSAGE_ID': message.message_id,
         'MESSAGE': 'Клавиатура',
-        'KEYBOARD': [{
-            "TEXT": "Bitrix24",
-            "LINK": "http://bitrix24.com",
-            "BG_COLOR": "#29619b",
-            "TEXT_COLOR": "#fff",
-            "DISPLAY": "LINE",
-        }]
     },
 
     r = requests.post(url=f'{authentication("Chat-bot")}imbot.command.answer', json=data)

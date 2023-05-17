@@ -14,4 +14,4 @@ data = {
 
 
 r = requests.post(url=f'https://vc4dk.bitrix24.ru/rest/311/5we272zatpjbdqsl/imbot.command.register', json=data)
-print(r)
+print(r.text)

@@ -5,7 +5,7 @@ from web_app_4dk.modules.authentication import authentication
 
 def command_add_handler(message):
     data = {
-        'COMMAND_ID': '37',
+        'COMMAND_ID': '39',
         'COMMAND': 'commands',
         'MESSAGE_ID': message.message_id,
         'MESSAGE': 'Отвечаю',

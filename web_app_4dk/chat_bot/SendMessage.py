@@ -22,7 +22,7 @@ def bot_send_message(req: dict) -> None:
         'BOT_ID': '495',
         'CLIENT_ID': 'vv58t6uleb5nyr3li47xp2mj5r3n46tb',
         'DIALOG_ID': dialog_id,
-        'MESSAGE': message_text,
+        'MESSAGE': message_text.replace('_', '\n'),
     }
     r = requests.post(url=f'{authentication("Chat-bot")}imbot.message.add', json=data)
     send_bitrix_request('lists.element.add', {

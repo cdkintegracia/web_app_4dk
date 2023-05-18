@@ -7,14 +7,13 @@ b = Bitrix(authentication('Bitrix'))
 
 def fns_task_complete(req):
     uf_crm_task = 'CO_' + req['company_id']
-    tasks = b.get_all('tasks.task.list', {'filter': {'UF_CRM_TASK': uf_crm_task, 'GROUP_ID': '89', '!STATUS': '5'}})
+    task = b.get_all('tasks.task.list', {'filter': {'UF_CRM_TASK': uf_crm_task, 'GROUP_ID': '89'}})
 
-    if tasks:
-        for task in tasks:
-            print(task)
-            update_task = b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1279', 'STATUS': '5'}})
-            b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': 'Администратор изменил вендора ЭЦП в сделке. Задача была автоматически завершена', 'AUTHOR_ID': '173'}],
-                   raw=True)
+    if task:
+        task = task[0]
+        update_task = b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1279', 'STATUS': '5'}})
+        b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': 'Администратор изменил вендора ЭЦП в сделке. Задача была автоматически завершена', 'AUTHOR_ID': '173'}],
+               raw=True)
 
     else:
         all_tasks = b.get_all('tasks.task.list', {'filter': {'GROUP_ID': '89'}})

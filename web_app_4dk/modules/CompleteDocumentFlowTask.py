@@ -12,5 +12,6 @@ def complete_document_flow_task(req):
     tasks = b.get_all('tasks.task.list', {'filter': {'TITLE': task_name_search, '!STATUS': '5'}})
     if tasks:
         for task in tasks:
+            print(task)
             b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STATUS': '5'}})
             b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': 'Способ обмена заполнен в карточке компании', 'AUTHOR_ID': '173'}], raw=True)

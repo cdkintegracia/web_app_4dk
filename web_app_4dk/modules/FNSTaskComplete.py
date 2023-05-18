@@ -11,6 +11,7 @@ def fns_task_complete(req):
 
     if tasks:
         for task in tasks:
+            print(task)
             update_task = b.call('tasks.task.update', {'taskId': task['id'], 'fields': {'STAGE_ID': '1279', 'STATUS': '5'}})
             b.call('task.commentitem.add', [task['id'], {'POST_MESSAGE': 'Администратор изменил вендора ЭЦП в сделке. Задача была автоматически завершена', 'AUTHOR_ID': '173'}],
                    raw=True)

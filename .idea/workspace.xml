@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/chat_bot/SendMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/chat_bot/SendMessage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,11 +219,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
-      <item itemvalue="Python.выв" />
+      <item itemvalue="Python.еуые (1)" />
       <item itemvalue="Python.SendMessage" />
       <item itemvalue="Python.TempChecko" />
+      <item itemvalue="Python.выв" />
       <item itemvalue="Python.fd" />
-      <item itemvalue="Python.еуые (1)" />
     </list>
     <recent_temporary>
       <list>

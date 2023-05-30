@@ -138,7 +138,7 @@ def custom_webhook():
 # Обработчик запросов чат-бота
 @app.route('/bitrix/chat_bot/', methods=['POST', 'HEAD'])
 def chat_bot():
-    print(request.args)
+    print(request.json)
     if 'job' in request.args:
         bot_custom_webhooks[request.args['job']](request.args)
     elif 'event' in request.form:

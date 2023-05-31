@@ -99,7 +99,7 @@ def update_call_statistic(req):
 
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
-        if len(list_elements) == 0:
+        if not list_elements:
 
             if req['data[CALL_TYPE]'] in ['2', '3']:
                 create_element(company_id=company['COMPANY_ID'], incoming_call=True)

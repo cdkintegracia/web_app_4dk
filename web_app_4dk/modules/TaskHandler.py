@@ -72,12 +72,13 @@ def fill_task_title(req, event):
                 'ID': contact_companies,
             }
         })
-        for i in range(len(contact_companies_info)):
-            if not contact_companies_info[i]['UF_CRM_1660818061808']:
-                contact_companies_info[i]['UF_CRM_1660818061808'] = 0
-        best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID']
-        uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm]
-        company_id = best_value_company
+        if contact_companies_info:
+            for i in range(len(contact_companies_info)):
+                if not contact_companies_info[i]['UF_CRM_1660818061808']:
+                    contact_companies_info[i]['UF_CRM_1660818061808'] = 0
+            best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID']
+            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm]
+            company_id = best_value_company
     else:
         company_id = company_crm[0][3:]
 

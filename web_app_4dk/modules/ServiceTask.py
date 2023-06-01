@@ -349,49 +349,65 @@ def create_service_tasks(dct):
     начались до сентября 2022 и заканчиваются в сентябре 2022
 
     """
+    '''
     try:
-        companies_name = b.get_all('crm.company.list', {'select': ['TITLE']})
-        task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description']
-        task_text = task_text.replace('[LIST]', '').replace('/[LIST]', '')
-        employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
-        type_deals = [
-                        'UC_XIYCTV',  # ПРОФ Земля + Помощник
-                        'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
-                        'UC_2SJOEJ',  # ПРОФ Облако+Помощник
-                        'UC_81T8ZR',  # АОВ
-                        'UC_SV60SP',  # АОВ + Облако
-                    ]
-        stage_ids = [
-            'C1:NEW',
-            'C1:UC_0KJKTY',
-            'C1:UC_3J0IH6',
-        ]
+    '''
+    companies_name = b.get_all('crm.company.list', {'select': ['TITLE']})
+    task_text = b.get_all('tasks.task.get', {'taskId': dct['task_id']})['task']['description']
+    task_text = task_text.replace('[LIST]', '').replace('/[LIST]', '')
+    employees = {}  # Dct сотрудников, значения которых - ID сделок для задачи
+    type_deals = [
+                    'UC_XIYCTV',  # ПРОФ Земля + Помощник
+                    'UC_5T4MAW',  # ПРОФ Земля + Облако + Помощник
+                    'UC_2SJOEJ',  # ПРОФ Облако+Помощник
+                    'UC_81T8ZR',  # АОВ
+                    'UC_SV60SP',  # АОВ + Облако
+                ]
+    stage_ids = [
+        'C1:NEW',
+        'C1:UC_0KJKTY',
+        'C1:UC_3J0IH6',
+    ]
 
-        year = dct['year']
-        month = months[dct['month']]
-        date_start = datetime.strptime(f'01-{month}-{year}', '%d-%m-%Y') - timedelta(days=1)
-        date_end = datetime.strftime(date_start + timedelta(days=32), '%Y-%m') + '-01'
-        date_start = datetime.strftime(date_start, '%Y-%m-%d')
-        if month[0] == '0':
-            month.replace('0', '')
-        current_month_days = monthrange(int(year), int(month))[1]  # Количество дней в выбранном месяце
-        if dct['deadline']:
-            deadline_datetime = datetime.strptime(dct['deadline'], '%d.%m.%Y')
-            task_deadline = deadline_datetime.strftime('%Y-%m-%d 19:00:00')
+    year = dct['year']
+    month = months[dct['month']]
+    date_start = datetime.strptime(f'01-{month}-{year}', '%d-%m-%Y') - timedelta(days=1)
+    date_end = datetime.strftime(date_start + timedelta(days=32), '%Y-%m') + '-01'
+    date_start = datetime.strftime(date_start, '%Y-%m-%d')
+    if month[0] == '0':
+        month.replace('0', '')
+    current_month_days = monthrange(int(year), int(month))[1]  # Количество дней в выбранном месяце
+    if dct['deadline']:
+        deadline_datetime = datetime.strptime(dct['deadline'], '%d.%m.%Y')
+        task_deadline = deadline_datetime.strftime('%Y-%m-%d 19:00:00')
+    else:
+        task_deadline = f"{str(year)}-{month}-{current_month_days} 19:00:00"
+
+    # Получение массива сделок
+
+    deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
+    quarter_deals = []
+    if dct['quarter'] in ['Да', 'Только квартальные']:
+        quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
+
+    # Разделение ID сделок по ответственному
+
+    for deal in deals:
+        employee = deal['ASSIGNED_BY_ID']   # Ответственный
+        if employee not in employees:
+
+            # Создание ключа с ID сотрудника и значение:
+            # 0: ID сделки
+            # 1: Название сделки
+            # 2: ID компании
+            employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
         else:
-            task_deadline = f"{str(year)}-{month}-{current_month_days} 19:00:00"
+            # Добавление ID сделки к значению dct
+            employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
 
-        # Получение массива сделок
-
-        deals = get_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
-        quarter_deals = []
-        if dct['quarter'] in ['Да', 'Только квартальные']:
-            quarter_deals = get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, dct['employees'], stage_ids)
-
-        # Разделение ID сделок по ответственному
-
-        for deal in deals:
-            employee = deal['ASSIGNED_BY_ID']   # Ответственный
+    if not deals:
+        for deal in quarter_deals:
+            employee = deal['ASSIGNED_BY_ID']  # Ответственный
             if employee not in employees:
 
                 # Создание ключа с ID сотрудника и значение:
@@ -403,160 +419,148 @@ def create_service_tasks(dct):
                 # Добавление ID сделки к значению dct
                 employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
 
-        if not deals:
-            for deal in quarter_deals:
-                employee = deal['ASSIGNED_BY_ID']  # Ответственный
-                if employee not in employees:
+    # Формирование задач
 
-                    # Создание ключа с ID сотрудника и значение:
-                    # 0: ID сделки
-                    # 1: Название сделки
-                    # 2: ID компании
-                    employees.setdefault(employee, [[deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']]])
+    for employee in employees:
+        if employee not in ['None', None]:
+
+            employee_fields = b.get_all('user.get', {"ID": employee})
+            employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
+            if dct['quarter'] == 'Только квартальные':
+                current_month_name = int_to_months[datetime.now().month]
+                if dct['deadline']:
+                    main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year} - {int_to_months[deadline_datetime.month]} {deadline_datetime.year}"
                 else:
-                    # Добавление ID сделки к значению dct
-                    employees[employee].append([deal['ID'], deal['TITLE'], deal['COMPANY_ID'], deal['ID']])
-
-        # Формирование задач
-
-        for employee in employees:
-            if employee not in ['None', None]:
-
-                employee_fields = b.get_all('user.get', {"ID": employee})
-                employee_name = employee_fields[0]['NAME'] + ' ' + employee_fields[0]['LAST_NAME']
-                if dct['quarter'] == 'Только квартальные':
-                    current_month_name = int_to_months[datetime.now().month]
-                    if dct['deadline']:
-                        main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year} - {int_to_months[deadline_datetime.month]} {deadline_datetime.year}"
-                    else:
-                        main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
-                else:
-                    main_task_name = f"Сервисный выезд {employee_name} {dct['month']} {str(year)}"
-                is_main_task_exists = b.get_all('tasks.task.list', {
-                    'select': ['ID'],
-                    'filter': {'TITLE': main_task_name,
-                               'GROUP_ID': '71'
-                               }
-                }
-                                                )
-                quarter_check_list_flag = False
-                if not is_main_task_exists:
-                    task = b.call('tasks.task.add', {
-                        'fields': {
-                            'TITLE': main_task_name,
-                            'DEADLINE': task_deadline,
-                            'RESPONSIBLE_ID': employee,
-                            'ALLOW_CHANGE_DEADLINE': 'N',
-                            'GROUP_ID': '71',
-                            'DESCRIPTION': task_text,
-                            'CREATED_BY': '173',
-                        }
+                    main_task_name = f"Сервисный выезд (квартал) {employee_name} {current_month_name} {datetime.now().year}"
+            else:
+                main_task_name = f"Сервисный выезд {employee_name} {dct['month']} {str(year)}"
+            is_main_task_exists = b.get_all('tasks.task.list', {
+                'select': ['ID'],
+                'filter': {'TITLE': main_task_name,
+                           'GROUP_ID': '71'
+                           }
+            }
+                                            )
+            quarter_check_list_flag = False
+            if not is_main_task_exists:
+                task = b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': main_task_name,
+                        'DEADLINE': task_deadline,
+                        'RESPONSIBLE_ID': employee,
+                        'ALLOW_CHANGE_DEADLINE': 'N',
+                        'GROUP_ID': '71',
+                        'DESCRIPTION': task_text,
+                        'CREATED_BY': '173',
                     }
-                                  )
-                    main_task = task['task']['id']
-                    quarter_check_list = ''
-                    if dct['quarter'] in ['Да', 'Только квартальные']:
-                        quarter_check_list = b.call('task.checklistitem.add', [
-                            main_task, {
-                                'TITLE': 'Квартальные', 'PARENT_ID': main_task,
-                            }
-                        ], raw=True
-                                                    )['result']
-                        quarter_check_list_flag = True
-
-                    if dct['quarter'] != 'Только квартальные':
-                        main_check_list = b.call('task.checklistitem.add', [
-                            main_task, {
-                                'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
-                            }
-                        ], raw=True
-                                                    )['result']
-
-                else:
-                    main_task = is_main_task_exists[0]['id']
-                    check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']
-                    for check_list in check_lists:
-                        if check_list['TITLE'] == 'Ежемесячные' or check_list['TITLE'] == 'BX_CHECKLIST_1':
-                            main_check_list = check_list['ID']
-                        elif check_list['TITLE'] == 'Квартальные':
-                            quarter_check_list = check_list['ID']
-                            quarter_check_list_flag = True
-
-                if quarter_check_list_flag is False and dct['quarter'] in ['Да', 'Только квартальные']:
+                }
+                              )
+                main_task = task['task']['id']
+                quarter_check_list = ''
+                if dct['quarter'] in ['Да', 'Только квартальные']:
                     quarter_check_list = b.call('task.checklistitem.add', [
                         main_task, {
                             'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                         }
                     ], raw=True
                                                 )['result']
+                    quarter_check_list_flag = True
 
-                if dct['quarter'] in ['Да', 'Только квартальные']:
-                    if dct['quarter'] == 'Только квартальные':
-                        quarter_check_list = main_task
-                    create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
-                                               current_month_days, task_text, dct, companies_name, task_deadline)
+                if dct['quarter'] != 'Только квартальные':
+                    main_check_list = b.call('task.checklistitem.add', [
+                        main_task, {
+                            'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                        }
+                    ], raw=True
+                                                )['result']
 
-            # Перебор значений выбранного выше ключа
-            employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
-            employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
-            for value in employees[employee]:
-                if employee in [None, 'None'] or not deals:
-                    continue
+            else:
+                main_task = is_main_task_exists[0]['id']
+                check_lists = b.call('task.checklistitem.getlist', [main_task], raw=True)['result']
+                for check_list in check_lists:
+                    if check_list['TITLE'] == 'Ежемесячные' or check_list['TITLE'] == 'BX_CHECKLIST_1':
+                        main_check_list = check_list['ID']
+                    elif check_list['TITLE'] == 'Квартальные':
+                        quarter_check_list = check_list['ID']
+                        quarter_check_list_flag = True
 
-                company = b.get_all('crm.company.list', {
-                    'filter': {
-                        'ID': value[2]
+            if quarter_check_list_flag is False and dct['quarter'] in ['Да', 'Только квартальные']:
+                quarter_check_list = b.call('task.checklistitem.add', [
+                    main_task, {
+                        'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                     }
-                })
+                ], raw=True
+                                            )['result']
 
-                # Проверка была ли создана подзадача, для возможности допостановки
-                is_sub_task_exists = b.get_all('tasks.task.list', {
-                    'select': ['ID'],
-                    'filter': {'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
-                               'GROUP_ID': '71'
-                               }
+            if dct['quarter'] in ['Да', 'Только квартальные']:
+                if dct['quarter'] == 'Только квартальные':
+                    quarter_check_list = main_task
+                create_quarter_subtasks(main_task, quarter_check_list, employee, quarter_deals, year, month,
+                                           current_month_days, task_text, dct, companies_name, task_deadline)
+
+        # Перебор значений выбранного выше ключа
+        employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
+        employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
+        for value in employees[employee]:
+            if employee in [None, 'None'] or not deals:
+                continue
+
+            company = b.get_all('crm.company.list', {
+                'filter': {
+                    'ID': value[2]
                 }
-                                           )
-                if not is_sub_task_exists and dct['quarter'] != 'Только квартальные':
+            })
 
-                    # Создание пунктов чек-листа для созданной задачи на сотрудника
-                    b.call('task.checklistitem.add', {
-                            'taskId': main_task,
-                            'FIELDS': {
-                                'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                            }
-                        }
-                    , raw=True
-                                        )
+            # Проверка была ли создана подзадача, для возможности допостановки
+            is_sub_task_exists = b.get_all('tasks.task.list', {
+                'select': ['ID'],
+                'filter': {'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                           'GROUP_ID': '71'
+                           }
+            }
+                                       )
+            if not is_sub_task_exists and dct['quarter'] != 'Только квартальные':
 
-                    # Создание подзадачи для основной задачи
-                    b.call('tasks.task.add', {
-                        'fields': {
-                            'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
-                            'DEADLINE': task_deadline,
-                            'RESPONSIBLE_ID': employee,
-                            'ALLOW_CHANGE_DEADLINE': 'N',
-                            'GROUP_ID': '71',
-                            'DESCRIPTION': f"{task_text}\n",
-                            'PARENT_ID': main_task,
-                            'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
-                            'CREATED_BY': '173',
+                # Создание пунктов чек-листа для созданной задачи на сотрудника
+                b.call('task.checklistitem.add', {
+                        'taskId': main_task,
+                        'FIELDS': {
+                            'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
                         }
                     }
-                                  )
+                , raw=True
+                                    )
+
+                # Создание подзадачи для основной задачи
+                b.call('tasks.task.add', {
+                    'fields': {
+                        'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
+                        'DEADLINE': task_deadline,
+                        'RESPONSIBLE_ID': employee,
+                        'ALLOW_CHANGE_DEADLINE': 'N',
+                        'GROUP_ID': '71',
+                        'DESCRIPTION': f"{task_text}\n",
+                        'PARENT_ID': main_task,
+                        'UF_CRM_TASK': [f"CO_{company[0]['ID']}", f"D_{value[3]}"],
+                        'CREATED_BY': '173',
+                    }
+                }
+                              )
 
 
-            # Защита от дублирования задач
+        # Защита от дублирования задач
 
-            updated_task = b.get_all('tasks.task.get', {'taskId': main_task})
-            if len(updated_task['task']['checklist']) == 0:
-                b.call('tasks.task.delete', {'taskId': main_task})
-                print('Удалена пустая задача')
+        updated_task = b.get_all('tasks.task.get', {'taskId': main_task})
+        if len(updated_task['task']['checklist']) == 0:
+            b.call('tasks.task.delete', {'taskId': main_task})
+            print('Удалена пустая задача')
 
-        b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})
+    b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})
+    '''
     except:
         b.call('im.notify.system.add',
                {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Не удалось поставить задачи на сервисный выезд'})
+    '''
 
 
 def get_report_comment(task_id):
@@ -567,64 +571,61 @@ def get_report_comment(task_id):
 
 
 def create_service_tasks_report(req):
-    '''
     try:
-    '''
-    month_last_day = monthrange(int(req['year']), int(months[req['month']]))[1]
-    tasks = b.get_all('tasks.task.list', {
-        'filter': {
-            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
-            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
-            'GROUP_ID': '71',
-            'RESPONSIBLE_ID': get_employee_id(req['employees']),
-            'REAL_STATUS': '5',
-        }
-    })
-    tasks = list(map(lambda x: [
-        x['responsible']['name'],
-        ' '.join(x['title'].split(' ')[:-2]),
-        get_report_comment(x['id']),
-        f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/",
-        x['title'],
-    ], tasks))
+        month_last_day = monthrange(int(req['year']), int(months[req['month']]))[1]
+        tasks = b.get_all('tasks.task.list', {
+            'filter': {
+                '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+                '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+                'GROUP_ID': '71',
+                'RESPONSIBLE_ID': get_employee_id(req['employees']),
+                'REAL_STATUS': '5',
+            }
+        })
+        tasks = list(map(lambda x: [
+            x['responsible']['name'],
+            ' '.join(x['title'].split(' ')[:-2]),
+            get_report_comment(x['id']),
+            f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/",
+            x['title'],
+        ], tasks))
 
-    # Создание xlsx файла отчета
-    report_created_time = datetime.now()
-    report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
-    report_name = f'Отчет по ЗСВ {report_name_time}.xlsx'.replace(' ', '_')
-    workbook = openpyxl.Workbook()
-    worklist = workbook.active
+        # Создание xlsx файла отчета
+        report_created_time = datetime.now()
+        report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
+        report_name = f'Отчет по ЗСВ {report_name_time}.xlsx'.replace(' ', '_')
+        workbook = openpyxl.Workbook()
+        worklist = workbook.active
 
-    worklist.append([f"{req['month']} {req['year']}"])
-    worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
-    for task in tasks:
-        if 'Сервисный выезд' in task[-1]:
-            continue
-        worklist.append(task[:-1])
-    for idx, col in enumerate(worklist.columns, 1):
-        worklist.column_dimensions[get_column_letter(idx)].auto_size = True
-    workbook.save(report_name)
+        worklist.append([f"{req['month']} {req['year']}"])
+        worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
+        for task in tasks:
+            if 'Сервисный выезд' in task[-1]:
+                continue
+            worklist.append(task[:-1])
+        for idx, col in enumerate(worklist.columns, 1):
+            worklist.column_dimensions[get_column_letter(idx)].auto_size = True
+        workbook.save(report_name)
 
-    # Загрузка отчета в Битрикс
-    bitrix_folder_id = '189467'
-    with open(report_name, 'rb') as file:
-        report_file = file.read()
-    report_file_base64 = str(base64.b64encode(report_file))[2:]
-    upload_report = b.call('disk.folder.uploadfile', {
-        'id': bitrix_folder_id,
-        'data': {'NAME': report_name},
-        'fileContent': report_file_base64
-    })
-    b.call('im.notify.system.add', {
-        'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по ЗСВ за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
-    os_remove(report_name)
-    '''
+        # Загрузка отчета в Битрикс
+        bitrix_folder_id = '189467'
+        with open(report_name, 'rb') as file:
+            report_file = file.read()
+        report_file_base64 = str(base64.b64encode(report_file))[2:]
+        upload_report = b.call('disk.folder.uploadfile', {
+            'id': bitrix_folder_id,
+            'data': {'NAME': report_name},
+            'fileContent': report_file_base64
+        })
+        b.call('im.notify.system.add', {
+            'USER_ID': req['user_id'][5:],
+            'MESSAGE': f'Отчет по ЗСВ за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
+        os_remove(report_name)
     except:
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f'Не удалось сформировать отчет по задачам на сервисный выезд'})
-    '''
+
 
 
 

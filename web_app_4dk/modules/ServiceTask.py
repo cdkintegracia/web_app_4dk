@@ -567,61 +567,64 @@ def get_report_comment(task_id):
 
 
 def create_service_tasks_report(req):
+    '''
     try:
-        month_last_day = monthrange(int(req['year']), int(months[req['month']]))[1]
-        tasks = b.get_all('tasks.task.list', {
-            'filter': {
-                '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
-                '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
-                'GROUP_ID': '71',
-                'RESPONSIBLE_ID': get_employee_id(req['employees']),
-                'REAL_STATUS': '5',
-            }
-        })
-        tasks = list(map(lambda x: [
-            x['responsible']['name'],
-            ' '.join(x['title'].split(' ')[:-2]),
-            get_report_comment(x['id']),
-            f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/",
-            x['title'],
-        ], tasks))
+    '''
+    month_last_day = monthrange(int(req['year']), int(months[req['month']]))[1]
+    tasks = b.get_all('tasks.task.list', {
+        'filter': {
+            '>=CREATED_DATE': f"{req['year']}-{months[req['month']]}-01",
+            '<=CREATED_DATE': f"{req['year']}-{months[req['month']]}-{month_last_day}",
+            'GROUP_ID': '71',
+            'RESPONSIBLE_ID': get_employee_id(req['employees']),
+            'REAL_STATUS': '5',
+        }
+    })
+    tasks = list(map(lambda x: [
+        x['responsible']['name'],
+        ' '.join(x['title'].split(' ')[:-2]),
+        get_report_comment(x['id']),
+        f"https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{x['id']}/",
+        x['title'],
+    ], tasks))
 
-        # Создание xlsx файла отчета
-        report_created_time = datetime.now()
-        report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
-        report_name = f'Отчет по ЗСВ {report_name_time}.xlsx'.replace(' ', '_')
-        workbook = openpyxl.Workbook()
-        worklist = workbook.active
+    # Создание xlsx файла отчета
+    report_created_time = datetime.now()
+    report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
+    report_name = f'Отчет по ЗСВ {report_name_time}.xlsx'.replace(' ', '_')
+    workbook = openpyxl.Workbook()
+    worklist = workbook.active
 
-        worklist.append([f"{req['month']} {req['year']}"])
-        worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
-        for task in tasks:
-            if 'Сервисный выезд' in task[-1]:
-                continue
-            worklist.append(task[:-1])
-        for idx, col in enumerate(worklist.columns, 1):
-            worklist.column_dimensions[get_column_letter(idx)].auto_size = True
-        workbook.save(report_name)
+    worklist.append([f"{req['month']} {req['year']}"])
+    worklist.append(['Ответственный', 'Компания', 'Комментарий', 'Ссылка на задачу'])
+    for task in tasks:
+        if 'Сервисный выезд' in task[-1]:
+            continue
+        worklist.append(task[:-1])
+    for idx, col in enumerate(worklist.columns, 1):
+        worklist.column_dimensions[get_column_letter(idx)].auto_size = True
+    workbook.save(report_name)
 
-        # Загрузка отчета в Битрикс
-        bitrix_folder_id = '189467'
-        with open(report_name, 'rb') as file:
-            report_file = file.read()
-        report_file_base64 = str(base64.b64encode(report_file))[2:]
-        upload_report = b.call('disk.folder.uploadfile', {
-            'id': bitrix_folder_id,
-            'data': {'NAME': report_name},
-            'fileContent': report_file_base64
-        })
-        b.call('im.notify.system.add', {
-            'USER_ID': req['user_id'][5:],
-            'MESSAGE': f'Отчет по ЗСВ за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
-        os_remove(report_name)
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '189467'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
+    })
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Отчет по ЗСВ за {req["month"]} {req["year"]} сформирован. {upload_report["DETAIL_URL"]}'})
+    os_remove(report_name)
+    '''
     except:
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f'Не удалось сформировать отчет по задачам на сервисный выезд'})
-
+    '''
 
 
 

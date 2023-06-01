@@ -306,7 +306,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
         ])
 
     worksheet.append([''])
-    worksheet.append([''] + month_names + ['6 месяцев'])
+    worksheet.append([''] + month_names + ['12 месяцев'])
     for month in month_names:
         for employee in data:
             its_months_summary[month] += data[employee][f'{month} ИТС']

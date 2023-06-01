@@ -401,7 +401,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
 
                 if services_month_summary:
                     worksheet.append([''])
-                    worksheet.append(['' for _ in range(12)] + list(services_month_summary.values()))
+                    worksheet.append(['' for _ in range(16)] + list(services_month_summary.values()))
                     services_month_summary = None
 
             elif department == 'Прочие' and service_report[employee]['Подразделение'] not in departments:

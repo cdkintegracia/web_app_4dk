@@ -11,6 +11,7 @@ class Message:
         if 'data[PARAMS][FILES]' in request_data:
             file_attr = None
             for attr in request_data:
+                print(attr)
                 if 'data[PARAMS][FILES]' in attr:
                     file_attr = attr
                     break

@@ -8,7 +8,8 @@ class Message:
         self.to_user_id = request_data['data[PARAMS][TO_USER_ID]']
         self.event = request_data['event']
         self.message_id = request_data['data[PARAMS][MESSAGE_ID]']
-        print('data[PARAMS][FILES]' in request_data)
+        for attr in request_data:
+            print(attr, 'data[PARAMS][FILES]' in attr)
         if 'data[PARAMS][FILES]' in request_data:
             file_attr = None
             for attr in request_data:

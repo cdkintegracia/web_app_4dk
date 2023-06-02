@@ -9,7 +9,7 @@ def message_handler(req):
         'ONIMCOMMANDADD': command_add_handler,
     }
     for i in req:
-        print(i)
+        print(i, req[i])
     if req['event'] in events:
         message = Message(req)
         events[message.event](message)

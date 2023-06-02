@@ -16,5 +16,5 @@ def message_handler(req):
 
     if req['event'] in events:
         message = Message(req)
-        print(message.file_id)
+        bot_send_message({'dialog_id': '311', 'message': message.file_url_download})
         events[message.event](message)

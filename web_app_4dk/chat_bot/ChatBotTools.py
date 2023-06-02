@@ -18,6 +18,11 @@ class Message:
 
         if file_attr:
             self.file_id = file_attr[:file_attr.index(']')]
-                #self.file_name =
+            self.file_name = request_data[f'data[PARAMS][FILES][{self.file_id}][name]']
+            self.file_extension = request_data[f'data[PARAMS][FILES][{self.file_id}][extension]']
+            self.file_url_download = 'https://vc4dk.bitrix24.ru' + request_data[f'data[PARAMS][FILES][{self.file_id}][urlDownload]']
         else:
             self.file_id = None
+            self.file_name = None
+            self.file_extension = None
+            self.file_url_download = None

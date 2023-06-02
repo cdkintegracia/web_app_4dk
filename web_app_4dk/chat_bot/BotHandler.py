@@ -16,5 +16,5 @@ def message_handler(req):
 
     if req['event'] in events:
         message = Message(req)
-        print(message.file_id)
+        #print(message.file_id)
         events[message.event](message)

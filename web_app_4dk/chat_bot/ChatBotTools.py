@@ -11,10 +11,11 @@ class Message:
         if 'data[PARAMS][FILES]' in request_data:
             file_attr = None
             for attr in request_data:
-                print(attr)
                 if 'data[PARAMS][FILES]' in attr:
                     file_attr = attr
                     break
             file_attr = file_attr[file_attr.index('[FILES]') + 8:]
             self.file_id = file_attr[:file_attr.index(']')]
             #self.file_name =
+        else:
+            self.file_id = None

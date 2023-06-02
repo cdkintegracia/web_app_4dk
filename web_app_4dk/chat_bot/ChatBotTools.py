@@ -8,4 +8,12 @@ class Message:
         self.to_user_id = request_data['data[PARAMS][TO_USER_ID]']
         self.event = request_data['event']
         self.message_id = request_data['data[PARAMS][MESSAGE_ID]']
-
+        if 'data[PARAMS][FILES]' in request_data:
+            file_attr = None
+            for attr in request_data:
+                if 'data[PARAMS][FILES]' in attr:
+                    file_attr = attr
+                    break
+            file_attr = file_attr[file_attr.index('[FILES]') + 8:]
+            self.file_id = file_attr[:file_attr.index(']')]
+            #self.file_name =

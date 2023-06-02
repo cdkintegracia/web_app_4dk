@@ -11,7 +11,7 @@ class Message:
 
         file_attr = None
         for attr in request_data:
-            if 'data[PARAMS][FILES]' in request_data:
+            if 'data[PARAMS][FILES]' in attr:
                 file_attr = attr
                 file_attr = file_attr[file_attr.index('[FILES]') + 8:]
                 break

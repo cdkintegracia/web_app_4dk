@@ -173,7 +173,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
 
 
 def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
-    print(date_start)
+    print(date_start, date_end)
     """
     Функция, которая вызывается из функции create_task_service
 

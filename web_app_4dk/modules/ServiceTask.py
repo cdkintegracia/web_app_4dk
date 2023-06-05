@@ -275,11 +275,11 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, sta
             }
         )
     for deal in deals_start_in_end_after:
-        print(deal)
+        print(deal['ID'])
     for deal in deals_start_before_end_after:
-        print(deal)
+        print(deal['ID'])
     for deal in deals_start_before_end_in:
-        print(deal)
+        print(deal['ID'])
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 

@@ -502,6 +502,7 @@ def create_service_tasks(dct):
         employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
         employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
         for value in employees[employee]:
+            print(value)
             if employee in [None, 'None'] or not deals:
                 continue
 

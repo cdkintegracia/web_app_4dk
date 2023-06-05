@@ -201,8 +201,6 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, sta
                 }
             }
         )
-        for deal in deals_start_in_end_after:
-            print(deal['ID'])
 
         # начались до сентября 2022 и заканчиваются в сентябре 2022
 
@@ -276,7 +274,8 @@ def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, sta
                 }
             }
         )
-
+    for deal in deals_start_in_end_after:
+        print(deals)
     return deals_start_in_end_after + deals_start_before_end_after + deals_start_before_end_in
 
 

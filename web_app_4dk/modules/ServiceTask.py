@@ -173,6 +173,7 @@ def get_quarter_deals_for_service_tasks(date_start, date_end, type_deals, employ
 
 
 def get_deals_for_service_tasks(date_start, date_end, type_deals, employees, stages):
+    print(date_start)
     """
     Функция, которая вызывается из функции create_task_service
 
@@ -502,7 +503,6 @@ def create_service_tasks(dct):
         employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
         employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
         for value in employees[employee]:
-            print(value)
             if employee in [None, 'None'] or not deals:
                 continue
 

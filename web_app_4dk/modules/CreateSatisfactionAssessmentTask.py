@@ -37,5 +37,6 @@ def create_satisfaction_assessment_task(req):
             'RESPONSIBLE_ID': '169',
             'DEADLINE': (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S'),
             'UF_CRM_TASK': task_info['ufCrmTask'],
+            'CREATED_BY': '173',
         }
     })

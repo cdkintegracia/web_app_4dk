@@ -35,7 +35,7 @@ def create_satisfaction_assessment_task(req):
             'TITLE': f'Оценка удовлетворенности ТЛП - {company_info["TITLE"]} - {ticket_date}',
             'DESCRIPTION': f'Завершенная задача: https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/',
             'RESPONSIBLE_ID': '169',
-            'DEADLINE': (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M%S'),
+            'DEADLINE': (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S'),
             'UF_CRM_TASK': task_info['ufCrmTask'],
         }
     })

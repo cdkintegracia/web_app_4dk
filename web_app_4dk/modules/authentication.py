@@ -5,7 +5,8 @@ def authentication(key):
     credentials = {
         'Bitrix': 'aHR0cHM6Ly92YzRkay5iaXRyaXgyNC5ydS9yZXN0LzMxMS83OG5vdXZ3ejlkcnNvbnkwLw==',
         'Google': 'Yml0cml4MjQtZGF0YS1zdHVkaW8tMjI3OGM3YmZiMWE3Lmpzb24=',
-        'Chat-bot': 'aHR0cHM6Ly92YzRkay5iaXRyaXgyNC5ydS9yZXN0LzMxMS81d2UyNzJ6YXRwamJkcXNsLw=='
+        'Chat-bot': 'aHR0cHM6Ly92YzRkay5iaXRyaXgyNC5ydS9yZXN0LzMxMS81d2UyNzJ6YXRwamJkcXNsLw==',
+        'Checko': 'ak13N0NJSUlKdE9LU05VYg=='
     }
     return base64.b64decode(credentials[key]).decode('utf-8')
 

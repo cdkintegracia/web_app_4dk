@@ -11,7 +11,7 @@ except ModuleNotFoundError:
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
-api_key = 'jMw7CIIIJtOKSNUb'
+api_key = authentication('Checko')
 api_methods = ['entrepreneur', 'finances', 'company']
 b24_list_element_fields = {
     'Выручка': 'PROPERTY_1621',

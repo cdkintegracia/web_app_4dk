@@ -43,7 +43,6 @@ def fill_task_title(req, event):
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
-    print(task_info)
     if not task_info or 'task' not in task_info or not task_info['task']:
         return
     task_info = task_info['task']

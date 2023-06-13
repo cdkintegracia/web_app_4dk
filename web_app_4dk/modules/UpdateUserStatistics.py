@@ -2,7 +2,6 @@ from datetime import timedelta, datetime
 
 from fast_bitrix24 import Bitrix
 import gspread
-import dateutil.parser
 import requests
 
 from web_app_4dk.modules.authentication import authentication
@@ -37,7 +36,7 @@ def time_handler(time: str) -> str:
     :param time: время в формате '2022-09-21T14:30:13+03:00'
     :return: дата в формате '01.01.2021'
     """
-    time = dateutil.parser.isoparse(time)
+    time = datetime.fromisoformat(time)
     message_time = f"{time.day}.{time.month}.{time.year}"
     return message_time
 
@@ -112,7 +111,7 @@ def add_new_task(req: dict):
     except:
         return
     responsible = task['task']['createdBy']
-    created_date = dateutil.parser.isoparse(task['task']['createdDate'])
+    created_date = datetime.fromisoformat(task['task']['createdDate'])
     date_start_filter = datetime.strftime(created_date - timedelta(hours=1), '%Y-%m-%d %H:%M:%S')
 
     data = {

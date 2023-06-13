@@ -120,10 +120,9 @@ bot_custom_webhooks = {
 # Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
-    update_logs("Получен дефолтный вебхук", request.form)
+    #update_logs("Получен дефолтный вебхук", request.form)
     if request.form['event'] == 'ONTASKADD':
         default_webhooks[request.form['event']](request.form, event='ONTASKADD')
-        print('ok')
     else:
         default_webhooks[request.form['event']](request.form)
     return 'OK'
@@ -132,7 +131,7 @@ def default_webhook():
 # Обработчик кастомных вебхуков Битрикс
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])
 def custom_webhook():
-    update_logs("Получен кастомный вебхук", request.args)
+    #update_logs("Получен кастомный вебхук", request.args)
     job = request.args['job']
     custom_webhooks[job](request.args)
     return 'OK'

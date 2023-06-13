@@ -1,7 +1,5 @@
 from datetime import datetime
 
-import dateutil.parser
-
 from fast_bitrix24 import Bitrix
 
 try:
@@ -58,7 +56,7 @@ def add_calls_amount_to_task(req):
 
     if not deal_info:
         return
-    closedate = dateutil.parser.isoparse(deal_info['CLOSEDATE'])
+    closedate = datetime.fromisoformat(deal_info['CLOSEDATE'])
     filter_month = closedate.month
     filter_year = closedate.year
     month_range = int(deal_info['UF_CRM_1638100416'])

@@ -121,8 +121,8 @@ bot_custom_webhooks = {
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
     #update_logs("Получен дефолтный вебхук", request.form)
+    print(request.form)
     if request.form['event'] == 'ONTASKADD':
-        print(request)
         default_webhooks[request.form['event']](request.form, event='ONTASKADD')
     else:
         default_webhooks[request.form['event']](request.form)

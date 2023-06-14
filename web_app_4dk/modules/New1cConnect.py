@@ -749,7 +749,7 @@ def connect_1c_event_handler(req):
 
 
 def add_ip():
-    
+
     headers = {
         'accept': 'application/json',
         'Content-Type': 'application/json',

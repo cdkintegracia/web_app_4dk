@@ -254,7 +254,6 @@ def load_user(user):
 # Обработчик вебхуков 1С-Коннект
 @app.route('/1c_connect', methods=['POST'])
 def update_connect_logs():
-    print(request)
     connect_1c_event_handler(request.json)
 
     #update_logs("Получен 1С-Коннект вебхук", request.json)

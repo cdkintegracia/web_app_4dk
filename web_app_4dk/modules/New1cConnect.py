@@ -747,8 +747,9 @@ def connect_1c_event_handler(req):
                     with connect:
                         connect.execute(sql, data)
 
-def add_ip():
 
+def add_ip():
+    
     headers = {
         'accept': 'application/json',
         'Content-Type': 'application/json',

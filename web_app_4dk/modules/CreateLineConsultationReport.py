@@ -131,7 +131,8 @@ def create_line_consultation_report(req):
     ]
     ]
     ignore_list = []
-    for deal in deals:
+    for index, deal in enumerate(deals):
+        print(index)
         try:
             company_id = deal['COMPANY_ID']
             if company_id in ignore_list:

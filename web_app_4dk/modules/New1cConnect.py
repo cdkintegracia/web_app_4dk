@@ -748,12 +748,21 @@ def connect_1c_event_handler(req):
                         connect.execute(sql, data)
 
 def add_ip():
-    data = {
-        'type': 'bot',
-        'url': ''
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
     }
-    r = requests.post(url=web_app_ip, json=data)
-    print(r.json())
+
+    json_data = {
+        'type': 'line',
+        'url': f'{web_app_ip}/1c_connect',
+    }
+
+    response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers, json=json_data,
+                             auth=('bitrix', 'SekXd4'))
+    print(response)
+
 
 
 if __name__ == '__main__':

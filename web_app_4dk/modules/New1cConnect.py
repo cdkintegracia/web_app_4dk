@@ -11,8 +11,10 @@ from fast_bitrix24 import Bitrix
 
 try:
     from authentication import authentication
+    from web_app_ip import web_app_ip
 except ModuleNotFoundError:
     from web_app_4dk.modules.authentication import authentication
+    from web_app_4dk.modules.web_app_ip import web_app_ip
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -744,3 +746,15 @@ def connect_1c_event_handler(req):
                     )
                     with connect:
                         connect.execute(sql, data)
+
+def add_ip():
+    data = {
+        'type': 'bot',
+        'url': ''
+    }
+    r = requests.post(url=web_app_ip, json=data)
+    print(r.json())
+
+
+if __name__ == '__main__':
+    add_ip()

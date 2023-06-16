@@ -58,6 +58,7 @@ from web_app_4dk.modules.CreateCompanyWithoutConnectReport import create_company
 from web_app_4dk.modules.CreateSatisfactionAssessmentTask import create_satisfaction_assessment_task
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
+from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -114,6 +115,7 @@ default_webhooks = {
 
 bot_custom_webhooks = {
     'send_message': bot_send_message,
+    'send_deal_changed_user_message': send_deal_changed_user_message,
 }
 
 

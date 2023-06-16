@@ -30,12 +30,19 @@ def send_satisfaction_assessment_message(req):
     if not calls:
         return
     call_phone_number = calls[0]['PHONE_NUMBER']
-    if call_phone_number[2:5] == in ['812', '812']:
+    if call_phone_number[2:5] in ['812', '812']:
         return
-    print(call_phone_number[2:5])
+    b.call('bizproc.workflow.start', {
+        'TEMPLATE_ID': '1561',
+        'DOCUMENT_ID': ['crm', 'CCrmDocumentContact', 'CONTACT_' + contact_id],
+        'PARAMETERS': {
+            'phone_number': call_phone_number,
+            'commentary_text': f"По задаче https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info['id']}/ клиенту было отправлено сообщение об оценке обслуживания",
+                    }
+    })
 
 
 data = {
     'task_id': '104455'
 }
-send_satisfaction_assessment_message(data)
+#send_satisfaction_assessment_message(data)

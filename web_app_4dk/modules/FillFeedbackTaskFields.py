@@ -7,6 +7,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def fill_feedback_task_fields(req):
+    print(req)
     task_id = req['form_url'].split('task_id=')[1]
     print(task_id)
     b.call('tasks.task.update', {

@@ -7,13 +7,11 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def fill_feedback_task_fields(req):
-    print(req)
     task_id = req['form_url'].split('task_id=')[1]
     task_update = b.call('tasks.task.update', {
         'taskId': task_id,
         'fields': {
-            'ufAuto177856763915': req['rating'],
-            'ufAuto917673898341': req['commentary']
+            'UF_AUTO_177856763915': req['rating'],
+            'UF_AUTO_917673898341': req['commentary']
         }
     })
-    print(task_update)

@@ -32,14 +32,23 @@ def send_satisfaction_assessment_message(req):
     call_phone_number = calls[0]['PHONE_NUMBER']
     if call_phone_number[2:5] in ['812', '812']:
         return
+
+    b.call('crm.item.add', {
+        'entityTypeId': '160',
+        'fields': {
+            'UF_CRM_39_1687268735735': call_phone_number,
+            'UF_CRM_39_1687176023': req['task_id']
+        }
+    })
+
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1561',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentContact', 'CONTACT_' + contact_id],
         'PARAMETERS': {
-            'phone_number': call_phone_number,
-            'commentary_text': f"По задаче https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info['id']}/ клиенту было отправлено сообщение об оценке обслуживания",
+            'commentary_text': f"По задаче https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info['id']}/ клиенту было отправлено сообщение об оценке обслуживания на номер {call_phone_number}",
                     }
     })
+
 
 
 data = {

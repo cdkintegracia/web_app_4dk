@@ -56,6 +56,7 @@ from web_app_4dk.modules.ChangeTaskGroup import change_task_group
 from web_app_4dk.modules.UpdateRefusalDealElement import update_refusal_deal_element
 from web_app_4dk.modules.CreateCompanyWithoutConnectReport import create_company_without_connect_report
 from web_app_4dk.modules.CreateSatisfactionAssessmentTask import create_satisfaction_assessment_task
+from web_app_4dk.modules.FillFeedbackTaskFields import fill_feedback_task_fields
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -95,6 +96,7 @@ custom_webhooks = {
     'update_refusal_deal_element': update_refusal_deal_element,
     'create_company_without_connect_report': create_company_without_connect_report,
     'create_satisfaction_assessment_task': create_satisfaction_assessment_task,
+    'fill_feedback_task_fields': fill_feedback_task_fields,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

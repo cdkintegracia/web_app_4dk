@@ -37,8 +37,9 @@ def send_satisfaction_assessment_message(req):
     b.call('crm.item.add', {
         'entityTypeId': '160',
         'fields': {
-            'UF_CRM_39_1687268735735': call_phone_number,
-            'UF_CRM_39_1687176023': req['task_id'],
+            'ufCrm39_1687268735735': call_phone_number,
+            'ufCrm39_1687176023': req['task_id'],
+            'title': req['task_id']
         }
     })
 

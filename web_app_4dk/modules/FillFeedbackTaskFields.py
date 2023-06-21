@@ -15,3 +15,14 @@ def fill_feedback_task_fields(req):
             'UF_AUTO_917673898341': req['commentary']
         }
     })
+
+    if int(req['rating']) < 5:
+        b.call('tasks.task.add', {
+            'fields': {
+                'GROUP_ID': '13',
+                'TITLE': 'Оценка обслуживания меньше 5',
+                'DESCRIPTION': f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_id}/\n"
+                               f"Оценка: {req['rating']}\n"
+                               f"Комментарий: {req['commentary']}"
+            }
+        })

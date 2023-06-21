@@ -21,14 +21,16 @@ def send_satisfaction_assessment_message(req):
     print(contact_phones)
     calls = b.get_all('voximplant.statistic.get', {
         'filter': {
-            'CRM_ENTITY_TYPE': 'CONTACT',
+            #'CRM_ENTITY_TYPE': 'CONTACT',
             'PHONE_NUMBER': contact_phones,
             '>CALL_START_DATE': task_info['createdDate'],
-            'CALL_FAILED_CODE': '200',
-            'PORTAL_USER_ID': task_info['responsibleId'],
-            'CALL_TYPE': '1',
+            #'CALL_FAILED_CODE': '200',
+            #'PORTAL_USER_ID': task_info['responsibleId'],
+            #'CALL_TYPE': '1',
 
         }})
+    print(calls)
+    exit()
     if not calls:
         print('ЗАДАЧА НЕ СОЗДАНА - НЕ НАЙДЕН ЗВОНОК')
         return

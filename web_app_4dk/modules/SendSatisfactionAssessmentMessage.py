@@ -18,6 +18,7 @@ def send_satisfaction_assessment_message(req):
     contact_id = contact_id[0][2:]
     contact_info = b.get_all('crm.contact.get', {'ID': contact_id, 'select': ['PHONE']})
     contact_phones = list(map(lambda x: x['VALUE'], contact_info['PHONE']))
+    print(contact_phones)
     calls = b.get_all('voximplant.statistic.get', {
         'filter': {
             'CRM_ENTITY_TYPE': 'CONTACT',

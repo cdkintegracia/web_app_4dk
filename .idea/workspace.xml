@@ -90,7 +90,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.hgf">
+  <component name="RunManager" selected="Python.SendSatisfactionAssessmentMessage">
     <configuration name="еуые" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -228,9 +228,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.SendSatisfactionAssessmentMessage" />
         <item itemvalue="Python.hgf" />
         <item itemvalue="Python.gdg" />
-        <item itemvalue="Python.SendSatisfactionAssessmentMessage" />
         <item itemvalue="Python.еуые" />
         <item itemvalue="Python.New1cConnect" />
       </list>

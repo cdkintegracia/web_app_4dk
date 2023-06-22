@@ -48,7 +48,7 @@ def send_satisfaction_assessment_message(req):
     b.call('tasks.task.update', {
         'taskId': req['task_id'],
         'fields': {
-            'UF_AUTO_420533626146': '1',
+            'UF_AUTO_475539459870': 'Да',
         }
     })
 

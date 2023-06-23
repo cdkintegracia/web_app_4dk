@@ -58,6 +58,7 @@ from web_app_4dk.modules.CreateCompanyWithoutConnectReport import create_company
 from web_app_4dk.modules.CreateSatisfactionAssessmentTask import create_satisfaction_assessment_task
 from web_app_4dk.modules.FillFeedbackTaskFields import fill_feedback_task_fields
 from web_app_4dk.modules.SendSatisfactionAssessmentMessage import send_satisfaction_assessment_message
+from web_app_4dk.modules.CreateSatisfactionAssessmentReport import create_satisfaction_assessment_report
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -99,6 +100,7 @@ custom_webhooks = {
     'create_satisfaction_assessment_task': create_satisfaction_assessment_task,
     'fill_feedback_task_fields': fill_feedback_task_fields,
     'send_satisfaction_assessment_message': send_satisfaction_assessment_message,
+    'create_satisfaction_assessment_report': create_satisfaction_assessment_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

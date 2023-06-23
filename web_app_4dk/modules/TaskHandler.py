@@ -88,9 +88,9 @@ def fill_task_title(req, event):
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })
-    if company_info and company_info['TITLE'] in task_info['title']:
+    if company_info and company_info['TITLE'].strip() in task_info['title']:
         return
-    print(company_info['TITLE'], task_info['title'], company_info['TITLE'] in task_info['title'])
+
     if not uf_crm_task:
         send_bitrix_request('tasks.task.update', {
             'taskId': task_id,

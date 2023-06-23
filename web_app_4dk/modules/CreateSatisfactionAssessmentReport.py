@@ -15,7 +15,7 @@ b = Bitrix(authentication('Bitrix'))
 
 groups_info = {
     'ТЛП': {'group_id': '1', 'stage_id': '15'},
-    'ЛК': {}
+    'ЛК': {'group_id': '7', 'stage_id': '67'}
 }
 
 

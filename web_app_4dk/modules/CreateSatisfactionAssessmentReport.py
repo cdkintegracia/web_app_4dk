@@ -105,13 +105,13 @@ def create_satisfaction_assessment_report(req):
 
         # Преобразование строки с датами из datetime в str
         if index == 2:
-            new_row_date = []
+            new_date_row = []
             for cell in row:
                 if cell:
-                    new_row_date.append(cell.strftime('%d.%m.%Y'))
+                    new_date_row.append(cell.strftime('%d.%m.%Y'))
                 else:
-                    new_row_date.append('')
-            worksheet.append(new_row_date)
+                    new_date_row.append('')
+            worksheet.append(new_date_row)
         else:
             worksheet.append(row)
     report_name = f'Отчет_по_оценкам_клиентов_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
@@ -129,5 +129,5 @@ def create_satisfaction_assessment_report(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по сумме сервисов сформирован. {upload_report["DETAIL_URL"]}'})
+        'MESSAGE': f'Отчет по оценка клиентов в группе {req["group_name"]} сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)

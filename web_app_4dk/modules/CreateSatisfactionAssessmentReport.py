@@ -129,5 +129,5 @@ def create_satisfaction_assessment_report(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по оценка клиентов в группе {req["group_name"]} сформирован. {upload_report["DETAIL_URL"]}'})
+        'MESSAGE': f'Отчет по оценкам клиентов в группе {req["group_name"]} сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)

@@ -51,7 +51,7 @@ def send_satisfaction_assessment_message(req):
             'UF_AUTO_475539459870': 'Да',
         }
     })
-
+    '''
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1561',
         'DOCUMENT_ID': ['crm', 'CCrmDocumentContact', 'CONTACT_' + contact_id],
@@ -59,3 +59,4 @@ def send_satisfaction_assessment_message(req):
             'commentary_text': f"По задаче https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info['id']}/ клиенту было отправлено сообщение об оценке обслуживания на номер {call_phone_number}",
                     }
     })
+    '''

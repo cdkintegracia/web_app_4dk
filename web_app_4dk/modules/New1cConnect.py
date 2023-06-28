@@ -658,9 +658,6 @@ def connect_1c_event_handler(req):
                 'UF_AUTO_177856763915': req['treatment']['quality']
             }
         })
-        send_bitrix_request('im.notify.system.add', {
-            'USER_ID': '311',
-            'MESSAGE': f'В задаче {task_id} заполнена оценка из коннекта'})
 
     # Перевод обращения на другую линию
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':

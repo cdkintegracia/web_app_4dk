@@ -39,6 +39,7 @@ def send_satisfaction_assessment_message(req):
         'fields': {
             'ufCrm39_1687268735735': call_phone_number,
             'ufCrm39_1687176023': req['task_id'],
+            'ufCrm39_1687170774': contact_id,
             'title': req['task_id'],
             'assigned_by_id': '173',
             'created_by': '173',

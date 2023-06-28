@@ -137,6 +137,8 @@ def write_logs_to_database(log):
     additional_info = ''
     if log['message_type'] == 1:
         additional_info = log['text']
+    elif log['message_type'] == 17:
+        additional_info = log['treatment']['quality']
     elif log['message_type'] == 53:
         additional_info = f"Длительность: {log['rda']['duration']}"
     elif log['message_type'] == 70:
@@ -637,6 +639,28 @@ def connect_1c_event_handler(req):
     # Завершение обращения
     elif req['message_type'] in [82, 90, 91, 92, 93]:
         close_treatment_task(req['treatment_id'], req['treatment']['treatment_duration'])
+
+    # Оценка специалиста
+    elif req['message_type'] == 17:
+        connect = connect_database('tasks')
+        sql = 'SELECT task_id FROM tasks WHERE treatment_id=?'
+        data = (
+            req['treatment_id'],
+        )
+        with connect:
+            task_id = connect.execute(sql, data).fetchone()
+        if not task_id:
+            return
+        task_id = task_id[0]
+        send_bitrix_request('tasks.task.update', {
+            'taskId': task_id,
+            'fields': {
+                'UF_AUTO_177856763915': req['treatment']['quality']
+            }
+        })
+        send_bitrix_request('im.notify.system.add', {
+            'USER_ID': '311',
+            'MESSAGE': f'В задаче {task_id} заполнена оценка из коннекта'})
 
     # Перевод обращения на другую линию
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':

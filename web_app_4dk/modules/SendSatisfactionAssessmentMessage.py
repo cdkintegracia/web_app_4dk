@@ -34,12 +34,22 @@ def send_satisfaction_assessment_message(req):
     if call_phone_number[2:5] in ['812', '812']:
         return
 
+    contact_emails = b.get_all('crm.contact.get', {
+        'ID': contact_id,
+        'select': ['EMAIL']
+    })
+
+    try:
+        contact_email = contact_emails['EMAIL'][0]['VALUE']
+    except:
+        contact_email = ''
+
     b.call('crm.item.add', {
         'entityTypeId': '160',
         'fields': {
             'ufCrm39_1687268735735': call_phone_number,
             'ufCrm39_1687176023': req['task_id'],
-            'ufCrm39_1687170774': contact_id,
+            'ufCrm39_1687955868': contact_email,
             'title': req['task_id'],
             'assigned_by_id': '173',
             'created_by': '173',

@@ -38,7 +38,7 @@ def compare_tasks_and_ratings(tasks):
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '273',
         'filter': {
-            'TITLE': tasks_id,
+            'NAME': tasks_id,
         }
     })
     result = []
@@ -161,4 +161,3 @@ def create_satisfaction_assessment_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по оценкам клиентов в группе {req["group_name"]} сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
-

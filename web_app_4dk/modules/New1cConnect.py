@@ -12,9 +12,11 @@ from fast_bitrix24 import Bitrix
 try:
     from authentication import authentication
     from web_app_ip import web_app_ip
+    from FillFeedbackTaskFields import create_feedback_list_element
 except ModuleNotFoundError:
     from web_app_4dk.modules.authentication import authentication
     from web_app_4dk.modules.web_app_ip import web_app_ip
+    from web_app_4dk.modules.FillFeedbackTaskFields import create_feedback_list_element
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -658,6 +660,7 @@ def connect_1c_event_handler(req):
                 'UF_AUTO_177856763915': req['treatment']['quality']
             }
         })
+        create_feedback_list_element(task_id, req['treatment']['quality'])
 
     # Перевод обращения на другую линию
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':

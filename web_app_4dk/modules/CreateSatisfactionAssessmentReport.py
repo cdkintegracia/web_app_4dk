@@ -32,7 +32,7 @@ def get_tasks(group_name, start_date_filter, end_date_filter):
     return tasks
 
 
-def compare_tasks_and_ratings(tasks):
+def compare_tasks_and_ratings(tasks, group_id):
     tasks_id = list(map(lambda x: x['id'], tasks))
     elements = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
@@ -48,7 +48,7 @@ def compare_tasks_and_ratings(tasks):
             continue
         task_element = task_element[0]
         if task['ufAuto177856763915'] != list(task_element['PROPERTY_1729'].values())[0]:
-            result.append([task['id'], list(task_element['PROPERTY_1729'].values())[0], task['ufAuto177856763915']])
+            result.append([f'https://vc4dk.bitrix24.ru/workgroups/group/{groups_info["group_id"]}/tasks/task/view/{task["id"]}/', list(task_element['PROPERTY_1729'].values())[0], task['ufAuto177856763915']])
     return result
 
 
@@ -139,8 +139,8 @@ def create_satisfaction_assessment_report(req):
 
     # Страница "Ошибки"
     worksheet = workbook.create_sheet('Ошибки')
-    errors_data = compare_tasks_and_ratings(tasks)
-    errors_data = [['ID задачи', 'Оценка в системе', 'Оценка в задаче']] + errors_data
+    errors_data = compare_tasks_and_ratings(tasks, groups_info[req["group_name"]]["group_id"])
+    errors_data = [['Ссылка на задачу', 'Оценка в системе', 'Оценка в задаче']] + errors_data
     for row in errors_data:
         worksheet.append(row)
 

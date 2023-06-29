@@ -14,7 +14,7 @@ def create_feedback_list_element(task_id, rating):
         'IBLOCK_ID': '273',
         'ELEMENT_CODE': time(),
         'fields': {
-            'TITLE': task_id,
+            'NAME': task_id,
             'PROPERTY_1729': rating,
         }
     })

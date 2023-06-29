@@ -161,3 +161,4 @@ def create_satisfaction_assessment_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по оценкам клиентов в группе {req["group_name"]} сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
+

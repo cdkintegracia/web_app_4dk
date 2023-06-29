@@ -32,6 +32,26 @@ def get_tasks(group_name, start_date_filter, end_date_filter):
     return tasks
 
 
+def compare_tasks_and_ratings(tasks):
+    tasks_id = list(map(lambda x: x['id'], tasks))
+    elements = b.get_all('lists.element.get', {
+        'IBLOCK_TYPE_ID': 'lists',
+        'IBLOCK_ID': '273',
+        'filter': {
+            'TITLE': tasks_id,
+        }
+    })
+    result = []
+    for task in tasks:
+        task_element = list(filter(lambda x: task['id'] == x['TITLE'], elements))
+        if not task_element:
+            continue
+        task_element = task_element[0]
+        if task['ufAuto177856763915'] != list(task_element['PROPERTY_1729'].values())[0]:
+            result.append([task['id'], list(task_element['PROPERTY_1729'].values())[0], task['ufAuto177856763915']])
+    return result
+
+
 def create_satisfaction_assessment_report(req):
     start_date_filter = datetime.strptime(req['start_date_filter'], '%d.%m.%Y')
     end_date_filter = (datetime.strptime(req['end_date_filter'], '%d.%m.%Y'))
@@ -99,8 +119,10 @@ def create_satisfaction_assessment_report(req):
             ])
 
     # Создание xlsx файла
+    # Страница "Отчет"
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
+    worksheet.title = 'Отчет'
     for index, row in enumerate(excel_data):
 
         # Преобразование строки с датами из datetime в str
@@ -114,6 +136,14 @@ def create_satisfaction_assessment_report(req):
             worksheet.append(new_date_row)
         else:
             worksheet.append(row)
+
+    # Страница "Ошибки"
+    worksheet = workbook.create_sheet('Ошибки')
+    errors_data = compare_tasks_and_ratings(tasks)
+    errors_data = [['ID задачи', 'Оценка в системе', 'Оценка в задаче']] + errors_data
+    for row in errors_data:
+        worksheet.append(row)
+
     report_name = f'Отчет_по_оценкам_клиентов_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
     workbook.save(report_name)
 

@@ -43,7 +43,7 @@ def go3_task_handler(req):
             'ELEMENT_CODE': time(),
             'fields': {
                 'NAME': req['task_name'].split(' летние продажи 2023')[0],
-                'CREATED_BY': req['responsible_id'],
+                'PROPERTY_1737': req['responsible_id'],
                 'PROPERTY_1733': company_id,
                 'PROPERTY_1735': '2723' if go3_field_value == '1555' else '2725'
             }

@@ -1,3 +1,5 @@
+from time import time
+
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
@@ -38,6 +40,7 @@ def go3_task_handler(req):
         b.call('lists.element.add', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '275',
+            'ELEMENT_CODE': time(),
             'fields': {
                 'NAME': req['task_name'].split(' летние продажи 2023')[0],
                 'CREATED_BY': req['responsible_id'],

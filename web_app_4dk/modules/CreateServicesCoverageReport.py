@@ -143,7 +143,7 @@ def create_services_coverage_report(req):
                 'ИТС': deals_category_1_types[deal['TYPE_ID']],
                 'Регномер': deal['UF_CRM_1640523562691'],
                 'Ответственный за сделку ИТС': user_name,
-                'Подразделение ответственного': departments_id_name[deal['UF_CRM_1640523703']],
+                'Подразделение ответственного': departments_id_name[deal['UF_CRM_1640523703']] if deal['UF_CRM_1640523703'] is not None else '',
                 'Контрагент': counteragent,
                 'Спарк в договоре / Спарк 3000': 'Нет',
                 'Спарк Плюс': 'Нет',

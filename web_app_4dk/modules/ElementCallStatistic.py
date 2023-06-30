@@ -109,6 +109,7 @@ def sort_types(company_id):
                'UC_XJFZN4',                         # Кабинет садовода
                'UC_74DPBQ',                         # БИТРИКС24
                'UC_6TCS2E',                         # Линк
+               '2',                                 # Контрагент (в договоре)
                ]
     type_element_codes = {
         'SALE': '2251',
@@ -163,7 +164,8 @@ def sort_types(company_id):
         'UC_GP5FR3': '2349',
         'UC_YIAJC8': '2351',
         '1': '2353',
-        'UC_6TCS2E': '2357'
+        'UC_6TCS2E': '2357',
+        '2': '2729'
     }
     for type in level_1:
         if type in types:

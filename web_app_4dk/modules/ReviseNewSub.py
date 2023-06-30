@@ -66,6 +66,7 @@ deal_type_names = {
             'UC_YIAJC8': 'Лицензия с купоном ИТС',
             '1': 'Не указан',
             'UC_6TCS2E': 'Линк',
+            '2': 'Контрагент (в договоре)'
         }
 deal_stage_names = {
         'C1:NEW': 'Услуга активна',
@@ -121,6 +122,7 @@ def revise_b24_deals(file_name, file_data, titles, companies):
                     'UC_D1DN7U',    # 1С Кабинет сотрудника
                     'UC_H8S037',    # ЭДО
                     'UC_6TCS2E',    # Линк
+                    '2',            # Контрагент (в договоре)
             ],
             'STAGE_ID': [
                 'C1:NEW',           # Услуга активна

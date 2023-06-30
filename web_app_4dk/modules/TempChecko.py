@@ -96,6 +96,7 @@ def find_top_deal(company_id: str) -> str:
                'UC_XJFZN4',                         # Кабинет садовода
                'UC_74DPBQ',                         # БИТРИКС24
                'UC_6TCS2E',                         # Линк
+               '2',                                 # Контрагент (в договоре)
                ]
     type_element_codes = {
         # 'SALE': '2251',
@@ -150,7 +151,8 @@ def find_top_deal(company_id: str) -> str:
         'UC_GP5FR3': '2497',
         'UC_YIAJC8': '2499',
         '1': '2501',
-        'UC_6TCS2E': '2505'
+        'UC_6TCS2E': '2505',
+        '2': '2727',
     }
     for type in level_1:
         if type in types:

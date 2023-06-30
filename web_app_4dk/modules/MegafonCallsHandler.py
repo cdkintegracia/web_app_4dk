@@ -198,6 +198,7 @@ def find_top_deal(deals: list) -> str:
                'UC_XJFZN4',  # Кабинет садовода
                'UC_74DPBQ',  # БИТРИКС24
                'UC_6TCS2E',  # Линк
+               '2',          # Контрагент (в договоре)
                ]
     deal_type_names = {
         'SALE': 'ИТС Земля',
@@ -253,6 +254,7 @@ def find_top_deal(deals: list) -> str:
         'UC_YIAJC8': 'Лицензия с купоном ИТС',
         '1': 'Не указан',
         'UC_6TCS2E': 'Линк',
+        '2': 'Контрагент (в договоре)'
     }
 
     for type in level_1:

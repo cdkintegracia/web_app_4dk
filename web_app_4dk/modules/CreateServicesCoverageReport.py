@@ -163,13 +163,14 @@ def create_services_coverage_report(req):
         'UC_WUGAZ7',        # 1СпаркРиски ПЛЮС 22500
         'UC_GZFC63',        # РПД
         'UC_IUJR81',        # Допы Облако
+        '2',                # Контрагент (в договоре)
     ]
     deals_services = list(filter(lambda x: x['TYPE_ID'] in services, deals_info))
     for service in deals_services:
         if service['COMPANY_ID']:
             if service['COMPANY_ID'] in result_data:
                 for data_counter in range(len(result_data[service['COMPANY_ID']])):
-                        if service['TYPE_ID'] == 'UC_A7G0AM' and result_data[service['COMPANY_ID']][data_counter]['Контрагент'] == 'Нет':
+                        if service['TYPE_ID'] in ['UC_A7G0AM', '2'] and result_data[service['COMPANY_ID']][data_counter]['Контрагент'] == 'Нет':
                             result_data[service['COMPANY_ID']][data_counter]['Контрагент'] = 'Да'
                         elif service['TYPE_ID'] in ['UC_2B0CK2', 'UC_86JXH1']:
                             result_data[service['COMPANY_ID']][data_counter]['Спарк в договоре / Спарк 3000'] = 'Да'

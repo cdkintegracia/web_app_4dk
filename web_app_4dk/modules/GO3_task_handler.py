@@ -26,7 +26,7 @@ def go3_task_handler(req):
             'taskId': req['task_id'],
             'select': ['*', 'UF_*'],
         })['task']
-        uf_crm_company = list(filter(lambda x: 'CO_' in x['ufCrmTask'], task_info))[0]
+        uf_crm_company = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))[0]
         company_id = uf_crm_company[3:]
         b.call('crm.company.update', {
             'ID': company_id,

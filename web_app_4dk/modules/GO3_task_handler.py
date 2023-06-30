@@ -9,8 +9,8 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def go3_task_handler(req):
-    yes_symbols = ['+', 'д', 'Д']
-    no_symbols = ['-', 'н', 'Н']
+    yes_symbols = ['+', 'д', 'Д', 'l', 'L']
+    no_symbols = ['-', 'н', 'Н', 'y', 'Y']
     go3_field_value = ''
     for symbol in yes_symbols:
         if symbol in req['go3']:

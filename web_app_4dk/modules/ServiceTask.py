@@ -332,7 +332,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         }, raw=True)
 
         # Создание подзадачи для основной задачи
-        b.call('tasks.task.add', {
+        send_bitrix_request('tasks.task.add', {
             'fields': {
                 'TITLE': f"СВ (К): {company['TITLE']} {dct['month']} {str(year)}",
                 'DEADLINE': task_deadline,
@@ -537,7 +537,7 @@ def create_service_tasks(dct):
             if not is_sub_task_exists and dct['quarter'] != 'Только квартальные':
 
                 # Создание подзадачи для основной задачи
-                sub_task = b.call('tasks.task.add', {
+                sub_task = send_bitrix_request('tasks.task.add', {
                     'fields': {
                         'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
                         'DEADLINE': task_deadline,
@@ -568,7 +568,7 @@ def create_service_tasks(dct):
 
         updated_task = b.get_all('tasks.task.get', {'taskId': main_task})
         if len(updated_task['task']['checklist']) == 0:
-            b.call('tasks.task.delete', {'taskId': main_task})
+            send_bitrix_request('tasks.task.delete', {'taskId': main_task})
             print('Удалена пустая задача')
 
     b.call('im.notify.system.add', {'USER_ID': dct['user_id'][5:], 'MESSAGE': f'Задачи на сервисный выезд поставлены'})

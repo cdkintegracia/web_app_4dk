@@ -455,7 +455,7 @@ def create_service_tasks(dct):
                         'DESCRIPTION': task_text,
                         'CREATED_BY': '173',
                     }
-                }
+                }, raw=True
                               )
                 print(task)
                 main_task = task['task']['id']

@@ -9,6 +9,7 @@ from openpyxl.utils import get_column_letter
 import requests
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.tools import send_bitrix_request
 
 
 # Считывание файла authentication.txt
@@ -445,7 +446,7 @@ def create_service_tasks(dct):
                                             )
             quarter_check_list_flag = False
             if not is_main_task_exists:
-                task = b.call('tasks.task.add', {
+                task = send_bitrix_request('tasks.task.add', {
                     'fields': {
                         'TITLE': main_task_name,
                         'DEADLINE': task_deadline,
@@ -455,10 +456,10 @@ def create_service_tasks(dct):
                         'DESCRIPTION': task_text,
                         'CREATED_BY': '173',
                     }
-                }, raw=True
+                }
                               )
 
-                main_task = task['id']
+                main_task = task['task']['id']
                 quarter_check_list = ''
                 if dct['quarter'] in ['Да', 'Только квартальные']:
                     quarter_check_list = b.call('task.checklistitem.add', [

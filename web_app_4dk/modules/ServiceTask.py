@@ -457,8 +457,8 @@ def create_service_tasks(dct):
                     }
                 }, raw=True
                               )
-                print(task)
-                main_task = task['task']['id']
+
+                main_task = task['id']
                 quarter_check_list = ''
                 if dct['quarter'] in ['Да', 'Только квартальные']:
                     quarter_check_list = b.call('task.checklistitem.add', [

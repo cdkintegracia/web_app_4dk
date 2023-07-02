@@ -642,7 +642,7 @@ def create_service_tasks_report(req):
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f'Не удалось сформировать отчет по задачам на сервисный выезд'})
 
-
+'''
 create_service_tasks({
     'month': 'Июль',
     'year': '2023',
@@ -652,7 +652,7 @@ create_service_tasks({
     'quarter': 'Нет',
     'deadline': ''
 })
-
+'''
 
 
 

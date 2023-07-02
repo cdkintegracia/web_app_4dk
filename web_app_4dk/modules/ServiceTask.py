@@ -457,6 +457,7 @@ def create_service_tasks(dct):
                     }
                 }
                               )
+                print(task)
                 main_task = task['task']['id']
                 quarter_check_list = ''
                 if dct['quarter'] in ['Да', 'Только квартальные']:

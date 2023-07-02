@@ -8,11 +8,22 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 import requests
 
-from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.tools import send_bitrix_request
+try:
+    from web_app_4dk.modules.authentication import authentication
+    from web_app_4dk.tools import send_bitrix_request
+except ModuleNotFoundError:
+    from authentication import authentication
 
 
-# Считывание файла authentication.txt
+    def send_bitrix_request(method: str, data: dict):
+        try:
+            return requests.post(f"{authentication('Bitrix')}{method}", json=data).json()['result']
+        except KeyError:
+            return
+
+
+
+        # Считывание файла authentication.txt
 
 webhook = authentication('Bitrix')
 b = Bitrix(webhook)
@@ -315,7 +326,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         sub_checklist = b.call('task.checklistitem.add', {
             'taskId': check_list_id,
             'FIELDS': {
-                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/\n"
+                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/\n\n  "
                          f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{task_id}/",
             }
         }, raw=True)
@@ -545,7 +556,7 @@ def create_service_tasks(dct):
                 b.call('task.checklistitem.add', {
                     'taskId': main_task,
                     'FIELDS': {
-                        'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/\n"
+                        'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/     \n\n "
                                  f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{sub_task['task']['id']}/",
                     }
                 }
@@ -630,6 +641,17 @@ def create_service_tasks_report(req):
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],
             'MESSAGE': f'Не удалось сформировать отчет по задачам на сервисный выезд'})
+
+
+create_service_tasks({
+    'month': 'Июль',
+    'year': '2023',
+    'employees': 'user_291',
+    'task_id': '76295',
+    'user_id': 'user_311',
+    'quarter': 'Нет',
+    'deadline': ''
+})
 
 
 

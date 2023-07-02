@@ -314,7 +314,8 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         sub_checklist = b.call('task.checklistitem.add', {
             'taskId': check_list_id,
             'FIELDS': {
-                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/",
+                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/\n"
+                         f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{task_id}/",
             }
         }, raw=True)
 
@@ -522,18 +523,8 @@ def create_service_tasks(dct):
                                        )
             if not is_sub_task_exists and dct['quarter'] != 'Только квартальные':
 
-                # Создание пунктов чек-листа для созданной задачи на сотрудника
-                b.call('task.checklistitem.add', {
-                        'taskId': main_task,
-                        'FIELDS': {
-                            'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/",
-                        }
-                    }
-                , raw=True
-                                    )
-
                 # Создание подзадачи для основной задачи
-                b.call('tasks.task.add', {
+                sub_task = b.call('tasks.task.add', {
                     'fields': {
                         'TITLE': f"СВ: {company[0]['TITLE']} {dct['month']} {str(year)}",
                         'DEADLINE': task_deadline,
@@ -547,6 +538,17 @@ def create_service_tasks(dct):
                     }
                 }
                               )
+
+                # Создание пунктов чек-листа для созданной задачи на сотрудника
+                b.call('task.checklistitem.add', {
+                    'taskId': main_task,
+                    'FIELDS': {
+                        'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/\n"
+                                 f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{sub_task['task']['id']}/",
+                    }
+                }
+                       , raw=True
+                       )
 
 
         # Защита от дублирования задач

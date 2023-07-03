@@ -8,7 +8,12 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 
-def create_feedback_list_element(task_id, rating):
+def create_feedback_list_element(task_id, rating, message_type):
+    message_types = {
+        'WhatsApp': '2731',
+        'E-mail': '2733',
+        '1С:Коннект': '2735',
+    }
     b.call('lists.element.add', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '273',
@@ -16,6 +21,7 @@ def create_feedback_list_element(task_id, rating):
         'fields': {
             'NAME': task_id,
             'PROPERTY_1729': rating,
+            'PROPERTY_1739': message_types[message_type]
         }
     })
 
@@ -30,7 +36,7 @@ def fill_feedback_task_fields(req):
         }
     })
 
-    create_feedback_list_element(task_id, req['rating'])
+    create_feedback_list_element(task_id, req['rating'], req['message_type'])
 
     if int(req['rating']) < 5:
         b.call('tasks.task.add', {

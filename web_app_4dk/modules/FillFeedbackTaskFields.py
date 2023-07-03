@@ -26,6 +26,29 @@ def create_feedback_list_element(task_id, rating, message_type):
     })
 
 
+def update_feedback_list_element(task_id, rating, commentary):
+    element = b.call('lists.element.get', {
+        'IBLOCK_TYPE_ID': 'lists',
+        'IBLOCK_ID': '273',
+        'filter': {
+        }
+    })
+    if element:
+        element = element[0]
+    else:
+        return
+    b.call('lists.element.get', {
+        'IBLOCK_TYPE_ID': 'lists',
+        'IBLOCK_ID': '273',
+        'ELEMENT_ID': element['ID'],
+        'fields': {
+            'PROPERTY_1729': rating,
+            'PROPERTY_1741': commentary
+        }
+    })
+
+
+
 def fill_feedback_task_fields(req):
     task_id = req['form_url'].split('task_id=')[1]
     task_update = b.call('tasks.task.update', {
@@ -36,7 +59,7 @@ def fill_feedback_task_fields(req):
         }
     })
 
-    create_feedback_list_element(task_id, req['rating'], req['message_type'])
+    update_feedback_list_element(task_id, req['rating'], req['commentary'])
 
     if int(req['rating']) < 5:
         b.call('tasks.task.add', {

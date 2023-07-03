@@ -660,7 +660,7 @@ def connect_1c_event_handler(req):
                 'UF_AUTO_177856763915': req['treatment']['quality']
             }
         })
-        create_feedback_list_element(task_id, req['treatment']['quality'])
+        create_feedback_list_element(task_id, req['treatment']['quality'], message_type='1С:Коннект')
 
     # Перевод обращения на другую линию
     elif req['message_type'] == 89 and req['data']['direction'] == 'to':

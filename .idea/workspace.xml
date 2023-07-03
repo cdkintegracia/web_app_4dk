@@ -223,12 +223,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.web_app_4dk" />
-      <item itemvalue="Python.ServiceTask" />
-      <item itemvalue="Python.GO3_task_handler" />
-      <item itemvalue="Python.saf" />
-      <item itemvalue="Python.ыа" />
       <item itemvalue="Python.CreateSatisfactionAssessmentReport" />
+      <item itemvalue="Python.GO3_task_handler" />
+      <item itemvalue="Python.ServiceTask" />
+      <item itemvalue="Python.ыа" />
+      <item itemvalue="Python.saf" />
+      <item itemvalue="Python.web_app_4dk" />
     </list>
     <recent_temporary>
       <list>

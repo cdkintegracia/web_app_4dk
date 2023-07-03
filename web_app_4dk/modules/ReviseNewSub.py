@@ -160,9 +160,11 @@ def revise_b24_deals(file_name, file_data, titles, companies):
         close_date_b24 = datetime.strftime(close_date_b24, "%d.%m.%Y")
         company_name_b24 = ''
         extra_code = ''
-        company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]
+        company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))
         if company_info:
-            company_name_b24 = company_info['TITLE']
+            company_name_b24 = company_info[0]['TITLE']
+        else:
+            continue
         data_was_found = 'Нет'
         company_name_1c = ''
         deal_name_1c = ''

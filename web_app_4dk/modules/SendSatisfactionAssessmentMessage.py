@@ -56,12 +56,6 @@ def send_satisfaction_assessment_message(req):
         }
     })
 
-    b.call('tasks.task.update', {
-        'taskId': req['task_id'],
-        'fields': {
-            'UF_AUTO_475539459870': 'Да',
-        }
-    })
     '''
     b.call('bizproc.workflow.start', {
         'TEMPLATE_ID': '1561',

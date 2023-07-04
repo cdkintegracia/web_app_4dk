@@ -7,7 +7,6 @@ webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 
-
 def check_task_result(dct):
     if 'group_id' in dct:
         if dct['group_id'] == '89':
@@ -30,7 +29,7 @@ def check_task_result(dct):
             b.call('tasks.task.update', {'taskId': id, 'fields': {'STAGE_ID': '1117'}})
         else:
             task_name = dct['task_title'].split()
-            if task_name[0] != 'СВ:':
+            if task_name[0] not in ['СВ:', 'СВ (К):']:
                 return
             task_date = task_name[-2:]
             main_task = b.get_all('tasks.task.list', {

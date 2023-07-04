@@ -29,6 +29,7 @@ def check_task_result(dct):
             b.call('tasks.task.update', {'taskId': id, 'fields': {'STAGE_ID': '1117'}})
         else:
             task_name = dct['task_title'].split()
+            print(task_name)
             if task_name[0] not in ['СВ:', 'СВ (К):']:
                 return
             task_date = task_name[-2:]

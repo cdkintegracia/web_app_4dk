@@ -11,6 +11,21 @@ webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
 
+int_to_month = {
+    1: 'Январь',
+    2: 'Февраль',
+    3: 'Март',
+    4: 'Апрель',
+    5: 'Май',
+    6: 'Июнь',
+    7: 'Июль',
+    8: 'Август',
+    9: 'Сентябрь',
+    10: 'Октябрь',
+    11: 'Ноябрь',
+    12: 'Декабрь'
+}
+
 def check_task_result(dct):
     if 'group_id' in dct:
         if dct['group_id'] == '89':
@@ -43,8 +58,8 @@ def check_task_result(dct):
                 }
             })
             if not main_task:
-                deadline = (datetime.strptime(dct['deadline'], '%d.%m.%Y %H:%M:%S')).strftime('%B %Y')
-
+                deadline = (datetime.strptime(dct['deadline'], '%d.%m.%Y %H:%M:%S'))
+                deadline = f'{int_to_month[deadline.month]} {deadline.year}'
                 main_task = b.get_all('tasks.task.list', {
                     'filter': {
                         'TITLE': f"Сервисный выезд (квартал) {dct['task_responsible']} {task_date[0]} {task_date[1]} - {deadline}"

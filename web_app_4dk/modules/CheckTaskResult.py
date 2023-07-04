@@ -30,7 +30,7 @@ def check_task_result(dct):
         else:
             task_name = dct['task_title'].split()
             print(task_name)
-            if task_name[0] not in ['СВ:', 'СВ (К):']:
+            if task_name[0] not in ['СВ:', 'СВ']:
                 return
             task_date = task_name[-2:]
             main_task = b.get_all('tasks.task.list', {

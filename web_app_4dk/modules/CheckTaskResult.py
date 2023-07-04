@@ -68,5 +68,5 @@ def check_task_result(dct):
             check_list = b.call('task.checklistitem.getlist', [main_task_id], raw=True)['result']
             task_row = list(filter(lambda x: dct['id'] in x['TITLE'], check_list))
             print(task_row)
-            b.call('task.checklistitem.complete', [task_row[0]['PARENT_ID'], task_row[0]['ID']])
+            b.call('task.checklistitem.complete', [task_row[0]['PARENT_ID'], task_row[0]['ID']], raw=True)
 

@@ -1,6 +1,7 @@
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 # Считывание файла authentication.txt
 webhook = authentication('Bitrix')
@@ -40,4 +41,5 @@ def check_task_result(dct):
             })
             print(f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}")
             print(main_task)
+            bot_send_message({'dialog_id': '311', 'message': f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}"})
 

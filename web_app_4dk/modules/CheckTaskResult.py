@@ -39,7 +39,13 @@ def check_task_result(dct):
                     'TITLE': f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}"
                 }
             })
+            if not main_task:
+                main_task = b.get_all('tasks.task.list', {
+                    'filter': {
+                        'TITLE': f"Сервисный выезд (квартал) {dct['task_responsible']} {task_date[0]} {task_date[1]}"
+                    }
+                })
             print(f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}")
             print(main_task)
-            bot_send_message({'dialog_id': '311', 'message': f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}"})
+            bot_send_message({'dialog_id': '311', 'message': dct['deadline']})
 

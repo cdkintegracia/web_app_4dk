@@ -48,7 +48,6 @@ def check_task_result(dct):
             b.call('tasks.task.update', {'taskId': id, 'fields': {'STAGE_ID': '1117'}})
         else:
             task_name = dct['task_title'].split()
-            print(task_name)
             if task_name[0] not in ['СВ:', 'СВ']:
                 return
             task_date = task_name[-2:]
@@ -67,6 +66,6 @@ def check_task_result(dct):
                 })
             main_task_id = main_task[0]['id']
             check_list = b.call('task.checklistitem.getlist', [main_task_id], raw=True)['result']
-            for i in check_list:
-                print(i)
+            task_row = list(filter(lambda x: dct['id'] in x['TITLE'], check_list))
+            print(task_row)
 

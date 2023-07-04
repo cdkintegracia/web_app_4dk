@@ -65,7 +65,7 @@ def check_task_result(dct):
                         'TITLE': f"Сервисный выезд (квартал) {dct['task_responsible']} {task_date[0]} {task_date[1]} - {deadline}"
                     }
                 })
-            main_task_id = main_task[0]['ID']
+            main_task_id = main_task[0]['id']
             check_list = b.call('task.checklistitem.getlist', [main_task_id], raw=True)['result']
             for i in check_list:
                 bot_send_message({'dialog_id': '311', 'message': i})

@@ -1,7 +1,13 @@
+from datetime import datetime
+import locale
+
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
+
+
+locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 # Считывание файла authentication.txt
 webhook = authentication('Bitrix')
@@ -40,12 +46,14 @@ def check_task_result(dct):
                 }
             })
             if not main_task:
+                deadline = (datetime.strptime(dct['deadline'], '%d.%m.%Y %H:%M:%S')).strftime('%B %Y')
+
                 main_task = b.get_all('tasks.task.list', {
                     'filter': {
-                        'TITLE': f"Сервисный выезд (квартал) {dct['task_responsible']} {task_date[0]} {task_date[1]}"
+                        'TITLE': f"Сервисный выезд (квартал) {dct['task_responsible']} {task_date[0]} {task_date[1]} - {deadline}"
                     }
                 })
             print(f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}")
             print(main_task)
-            bot_send_message({'dialog_id': '311', 'message': dct['deadline']})
+            bot_send_message({'dialog_id': '311', 'message': f"Сервисный выезд (квартал) {dct['task_responsible']} {task_date[0]} {task_date[1]} - {deadline}"})
 

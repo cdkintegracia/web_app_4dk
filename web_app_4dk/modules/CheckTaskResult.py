@@ -38,5 +38,6 @@ def check_task_result(dct):
                     'TITLE': f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}"
                 }
             })
+            print(f"Сервисный выезд {dct['task_responsible']} {task_date[0]} {task_date[1]}")
             print(main_task)
 

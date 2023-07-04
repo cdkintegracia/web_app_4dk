@@ -1,13 +1,10 @@
 from datetime import datetime
-import locale
 
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
-
-locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 # Считывание файла authentication.txt
 webhook = authentication('Bitrix')

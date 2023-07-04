@@ -60,6 +60,7 @@ from web_app_4dk.modules.FillFeedbackTaskFields import fill_feedback_task_fields
 from web_app_4dk.modules.SendSatisfactionAssessmentMessage import send_satisfaction_assessment_message
 from web_app_4dk.modules.CreateSatisfactionAssessmentReport import create_satisfaction_assessment_report
 from web_app_4dk.modules.GO3_task_handler import go3_task_handler
+from web_app_4dk.modules.FillRequestTaskCompany import fill_request_task_company
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -103,6 +104,7 @@ custom_webhooks = {
     'send_satisfaction_assessment_message': send_satisfaction_assessment_message,
     'create_satisfaction_assessment_report': create_satisfaction_assessment_report,
     'go3_task_handler': go3_task_handler,
+    'fill_request_task_company': fill_request_task_company,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

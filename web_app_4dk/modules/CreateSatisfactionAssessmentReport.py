@@ -137,6 +137,9 @@ def create_satisfaction_assessment_report(req):
         else:
             worksheet.append(row)
 
+    report_name = f'Отчет_по_оценкам_клиентов_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    workbook.save(report_name)
+    '''
     # Страница "Ошибки"
     worksheet = workbook.create_sheet('Ошибки')
     errors_data = compare_tasks_and_ratings(tasks, groups_info[req["group_name"]]["group_id"])
@@ -146,7 +149,7 @@ def create_satisfaction_assessment_report(req):
 
     report_name = f'Отчет_по_оценкам_клиентов_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
     workbook.save(report_name)
-
+    '''
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '495759'
     with open(report_name, 'rb') as file:

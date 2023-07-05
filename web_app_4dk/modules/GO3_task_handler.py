@@ -12,6 +12,7 @@ def go3_task_handler(req):
     yes_symbols = ['+', 'д', 'Д', 'l', 'L']
     no_symbols = ['-', 'н', 'Н', 'y', 'Y']
     go3_field_value = ''
+    ut_field_value = ''
     for symbol in yes_symbols:
         if symbol in req['go3']:
             go3_field_value = '1555'
@@ -21,6 +22,17 @@ def go3_task_handler(req):
         for symbol in no_symbols:
             if symbol in req['go3']:
                 go3_field_value = '1557'
+                break
+
+    for symbol in yes_symbols:
+        if symbol in req['ut']:
+            ut_field_value = '2737'
+            break
+
+    if not go3_field_value:
+        for symbol in no_symbols:
+            if symbol in req['ut']:
+                ut_field_value = '2739'
                 break
 
     if go3_field_value:
@@ -45,6 +57,7 @@ def go3_task_handler(req):
                 'NAME': req['task_name'].split(' летние продажи 2023')[0],
                 'PROPERTY_1737': task_info['responsibleId'],
                 'PROPERTY_1733': company_id,
-                'PROPERTY_1735': '2723' if go3_field_value == '1555' else '2725'
+                'PROPERTY_1735': '2723' if go3_field_value == '1555' else '2725',
+                'PROPERTY_1743': ut_field_value,
             }
         })

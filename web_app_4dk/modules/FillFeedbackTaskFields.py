@@ -31,7 +31,7 @@ def update_feedback_list_element(task_id, rating, commentary):
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '273',
         'filter': {
-            'TITLE': task_id
+            'NAME': task_id
         }
     })
     if element:

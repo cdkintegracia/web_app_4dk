@@ -22,4 +22,3 @@ def fill_request_task_company(req):
             'UF_CRM_TASK': ['CO_' + company_id]
         }
     })
-

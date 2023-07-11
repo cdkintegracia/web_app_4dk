@@ -8,7 +8,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def add_invoice_number(req):
-
+    print(req)
     documents = send_bitrix_request('crm.documentgenerator.document.list', {
         'filter': {
             'entityTypeId': '31',

@@ -20,6 +20,6 @@ def add_invoice_number(req):
         'entityTypeId': '31',
         'id': req['id'],
         'fields': {
-            'UF_CRM_SMART_INVOICE_1684919199892': f"{req['invoice_title']} {document_number}",
+            'ufCrm_SMART_INVOICE_1684919199892': f"{req['invoice_title']} {document_number}",
         }
     })

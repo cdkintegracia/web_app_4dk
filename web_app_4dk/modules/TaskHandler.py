@@ -52,7 +52,7 @@ def fill_task_title(req, event):
         send_notification(task_info, 'Завершение')
     '''
 
-    if not task_info['ufCrmTask']:
+    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']:
         return
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

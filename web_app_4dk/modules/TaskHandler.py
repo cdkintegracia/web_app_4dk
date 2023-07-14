@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from time import time
 
 from web_app_4dk.tools import send_bitrix_request
 
@@ -37,6 +38,79 @@ def check_similar_tasks_this_hour(task_info, company_id):
             })
 
 
+def task_registry(task_info):
+    task_status = {
+        "2": 343,
+        "-1": 345,
+        "-3": 347,
+        "3": 349,
+        "4": 351,
+        "5": 353,
+        "6": 355,
+    }
+    tags = send_bitrix_request('task.item.gettags', {'taskId': '187531'})
+    if tags:
+        tags = ', '.join(tags)
+    else:
+        tags = ''
+    registry_element = send_bitrix_request('lists.element.get', {
+        'IBLOCK_TYPE_ID': 'lists',
+        'IBLOCK_ID': '107',
+        'FILTER': {
+            'PROPERTY_517': task_info['id'],
+        }
+    })
+    if registry_element:
+        send_bitrix_request('lists.element.update', {
+            "IBLOCK_TYPE_ID": "lists",
+            "IBLOCK_ID": "107",
+            "ELEMENT_ID": registry_element['ID'],
+            "FIELDS": {
+                "NAME": task_info["title"],
+                "PROPERTY_517": task_info['id'],
+                "PROPERTY_495": task_status[task_info['status']],
+                "PROPERTY_499": registry_element['PROPERTY_499'] if 'PROPERTY_499' in registry_element else '',
+                "PROPERTY_501": registry_element['PROPERTY_501'] if 'PROPERTY_501' in registry_element else '',
+                "PROPERTY_537": registry_element['PROPERTY_537'] if 'PROPERTY_537' in registry_element else '',
+                "PROPERTY_505": task_info["createdDate"],
+                "PROPERTY_507": task_info["closedDate"],
+                "PROPERTY_509": task_info["createdBy"],
+                "PROPERTY_511": task_info["responsibleId"],
+                "PROPERTY_515": tags,
+                "PROPERTY_513": task_info["durationFact"],
+            }})
+    else:
+        if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
+            company_id = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
+            if company_id:
+                company_id = company_id[0]
+            else:
+                company_id = ''
+            contact_id = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+            if contact_id:
+                contact_id = contact_id[0]
+            else:
+                contact_id = ''
+        send_bitrix_request('lists.element.add', {
+            "IBLOCK_TYPE_ID": "lists",
+            "IBLOCK_ID": "107",
+            "ELEMENT_CODE": time(),
+            "FIELDS": {
+                "NAME": task_info["title"],
+                "PROPERTY_517": task_info['id'],
+                "PROPERTY_495": task_status[task_info['status']],
+                "PROPERTY_499": company_id,
+                "PROPERTY_501": contact_id,
+                "PROPERTY_537": task_info['groupId'],
+                "PROPERTY_505": task_info["createdDate"],
+                "PROPERTY_507": task_info["closedDate"],
+                "PROPERTY_509": task_info["createdBy"],
+                "PROPERTY_511": task_info["responsibleId"],
+                "PROPERTY_515": tags,
+                "PROPERTY_513": task_info["durationFact"],
+            }})
+
+
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']
     task_info = send_bitrix_request('tasks.task.get', {
@@ -46,7 +120,7 @@ def fill_task_title(req, event):
     if not task_info or 'task' not in task_info or not task_info['task']:
         return
     task_info = task_info['task']
-
+    task_registry(task_info)
     '''
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
         send_notification(task_info, 'Завершение')

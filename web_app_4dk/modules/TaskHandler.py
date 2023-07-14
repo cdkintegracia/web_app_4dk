@@ -81,6 +81,8 @@ def task_registry(task_info):
                 "PROPERTY_513": task_info["durationFact"],
             }})
     else:
+        groups = send_bitrix_request('sonet_group.get')
+        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
         company_id = ''
         contact_id = ''
         if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
@@ -100,7 +102,7 @@ def task_registry(task_info):
                 "PROPERTY_495": task_status[task_info['status']],
                 "PROPERTY_499": company_id,
                 "PROPERTY_501": contact_id,
-                "PROPERTY_537": task_info['groupId'],
+                "PROPERTY_537": group_name,
                 "PROPERTY_505": task_info["createdDate"],
                 "PROPERTY_507": task_info["closedDate"],
                 "PROPERTY_509": task_info["createdBy"],

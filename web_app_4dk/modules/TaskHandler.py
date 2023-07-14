@@ -92,6 +92,9 @@ def task_registry(task_info):
                 contact_id = contact_id[0]
             else:
                 contact_id = ''
+        else:
+            company_id = ''
+            contact_id = ''
         send_bitrix_request('lists.element.add', {
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "107",

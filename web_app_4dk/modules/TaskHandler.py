@@ -81,7 +81,7 @@ def task_registry(task_info):
                 "PROPERTY_513": task_info["durationFact"],
             }})
     else:
-        groups = send_bitrix_request('sonet_group.get')
+        groups = send_bitrix_request('sonet_group.get', {})
         group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
         company_id = ''
         contact_id = ''

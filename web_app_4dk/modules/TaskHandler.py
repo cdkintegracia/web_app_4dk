@@ -81,20 +81,15 @@ def task_registry(task_info):
                 "PROPERTY_513": task_info["durationFact"],
             }})
     else:
+        company_id = ''
+        contact_id = ''
         if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
-            company_id = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
-            if company_id:
+            ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
+            if ufCrmCompany:
                 company_id = company_id[0]
-            else:
-                company_id = ''
-            contact_id = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-            if contact_id:
+            ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+            if ufCrmContact:
                 contact_id = contact_id[0]
-            else:
-                contact_id = ''
-        else:
-            company_id = ''
-            contact_id = ''
         send_bitrix_request('lists.element.add', {
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "107",

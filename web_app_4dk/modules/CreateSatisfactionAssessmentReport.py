@@ -85,7 +85,7 @@ def create_satisfaction_assessment_report(req):
             filter_date = d.strftime('%d.%m.%Y')
             date_all_tasks = list(filter(lambda x: (datetime.fromisoformat(x['createdDate'])).strftime('%d.%m.%Y') == filter_date, tasks))
             all_tasks.append(len(date_all_tasks))
-            date_no_answer_tasks = list(filter(lambda x: x['ufAuto475539459870'] and not x['ufAuto177856763915'], date_all_tasks))
+            date_no_answer_tasks = list(filter(lambda x: not x['ufAuto177856763915'], date_all_tasks))
             no_answer_tasks.append(len(date_no_answer_tasks))
 
             for rating in tasks_with_rating.keys():

@@ -86,10 +86,10 @@ def task_registry(task_info):
         if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
             ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
             if ufCrmCompany:
-                company_id = company_id[0]
+                company_id = ufCrmCompany[0]
             ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if ufCrmContact:
-                contact_id = contact_id[0]
+                contact_id = ufCrmContact[0]
         send_bitrix_request('lists.element.add', {
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "107",

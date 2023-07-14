@@ -82,7 +82,10 @@ def task_registry(task_info):
             }})
     else:
         groups = send_bitrix_request('sonet_group.get', {})
-        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
+        try:
+            group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
+        except IndexError:
+            group_name = ''
         company_id = ''
         contact_id = ''
         if 'ufCrmTask' in task_info and task_info['ufCrmTask']:

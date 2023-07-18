@@ -81,7 +81,7 @@ def task_registry(task_info, event):
                 "PROPERTY_515": tags,
                 "PROPERTY_513": task_info["durationFact"],
             }})
-    elif event == 'ONTASKADD':
+    else:
         groups = send_bitrix_request('sonet_group.get', {})
         try:
             group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']

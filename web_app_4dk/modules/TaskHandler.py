@@ -124,7 +124,7 @@ def fill_task_title(req, event):
     if not task_info or 'task' not in task_info or not task_info['task']:
         return
     task_info = task_info['task']
-    task_registry(task_info)
+    task_registry(task_info, event)
     '''
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
         send_notification(task_info, 'Завершение')

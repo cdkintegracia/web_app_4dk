@@ -216,12 +216,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.AddInvoiceNumber" />
       <item itemvalue="Python.fsaf" />
+      <item itemvalue="Python.sffs" />
       <item itemvalue="Python.temp" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python.AddInvoiceNumber" />
-      <item itemvalue="Python.sffs" />
+      <item itemvalue="Python.web_app_4dk" />
     </list>
     <recent_temporary>
       <list>

@@ -12,7 +12,6 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 
-
 def create_current_month_deals_data_file(user_data=None, user_id='311'):
     if not user_data:
         user_data = b.get_all('user.get')

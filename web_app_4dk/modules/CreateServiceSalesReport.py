@@ -128,7 +128,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
     service_deal_value_field = f'{month} Сервисы'
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))
     for deal_info in deals_info:
-
+        if deal_info['Тип'] == 'Контрагент в договоре':
+            deal_info['Тип'] = 'Контрагент'
         if deal_info['Ответственный'] not in handled_data:
             continue
 

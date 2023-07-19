@@ -1,9 +1,7 @@
 from fast_bitrix24 import Bitrix
 
-try:
-    from authentication import authentication
-except ModuleNotFoundError:
-    from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.ClearContactPhoneNumbers import clear_contact_phone_numbers
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -33,7 +31,7 @@ def send_satisfaction_assessment_message(req):
     if not calls:
         return
     call_phone_number = calls[0]['PHONE_NUMBER']
-    if call_phone_number[2:5] in ['812', '812']:
+    if '812' in call_phone_number[:6]:
         return
 
     contact_emails = b.get_all('crm.contact.get', {
@@ -57,6 +55,8 @@ def send_satisfaction_assessment_message(req):
             'created_by': '173',
         }
     })
+
+    clear_contact_phone_numbers(contact_id)
 
     '''
     b.call('bizproc.workflow.start', {

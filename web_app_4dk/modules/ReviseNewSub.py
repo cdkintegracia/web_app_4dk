@@ -386,5 +386,5 @@ def revise_new_sub(filename, b24_user_id):
     os.remove(report_name)
     #except:
         #b.call('im.notify.system.add',
-               3{'USER_ID': b24_user_id, 'MESSAGE': f'Не удалось завершить сверку по NewSub'})
+               #{'USER_ID': b24_user_id, 'MESSAGE': f'Не удалось завершить сверку по NewSub'})
 

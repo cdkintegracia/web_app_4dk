@@ -39,7 +39,6 @@ def check_similar_tasks_this_hour(task_info, company_id):
 
 
 def task_registry(task_info, event):
-    print(event)
     task_status = {
         "2": 343,
         "-1": 345,
@@ -82,6 +81,16 @@ def task_registry(task_info, event):
                 "PROPERTY_513": task_info["durationFact"],
             }})
     elif event == 'ONTASKADD':
+        sleep(10)
+        registry_element = send_bitrix_request('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '107',
+            'FILTER': {
+                'PROPERTY_517': task_info['id'],
+            }
+        })
+        if registry_element:
+            return
         groups = send_bitrix_request('sonet_group.get', {})
         try:
             group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']

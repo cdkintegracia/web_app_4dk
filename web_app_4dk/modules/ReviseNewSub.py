@@ -338,8 +338,8 @@ def revise_new_sub(filename, b24_user_id):
             deal_name_b24,
             company_name_b24,
             deal_type_b24,
-            datetime.strptime(close_date_1c, '%d.%m.%Y'),
-            datetime.strptime(close_date_b24, '%d.%m.%Y'),
+            datetime.strptime(close_date_1c, '%d.%m.%Y') if close_date_1c else '',
+            datetime.strptime(close_date_b24, '%d.%m.%Y') if close_date_b24 else '',
             deal_stage_b24,
             extra_code,
         ])

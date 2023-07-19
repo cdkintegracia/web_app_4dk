@@ -205,8 +205,8 @@ def revise_b24_deals(file_name, file_data, titles, companies):
             data_was_found,
             company_name_1c,
             deal_name_1c,
-            close_date_b24,
-            close_date_1c,
+            datetime.strptime(close_date_b24, '%d.%m.%Y'),
+            datetime.strptime(close_date_1c, '%d.%m.%Y'),
             extra_code
         ])
 

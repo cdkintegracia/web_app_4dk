@@ -81,7 +81,7 @@ def task_registry(task_info, event):
                 "PROPERTY_513": task_info["durationFact"],
             }})
     elif event == 'ONTASKADD':
-        sleep(30)
+        sleep(60)
         registry_element = send_bitrix_request('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '107',

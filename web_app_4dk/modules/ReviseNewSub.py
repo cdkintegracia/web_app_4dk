@@ -328,7 +328,6 @@ def revise_new_sub(filename, b24_user_id):
             deals = list(filter(lambda x: str(x['UF_CRM_1640523562691']).strip(' ') == str(reg_number_1c).strip(' '), all_deals))
             if not deals:
                 deal_was_found = 'Нет регномера'
-        print(close_date_1c, close_date_b24)
         report_data.append([
             reg_number_1c,
             code1c_1c,

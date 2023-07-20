@@ -60,6 +60,3 @@ def clear_contact_phone_numbers(contact_id):
                 'PHONE': new_phones
             }
         })
-
-
-clear_contact_phone_numbers('567')

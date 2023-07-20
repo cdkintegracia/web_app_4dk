@@ -18,6 +18,6 @@ def fill_act_document_company(req):
             'entityTypeId': '161',
             'id': req['element_id'],
             'fields': {
-                'ufCrm41_1689103279': company_info[0]['ID']
+                'ufCrm411689103279': company_info[0]['ID']
             }
         })

@@ -1,8 +1,8 @@
 from copy import deepcopy
 
 from fast_bitrix24 import Bitrix
-
-from web_app_4dk.modules.authentication import authentication
+from authentication import authentication
+#from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -47,6 +47,7 @@ def clear_contact_phone_numbers(contact_id):
         for phone in phones:
             phone['VALUE_TYPE'] = 'WORK'
 
+        check_phones = []
         for i in phones:
             if i['VALUE'] not in check_phones:
                 check_phones.append(i['VALUE'])
@@ -59,3 +60,6 @@ def clear_contact_phone_numbers(contact_id):
                 'PHONE': new_phones
             }
         })
+
+
+clear_contact_phone_numbers('567')

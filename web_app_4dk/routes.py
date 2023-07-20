@@ -62,6 +62,7 @@ from web_app_4dk.modules.CreateSatisfactionAssessmentReport import create_satisf
 from web_app_4dk.modules.GO3_task_handler import go3_task_handler
 from web_app_4dk.modules.FillRequestTaskCompany import fill_request_task_company
 from web_app_4dk.modules.AddInvoiceNumber import add_invoice_number
+from web_app_4dk.modules.FillActDocumentCompany import fill_act_document_company
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -107,6 +108,7 @@ custom_webhooks = {
     'go3_task_handler': go3_task_handler,
     'fill_request_task_company': fill_request_task_company,
     'add_invoice_number': add_invoice_number,
+    'fill_act_document_company': fill_act_document_company,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

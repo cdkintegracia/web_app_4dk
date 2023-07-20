@@ -12,6 +12,7 @@ def fill_act_document_company(req):
             'UF_CRM_1656070716': req['inn']
         }
     })
+    print(company_info)
     if company_info:
         b.call('crm.item.update', {
             'entityTypeId': '161',

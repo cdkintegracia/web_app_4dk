@@ -108,7 +108,7 @@ def task_registry(task_info, event):
         send_bitrix_request('lists.element.add', {
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "107",
-            "ELEMENT_CODE": time(),
+            "ELEMENT_CODE": task_info['id'],
             "FIELDS": {
                 "NAME": task_info["title"],
                 "PROPERTY_517": task_info['id'],

@@ -7,9 +7,10 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def fill_request_task_company(req):
-    b.call('tasks.task.update', {
-        'taskId': req['task_id'],
-        'fields': {
-            'UF_CRM_TASK': ['CO_' + req['company_id']]
-        }
-    })
+    if 'company_id' in req:
+        b.call('tasks.task.update', {
+            'taskId': req['task_id'],
+            'fields': {
+                'UF_CRM_TASK': ['CO_' + req['company_id']]
+            }
+        })

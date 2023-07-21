@@ -7,6 +7,14 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_paid_task(req):
+    task_info = b.get_all('tasks.task.get', {
+        'taskId': req['task_id'],
+        'select': ['*', 'UF_*']
+    })['task']
+    try:
+        uf_crm_task = task_info['ufCrmTask']
+    except:
+        uf_crm_task = []
     b.call('tasks.task.add', {
         'fields': {
             'TITLE': 'Платная задача завершена! Выставьте счет клиенту.',
@@ -24,6 +32,7 @@ def create_paid_task(req):
                            f'Трудозатраты: {req["time"]}',
             'GROUP_ID': '11',
             'CREATED_BY': '173',
-            'RESPONSIBLE_ID': '173'
+            'RESPONSIBLE_ID': '173',
+            'UF_CRM_TASK': uf_crm_task
         }
     })

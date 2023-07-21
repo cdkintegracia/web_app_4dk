@@ -34,6 +34,3 @@ def fill_act_document_smart_process(req):
         'id': req['element_id'],
         'fields': update_fields
     })
-
-
-#fill_act_document_smart_process({'element_id': '47'})

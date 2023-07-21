@@ -18,8 +18,6 @@ def fill_act_document_smart_process(req):
         'entityTypeId': '161',
         'id': req['element_id'],
     })['item']
-    print(element_info)
-    exit()
     company_info = b.get_all('crm.company.list', {
         'select': ['*', 'UF_*'],
         'filter': {

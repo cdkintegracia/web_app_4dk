@@ -21,6 +21,9 @@ def create_paid_task(req):
                            f'Ответственный: {req["responsible"]}\n'
                            f'Дата создания: {req["created_date"]}\n'
                            f'Дата закрытия: {req["close_date"]}\n'
-                           f'Трудозатраты: {req["time"]}'
+                           f'Трудозатраты: {req["time"]}',
+            'GROUP_ID': '11',
+            'CREATED_BY': '173',
+            'RESPONSIBLE_ID': '173'
         }
     })

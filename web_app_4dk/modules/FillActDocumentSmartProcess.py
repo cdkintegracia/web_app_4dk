@@ -31,7 +31,7 @@ def fill_act_document_smart_process(req):
     update_fields['observers'] = company_info['ASSIGNED_BY_ID']
     update_fields['assignedById'] = '173'
     if element_info['ufCrm41_1690283806']:
-        users = b.get_all('user.get')
+        users = send_bitrix_request('user.get')
         sou_fio = element_info['ufCrm41_1690283806'].split()
         user_info = list(filter(lambda x: sou_fio[0] == x['LAST_NAME'] and sou_fio[1] == x['NAME'], users))
         if user_info:

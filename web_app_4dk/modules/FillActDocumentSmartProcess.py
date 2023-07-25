@@ -28,7 +28,14 @@ def fill_act_document_smart_process(req):
     update_fields = {}
     update_fields['companyId'] = company_info['ID']
     update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info['UF_CRM_1638093692254']]
-    update_fields['assignedById'] = company_info['ASSIGNED_BY_ID']
+    update_fields['observers'] = company_info['ASSIGNED_BY_ID']
+    update_fields['assignedById'] = '173'
+    if element_info['ufCrm41_1690283806']:
+        users = b.get_all('user.get')
+        sou_fio = element_info['ufCrm41_1690283806'].split()
+        user_info = list(filter(lambda x: sou_fio[0] == x['LAST_NAME'] and sou_fio[1] == x['NAME'], users))
+        if user_info:
+            update_fields['assignedById'] = user_info[0]['ID']
     send_bitrix_request('crm.item.update', {
         'entityTypeId': '161',
         'id': req['element_id'],

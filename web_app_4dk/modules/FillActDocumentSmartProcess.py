@@ -95,7 +95,7 @@ def fill_act_document_smart_process(req):
     update_fields['observers'] = company_info['ASSIGNED_BY_ID']
     update_fields['assignedById'] = '91'
     if element_info['ufCrm41_1690283806']:
-        user_b24 = b.get_all('user.get', {
+        user_b24 = send_bitrix_request('user.get', {
             'filter': {
                 'UF_USR_1690373869887': element_info['ufCrm41_1690283806']
             }

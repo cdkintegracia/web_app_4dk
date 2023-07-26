@@ -94,7 +94,7 @@ def fill_act_document_smart_process(req):
     update_fields['observers'] = company_info['ASSIGNED_BY_ID']
     update_fields['assignedById'] = '173'
     if element_info['ufCrm41_1690283806']:
-        sou_guid = element_info['ufCrm41_1690283806'].split()
+        sou_guid = element_info['ufCrm41_1690283806']
         if sou_guid in guids:
             update_fields['assignedById'] = guids[sou_guid]
     send_bitrix_request('crm.item.update', {

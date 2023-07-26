@@ -13,7 +13,7 @@ documents_delivery = {
         '': '',
         None: '',
     }
-
+'''
 guids = {
     '14b2e004-bb25-11e8-80c1-0050569065b7': '227',
     '4dbac4d4-cd86-11e9-80c7-ac1f6b6226d7': '241',
@@ -76,7 +76,7 @@ guids = {
     '4bc8c99a-5104-4056-a8ef-8d8a0e041c57': '153',
     '1999f7de-c943-11e6-8a6d-aa3d71163f04': '135',
 }
-
+'''
 
 def fill_act_document_smart_process(req):
     element_info = send_bitrix_request('crm.item.get', {
@@ -89,39 +89,21 @@ def fill_act_document_smart_process(req):
             'UF_CRM_1656070716': element_info['ufCrm41_1689103279']
         }
     })[0]
-    update_fields = {}
+    update_fields = dict()
     update_fields['companyId'] = company_info['ID']
     update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info['UF_CRM_1638093692254']]
     update_fields['observers'] = company_info['ASSIGNED_BY_ID']
     update_fields['assignedById'] = '173'
     if element_info['ufCrm41_1690283806']:
-        sou_guid = element_info['ufCrm41_1690283806']
-        if sou_guid in guids:
-            update_fields['assignedById'] = guids[sou_guid]
+        user_b24 = b.get_all('user.get', {
+            'filter': {
+                'UF_USR_1690373869887': element_info['ufCrm41_1690283806']
+            }
+        })
+        if user_b24:
+            update_fields['assignedById'] = user_b24[0]['ID']
     send_bitrix_request('crm.item.update', {
         'entityTypeId': '161',
         'id': req['element_id'],
         'fields': update_fields
     })
-
-
-'''
-guids = {}
-workbook = openpyxl.load_workbook('guids.xlsx')
-worksheet = workbook.active
-max_rows = worksheet.max_row
-for row in range(2, max_rows + 1):
-    cell_value_name = worksheet.cell(row=row, column=2).value
-    cell_value_guid = worksheet.cell(row=row, column=3).value
-    guids[cell_value_guid.split('.')[0]] = cell_value_name
-
-users = b.get_all('user.get')
-for guid in guids:
-    fio = guids[guid].split()
-    user_info = list(filter(lambda x: x['NAME'] == fio[1] and x['LAST_NAME'] == fio[0], users))
-    if user_info:
-        guids[guid] = user_info[0]['ID']
-
-print(guids)
-'''
-

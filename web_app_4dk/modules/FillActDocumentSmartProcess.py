@@ -93,7 +93,7 @@ def fill_act_document_smart_process(req):
     update_fields['companyId'] = company_info['ID']
     update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info['UF_CRM_1638093692254']]
     update_fields['observers'] = company_info['ASSIGNED_BY_ID']
-    update_fields['assignedById'] = '173'
+    update_fields['assignedById'] = '91'
     if element_info['ufCrm41_1690283806']:
         user_b24 = b.get_all('user.get', {
             'filter': {

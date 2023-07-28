@@ -15,40 +15,48 @@ documents_delivery = {
 
 
 def fill_act_document_smart_process(req):
-    company_info = send_bitrix_request('crm.company.list', {
-        'select': ['*', 'UF_*'],
+    elements = b.get_all('crm.item.list', {
+        'entityTypeId': '161',
         'filter': {
-            'UF_CRM_1656070716': req['inn']
+            'companyId': [None, 'None', '']
         }
     })
-    update_fields = dict()
-    if company_info:
-        update_fields['companyId'] = company_info[0]['ID']
-        update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info[0]['UF_CRM_1638093692254']]
-        update_fields['observers'] = company_info[0]['ASSIGNED_BY_ID']
-    if req['guid']:
-        user_b24 = send_bitrix_request('user.get', {
+
+    for element in elements:
+        #print(element)
+        company_info = send_bitrix_request('crm.company.list', {
+            'select': ['*', 'UF_*'],
             'filter': {
-                'UF_USR_1690373869887': req['guid']
+                'UF_CRM_1656070716': element['ufCrm41_1689103279']
             }
         })
-        if user_b24:
-            update_fields['assignedById'] = user_b24[0]['ID']
-    else:
-        update_fields['assignedById'] = '91'
-    send_bitrix_request('crm.item.update', {
-        'entityTypeId': '161',
-        'id': req['element_id'],
-        'fields': update_fields
-    })
+        update_fields = dict()
+        if company_info:
+            update_fields['companyId'] = company_info[0]['ID']
+            update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info[0]['UF_CRM_1638093692254']]
+            update_fields['observers'] = company_info[0]['ASSIGNED_BY_ID']
+        if element['ufCrm41_1690283806']:
+            user_b24 = send_bitrix_request('user.get', {
+                'filter': {
+                    'UF_USR_1690373869887': element['ufCrm41_1690283806']
+                }
+            })
+            if user_b24:
+                update_fields['assignedById'] = user_b24[0]['ID']
+            else:
+                update_fields['assignedById'] = '91'
+        else:
+            update_fields['assignedById'] = '91'
+        send_bitrix_request('crm.item.update', {
+            'entityTypeId': '161',
+            'id': element['id'],
+            'fields': update_fields
+        })
+
+    send_bitrix_request('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'"Элементы РТиУ заполнены'})
 
 
-elements = b.get_all('crm.item.list', {
-    'entityTypeId': '161',
-})
-
-'''
-for index, element in enumerate(elements, 1):
-    print(index, len(elements))
-    fill_act_document_smart_process({'element_id': element['id'], 'inn': element['ufCrm41_1689103279'], 'guid': element['ufCrm41_1690283806']})
-'''
+if __name__ == '__main__':
+    fill_act_document_smart_process({'user_id': 'user_311'})

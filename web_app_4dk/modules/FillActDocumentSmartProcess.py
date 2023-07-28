@@ -47,6 +47,8 @@ def fill_act_document_smart_process(req):
                 update_fields['assignedById'] = '91'
         else:
             update_fields['assignedById'] = '91'
+        if element['stageId'] == 'DT161_53:NEW' and not element['ufCrm41_1689101216']:
+            update_fields['stageId'] = 'DT161_53:SUCCESS'
         send_bitrix_request('crm.item.update', {
             'entityTypeId': '161',
             'id': element['id'],

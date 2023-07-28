@@ -55,6 +55,23 @@ def fill_act_document_smart_process(req):
             'fields': update_fields
         })
 
+        elements = b.get_all('crm.item.list', {
+            'entityTypeId': '161',
+            'filter': {
+                'stageId': 'DT161_53:NEW',
+                '!ufCrm41_1689101216': [None, 'None', '']
+            }
+        })
+
+        for element in elements:
+            send_bitrix_request('crm.item.update', {
+                'entityTypeId': '161',
+                'id': element['id'],
+                'fields': {
+                    'stageId': 'DT161_53:SUCCESS'
+                }
+            })
+
     send_bitrix_request('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'"Элементы РТиУ заполнены'})

@@ -21,9 +21,14 @@ def fill_act_document_smart_process(req):
             'companyId': [None, 'None', '']
         }
     })
+    if not elements:
+        send_bitrix_request('im.notify.system.add', {
+            'USER_ID': '311',
+            'MESSAGE': f'Было обновлено 0 элементов РТиУ'
+        })
+        return
     new_companies = list()
     for element in elements:
-        #print(element)
         company_info = send_bitrix_request('crm.company.list', {
             'select': ['*', 'UF_*'],
             'filter': {

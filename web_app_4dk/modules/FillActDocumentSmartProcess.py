@@ -51,9 +51,9 @@ def fill_act_document_smart_process(req):
         if update_fields['assignedById'] == '91':
             if element['ufCrm41_1690283806'] == '4f4d8faa-c928-11e6-8a6d-aa3d71163f04':
                 update_fields['assignedById'] = '169'
-            elif element['ufCrm41_1690283806'] == '4f4d8faa-c928-11e6-8a6d-aa3d71163f04':
+            elif element['ufCrm41_1690283806'] == 'e0677df2-dd6e-11e6-8e7c-0050569f0c3a':
                 update_fields['assignedById'] = '161'
-                
+
         if element['stageId'] == 'DT161_53:NEW' and element['ufCrm41_1689101216']:
             update_fields['stageId'] = 'DT161_53:SUCCESS'
         send_bitrix_request('crm.item.update', {

@@ -21,7 +21,7 @@ def fill_act_document_smart_process(req):
             'companyId': [None, 'None', '']
         }
     })
-
+    new_companies = ''
     for element in elements:
         #print(element)
         company_info = send_bitrix_request('crm.company.list', {
@@ -53,6 +53,30 @@ def fill_act_document_smart_process(req):
             'entityTypeId': '161',
             'id': element['id'],
             'fields': update_fields
+        })
+
+        if not company_info:
+            company = send_bitrix_request('crm.company.add', {
+                'fields': {
+                    'TITLE': element['ufCrm41_1689103279'],
+                    'ASSIGNED_BY_ID': update_fields['assignedById'],
+                    'UF_CRM_1656070716': element['ufCrm41_1689103279'],
+                    'COMPANY_TYPE': 'CUSTOMER'
+                }
+            })
+            new_companies += f"https://vc4dk.bitrix24.ru/crm/company/details/{company}/\n"
+
+    if new_companies:
+        send_bitrix_request('tasks.task.add', {
+            'fields': {
+                'TITLE': 'Новые компании РТиУ',
+                'DESCRIPTION': f'При выгрузке РТиУ для следующих компаний не найдено соответствий в Б24, поэтому компании были созданы в Б24:\n\n'
+                               f'{new_companies}',
+                'GROUP_ID': '13',
+                'RESPONSIBLE_ID': '311',
+                'CREATED_BY': '173'
+
+            }
         })
 
     elements = b.get_all('crm.item.list', {

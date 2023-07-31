@@ -54,7 +54,6 @@ def fill_act_document_smart_process(req):
         if element['ufCrm41_1690546413']:
             user_b24 = list(filter(lambda x: element['ufCrm41_1690283806'] == x['UF_USR_1690373869887'], users))
             if user_b24:
-                user_b24 = user_b24[0]
                 update_fields['assignedById'] = user_b24[0]['ID']
             else:
                 update_fields['assignedById'] = '91'

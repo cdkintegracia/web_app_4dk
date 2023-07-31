@@ -18,7 +18,11 @@ documents_delivery = {
 
 def fill_act_document_smart_process(req):
     bad_counter = 0
-    users = b.get_all('user.get')
+    users = b.get_all('user.get', {
+        'filter': {
+            '!UF_USR_1690373869887': None
+        }
+    })
     elements = b.get_all('crm.item.list', {
         'entityTypeId': '161',
         'filter': {
@@ -48,13 +52,6 @@ def fill_act_document_smart_process(req):
             update_fields['ufCrm41_1690546413'] = company_info[0]['TITLE']
         update_fields['ufCrm41_1690807843'] = int(element['ufCrm41_1689101306'].split('-')[-1])
         if element['ufCrm41_1690546413']:
-            '''
-            user_b24 = send_bitrix_request('user.get', {
-                'filter': {
-                    'UF_USR_1690373869887': element['ufCrm41_1690283806']
-                }
-            })
-            '''
             user_b24 = list(filter(lambda x: element['ufCrm41_1690283806'] == x['UF_USR_1690373869887'], users))
             if user_b24:
                 user_b24 = user_b24[0]

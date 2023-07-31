@@ -30,6 +30,10 @@ for element in elements:
         'fields': update_fields
     })
 '''
-users = b.get_all('user.get')
+users = b.get_all('user.get', {
+        'filter': {
+            '!UF_USR_1690373869887': None
+        }
+    })
 for user in users:
     print(user)

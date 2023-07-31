@@ -40,7 +40,8 @@ def fill_act_document_smart_process(req):
             update_fields['companyId'] = company_info[0]['ID']
             update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info[0]['UF_CRM_1638093692254']]
             update_fields['observers'] = company_info[0]['ASSIGNED_BY_ID']
-        if element['ufCrm41_1690283806']:
+            update_fields['ufCrm41_1690546413'] = company_info[0]['TITLE']
+        if element['ufCrm41_1690546413']:
             user_b24 = send_bitrix_request('user.get', {
                 'filter': {
                     'UF_USR_1690373869887': element['ufCrm41_1690283806']

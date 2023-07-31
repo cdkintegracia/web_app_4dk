@@ -1,3 +1,5 @@
+from time import sleep
+
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
@@ -15,6 +17,8 @@ documents_delivery = {
 
 
 def fill_act_document_smart_process(req):
+    bad_counter = 0
+    users = b.get_all('user.get')
     elements = b.get_all('crm.item.list', {
         'entityTypeId': '161',
         'filter': {
@@ -29,6 +33,7 @@ def fill_act_document_smart_process(req):
         return
     new_companies = list()
     for element in elements:
+        sleep(1)
         company_info = send_bitrix_request('crm.company.list', {
             'select': ['*', 'UF_*'],
             'filter': {
@@ -41,18 +46,25 @@ def fill_act_document_smart_process(req):
             update_fields['ufCrm41_1689862848017'] = documents_delivery[company_info[0]['UF_CRM_1638093692254']]
             update_fields['observers'] = company_info[0]['ASSIGNED_BY_ID']
             update_fields['ufCrm41_1690546413'] = company_info[0]['TITLE']
+        update_fields['ufCrm41_1690807843'] = int(element['ufCrm41_1689101306'].split('-')[-1])
         if element['ufCrm41_1690546413']:
+            '''
             user_b24 = send_bitrix_request('user.get', {
                 'filter': {
                     'UF_USR_1690373869887': element['ufCrm41_1690283806']
                 }
             })
+            '''
+            user_b24 = list(filter(lambda x: element['ufCrm41_1690283806'] == x['UF_USR_1690373869887'], users))
             if user_b24:
+                user_b24 = user_b24[0]
                 update_fields['assignedById'] = user_b24[0]['ID']
             else:
                 update_fields['assignedById'] = '91'
+                bad_counter += 1
         else:
             update_fields['assignedById'] = '91'
+            bad_counter += 1
 
         if update_fields['assignedById'] == '91':
             if element['ufCrm41_1690283806'] == '4f4d8faa-c928-11e6-8a6d-aa3d71163f04':
@@ -114,7 +126,8 @@ def fill_act_document_smart_process(req):
 
     send_bitrix_request('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'"Элементы РТиУ заполнены'})
+        'MESSAGE': f'"Элементы РТиУ заполнены\n'
+                   f'Плохих элементов {bad_counter}'})
 
 
 if __name__ == '__main__':

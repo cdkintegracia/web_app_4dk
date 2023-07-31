@@ -122,7 +122,7 @@ def fill_act_document_smart_process(req):
 
     send_bitrix_request('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'"Элементы РТиУ заполнены\n'
+        'MESSAGE': f'Элементы РТиУ заполнены\n'
                    f'Плохих элементов {bad_counter}'})
 
 

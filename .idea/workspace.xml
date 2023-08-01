@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="" />
+    <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/FillActDocumentSmartProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/FillActDocumentSmartProcess.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,7 +90,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.fdsf">
+  <component name="RunManager" selected="Python.FillActDocumentSmartProcess">
     <configuration name="аврпвп" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -217,17 +220,17 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
-      <item itemvalue="Python.fdsf" />
-      <item itemvalue="Python.аврпвп" />
-      <item itemvalue="Python.temp" />
       <item itemvalue="Python.ClearContactPhoneNumbers" />
       <item itemvalue="Python.FillActDocumentSmartProcess" />
+      <item itemvalue="Python.аврпвп" />
+      <item itemvalue="Python.fdsf" />
+      <item itemvalue="Python.temp" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.FillActDocumentSmartProcess" />
         <item itemvalue="Python.fdsf" />
         <item itemvalue="Python.аврпвп" />
-        <item itemvalue="Python.FillActDocumentSmartProcess" />
         <item itemvalue="Python.temp" />
         <item itemvalue="Python.ClearContactPhoneNumbers" />
       </list>

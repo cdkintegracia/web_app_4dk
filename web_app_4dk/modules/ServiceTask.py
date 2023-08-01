@@ -553,6 +553,8 @@ def create_service_tasks(dct):
                               )
 
                 # Создание пунктов чек-листа для созданной задачи на сотрудника
+                print(company)
+                print(value)
                 b.call('task.checklistitem.add', {
                     'taskId': main_task,
                     'FIELDS': {

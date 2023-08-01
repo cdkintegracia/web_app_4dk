@@ -23,15 +23,15 @@ def fill_act_document_smart_process(req):
             '!UF_USR_1690373869887': None
         }
     })
-    filters = [
-        {'companyId': [None, 'None', '']},
-        {'assignedById': ['91']}
-    ]
-    for element_filter in filters:
+    filters = {
+        1: {'companyId': [None, 'None', '']},
+        2: {'assignedById': ['91']}
+    }
+    for key in filters:
         elements = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'filter': {
-                element_filter
+                filters[key]
             }
         })
         if not elements:

@@ -54,15 +54,13 @@ def fill_act_document_smart_process(req):
                 update_fields['observers'] = company_info[0]['ASSIGNED_BY_ID']
                 update_fields['ufCrm41_1690546413'] = company_info[0]['TITLE']
             update_fields['ufCrm41_1690807843'] = int(element['ufCrm41_1689101306'].split('-')[-1])
+            update_fields['assignedById'] = '91'
             if element['ufCrm41_1690546413']:
                 user_b24 = list(filter(lambda x: element['ufCrm41_1690283806'] == x['UF_USR_1690373869887'], users))
                 if user_b24:
                     update_fields['assignedById'] = user_b24[0]['ID']
-                else:
-                    update_fields['assignedById'] = '91'
-                    bad_counter += 1
-            else:
-                update_fields['assignedById'] = '91'
+
+            if element_filter == {'assignedById': ['91']} and update_fields['assignedById'] == '91':
                 bad_counter += 1
 
             if update_fields['assignedById'] == '91':

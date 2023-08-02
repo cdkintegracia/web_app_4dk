@@ -33,7 +33,7 @@ def create_info_smart_process_report(req):
     ]
     for company in companies:
         company_data = list()
-        company_data.append(list(filter(lambda x: x['ID'] == company['ID'], companies)))[0]['TITLE']
+        company_data.append(list(filter(lambda x: str(x['ID']) == str(company['ID']), companies))[0]['TITLE'])
 
         user = list(filter(lambda x: str(company['ASSIGNED_BY_ID']) == str(x['ID']), users))
         if user:
@@ -73,3 +73,5 @@ def create_info_smart_process_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по инфо сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
+
+create_info_smart_process_report({})

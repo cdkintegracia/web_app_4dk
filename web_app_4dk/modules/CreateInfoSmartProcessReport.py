@@ -71,5 +71,5 @@ def create_info_smart_process_report(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по инфо {req["group_name"]} сформирован. {upload_report["DETAIL_URL"]}'})
+        'MESSAGE': f'Отчет по инфо сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)

@@ -73,5 +73,3 @@ def create_info_smart_process_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по инфо сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
-
-create_info_smart_process_report({})

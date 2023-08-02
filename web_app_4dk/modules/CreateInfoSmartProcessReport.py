@@ -33,7 +33,7 @@ def create_info_smart_process_report(req):
     ]
     for company in companies:
         company_data = list()
-        company_data.append(company['ID'])
+        company_data.append(list(filter(lambda x: x['ID'] == company['ID'], companies)))[0]['TITLE']
 
         user = list(filter(lambda x: str(company['ASSIGNED_BY_ID']) == str(x['ID']), users))
         if user:

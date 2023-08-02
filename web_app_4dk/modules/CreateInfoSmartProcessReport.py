@@ -43,7 +43,7 @@ def create_info_smart_process_report(req):
         if info:
             company_data.append('Да')
             company_data.append(' '.join(list(map(lambda x: x.replace('\n', ' '), info[0]['ufCrm25_1666342439']))))
-            company_data.append(info[0]['ufCrm25_1689337909'])
+            company_data.append(list(filter(lambda x: str(x['ID']) == str(info[0]['ufCrm25_1689337909']), fields['fields']['ufCrm25_1689337909']['items']))[0]['VALUE'] if info[0]['ufCrm25_1689337909'] else '')
             company_data.append(info[0]['ufCrm25_1689337900'])
             company_data.append(list(filter(lambda x: str(x['ID']) == str(info[0]['ufCrm25_1689337857']), fields['fields']['ufCrm25_1689337857']['items']))[0]['VALUE'] if info[0]['ufCrm25_1689337857'] else '')
             company_data.append(info[0]['ufCrm25_1689337847'])

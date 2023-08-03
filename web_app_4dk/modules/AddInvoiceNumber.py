@@ -15,6 +15,10 @@ def add_invoice_number(req):
         }
     })
     document_number = documents['documents'][-1]['number']
+    invoice_info = b.get_all('crm.item.get', {
+        'entityTypeId': '31',
+        'id': req['id'],
+    })
     b.call('crm.item.update', {
         'entityTypeId': '31',
         'id': req['id'],

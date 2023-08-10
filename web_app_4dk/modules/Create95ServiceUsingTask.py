@@ -7,4 +7,10 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_95_service_using_task(req):
-    print(req)
+    task_title = f"Для {req['company_name']} использование сервиса {req['service_name']} достигло 95% лимита"
+    tasks = b.get_all('tasks.task.list', {
+        'filter': {
+            'TITLE': task_title
+        }
+    })
+    print(tasks[0])

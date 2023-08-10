@@ -16,8 +16,8 @@ def create_95_service_using_task(req):
     tasks = send_bitrix_request('tasks.task.list', {
         'filter': {
             'TITLE': task_title,
-            '>CREATED_DATE': filter_date_start,
-            '<CREATED_DATE': filter_date_end
+            '>CREATED_DATE': filter_date_start.strftime('%Y-%m-%d'),
+            '<CREATED_DATE': filter_date_end.strftime('%Y-%m-%d')
         }
     })
     if not tasks:

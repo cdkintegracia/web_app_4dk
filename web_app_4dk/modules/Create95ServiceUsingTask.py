@@ -7,9 +7,4 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_95_service_using_task(req):
-    text = ''
-    for key, value in req.items():
-        text += key, '', value, '\n'
-    b.call('im.notify.system.add', {
-        'USER_ID': '311',
-        'MESSAGE': text})
+    print(req)

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from time import time, sleep
+from random import randint
 
 from web_app_4dk.tools import send_bitrix_request
 
@@ -39,6 +40,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
 
 
 def task_registry(task_info, event):
+    sleep(randint(1, 30))
     task_status = {
         "2": 343,
         "-1": 345,

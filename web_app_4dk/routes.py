@@ -66,6 +66,7 @@ from web_app_4dk.modules.FillActDocumentSmartProcess import fill_act_document_sm
 from web_app_4dk.modules.CreatePaidTask import create_paid_task
 from web_app_4dk.modules.CreateInfoSmartProcessReport import create_info_smart_process_report
 from web_app_4dk.modules.Create95ServiceUsingTask import create_95_service_using_task
+from web_app_4dk.modules.ChangeMainContactCompany import change_main_contact_company
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -114,7 +115,8 @@ custom_webhooks = {
     'fill_act_document_smart_process': fill_act_document_smart_process,
     'create_paid_task': create_paid_task,
     'create_info_smart_process_report': create_info_smart_process_report,
-    'create_95_service_using_task': create_95_service_using_task
+    'create_95_service_using_task': create_95_service_using_task,
+    'change_main_contact_company': change_main_contact_company
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

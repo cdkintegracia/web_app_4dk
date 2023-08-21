@@ -17,3 +17,4 @@ def change_main_contact_company(req):
             'COMPANY_IDS': companies
         }
     })
+

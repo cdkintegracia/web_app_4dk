@@ -33,7 +33,7 @@ def auto_failure(req):
     companies = b.get_all('crm.company.list', {'filter': {'ID': list(map(lambda x: x['COMPANY_ID'], deals))}})
 
     for deal in deals:
-        b.call('bizproc.workflow.start', {'TEMPLATE_ID': '759', 'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + deal['ID']]})
+        #b.call('bizproc.workflow.start', {'TEMPLATE_ID': '759', 'DOCUMENT_ID': ['crm', 'CCrmDocumentDeal', 'DEAL_' + deal['ID']]})
         company = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))
         if company:
             logs += f'{deal["ID"]} {deal["TITLE"]} {company[0]["TITLE"]}\n'
@@ -41,5 +41,6 @@ def auto_failure(req):
             logs += f'{deal["ID"]} {deal["TITLE"]}\n'
 
     b.call('im.notify.system.add', {
-        'USER_ID': req['user_id'][5:],
+        #'USER_ID': req['user_id'][5:],
+        'USER_ID': '1',
         'MESSAGE': logs})

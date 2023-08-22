@@ -41,6 +41,5 @@ def auto_failure(req):
             logs += f'{deal["ID"]} {deal["TITLE"]}\n'
 
     b.call('im.notify.system.add', {
-        #'USER_ID': req['user_id'][5:],
-        'USER_ID': '1',
+        'USER_ID': req['user_id'][5:],
         'MESSAGE': logs})

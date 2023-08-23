@@ -81,7 +81,7 @@ def task_registry(task_info, event):
                 "PROPERTY_511": task_info["responsibleId"],
                 "PROPERTY_515": tags,
                 "PROPERTY_513": task_info["durationFact"],
-                "PROPERTY_1745": f'https://vc4dk.bitrix24.ru/company/personal/user/1/tasks/task/view/{task_info["id"]}/'
+                "PROPERTY_1747": f'https://vc4dk.bitrix24.ru/company/personal/user/1/tasks/task/view/{task_info["id"]}/'
             }})
     elif event == 'ONTASKADD':
         sleep(60)
@@ -125,7 +125,7 @@ def task_registry(task_info, event):
                 "PROPERTY_511": task_info["responsibleId"],
                 "PROPERTY_515": tags,
                 "PROPERTY_513": task_info["durationFact"],
-                "PROPERTY_1745": f'https://vc4dk.bitrix24.ru/company/personal/user/1/tasks/task/view/{task_info["id"]}/'
+                "PROPERTY_1747": f'https://vc4dk.bitrix24.ru/company/personal/user/1/tasks/task/view/{task_info["id"]}/'
             }})
 
 

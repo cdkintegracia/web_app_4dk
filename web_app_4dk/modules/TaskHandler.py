@@ -51,11 +51,26 @@ def task_registry(task_info, event):
         "6": 355,
     }
 
-    task_url = ''
     if task_info['groupId']:
         task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{task_info["groupId"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
     else:
         task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{task_info["createdBy"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+
+    company_id = ''
+    contact_id = ''
+    if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
+        ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
+        if ufCrmCompany:
+            company_id = ufCrmCompany[0]
+        ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+        if ufCrmContact:
+            contact_id = ufCrmContact[0]
+
+    groups = send_bitrix_request('sonet_group.get', {})
+    try:
+        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
+    except:
+        group_name = ''
 
     tags = send_bitrix_request('task.item.gettags', {'taskId': '187531'})
     if tags:
@@ -79,9 +94,9 @@ def task_registry(task_info, event):
                 "NAME": task_info["title"],
                 "PROPERTY_517": task_info['id'],
                 "PROPERTY_495": task_status[task_info['status']],
-                "PROPERTY_499": registry_element['PROPERTY_499'] if 'PROPERTY_499' in registry_element else '',
-                "PROPERTY_501": registry_element['PROPERTY_501'] if 'PROPERTY_501' in registry_element else '',
-                "PROPERTY_537": registry_element['PROPERTY_537'] if 'PROPERTY_537' in registry_element else '',
+                "PROPERTY_499": company_id,
+                "PROPERTY_501": contact_id,
+                "PROPERTY_537": group_name,
                 "PROPERTY_505": task_info["createdDate"],
                 "PROPERTY_507": task_info["closedDate"],
                 "PROPERTY_509": task_info["createdBy"],
@@ -101,20 +116,7 @@ def task_registry(task_info, event):
         })
         if registry_element:
             return
-        groups = send_bitrix_request('sonet_group.get', {})
-        try:
-            group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
-        except:
-            group_name = ''
-        company_id = ''
-        contact_id = ''
-        if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
-            ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
-            if ufCrmCompany:
-                company_id = ufCrmCompany[0]
-            ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-            if ufCrmContact:
-                contact_id = ufCrmContact[0]
+
         send_bitrix_request('lists.element.add', {
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "107",

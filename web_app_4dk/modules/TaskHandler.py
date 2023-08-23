@@ -50,6 +50,13 @@ def task_registry(task_info, event):
         "5": 353,
         "6": 355,
     }
+
+    task_url = ''
+    if task_info['groupId']:
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{task_info["groupId"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+    else:
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{task_info["createdBy"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+
     tags = send_bitrix_request('task.item.gettags', {'taskId': '187531'})
     if tags:
         tags = ', '.join(tags)
@@ -81,7 +88,7 @@ def task_registry(task_info, event):
                 "PROPERTY_511": task_info["responsibleId"],
                 "PROPERTY_515": tags,
                 "PROPERTY_513": task_info["durationFact"],
-                "PROPERTY_1747": f'https://vc4dk.bitrix24.ru/company/personal/user/1/tasks/task/view/{task_info["id"]}/'
+                "PROPERTY_1747": task_url
             }})
     elif event == 'ONTASKADD':
         sleep(60)
@@ -125,7 +132,7 @@ def task_registry(task_info, event):
                 "PROPERTY_511": task_info["responsibleId"],
                 "PROPERTY_515": tags,
                 "PROPERTY_513": task_info["durationFact"],
-                "PROPERTY_1747": f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/1/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+                "PROPERTY_1747": task_url
 
             }})
 

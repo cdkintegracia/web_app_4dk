@@ -24,7 +24,6 @@ def fill_act_document_smart_process(req):
         }
     })
     filters = [
-        {'companyId': [None, 'None', '']},
         {'assignedById': ['91']}
     ]
     for element_filter in filters:

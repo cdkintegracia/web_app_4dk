@@ -54,7 +54,7 @@ def task_registry(task_info, event):
     if task_info['groupId']:
         task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{task_info["groupId"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
     else:
-        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{task_info["createdBy"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{task_info["responsibleId"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
 
     company_id = ''
     contact_id = ''

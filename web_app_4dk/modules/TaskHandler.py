@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from time import time, sleep
 from random import randint
+import json
 
 from web_app_4dk.tools import send_bitrix_request
 
@@ -117,7 +118,7 @@ def task_registry(task_info, event):
         if registry_element:
             return
 
-        send_bitrix_request('lists.element.add', {
+        new_element = send_bitrix_request('lists.element.add', {
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "107",
             "ELEMENT_CODE": task_info['id'],
@@ -137,7 +138,8 @@ def task_registry(task_info, event):
                 "PROPERTY_1747": task_url
 
             }})
-
+        with open('task_logs.json', 'w') as file:
+            data = json.dumps(new_element, indent=3, file=file)
 
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']

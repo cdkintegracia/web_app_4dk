@@ -139,7 +139,8 @@ def task_registry(task_info, event):
 
             }})
         with open('task_logs.json', 'w') as file:
-            data = json.dumps(new_element, indent=3, file=file)
+            data = json.dumps(new_element, indent=3)
+            file.write(data)
 
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']

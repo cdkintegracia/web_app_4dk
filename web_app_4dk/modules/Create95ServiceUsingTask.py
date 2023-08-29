@@ -11,7 +11,6 @@ b = Bitrix(authentication('Bitrix'))
 
 def create_95_service_using_task(req):
     task_title = f"Для {req['company_name']} использование сервиса {req['service_name']} достигло 95% лимита"
-    print(task_title)
     filter_date_start = datetime.now() - timedelta(days=1)
     filter_date_end = datetime.now() + timedelta(days=1)
     tasks = send_bitrix_request('tasks.task.list', {
@@ -21,8 +20,7 @@ def create_95_service_using_task(req):
             '<CREATED_DATE': filter_date_end.strftime('%Y-%m-%d')
         }
     })
-    print(tasks)
-    if not tasks:
+    if not tasks['tasks']:
         send_bitrix_request('tasks.task.add', {
             'fields': {
                 'TITLE': task_title,

@@ -62,10 +62,10 @@ def task_registry(task_info, event):
     if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
         ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
         if ufCrmCompany:
-            company_id = ufCrmCompany[0]
+            company_id = ufCrmCompany[0][3:]
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if ufCrmContact:
-            contact_id = ufCrmContact[0]
+            contact_id = ufCrmContact[0][2:]
 
     groups = send_bitrix_request('sonet_group.get', {})
     try:

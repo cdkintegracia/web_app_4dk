@@ -75,7 +75,8 @@ def create_info_smart_process_report(req):
     })
     deals = b.get_all('crm.deal.list', {
         'filter': {
-            'CATEGORY_ID': '1'
+            'CATEGORY_ID': '1',
+            '!STAGE_ID': ['C1:WON', 'C1:LOSE']
         }
     })
     info_elements = b.get_all('crm.item.list', {

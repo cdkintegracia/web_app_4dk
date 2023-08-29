@@ -138,8 +138,7 @@ def task_registry(task_info, event):
                 "PROPERTY_1747": task_url
 
             }})
-        with open('/root/web_app_4dk/web_app_4dk/modules/task_logs.json', 'w') as file:
-            json.dump(new_element, file, indent=3)
+
 
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']

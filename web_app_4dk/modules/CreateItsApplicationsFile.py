@@ -22,6 +22,11 @@ def create_its_applications_file(req):
             'CATEGORY_ID': '1'
         }
     })
+    if not deals:
+        b.call('im.notify.system.add', {
+            'USER_ID': req['user_id'][5:],
+            'MESSAGE': f'Нет подходящих сделок для файла с заявками на подписки.'})
+
     companies = b.get_all('crm.company.list', {
         'select': ['*', 'UF_*', 'PHONE'],
         'filter': {

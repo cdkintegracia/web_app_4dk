@@ -25,7 +25,7 @@ def create_its_applications_file(req):
     if not deals:
         b.call('im.notify.system.add', {
             'USER_ID': req['user_id'][5:],
-            'MESSAGE': f'Нет подходящих сделок для файла с заявками на подписки.'})
+            'MESSAGE': f'Нет подходящих сделок для формирования файла с заявками на подписки.'})
         return
     companies = b.get_all('crm.company.list', {
         'select': ['*', 'UF_*', 'PHONE'],

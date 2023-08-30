@@ -87,7 +87,7 @@ def create_its_applications_file(req):
                                f"{contact_info['SECOND_NAME']}".replace('None', '').strip()
         else:
             responsible_name = 'Иванов Иван Иванович'
-            
+
         data_to_write.append([
             index,                              # № п/п
             '04382',                            # Код партнера

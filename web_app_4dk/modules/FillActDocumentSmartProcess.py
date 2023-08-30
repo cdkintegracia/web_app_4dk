@@ -120,7 +120,7 @@ def fill_act_document_smart_process(req):
                 'stageId': 'DT161_53:SUCCESS'
             }
         })
-
+    print(req)
     send_bitrix_request('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Элементы РТиУ заполнены\n'

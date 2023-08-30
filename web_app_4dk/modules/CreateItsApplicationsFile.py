@@ -113,13 +113,13 @@ def create_its_applications_file(req):
             payment_method,                     # Способ оплаты
         ])
 
-    workbook = openpyxl.load_workbook('Шаблон заявок ИТС.xlsx')
+    workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
     worklist = workbook.active
     for row, row_data in enumerate(data_to_write, 11):
         for col, cell_value in enumerate(row_data, 1):
             worklist.cell(row=row, column=col).value = cell_value
     filename = f'Заявки_на_подписки_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}'
-    workbook.save('test.xlsx')
+    workbook.save(filename)
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '568997'

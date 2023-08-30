@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from random import randint
+from time import sleep
 
 from fast_bitrix24 import Bitrix
 
@@ -10,6 +12,7 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_95_service_using_task(req):
+    sleep(randint(1, 30))
     task_title = f"Для {req['company_name']} использование сервиса {req['service_name']} достигло 95% лимита"
     filter_date_start = datetime.now() - timedelta(days=1)
     filter_date_end = datetime.now() + timedelta(days=1)

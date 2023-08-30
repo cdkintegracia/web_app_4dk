@@ -118,7 +118,7 @@ def create_its_applications_file(req):
     for row, row_data in enumerate(data_to_write, 11):
         for col, cell_value in enumerate(row_data, 1):
             worklist.cell(row=row, column=col).value = cell_value
-    filename = f'Заявки_на_подписки_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}'
+    filename = f'Заявки_на_подписки_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
     workbook.save(filename)
 
     # Загрузка отчета в Битрикс

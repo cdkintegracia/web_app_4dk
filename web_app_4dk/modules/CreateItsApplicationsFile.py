@@ -117,6 +117,12 @@ def create_its_applications_file(req):
             subscription_period,                # Количество выпусков
             payment_method,                     # Способ оплаты
         ])
+        b.call('crm.deal.update', {
+            'ID': deal['ID'],
+            'fields': {
+                'UF_CRM_1643800749': '373'
+            }
+        })
 
     workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
     worklist = workbook.active
@@ -140,4 +146,3 @@ def create_its_applications_file(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Файл с заявками на подписки сформирован. {upload_report["DETAIL_URL"]}'})
     os_remove(filename)
-

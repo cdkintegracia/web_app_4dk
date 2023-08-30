@@ -51,8 +51,9 @@ def create_its_applications_file(req):
         subscription_period = int(deal['UF_CRM_1638100416'])
         if code_1c in ['2001', '2004'] and 'UF_CRM_1637933869479' == '1':
             subscription_period = 12
-        payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'], deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']
-        company_requisite = send_bitrix_request('crm.requisite.list', {\
+        payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'],
+                                     deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']
+        company_requisite = send_bitrix_request('crm.requisite.list', {
             'select': ['*', 'UF_*'],
             'filter': {
                 'ENTITY_TYPE_ID': '4',
@@ -74,11 +75,11 @@ def create_its_applications_file(req):
             }
         })[0]
         company_city = address_info['CITY'] if address_info['CITY'] else 'Санкт-Петербург'
-        contacts = b.get_all('crm.company.contact.items.get', {
+        contacts = send_bitrix_request('crm.company.contact.items.get', {
             'id': company_info['ID']
         })
         if contacts:
-            contact_info = b.get_all('crm.contact.get', {
+            contact_info = send_bitrix_request('crm.contact.get', {
                 'ID': contacts[0]['CONTACT_ID']
             })
             responsible_name = f"{contact_info['LAST_NAME']} " \
@@ -86,6 +87,7 @@ def create_its_applications_file(req):
                                f"{contact_info['SECOND_NAME']}".replace('None', '').strip()
         else:
             responsible_name = 'Иванов Иван Иванович'
+            
         data_to_write.append([
             index,                              # № п/п
             '04382',                            # Код партнера

@@ -1,5 +1,7 @@
 import re
 from datetime import datetime
+import base64
+from os import remove as os_remove
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -11,9 +13,8 @@ from web_app_4dk.tools import send_bitrix_request
 b = Bitrix(authentication('Bitrix'))
 
 
-def create_its_applications_file():
-    workbook = openpyxl.load_workbook('Шаблон заявок ИТС.xlsx')
-    worklist = workbook.active
+def create_its_applications_file(req):
+    deal_fields = b.get_all('crm.deal.fields')
     deals = b.get_all('crm.deal.list', {
         'select': ['*', 'UF_*'],
         'filter': {
@@ -29,7 +30,6 @@ def create_its_applications_file():
     })
     data_to_write = []
     for index, deal in enumerate(deals, 1):
-        print(deal)
         deal_date_start = datetime.fromisoformat(deal['BEGINDATE']).strftime('%d.%m.%Y')
         product_row = send_bitrix_request('crm.deal.productrows.get', {
             'id': deal['ID'],
@@ -43,23 +43,32 @@ def create_its_applications_file():
             code_1c = product_info['PROPERTY_139']['value']
         except:
             continue
-        company_requisite = send_bitrix_request('crm.requisite.list', {
+        subscription_period = int(product_info['PROPERTY_1619']['value'])
+        if code_1c in ['2001', '2004'] and 'UF_CRM_1637933869479' == '1':
+            subscription_period = 12
+        payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'], deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']
+        company_requisite = send_bitrix_request('crm.requisite.list', {\
+            'select': ['*', 'UF_*'],
             'filter': {
                 'ENTITY_TYPE_ID': '4',
                 'ENTITY_ID': deal['COMPANY_ID']
             }
         })[0]
-        company_city = company_requisite['ADDRESS_CITY'] if 'ADDRESS_CITY' in company_requisite and company_requisite['ADDRESS_CITY'] else 'Санкт-Петербург'
         company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]
         company_name = re.match(r'.+ \d+', company_info['TITLE']).group()
         if 'PHONE' in company_info and company_info['PHONE']:
-            company_phone_code = company_info['PHONE'][0]['VALUE'][1:4]
-            company_phone = company_info['PHONE'][0]['VALUE'][4:]
+            company_phone_code = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[1:4]
+            company_phone = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[4:]
         else:
             company_phone_code = '812'
             company_phone = '334-44-74'
-        print(company_requisite)
-        print(company_info)
+        address_info = b.get_all('crm.address.list', {
+            'filter': {
+                'ENTITY_TYPE_ID': '4',
+                'ENTITY_ID': company_info['ID']
+            }
+        })[0]
+        company_city = address_info['CITY'] if address_info['CITY'] else 'Санкт-Петербург'
         contacts = b.get_all('crm.company.contact.items.get', {
             'id': company_info['ID']
         })
@@ -83,29 +92,47 @@ def create_its_applications_file():
             company_requisite['RQ_INN'],        # ИНН
             company_requisite['RQ_KPP'],        # КПП
             1,                                  # Количество рабочих мест
-            '',
-            '',
+            '',                                 # Тип основной деятельности
+            '',                                 # Директор
             responsible_name,                   # Ответственный
-            '',
-            company_city,                       # Город !!! ИСПРАВИТЬ
-            '',
-            '',
-            '',
-            '',
+            '',                                 # Почт. индекс
+            company_city,                       # Город
+            '',                                 # Улица
+            '',                                 # Дом
+            '',                                 # Корпус
+            '',                                 # Квартира
             company_phone_code,                 # Код
             company_phone,                      # Телефон
-            '',
-            '',
-            '0-новая',                          #
-            '',
-            '',
-            deal_date_start,                    # Дата начала
-
-
-
-
-
+            '',                                 # Факс
+            '',                                 # E-mail
+            '0 - новая',                        # Операция (новый 1С:ИТС / продление / отказ от действующего 1С:ИТС)
+            '',                                 # Дата Отказа мм.гг
+            '',                                 # Причина отказа от действующей регистрации 1С:ИТС (см. комментарий)
+            deal_date_start,                    # Дата начала мм.гг
+            subscription_period,                # Количество выпусков
+            payment_method,                     # Способ оплаты
         ])
-        print(data_to_write)
 
-create_its_applications_file()
+    workbook = openpyxl.load_workbook('Шаблон заявок ИТС.xlsx')
+    worklist = workbook.active
+    for row, row_data in enumerate(data_to_write, 11):
+        for col, cell_value in enumerate(row_data, 1):
+            worklist.cell(row=row, column=col).value = cell_value
+    filename = f'Заявки_на_подписки_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}'
+    workbook.save('test.xlsx')
+
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '568997'
+    with open(filename, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': filename},
+        'fileContent': report_file_base64
+    })
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Файл с заявками на подписки сформирован. {upload_report["DETAIL_URL"]}'})
+    os_remove(filename)
+

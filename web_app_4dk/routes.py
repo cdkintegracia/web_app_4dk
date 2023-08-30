@@ -68,6 +68,7 @@ from web_app_4dk.modules.CreateInfoSmartProcessReport import create_info_smart_p
 from web_app_4dk.modules.Create95ServiceUsingTask import create_95_service_using_task
 from web_app_4dk.modules.ChangeMainContactCompany import change_main_contact_company
 from web_app_4dk.modules.ClearTaskRegister import clear_task_registry
+from web_app_4dk.modules.CreateItsApplicationsFile import create_its_applications_file
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -118,7 +119,8 @@ custom_webhooks = {
     'create_info_smart_process_report': create_info_smart_process_report,
     'create_95_service_using_task': create_95_service_using_task,
     'change_main_contact_company': change_main_contact_company,
-    'clear_task_registry': clear_task_registry
+    'clear_task_registry': clear_task_registry,
+    'create_its_applications_file': create_its_applications_file
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

@@ -43,7 +43,7 @@ def create_its_applications_file(req):
             code_1c = product_info['PROPERTY_139']['value']
         except:
             continue
-        subscription_period = int(product_info['PROPERTY_1619']['value'])
+        subscription_period = int(deal['UF_CRM_1638100416'])
         if code_1c in ['2001', '2004'] and 'UF_CRM_1637933869479' == '1':
             subscription_period = 12
         payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'], deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']

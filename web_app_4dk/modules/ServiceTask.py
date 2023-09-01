@@ -2,6 +2,7 @@ from calendar import monthrange
 from datetime import datetime, timedelta
 import base64
 from os import remove as os_remove
+from time import sleep
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -517,6 +518,7 @@ def create_service_tasks(dct):
         employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
         employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
         for value in employees[employee]:
+            sleep(2)
             if employee in [None, 'None'] or not deals:
                 continue
 

@@ -125,6 +125,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CompleteDossierTask.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -415,6 +416,7 @@
       <workItem from="1683097356182" duration="9000" />
       <workItem from="1688324507251" duration="1950000" />
       <workItem from="1693360419037" duration="2003000" />
+      <workItem from="1693913475382" duration="687000" />
     </task>
     <servers />
   </component>

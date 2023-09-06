@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/ServiceTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/ServiceTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateItsApplicationsFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateItsApplicationsFile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +90,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CompleteDossierTask">
+  <component name="RunManager" selected="Python.CreateItsApplicationsFile">
     <configuration name="ыфв" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -232,8 +232,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.CompleteDossierTask" />
         <item itemvalue="Python.CreateItsApplicationsFile" />
+        <item itemvalue="Python.CompleteDossierTask" />
         <item itemvalue="Python.fdf" />
         <item itemvalue="Python.gfdg" />
         <item itemvalue="Python.ыфв" />

@@ -49,7 +49,7 @@ def create_its_applications_file(req):
         except:
             continue
         subscription_period = int(deal['UF_CRM_1638100416'])
-        if code_1c in ['2001', '2004'] and 'UF_CRM_1637933869479' == '1':
+        if code_1c in ['2001', '2004'] and deal['UF_CRM_1637933869479'] == '1':
             subscription_period = 12
         payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'],
                                      deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']
@@ -68,13 +68,17 @@ def create_its_applications_file(req):
         else:
             company_phone_code = '812'
             company_phone = '334-44-74'
-        address_info = b.get_all('crm.address.list', {
-            'filter': {
-                'ENTITY_TYPE_ID': '4',
-                'ENTITY_ID': company_info['ID']
-            }
-        })[0]
-        company_city = address_info['CITY'] if address_info['CITY'] else 'Санкт-Петербург'
+        try:
+            address_info = b.get_all('crm.address.list', {
+                'filter': {
+                    'ENTITY_TYPE_ID': '4',
+                    'ENTITY_ID': company_info['ID']
+                }
+            })[0]
+            company_city = address_info['CITY'] if address_info['CITY'] else 'Санкт-Петербург'
+        except:
+            company_city = 'Санкт-Петербург'
+            
         contacts = send_bitrix_request('crm.company.contact.items.get', {
             'id': company_info['ID']
         })
@@ -119,14 +123,18 @@ def create_its_applications_file(req):
             subscription_period,                # Количество выпусков
             payment_method,                     # Способ оплаты
         ])
+        '''
         b.call('crm.deal.update', {
             'ID': deal['ID'],
             'fields': {
                 'UF_CRM_1643800749': '373'
             }
         })
-
-    workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
+        '''
+    try:
+        workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
+    except FileNotFoundError:
+        workbook = openpyxl.load_workbook('Шаблон заявок ИТС.xlsx')
     worklist = workbook.active
     for row, row_data in enumerate(data_to_write, 11):
         for col, cell_value in enumerate(row_data, 1):
@@ -148,3 +156,7 @@ def create_its_applications_file(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Файл с заявками на подписки сформирован. {upload_report["DETAIL_URL"]}'})
     os_remove(filename)
+
+
+if __name__ == '__main__':
+    create_its_applications_file({'user_id': 'user_311'})

@@ -123,14 +123,12 @@ def create_its_applications_file(req):
             subscription_period,                # Количество выпусков
             payment_method,                     # Способ оплаты
         ])
-        '''
         b.call('crm.deal.update', {
             'ID': deal['ID'],
             'fields': {
                 'UF_CRM_1643800749': '373'
             }
         })
-        '''
     try:
         workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
     except FileNotFoundError:

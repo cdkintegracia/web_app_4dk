@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 from os import remove as os_remove
 
@@ -14,13 +14,21 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_its_applications_file(req):
+    UF_CRM_1643800749 = {
+        'create': '371',
+        'reject': '477'
+    }
+    deal_filter = {
+        'UF_CRM_1643800749': UF_CRM_1643800749[req['process']],
+        'CATEGORY_ID': '1'
+    }
+    if req['process'] == 'reject':
+        deal_filter['UF_CRM_1637933869479'] = '0'
+
     deal_fields = b.get_all('crm.deal.fields')
     deals = b.get_all('crm.deal.list', {
         'select': ['*', 'UF_*'],
-        'filter': {
-            'UF_CRM_1643800749': '371',
-            'CATEGORY_ID': '1'
-        }
+        'filter': deal_filter
     })
     if not deals:
         b.call('im.notify.system.add', {
@@ -49,7 +57,9 @@ def create_its_applications_file(req):
         except:
             continue
         subscription_period = int(deal['UF_CRM_1638100416'])
-        if code_1c in ['2001', '2004'] and deal['UF_CRM_1637933869479'] == '1':
+        if req['process'] == 'reject':
+            subscription_period = 12
+        elif code_1c in ['2001', '2004'] and deal['UF_CRM_1637933869479'] == '1':
             subscription_period = 12
         payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'],
                                      deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']
@@ -92,6 +102,19 @@ def create_its_applications_file(req):
         else:
             responsible_name = 'Иванов Иван Иванович'
 
+        table_data = {
+            'create': {
+                'operation_24': '0 - новая',
+                'reject_date_25': '',
+                'reject_reason_26': '',
+            },
+            'reject': {
+                'operation_24': '1 - отказ',
+                'reject_date_25': (datetime.fromisoformat(deal['UF_CRM_1638958630625']) + timedelta(days=1)).strftime('%d.%m.%Y'),
+                'reject_reason_26': '1 - прерывание договора 1С:ИТС на некоторый период, например в связи с финансовыми причинами клиента;',
+            }
+        }
+
         data_to_write.append([
             index,                              # № п/п
             '04382',                            # Код партнера
@@ -116,19 +139,30 @@ def create_its_applications_file(req):
             company_phone,                      # Телефон
             '',                                 # Факс
             '',                                 # E-mail
-            '0 - новая',                        # Операция (новый 1С:ИТС / продление / отказ от действующего 1С:ИТС)
-            '',                                 # Дата Отказа мм.гг
-            '',                                 # Причина отказа от действующей регистрации 1С:ИТС (см. комментарий)
+            table_data[req['process']]['operation_24'],        # Операция (новый 1С:ИТС / продление / отказ от действующего 1С:ИТС)
+            table_data[req['process']]['reject_date_25'],      # Дата Отказа мм.гг
+            table_data[req['process']]['reject_reason_26'],    # Причина отказа от действующей регистрации 1С:ИТС (см. комментарий)
             deal_date_start,                    # Дата начала мм.гг
             subscription_period,                # Количество выпусков
             payment_method,                     # Способ оплаты
         ])
-        b.call('crm.deal.update', {
-            'ID': deal['ID'],
-            'fields': {
-                'UF_CRM_1643800749': '373'
-            }
-        })
+
+        if req['process'] == 'create':
+            b.call('crm.deal.update', {
+                'ID': deal['ID'],
+                'fields': {
+                    'UF_CRM_1643800749': '373'
+                }
+            })
+        elif req['process'] == 'reject':
+            b.call('crm.deal.update', {
+                'ID': deal['ID'],
+                'fields': {
+                    'UF_CRM_1643800749': '479',
+                    'CLOSEDATE': deal['UF_CRM_1638958630625'],
+                    'UF_CRM_1638958630625': '',
+                }
+            })
     try:
         workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
     except FileNotFoundError:
@@ -157,4 +191,4 @@ def create_its_applications_file(req):
 
 
 if __name__ == '__main__':
-    create_its_applications_file({'user_id': 'user_311'})
+    create_its_applications_file({'user_id': 'user_311', 'process': 'reject'})

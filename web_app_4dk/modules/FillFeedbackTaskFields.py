@@ -34,9 +34,9 @@ def update_feedback_list_element(task_id, rating, commentary):
             'NAME': task_id
         }
     })
-    if element:
+    if isinstance(element, list):
         element = element[0]
-    else:
+    if not element:
         return
     b.call('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
@@ -47,7 +47,6 @@ def update_feedback_list_element(task_id, rating, commentary):
             'PROPERTY_1741': commentary
         }
     })
-
 
 
 def fill_feedback_task_fields(req):

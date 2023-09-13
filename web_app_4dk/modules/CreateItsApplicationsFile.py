@@ -33,6 +33,7 @@ def create_its_applications_file(req):
         'select': ['*', 'UF_*'],
         'filter': deal_filter
     })
+    print(len(deals))
     if not deals:
         if req['process'] == 'create':
             b.call('im.notify.system.add', {

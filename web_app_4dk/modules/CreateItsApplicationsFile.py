@@ -115,7 +115,7 @@ def create_its_applications_file(req):
             },
             'reject': {
                 'operation_24': '1 - отказ',
-                'reject_date_25': (datetime.fromisoformat(deal['UF_CRM_1638958630625']) + timedelta(days=1)).strftime('%d.%m.%Y'),
+                'reject_date_25': (datetime.fromisoformat(deal['UF_CRM_1638958630625']) + timedelta(days=1)).strftime('%d.%m.%Y') if deal['UF_CRM_1638958630625'] else '',
                 'reject_reason_26': '1 - прерывание договора 1С:ИТС на некоторый период, например в связи с финансовыми причинами клиента;',
             }
         }

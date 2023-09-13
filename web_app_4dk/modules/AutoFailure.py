@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 
 from fast_bitrix24 import Bitrix
-import requests
 
 from web_app_4dk.modules.authentication import authentication
-from web_app_4dk.modules.web_app_ip import web_app_ip
+from web_app_4dk.modules.CreateItsApplicationsFile import create_its_applications_file
 
 
 b = Bitrix(authentication('Bitrix'))
@@ -46,4 +45,4 @@ def auto_failure(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': logs})
 
-    requests.get(f'{web_app_ip}/bitrix/custom_webhook?job=create_its_applications_file&user_id={req["user_id"]}&process=reject')
+    create_its_applications_file({'user_id': req["user_id"], 'process': 'reject'})

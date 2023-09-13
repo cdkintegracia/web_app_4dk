@@ -102,6 +102,7 @@ def create_its_applications_file(req):
         else:
             responsible_name = 'Иванов Иван Иванович'
         print('ДПО:', deal['UF_CRM_1638958630625'])
+        print(deal)
 
         table_data = {
             'create': {

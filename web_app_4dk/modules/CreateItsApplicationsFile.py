@@ -101,6 +101,7 @@ def create_its_applications_file(req):
                                f"{contact_info['SECOND_NAME']}".replace('None', '').strip()
         else:
             responsible_name = 'Иванов Иван Иванович'
+        print(deal['UF_CRM_1638958630625'])
 
         table_data = {
             'create': {

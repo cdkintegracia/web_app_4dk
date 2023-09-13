@@ -55,6 +55,7 @@ def create_its_applications_file(req):
         product_row = send_bitrix_request('crm.deal.productrows.get', {
             'id': deal['ID'],
         })
+        print(product_row)
         if not product_row:
             continue
         product_info = send_bitrix_request('crm.product.get.json', {
@@ -64,7 +65,6 @@ def create_its_applications_file(req):
             code_1c = product_info['PROPERTY_139']['value']
         except:
             continue
-        print(code_1c)
         subscription_period = int(deal['UF_CRM_1638100416'])
         if req['process'] == 'reject':
             subscription_period = 12

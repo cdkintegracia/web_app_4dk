@@ -31,9 +31,14 @@ def create_its_applications_file(req):
         'filter': deal_filter
     })
     if not deals:
-        b.call('im.notify.system.add', {
-            'USER_ID': req['user_id'][5:],
-            'MESSAGE': f'Нет подходящих сделок для формирования файла с заявками на подписки.'})
+        if req['process'] == 'create':
+            b.call('im.notify.system.add', {
+                'USER_ID': req['user_id'][5:],
+                'MESSAGE': f'Нет подходящих сделок для формирования файла с заявками на подписки.'})
+        elif req['process'] == 'reject':
+            b.call('im.notify.system.add', {
+                'USER_ID': req['user_id'][5:],
+                'MESSAGE': f'Нет подходящих сделок для формирования файла с отказами.'})
         return
     companies = b.get_all('crm.company.list', {
         'select': ['*', 'UF_*', 'PHONE'],
@@ -101,9 +106,6 @@ def create_its_applications_file(req):
                                f"{contact_info['SECOND_NAME']}".replace('None', '').strip()
         else:
             responsible_name = 'Иванов Иван Иванович'
-
-        print('ДПО:', deal['UF_CRM_1638958630625'])
-        print(deal['ID'])
 
         table_data = {
             'create': {

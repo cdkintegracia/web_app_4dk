@@ -14,9 +14,6 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_its_applications_file(req):
-    b.call('im.notify.system.add', {
-        'USER_ID': req['user_id'][5:],
-        'MESSAGE': req['process']})
     UF_CRM_1643800749 = {
         'create': '371',
         'reject': '477'
@@ -61,6 +58,7 @@ def create_its_applications_file(req):
             'id': product_row[0]['PRODUCT_ID']
         })
         print(product_info)
+        print(product_row[0]['PRODUCT_ID'])
         try:
             code_1c = product_info['PROPERTY_139']['value']
         except:

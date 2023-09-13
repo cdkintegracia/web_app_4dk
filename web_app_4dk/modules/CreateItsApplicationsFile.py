@@ -55,12 +55,12 @@ def create_its_applications_file(req):
         product_row = send_bitrix_request('crm.deal.productrows.get', {
             'id': deal['ID'],
         })
-        print(product_row)
         if not product_row:
             continue
         product_info = send_bitrix_request('crm.product.get.json', {
             'id': product_row[0]['PRODUCT_ID']
         })
+        print(product_info)
         try:
             code_1c = product_info['PROPERTY_139']['value']
         except:

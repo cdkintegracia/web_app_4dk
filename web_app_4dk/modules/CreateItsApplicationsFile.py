@@ -179,7 +179,11 @@ def create_its_applications_file(req):
     for row, row_data in enumerate(data_to_write, 11):
         for col, cell_value in enumerate(row_data, 1):
             worklist.cell(row=row, column=col).value = cell_value
-    filename = f'Заявки_на_подписки_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    filenames = {
+        'create': f'Заявки_на_подписки_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx',
+        'reject': f'Отказы_от_ИТС_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    }
+    filename = filenames[req['process']]
     workbook.save(filename)
 
     # Загрузка отчета в Битрикс

@@ -14,6 +14,9 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_its_applications_file(req):
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': req['process']})
     UF_CRM_1643800749 = {
         'create': '371',
         'reject': '477'

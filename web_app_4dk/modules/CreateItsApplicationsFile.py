@@ -33,7 +33,6 @@ def create_its_applications_file(req):
         'select': ['*', 'UF_*'],
         'filter': deal_filter
     })
-    print(len(deals))
     if not deals:
         if req['process'] == 'create':
             b.call('im.notify.system.add', {
@@ -65,6 +64,7 @@ def create_its_applications_file(req):
             code_1c = product_info['PROPERTY_139']['value']
         except:
             continue
+        print(code_1c)
         subscription_period = int(deal['UF_CRM_1638100416'])
         if req['process'] == 'reject':
             subscription_period = 12

@@ -16,6 +16,7 @@ def auto_failure(req):
     filter_date_end = datetime(day=1, month=filter_date.month + 2, year=filter_date.year) - timedelta(days=2)
     filter_date_end = datetime.strftime(filter_date_end, '%Y-%m-%d')
     filter_date_start = datetime.strftime(filter_date, '%Y-%m-%d')
+    print(filter_date_start)
     deal_types = [
         'UC_HT9G9H',  # ПРОФ Земля
         'UC_XIYCTV',  # ПРОФ Земля+Помощник

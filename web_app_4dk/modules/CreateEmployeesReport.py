@@ -108,7 +108,7 @@ def create_employees_report(req):
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
         try:
-            average_tasks_ratings = sum(tasks_ratings) / len(tasks_ratings)
+            average_tasks_ratings = round(sum(tasks_ratings) / len(tasks_ratings), 2)
         except ZeroDivisionError:
             average_tasks_ratings = '-'
 

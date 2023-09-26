@@ -95,7 +95,8 @@ def create_employees_report(req):
                 'RESPONSIBLE_ID': user_info['ID'],
                 '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
-            }
+            },
+            'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
 
         completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
@@ -103,6 +104,9 @@ def create_employees_report(req):
         completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
         completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
         non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
+        completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
+        tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, tasks))
+        tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
 
         worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
         worksheet.append(['Рабочих дней', f'100 из 100'])
@@ -111,6 +115,9 @@ def create_employees_report(req):
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
         worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
         worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
+        worksheet.append([])
+        worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
+        worksheet.append(['Средняя оценка', sum(tasks_ratings) / len(tasks_ratings)])
 
         change_sheet_style(worksheet)
 
@@ -134,6 +141,6 @@ def create_employees_report(req):
 
 '''
 create_employees_report({
-    'users': 'user_311',
+    'users': 'user_131',
 })
 '''

@@ -107,6 +107,10 @@ def create_employees_report(req):
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
+        try:
+            average_tasks_ratings = sum(tasks_ratings) / len(tasks_ratings)
+        except ZeroDivisionError:
+            average_tasks_ratings = '-'
 
         worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
         worksheet.append(['Рабочих дней', f'100 из 100'])
@@ -117,7 +121,7 @@ def create_employees_report(req):
         worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
         worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
-        worksheet.append(['Средняя оценка', sum(tasks_ratings) / len(tasks_ratings)])
+        worksheet.append(['Средняя оценка', average_tasks_ratings])
 
         change_sheet_style(worksheet)
 

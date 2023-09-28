@@ -141,7 +141,7 @@ def create_employees_report(req):
         non_quarter_documents_debts = len(documents_debts) - len(quarter_documents_debts)
 
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
-        worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts)])
+        worksheet.append(['Штук', len(quarter_documents_debts), non_quarter_documents_debts])
         worksheet.append([])
 
         # Задачи

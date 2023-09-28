@@ -124,7 +124,8 @@ def create_employees_report(req):
             'entityTypeId': '161',
             'filter': {
                 'assignedById': user_info['ID'],
-                'stageId': 'DT161_53:NEW'
+                'stageId': 'DT161_53:NEW',
+                '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
         })
 
@@ -137,8 +138,7 @@ def create_employees_report(req):
                                               quarter_filters['start_date'].timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
                                               < quarter_filters['end_date'].timestamp(), documents_debts))
-        quarter_documents_debts_id = list(map(lambda x: x['id'], quarter_documents_debts))
-        non_quarter_documents_debts = list(filter(lambda x: x['id'] not in quarter_documents_debts_id, documents_debts))
+        non_quarter_documents_debts = len(documents_debts) - len(quarter_documents_debts)
 
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts)])

@@ -76,6 +76,7 @@ def get_quarter_filter(month_number):
         'end_date': quarter_end_filter
     }
 
+
 def create_employees_report(req):
     users_id = get_employee_id(req['users'])
     users_info = b.get_all('user.get', {
@@ -84,6 +85,8 @@ def create_employees_report(req):
             'ID': users_id,
         }
     })
+
+    deal_fields = b.get_all('crm.deal.fields')
 
     report_year = datetime.now().year
     report_month = datetime.now().month - 1
@@ -111,15 +114,38 @@ def create_employees_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        tasks = b.get_all('tasks.task.list', {
+        worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
+        worksheet.append([])
+        worksheet.append([])
+
+        # Продажи
+        sales = b.get_all('crm.item.list', {
+            'entityTypeId': '133',
             'filter': {
-                'RESPONSIBLE_ID': user_info['ID'],
-                '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
-                '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
-            },
-            'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
+                'assignedById': user_info['ID'],
+                '>=ufCrm3_1654248264': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<ufCrm3_1654248264': month_filter_end.strftime(ddmmyyyy_pattern),
+            }
         })
 
+        sold_deals = b.get_all('crm.deal.list', {
+            'select': ['UF_CRM_1657878818384', 'OPPORTUNITY'],
+            'filter': {
+                'ID': list(map(lambda x: x['parentId2'], sales))
+            }
+        })
+
+        deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
+
+        worksheet.append(['Продажи', f'{month_names[report_month]} {report_year} шт.', f'{month_names[report_month]} {report_year} руб'])
+        for field_value in deal_group_field:
+            grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'], sold_deals))
+            worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), grouped_deals)))])
+        worksheet.append(['Всего', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
+        worksheet.append([])
+
+
+        # Долги по документам
         documents_debts = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'filter': {
@@ -128,12 +154,6 @@ def create_employees_report(req):
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
         })
-
-        worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
-        worksheet.append([])
-        worksheet.append([])
-
-        # Долги по документам
         quarter_documents_debts = list(filter(lambda x:
                                               quarter_filters['start_date'].timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
@@ -145,6 +165,14 @@ def create_employees_report(req):
         worksheet.append([])
 
         # Задачи
+        tasks = b.get_all('tasks.task.list', {
+            'filter': {
+                'RESPONSIBLE_ID': user_info['ID'],
+                '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+            },
+            'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
+        })
         completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
         service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
         completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
@@ -185,9 +213,9 @@ def create_employees_report(req):
         'MESSAGE': f'Отчет по активностям сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
 
-'''
+
 create_employees_report({
-    'users': 'group_dr1',
+    'users': 'group_dr27',
 })
-'''
+
 

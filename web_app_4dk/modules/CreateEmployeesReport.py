@@ -142,6 +142,7 @@ def create_employees_report(req):
 
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts)])
+        worksheet.append([])
 
         # Задачи
         completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))

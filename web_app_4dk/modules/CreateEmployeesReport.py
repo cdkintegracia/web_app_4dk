@@ -213,9 +213,9 @@ def create_employees_report(req):
         'MESSAGE': f'Отчет по активностям сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
 
-
+'''
 create_employees_report({
     'users': 'group_dr27',
 })
-
+'''
 

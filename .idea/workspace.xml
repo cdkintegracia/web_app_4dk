@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateEmployeeReport.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/ывыв.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web_app_4dk/modules/GetEmailsFromContactsAndCompanies.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateEmployeesReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateEmployeesReport.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +40,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2DA1z4GKj8h5obnsKsQCjQgb7ju" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -60,7 +63,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -91,7 +94,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CreateEmployeeReport">
+  <component name="RunManager" selected="Python.CreateEmployeesReport">
     <configuration name="123" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -134,7 +137,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="dadada" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="CreateEmployeesReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -146,7 +149,28 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/dadada.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateEmployeesReport.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GetEmailsFromContactsAndCompanies" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="flask" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\Максим\Documents\GitHub\web_app_4dk\web_app_4dk\modules\GetEmailsFromContactsAndCompanies.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -168,27 +192,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/fsdfa.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="fss" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="flask" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/fss.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -221,19 +224,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.GetEmailsFromContactsAndCompanies" />
+      <item itemvalue="Python.CreateEmployeesReport" />
       <item itemvalue="Python.CreateEmployeeReport" />
       <item itemvalue="Python.123" />
-      <item itemvalue="Python.dadada" />
       <item itemvalue="Python.fsdfa" />
-      <item itemvalue="Python.fss" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CreateEmployeesReport" />
+        <item itemvalue="Python.GetEmailsFromContactsAndCompanies" />
         <item itemvalue="Python.CreateEmployeeReport" />
         <item itemvalue="Python.123" />
         <item itemvalue="Python.fsdfa" />
-        <item itemvalue="Python.dadada" />
-        <item itemvalue="Python.fss" />
       </list>
     </recent_temporary>
   </component>
@@ -429,26 +432,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateServicesCoverageReport.coverage" NAME="CreateServicesCoverageReport Coverage Results" MODIFIED="1681381513644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$CheckoAPI.coverage" NAME="CreateRevenueListElements Coverage Results" MODIFIED="1679055014087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$ChangeTaskGroup.coverage" NAME="ChangeTaskGroup Coverage Results" MODIFIED="1681298762288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$TxtEmailsHandler.coverage" NAME="TxtEmailsHandler Coverage Results" MODIFIED="1680866344551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateRevenueListElements__1_.coverage" NAME="CreateRevenueListElements (1) Coverage Results" MODIFIED="1679656371478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$AddTableColumnDB.coverage" NAME="AddTableColumnDB Coverage Results" MODIFIED="1678718667408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$fdfsfsfsfsfsfsf.coverage" NAME="fdfsfsfsfsfsfsf Coverage Results" MODIFIED="1679061914439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateItsApplicationsFile.coverage" NAME="CreateItsApplicationsFile Coverage Results" MODIFIED="1693362432095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$AddProduct.coverage" NAME="AddProduct Coverage Results" MODIFIED="1679394840252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$fdsdfsfsfsf.coverage" NAME="fdsdfsfsfsf Coverage Results" MODIFIED="1680276231901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$dsd.coverage" NAME="dsd Coverage Results" MODIFIED="1680276023778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$UpdateRefusalDealElement.coverage" NAME="UpdateRefusalDealElement Coverage Results" MODIFIED="1682690935426" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateSaleReportingDeals__1_.coverage" NAME="CreateSaleReportingDeals (1) Coverage Results" MODIFIED="1680591909714" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$GetRegnumberElements.coverage" NAME="GetRegnumberElements Coverage Results" MODIFIED="1680175417595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$test.coverage" NAME="test Coverage Results" MODIFIED="1679993417531" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$df.coverage" NAME="df Coverage Results" MODIFIED="1679052050289" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$temp.coverage" NAME="temp Coverage Results" MODIFIED="1682697983652" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$CreateCompanyWithoutConnectReport.coverage" NAME="CreateCompanyWithoutConnectReport Coverage Results" MODIFIED="1683040461125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
-    <SUITE FILE_PATH="coverage/web_app_4dk$ServiceTask.coverage" NAME="ServiceTask Coverage Results" MODIFIED="1688326275132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

@@ -58,10 +58,31 @@ def change_sheet_style(sheet) -> None:
         sheet.column_dimensions[get_column_letter(column_cells[0].column)].width = length * 1.1
 
 
+def get_quarter_filter(month_number):
+    quarters = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+        [10, 11, 12]
+    ]
+    quarter = list(filter(lambda x: month_number in x, quarters))[0]
+    if month_number + 1 in quarter:
+        quarter.remove(month_number + 1)
+    quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
+    quarter_end_filter = datetime(day=1, month=quarter[-1] + 1, year=datetime.now().year)
+
+    return {
+        'start_date': quarter_start_filter,
+        'end_date': quarter_end_filter
+    }
+
 def create_employees_report(req):
     users_id = get_employee_id(req['users'])
     users_info = b.get_all('user.get', {
-        'ID': users_id
+        'filter': {
+            'ACTIVE': 'true',
+            'ID': users_id,
+        }
     })
 
     report_year = datetime.now().year
@@ -73,7 +94,7 @@ def create_employees_report(req):
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
-
+    quarter_filters = get_quarter_filter(datetime.now().month - 1)
 
     workbook = openpyxl.Workbook()
     report_name = f'Отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
@@ -99,22 +120,43 @@ def create_employees_report(req):
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
 
+        documents_debts = b.get_all('crm.item.list', {
+            'entityTypeId': '161',
+            'filter': {
+                'assignedById': user_info['ID'],
+                'stageId': 'DT161_53:NEW'
+            }
+        })
+
+        worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
+        worksheet.append([])
+        worksheet.append([])
+
+        # Долги по документам
+        quarter_documents_debts = list(filter(lambda x:
+                                              quarter_filters['start_date'].timestamp() <=
+                                              datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
+                                              < quarter_filters['end_date'].timestamp(), documents_debts))
+        quarter_documents_debts_id = list(map(lambda x: x['id'], quarter_documents_debts))
+        non_quarter_documents_debts = list(filter(lambda x: x['id'] not in quarter_documents_debts_id, documents_debts))
+
+        worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
+        worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts)])
+
+        # Задачи
         completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
         service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
         completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
         completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
         non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
-        tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, tasks))
+        tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
         try:
             average_tasks_ratings = round(sum(tasks_ratings) / len(tasks_ratings), 2)
         except ZeroDivisionError:
             average_tasks_ratings = '-'
 
-        worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
-        worksheet.append(['Рабочих дней', f'100 из 100'])
-        worksheet.append([])
         worksheet.append(['', 'Незакрытых (и созд. в этом мес)', 'Всего создано в месяце'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
         worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
@@ -142,9 +184,9 @@ def create_employees_report(req):
         'MESSAGE': f'Отчет по активностям сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
 
-
 '''
 create_employees_report({
-    'users': 'user_131',
+    'users': 'group_dr1',
 })
 '''
+

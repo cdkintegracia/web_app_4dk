@@ -162,8 +162,8 @@ def task_registry(task_info, event):
 
             }})
 
-        if task_info["responsibleId"] == '311':
-            bot_send_message({'dialog_id': '311',
+        if task_info["responsibleId"] == '157':
+            bot_send_message({'dialog_id': '157',
                               'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/311/tasks/task/view/{task_info['id']}/"})
 
 

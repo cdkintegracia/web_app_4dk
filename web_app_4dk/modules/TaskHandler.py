@@ -6,6 +6,29 @@ import json
 from web_app_4dk.tools import send_bitrix_request
 
 
+def send_notification(task_info, notification_type):
+    users_notification_list = ['339', '311']
+    if not task_info or not task_info['auditors']:
+        return
+    auditors = task_info['auditors']
+    task_id = task_info['id']
+    flag = False
+    for user in users_notification_list:
+        if user in auditors:
+            if notification_type == 'Создание':
+                send_bitrix_request('im.notify.system.add', {'USER_ID': user,
+                                                             'MESSAGE': f"Была создана новая задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
+                send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
+                                                             'MESSAGE': f"Была создана новая задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
+            elif notification_type == 'Завершение':
+                send_bitrix_request('im.notify.system.add', {'USER_ID': user,
+                                                             'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
+                send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
+                                                             'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
+                if not flag:
+                    send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
+                    flag = True
+
 def check_similar_tasks_this_hour(task_info, company_id):
     users_id = [task_info['createdBy'], '1']
     if task_info['groupId'] not in ['1', '7']:
@@ -138,6 +161,10 @@ def task_registry(task_info, event):
 
             }})
 
+        if task_info["responsibleId"] == '311':
+            send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
+                                                         'MESSAGE': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/311/tasks/task/view/{task_info['id']}/"})
+
 
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']
@@ -207,30 +234,6 @@ def fill_task_title(req, event):
                 'UF_CRM_TASK': uf_crm_task,
             }})
     return task_info
-
-
-def send_notification(task_info, notification_type):
-    users_notification_list = ['339', '311']
-    if not task_info or not task_info['auditors']:
-        return
-    auditors = task_info['auditors']
-    task_id = task_info['id']
-    flag = False
-    for user in users_notification_list:
-        if user in auditors:
-            if notification_type == 'Создание':
-                send_bitrix_request('im.notify.system.add', {'USER_ID': user,
-                                                             'MESSAGE': f"Была создана новая задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
-                send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
-                                                             'MESSAGE': f"Была создана новая задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
-            elif notification_type == 'Завершение':
-                send_bitrix_request('im.notify.system.add', {'USER_ID': user,
-                                                             'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
-                send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
-                                                             'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
-                if not flag:
-                    send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
-                    flag = True
 
 
 def task_handler(req, event=None):

@@ -67,7 +67,12 @@ def create_its_applications_file(req):
         elif code_1c in ['2001', '2004'] and deal['UF_CRM_1637933869479'] == '1':
             subscription_period = 12
         payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'],
-                                     deal_fields['UF_CRM_1642775558379']['items']))[0]['VALUE']
+                                     deal_fields['UF_CRM_1642775558379']['items']))
+        if payment_method:
+            payment_method = payment_method[0]['VALUE']
+        else:
+            payment_method = ''
+
         company_requisite = send_bitrix_request('crm.requisite.list', {
             'select': ['*', 'UF_*'],
             'filter': {

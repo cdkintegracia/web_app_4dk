@@ -4,6 +4,7 @@ from random import randint
 import json
 
 from web_app_4dk.tools import send_bitrix_request
+from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 
 def send_notification(task_info, notification_type):
@@ -162,8 +163,8 @@ def task_registry(task_info, event):
             }})
 
         if task_info["responsibleId"] == '311':
-            send_bitrix_request('im.notify.system.add', {'USER_ID': '311',
-                                                         'MESSAGE': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/311/tasks/task/view/{task_info['id']}/"})
+            bot_send_message({'dialog_id': '311',
+                              'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/311/tasks/task/view/{task_info['id']}/"})
 
 
 def fill_task_title(req, event):

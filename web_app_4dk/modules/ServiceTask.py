@@ -557,14 +557,13 @@ def create_service_tasks(dct):
                 sleep(1)
 
                 # Создание пунктов чек-листа для созданной задачи на сотрудника
-                b.call('task.checklistitem.add', {
+                send_bitrix_request('task.checklistitem.add', {
                     'taskId': main_task,
                     'FIELDS': {
                         'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/     \n\n "
                                  f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{sub_task['task']['id']}/",
                     }
                 }
-                       , raw=True
                        )
 
 

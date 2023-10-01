@@ -518,7 +518,7 @@ def create_service_tasks(dct):
         employees[employee] = list(map(lambda x: [x[0], x[1], x[2], x[3], list(filter(lambda y: y['ID'] == x[2], companies_name))[0]['TITLE']], employees[employee]))
         employees[employee] = list(sorted(employees[employee], key=lambda x: x[4]))
         for value in employees[employee]:
-            sleep(2)
+            sleep(1)
             if employee in [None, 'None'] or not deals:
                 continue
 
@@ -553,7 +553,6 @@ def create_service_tasks(dct):
                     }
                 }
                               )
-                print(sub_task)
                 sleep(1)
 
                 # Создание пунктов чек-листа для созданной задачи на сотрудника

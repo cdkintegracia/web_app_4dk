@@ -324,13 +324,13 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         ], raw=True
                )
         '''
-        sub_checklist = b.call('task.checklistitem.add', {
+        sub_checklist = send_bitrix_request('task.checklistitem.add', {
             'taskId': check_list_id,
             'FIELDS': {
                 'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/\n\n  "
                          f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{task_id}/",
             }
-        }, raw=True)
+        })
 
         # Создание подзадачи для основной задачи
         send_bitrix_request('tasks.task.add', {
@@ -501,7 +501,7 @@ def create_service_tasks(dct):
                         quarter_check_list_flag = True
 
             if quarter_check_list_flag is False and dct['quarter'] in ['Да', 'Только квартальные']:
-                quarter_check_list = b.call('task.checklistitem.add', [
+                quarter_check_list = send_bitrix_request('task.checklistitem.add', [
                     main_task, {
                         'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                     }

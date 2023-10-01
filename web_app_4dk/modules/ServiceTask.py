@@ -553,6 +553,7 @@ def create_service_tasks(dct):
                     }
                 }
                               )
+                print(sub_task)
                 sleep(1)
 
                 # Создание пунктов чек-листа для созданной задачи на сотрудника

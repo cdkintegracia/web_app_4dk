@@ -99,17 +99,17 @@ def task_registry(task_info, event):
 
     tags = send_bitrix_request('task.item.gettags', {'taskId': task_info['id']})
     if tags:
-        tags = ', '.join(tags)
+        tags = ', '.join(tags) #изначально теги в виде листа, а этой операцией мы переделываем в строку с сепаратором ,
     else:
         tags = ''
-    registry_element = send_bitrix_request('lists.element.get', {
+    registry_element = send_bitrix_request('lists.element.get', { #получаем элемент списка по ид задачи
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '107',
         'FILTER': {
             'PROPERTY_517': task_info['id'],
         }
     })
-    if registry_element:
+    if registry_element: # если нашли, то обновляем
         registry_element = registry_element[0]
         send_bitrix_request('lists.element.update', {
             "IBLOCK_TYPE_ID": "lists",
@@ -164,7 +164,7 @@ def task_registry(task_info, event):
 
         if task_info["responsibleId"] == '157':
             bot_send_message({'dialog_id': '157',
-                              'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/311/tasks/task/view/{task_info['id']}/"})
+                              'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/157/tasks/task/view/{task_info['id']}/"})
 
 
 def fill_task_title(req, event):

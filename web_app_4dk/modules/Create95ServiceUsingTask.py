@@ -35,6 +35,7 @@ def create_95_service_using_task(req):
                 '!ID': req['element_id']
             }
         })
+        print(active_service_elements)
         if not active_service_elements:
             send_bitrix_request('tasks.task.add', {
                 'fields': {

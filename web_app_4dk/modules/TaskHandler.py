@@ -67,7 +67,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
 def task_registry(task_info, event):
     sleep(randint(1, 30))
     task_status = {
-        "2": 343,
+        "2": 343, #поле в реестре задач Статусзадачи, у каждого знч поля есть свой id
         "-1": 345,
         "-3": 347,
         "3": 349,
@@ -91,9 +91,9 @@ def task_registry(task_info, event):
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]
 
-    groups = send_bitrix_request('sonet_group.get', {})
+    groups = send_bitrix_request('sonet_group.get', {})  #получили инфо по всем группам, что есть на портале
     try:
-        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME']
+        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME'] # ищем по id группу и берем ее название
     except:
         group_name = ''
 

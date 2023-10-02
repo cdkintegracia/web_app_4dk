@@ -97,7 +97,7 @@ def task_registry(task_info, event):
     except:
         group_name = ''
 
-    tags = send_bitrix_request('task.item.gettags', {'taskId': '187531'})
+    tags = send_bitrix_request('task.item.gettags', {'taskId': task_info['id']})
     if tags:
         tags = ', '.join(tags)
     else:

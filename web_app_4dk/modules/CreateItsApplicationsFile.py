@@ -81,7 +81,11 @@ def create_its_applications_file(req):
             }
         })[0]
         company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]
-        company_name = re.match(r'.+ \d+', company_info['TITLE']).group()
+        company_name = re.match(r'.+ \d+', company_info['TITLE'])
+        if company_name:
+            company_name = company_name.group()
+        else:
+            company_name = '000000000000'
         if 'PHONE' in company_info and company_info['PHONE']:
             company_phone_code = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[1:4]
             company_phone = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[4:]

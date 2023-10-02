@@ -501,7 +501,7 @@ def create_service_tasks(dct):
                         quarter_check_list_flag = True
 
             if quarter_check_list_flag is False and dct['quarter'] in ['Да', 'Только квартальные']:
-                quarter_check_list = send_bitrix_request('task.checklistitem.add', [
+                quarter_check_list = b.call('task.checklistitem.add', [
                     main_task, {
                         'TITLE': 'Квартальные', 'PARENT_ID': main_task,
                     }

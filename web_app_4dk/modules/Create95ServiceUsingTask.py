@@ -31,7 +31,8 @@ def create_95_service_using_task(req):
                 'NAME': req['service_name'],
                 'PROPERTY_1289': req['subscriber_code'],
                 'PROPERTY_1331': '2213',
-                'PROPERTY_1283': req['company_id']
+                'PROPERTY_1283': req['company_id'],
+                '!ID': req['element_id']
             }
         })
         if not active_service_elements:

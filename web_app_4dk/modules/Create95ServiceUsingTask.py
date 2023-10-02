@@ -24,11 +24,22 @@ def create_95_service_using_task(req):
         }
     })
     if not tasks['tasks']:
-        send_bitrix_request('tasks.task.add', {
-            'fields': {
-                'TITLE': task_title,
-                'CREATED_BY': '173',
-                'RESPONSIBLE_ID': '133',
-                'UF_CRM_TASK': ['CO_' + req['company_id']]
+        active_service_elements = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '169',
+            'filter': {
+                'NAME': req['service_name'],
+                'PROPERTY_1289': req['subscriber_code'],
+                'PROPERTY_1331': '2213',
+                'PROPERTY_1283': req['company_id']
             }
         })
+        if not active_service_elements:
+            send_bitrix_request('tasks.task.add', {
+                'fields': {
+                    'TITLE': task_title,
+                    'CREATED_BY': '173',
+                    'RESPONSIBLE_ID': '133',
+                    'UF_CRM_TASK': ['CO_' + req['company_id']]
+                }
+            })

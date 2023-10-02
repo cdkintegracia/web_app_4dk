@@ -136,12 +136,14 @@ def create_employees_report(req):
         })
 
         deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
+        deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
         worksheet.append(['Продажи', f'{month_names[report_month]} {report_year} шт.', f'{month_names[report_month]} {report_year} руб'])
         for field_value in deal_group_field:
             grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'], sold_deals))
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), grouped_deals)))])
-        worksheet.append(['Всего', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
+        worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
+        worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         worksheet.append([])
 
 
@@ -197,7 +199,7 @@ def create_employees_report(req):
         change_sheet_style(worksheet)
 
     workbook.save(report_name)
-
+    exit()
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '600147'
     with open(report_name, 'rb') as file:
@@ -214,10 +216,10 @@ def create_employees_report(req):
     os.remove(report_name)
 
 
-'''
+
 create_employees_report({
-    'users': 'user_131'   #'group_dr27',
+    'users': 'user_129'   #'group_dr27',
 })
-'''
+
 
 

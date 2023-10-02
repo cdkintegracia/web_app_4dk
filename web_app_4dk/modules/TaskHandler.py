@@ -64,7 +64,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
             })
 
 
-def task_registry(, event):
+def task_registry(task_info, event):
     sleep(randint(1, 30))
     task_status = {
         "2": 343, #поле в реестре задач Статусзадачи, у каждого знч поля есть свой id
@@ -83,7 +83,7 @@ def task_registry(, event):
 
     company_id = ''
     contact_id = ''
-    if 'ufCrmTask' in  and ['ufCrmTask']:
+    if 'ufCrmTask' in task_info and ['ufCrmTask']:
         ufCrmCompany = list(filter(lambda x: 'CO_' in x, ['ufCrmTask']))
         if ufCrmCompany:
             company_id = ufCrmCompany[0][3:]

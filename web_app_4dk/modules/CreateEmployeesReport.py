@@ -199,7 +199,7 @@ def create_employees_report(req):
         change_sheet_style(worksheet)
 
     workbook.save(report_name)
-    exit()
+
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '600147'
     with open(report_name, 'rb') as file:
@@ -214,4 +214,13 @@ def create_employees_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по активностям сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
+
+
+'''
+create_employees_report({
+    'users': 'user_129'   #'group_dr27',
+})
+'''
+
+
 

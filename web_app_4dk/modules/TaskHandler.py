@@ -173,7 +173,7 @@ def fill_task_title(req, event):
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
-    if not task_info or 'task' not in task_info or not task_info['task']:
+    if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
         return
     task_info = task_info['task']
     task_registry(task_info, event)
@@ -182,7 +182,7 @@ def fill_task_title(req, event):
         send_notification(task_info, 'Завершение')
     '''
 
-    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']:
+    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']: # ufCrmTask - связь с сущностью (список)
         return
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

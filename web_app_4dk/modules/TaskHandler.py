@@ -31,21 +31,21 @@ def send_notification(task_info, notification_type):
                     flag = True
 
 def check_similar_tasks_this_hour(task_info, company_id):
-    users_id = [task_info['createdBy'], '1']
-    if task_info['groupId'] not in ['1', '7']:
+    users_id = [['createdBy'], '1']
+    if ['groupId'] not in ['1', '7']:
         return
     group_names = {
         '1': 'ТЛП',
         '7': 'ЛК',
     }
-    end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')
+    end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S') #форматируем дату в строку
+    start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S') #вычитаем из тек даты 1 час
     similar_tasks = send_bitrix_request('tasks.task.list', {
         'filter': {
-            '!ID': task_info['id'],
+            '!ID': ['id'],
             '>=CREATED_DATE': start_time_filter,
             '<CREATED_DATE': end_time_filter,
-            'GROUP_ID': task_info['groupId'],
+            'GROUP_ID': ['groupId'],
             'UF_CRM_TASK': ['CO_' + company_id]
         }
     })
@@ -53,18 +53,18 @@ def check_similar_tasks_this_hour(task_info, company_id):
         similar_tasks = similar_tasks['tasks']
     else:
         return
-    similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
+    similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
     if similar_tasks:
         for user_id in users_id:
             send_bitrix_request('im.notify.system.add', {
                 'USER_ID': user_id,
-                'MESSAGE': f"Для текущей компании в группе {group_names[task_info['groupId']]} уже были поставлены задачи за прошедший час\n"
-                           f"Новая задача: https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{task_info['id']}/\n\n"
+                'MESSAGE': f"Для текущей компании в группе {group_names[['groupId']]} уже были поставлены задачи за прошедший час\n"
+                           f"Новая задача: https://vc4dk.bitrix24.ru/workgroups/group/{['groupId']}/tasks/task/view/{['id']}/\n\n"
                            f"Поставленные ранее:\n {similar_tasks_url}"
             })
 
 
-def task_registry(task_info, event):
+def task_registry(, event):
     sleep(randint(1, 30))
     task_status = {
         "2": 343, #поле в реестре задач Статусзадачи, у каждого знч поля есть свой id
@@ -76,15 +76,15 @@ def task_registry(task_info, event):
         "6": 355,
     }
 
-    if task_info['groupId'] and task_info['groupId'] != '0':
-        task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{task_info["groupId"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+    if ['groupId'] and ['groupId'] != '0':
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{["groupId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
     else:
-        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{task_info["responsibleId"]}/tasks/task/view/{task_info["id"]}/">Ссылка на задачу</a>'
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{["responsibleId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
 
     company_id = ''
     contact_id = ''
-    if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
-        ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
+    if 'ufCrmTask' in  and ['ufCrmTask']:
+        ufCrmCompany = list(filter(lambda x: 'CO_' in x, ['ufCrmTask']))
         if ufCrmCompany:
             company_id = ufCrmCompany[0][3:]
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
@@ -99,17 +99,17 @@ def task_registry(task_info, event):
 
     tags = send_bitrix_request('task.item.gettags', {'taskId': task_info['id']})
     if tags:
-        tags = ', '.join(tags)
+        tags = ', '.join(tags) #изначально теги в виде листа, а этой операцией мы переделываем в строку с сепаратором ,
     else:
         tags = ''
-    registry_element = send_bitrix_request('lists.element.get', {
+    registry_element = send_bitrix_request('lists.element.get', { #получаем элемент списка по ид задачи
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '107',
         'FILTER': {
             'PROPERTY_517': task_info['id'],
         }
     })
-    if registry_element:
+    if registry_element: # если нашли, то обновляем
         registry_element = registry_element[0]
         send_bitrix_request('lists.element.update', {
             "IBLOCK_TYPE_ID": "lists",
@@ -164,7 +164,7 @@ def task_registry(task_info, event):
 
         if task_info["responsibleId"] == '157':
             bot_send_message({'dialog_id': '157',
-                              'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/311/tasks/task/view/{task_info['id']}/"})
+                              'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/157/tasks/task/view/{task_info['id']}/"})
 
 
 def fill_task_title(req, event):

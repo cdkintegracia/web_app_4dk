@@ -205,9 +205,9 @@ def fill_task_title(req, event):
             for i in range(len(contact_companies_info)):
                 if not contact_companies_info[i]['UF_CRM_1660818061808']:
                     contact_companies_info[i]['UF_CRM_1660818061808'] = 0
-            best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID']
-            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm]
-            company_id = best_value_company
+            best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] #последний элемент в общем списке - с макс value
+            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно толлько перезаписать обоими значениями заново
+            company_id = best_value_company #Это для тайтла
     else:
         company_id = company_crm[0][3:]
 
@@ -218,10 +218,10 @@ def fill_task_title(req, event):
     company_info = send_bitrix_request('crm.company.get', {
         'ID': company_id,
     })
-    if company_info and company_info['TITLE'].strip() in task_info['title']:
+    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
         return
 
-    if not uf_crm_task:
+    if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять
         send_bitrix_request('tasks.task.update', {
             'taskId': task_id,
             'fields': {

@@ -54,11 +54,12 @@ def fill_act_document_smart_process(req):
                 update_fields['observers'] = company_info[0]['ASSIGNED_BY_ID'] #наблюдатель в элементе == ответственный в компании
                 update_fields['ufCrm41_1690546413'] = company_info[0]['TITLE'] #название
             update_fields['ufCrm41_1690807843'] = int(element['ufCrm41_1689101306'].split('-')[-1]) #номер в 1С
-            update_fields['assignedById'] = '91'#задаем
             if element['ufCrm41_1690546413']: #если заполнено название компании в элементе
                 user_b24 = list(filter(lambda x: element['ufCrm41_1690283806'] == x['UF_USR_1690373869887'], users)) #находим инфо о пользователе, по значению поля СОУ в элементе мы ищем пользователя, в профиле есть поле СОУ
                 if user_b24:
                     update_fields['assignedById'] = user_b24[0]['ID'] #указываем юзера, если найден
+                else:
+                    update_fields['assignedById'] = '91'  # задаем
 
             if element_filter == {'assignedById': ['91']} and update_fields['assignedById'] == '91':
                 bad_counter += 1
@@ -124,6 +125,11 @@ def fill_act_document_smart_process(req):
 
     send_bitrix_request('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Элементы РТиУ заполнены\n'
+                   f'Плохих элементов {bad_counter}'})
+
+    send_bitrix_request('im.notify.system.add', {
+        'USER_ID': '311',
         'MESSAGE': f'Элементы РТиУ заполнены\n'
                    f'Плохих элементов {bad_counter}'})
 

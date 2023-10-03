@@ -773,6 +773,9 @@ def connect_1c_event_handler(req):
 
 
 def add_ip():
+    """
+    Отправляет на сервер 1С-Коннект запрос с добавлением текущего IP адреса веб-приложения в рассылку событий
+    """
 
     headers = {
         'accept': 'application/json',

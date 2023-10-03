@@ -288,7 +288,6 @@ def main_page():
 def load_user(user):
     return 1
 
-
 # Обработчик вебхуков 1С-Коннект
 @app.route('/1c_connect', methods=['POST'])
 def update_connect_logs():

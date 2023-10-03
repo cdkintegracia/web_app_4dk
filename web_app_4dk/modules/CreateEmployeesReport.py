@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from calendar import monthrange
 import base64
 import os
 
@@ -77,6 +78,10 @@ def get_quarter_filter(month_number):
     }
 
 
+def read_deals_data_file(month, year):
+    pass
+
+
 def create_employees_report(req):
     users_id = get_employee_id(req['users'])
     users_info = b.get_all('user.get', {
@@ -93,6 +98,10 @@ def create_employees_report(req):
     if report_month == 0:
         report_month = 12
         report_year -= 1
+    report_month_range = monthrange(report_year, report_month)[1]
+    report_month_last_day_date = (f'{report_month_range}.'
+                                  f'{report_month if len(str(report_month)) == 2 else "0" + str(report_month)}.'
+                                  f'{report_year}')
 
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
@@ -116,6 +125,15 @@ def create_employees_report(req):
 
         worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
         worksheet.append([])
+        worksheet.append([])
+
+        # Отчетность
+        worksheet.append(['Отчетность', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала года',
+                          'На начало года', 'Количество на январь'])
+        worksheet.append(['Льготных отчетностей', ''])
+        worksheet.append(['Охват льготной отчетностью', ''])
+        worksheet.append(['Платных отчетностей', ''])
+        worksheet.append(['Охват платных отчетностей', ''])
         worksheet.append([])
 
         # Продажи
@@ -200,6 +218,9 @@ def create_employees_report(req):
 
     workbook.save(report_name)
 
+    if not req['user_id']:
+        return
+
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '600147'
     with open(report_name, 'rb') as file:
@@ -216,11 +237,11 @@ def create_employees_report(req):
     os.remove(report_name)
 
 
-'''
-create_employees_report({
-    'users': 'user_129'   #'group_dr27',
-})
-'''
+if __name__ == '__main__':
+    create_employees_report({
+        'users': 'user_129'   #'group_dr27',
+    })
+
 
 
 

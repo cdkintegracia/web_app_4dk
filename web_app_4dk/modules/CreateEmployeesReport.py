@@ -295,18 +295,20 @@ def create_employees_report(req):
                 '<ufCrm3_1654248264': month_filter_end.strftime(ddmmyyyy_pattern),
             }
         })
-
-        sold_deals = b.get_all('crm.deal.list', {
-            'select': ['UF_CRM_1657878818384', 'OPPORTUNITY'],
-            'filter': {
-                'ID': list(map(lambda x: x['parentId2'], sales))
-            }
-        })
+        if sales:
+            sold_deals = b.get_all('crm.deal.list', {
+                'select': ['UF_CRM_1657878818384', 'OPPORTUNITY'],
+                'filter': {
+                    'ID': list(map(lambda x: x['parentId2'], sales))
+                }
+            })
+        else:
+            sold_deals = []
 
         worksheet.append(['Продажи', f'{month_names[report_month]} {report_year} шт.', f'{month_names[report_month]} {report_year} руб'])
         for field_value in deal_group_field:
             grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'], sold_deals))
-            worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), grouped_deals)))])
+            worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         worksheet.append([])

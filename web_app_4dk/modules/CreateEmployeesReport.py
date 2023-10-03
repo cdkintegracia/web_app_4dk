@@ -12,6 +12,22 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
+deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+month_int_names = {
+        1: 'Январь',
+        2: 'Февраль',
+        3: 'Март',
+        4: 'Апрель',
+        5: 'Май',
+        6: 'Июнь',
+        7: 'Июль',
+        8: 'Август',
+        9: 'Сентябрь',
+        10: 'Октябрь',
+        11: 'Ноябрь',
+        12: 'Декабрь',
+    }
 
 
 def get_employee_id(users: str) -> list:
@@ -47,8 +63,13 @@ def get_fio_from_user_info(user_info: dict) -> str:
     :param user_info: Словарь, полученный запросом с методом user.get
     """
 
+    '''
     return f'{user_info["LAST_NAME"] if "LAST_NAME" in user_info else ""}'\
            f' {user_info["NAME"] if "NAME" in user_info else ""}'.strip()
+    '''
+
+    return (f'{user_info["NAME"] if "NAME" in user_info else ""}'
+            f' {user_info["LAST_NAME"] if "LAST_NAME" in user_info else ""}').strip()
 
 
 def change_sheet_style(sheet) -> None:
@@ -79,7 +100,17 @@ def get_quarter_filter(month_number):
 
 
 def read_deals_data_file(month, year):
-    pass
+    filename = f'{month_int_names[month]}_{year}.xlsx'
+    workbook = openpyxl.load_workbook(f'{deals_info_files_directory}{filename}')
+    worksheet = workbook.active
+    file_titles = ['Предполагаемая дата закрытия', 'Дата начала', 'Ответственный', 'Тип', 'Сумма', 'Стадия сделки',
+                   'Группа', 'ID', 'Название сделки']
+    file_data = []
+    for row in worksheet.rows:
+        row_data = list(map(lambda x: x.value, row))
+        row_data = dict(zip(file_titles, row_data))
+        file_data.append(row_data)
+    return file_data
 
 
 def create_employees_report(req):
@@ -102,6 +133,11 @@ def create_employees_report(req):
     report_month_last_day_date = (f'{report_month_range}.'
                                   f'{report_month if len(str(report_month)) == 2 else "0" + str(report_month)}.'
                                   f'{report_year}')
+    before_last_month = report_month - 1
+    before_last_month_year = report_year
+    if before_last_month == 0:
+        before_last_month = 12
+        before_last_month_year -= 1
 
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
@@ -114,6 +150,9 @@ def create_employees_report(req):
         1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август', 9: 'Сентябрь',
         10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
     }
+
+    deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
+    deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
@@ -128,12 +167,123 @@ def create_employees_report(req):
         worksheet.append([])
 
         # Отчетность
+        # Отчетный месяц
+        last_month_deals_data = read_deals_data_file(report_month, report_year)
+        free_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                      x['Тип'] == 'Отчетность (в рамках ИТС)',
+                                                      last_month_deals_data))
+
+        prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                      x['Группа'] == 'ИТС' and
+                                                      'Базовый' not in x['Тип'], last_month_deals_data))
+
+        its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                     x['Группа'] == 'ИТС', last_month_deals_data))
+
+        try:
+            coverage_free_reporting_deals_last_month = round(len(free_reporting_deals_last_month) /
+                                                             len(prof_deals_last_month), 2) * 100
+        except ZeroDivisionError:
+            coverage_free_reporting_deals_last_month = 0
+
+        paid_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                                x['Тип'] == 'Отчетность', last_month_deals_data))
+
+        try:
+            coverage_paid_reporting_deals_last_month = round(round(len(paid_reporting_deals_last_month) /
+                                                             len(its_deals_last_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_paid_reporting_deals_last_month = 0
+
+        # Предшествующий отчетному месяц
+        before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
+
+        free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                      x['Тип'] == 'Отчетность (в рамках ИТС)', before_last_month_deals_data))
+
+        prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                   x['Группа'] == 'ИТС' and
+                                                   'Базовый' not in x['Тип'], before_last_month_deals_data))
+
+        its_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                  x['Группа'] == 'ИТС', before_last_month_deals_data))
+
+        try:
+            coverage_free_reporting_deals_before_last_month = round(round(len(free_reporting_deals_before_last_month) /
+                                                                    len(prof_deals_before_last_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_free_reporting_deals_before_last_month = 0
+
+        paid_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                             x['Тип'] == 'Отчетность', before_last_month_deals_data))
+
+        try:
+            coverage_paid_reporting_deals_before_last_month = round(round(len(paid_reporting_deals_before_last_month) /
+                                                                    len(its_deals_before_last_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_paid_reporting_deals_before_last_month = 0
+
+        # Начало года
+        start_year_deals_data = read_deals_data_file(1, report_year)
+        free_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                      x['Тип'] == 'Отчетность (в рамках ИТС)',
+                                                      start_year_deals_data))
+
+        prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
+                                            x['Группа'] == 'ИТС' and
+                                            'Базовый' not in x['Тип'], start_year_deals_data))
+
+        its_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
+                                           x['Группа'] == 'ИТС', start_year_deals_data))
+
+        try:
+            coverage_free_reporting_deals_start_year = round(round(len(free_reporting_deals_start_year) /
+                                                             len(prof_deals_start_year), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_free_reporting_deals_start_year = 0
+
+        paid_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                      x['Тип'] == 'Отчетность',
+                                                      start_year_deals_data))
+
+        try:
+            coverage_paid_reporting_deals_start_year = round(round(len(paid_reporting_deals_start_year) /
+                                                             len(its_deals_start_year), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_paid_reporting_deals_start_year = 0
+
+
+
         worksheet.append(['Отчетность', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала года',
-                          'На начало года', 'Количество на январь'])
-        worksheet.append(['Льготных отчетностей', ''])
-        worksheet.append(['Охват льготной отчетностью', ''])
-        worksheet.append(['Платных отчетностей', ''])
-        worksheet.append(['Охват платных отчетностей', ''])
+                          'На начало года'])
+        worksheet.append([
+            'Льготных отчетностей',
+            len(free_reporting_deals_last_month),
+            len(free_reporting_deals_last_month) - len(free_reporting_deals_before_last_month),
+            len(free_reporting_deals_last_month) - len(free_reporting_deals_start_year),
+            len(free_reporting_deals_start_year),
+        ])
+        worksheet.append([
+            'Охват льготной отчетностью',
+            f'{coverage_free_reporting_deals_last_month}%',
+            f'{coverage_free_reporting_deals_last_month - coverage_free_reporting_deals_before_last_month}%',
+            f'{coverage_free_reporting_deals_last_month - coverage_free_reporting_deals_start_year}%',
+            f'{coverage_free_reporting_deals_start_year}%',
+        ])
+        worksheet.append([
+            'Платных отчетностей',
+            len(paid_reporting_deals_last_month),
+            len(paid_reporting_deals_last_month) - len(paid_reporting_deals_before_last_month),
+            len(paid_reporting_deals_last_month) - len(paid_reporting_deals_start_year),
+            len(paid_reporting_deals_start_year),
+        ])
+        worksheet.append([
+            'Охват платных отчетностей',
+            f'{coverage_paid_reporting_deals_last_month}%',
+            f'{coverage_paid_reporting_deals_last_month - coverage_paid_reporting_deals_before_last_month}%',
+            f'{coverage_paid_reporting_deals_last_month - coverage_paid_reporting_deals_start_year}%',
+            f'{coverage_paid_reporting_deals_start_year}%',
+        ])
         worksheet.append([])
 
         # Продажи
@@ -152,9 +302,6 @@ def create_employees_report(req):
                 'ID': list(map(lambda x: x['parentId2'], sales))
             }
         })
-
-        deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
-        deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
         worksheet.append(['Продажи', f'{month_names[report_month]} {report_year} шт.', f'{month_names[report_month]} {report_year} руб'])
         for field_value in deal_group_field:
@@ -178,6 +325,7 @@ def create_employees_report(req):
                                               quarter_filters['start_date'].timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
                                               < quarter_filters['end_date'].timestamp(), documents_debts))
+
         non_quarter_documents_debts = len(documents_debts) - len(quarter_documents_debts)
 
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
@@ -218,7 +366,7 @@ def create_employees_report(req):
 
     workbook.save(report_name)
 
-    if not req['user_id']:
+    if 'user_id' not in req:
         return
 
     # Загрузка отчета в Битрикс
@@ -239,7 +387,7 @@ def create_employees_report(req):
 
 if __name__ == '__main__':
     create_employees_report({
-        'users': 'user_129'   #'group_dr27',
+        'users': 'user_355'  #'user_129'   #'group_dr27', 'user_135'
     })
 
 

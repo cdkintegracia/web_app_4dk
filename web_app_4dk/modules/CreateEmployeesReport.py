@@ -166,23 +166,183 @@ def create_employees_report(req):
         worksheet.append([])
         worksheet.append([])
 
+        last_month_deals_data = read_deals_data_file(report_month, report_year)
+        before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
+        start_year_deals_data = read_deals_data_file(1, report_year)
+        quarter_deals_data = read_deals_data_file(get_quarter_filter(report_month)['start_date'].month, report_year)
+
+        # Сделки
+        # Отчетный месяц
+        its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and
+                                                'Базовый' not in x['Тип'], last_month_deals_data))
+
+        its_base_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and
+                                                'Базовый' in x['Тип'], last_month_deals_data))
+
+        countragent_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                   'Контрагент' in x['Тип'], last_month_deals_data))
+
+        spark_in_contract_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                         '1Спарк в договоре' == x['Тип'], last_month_deals_data))
+
+        spark_3000_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                  '1Спарк 3000' == x['Тип'], last_month_deals_data))
+
+        spark_22500_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                   '22500' in x['Тип'], last_month_deals_data))
+
+        rpd_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                           'РПД' in x['Тип'], last_month_deals_data))
+
+        # Предшествующий отчетному месяц
+        its_prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                       x['Группа'] == 'ИТС' and
+                                                       'Базовый' not in x['Тип'], before_last_month_deals_data))
+
+        its_base_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                       x['Группа'] == 'ИТС' and
+                                                       'Базовый' in x['Тип'], before_last_month_deals_data))
+
+        countragent_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                          'Контрагент' in x['Тип'], before_last_month_deals_data))
+
+        spark_in_contract_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                                '1Спарк в договоре' == x['Тип'], before_last_month_deals_data))
+
+        spark_3000_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                         '1Спарк 3000' == x['Тип'], before_last_month_deals_data))
+
+        spark_22500_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                          '22500' in x['Тип'], before_last_month_deals_data))
+
+        rpd_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                  'РПД' in x['Тип'], before_last_month_deals_data))
+
+        # Начало квартала
+        its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                             'Базовый' not in x['Тип'], quarter_deals_data))
+
+        its_base_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                             'Базовый' in x['Тип'], quarter_deals_data))
+
+        countragent_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                'Контрагент' in x['Тип'], quarter_deals_data))
+
+        spark_in_contract_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                      '1Спарк в договоре' == x['Тип'], quarter_deals_data))
+
+        spark_3000_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                               '1Спарк 3000' == x['Тип'], quarter_deals_data))
+
+        spark_22500_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                '22500' in x['Тип'], quarter_deals_data))
+
+        rpd_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                        'РПД' in x['Тип'], quarter_deals_data))
+
+        # Начало года
+        its_prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                                'Базовый' not in x['Тип'], start_year_deals_data))
+
+        its_base_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                                'Базовый' in x['Тип'], start_year_deals_data))
+
+        countragent_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                   'Контрагент' in x['Тип'], start_year_deals_data))
+
+        spark_in_contract_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                         '1Спарк в договоре' == x['Тип'], start_year_deals_data))
+
+        spark_3000_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                  '1Спарк 3000' == x['Тип'], start_year_deals_data))
+
+        spark_22500_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                                   '22500' in x['Тип'], start_year_deals_data))
+
+        rpd_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+                                           'РПД' in x['Тип'], start_year_deals_data))
+
+        worksheet.append(['Сделки', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала квартала',
+                          'Прирост с начала года'])
+        worksheet.append([
+            'ИТС ПРОФ',
+            len(its_prof_deals_last_month),
+            len(its_prof_deals_last_month) - len(its_prof_deals_before_last_month),
+            len(its_prof_deals_last_month) - len(its_prof_deals_quarter),
+            len(its_prof_deals_last_month) - len(its_prof_deals_start_year)
+        ])
+        worksheet.append([
+            'ИТС Базовые',
+            len(its_base_deals_last_month),
+            len(its_base_deals_last_month) - len(its_base_deals_before_last_month),
+            len(its_base_deals_last_month) - len(its_base_deals_quarter),
+            len(its_base_deals_last_month) - len(its_base_deals_start_year),
+        ])
+        worksheet.append([
+            'Контрагент',
+            len(countragent_deals_last_month),
+            len(countragent_deals_last_month) - len(countragent_deals_before_last_month),
+            len(countragent_deals_last_month) - len(countragent_deals_quarter),
+            len(countragent_deals_last_month) - len(countragent_deals_start_year),
+        ])
+        worksheet.append([
+            'Спарк в договоре',
+            len(spark_in_contract_deals_last_month),
+            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_before_last_month),
+            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_quarter),
+            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_start_year),
+        ])
+        worksheet.append([
+            'Спарк 3000',
+            len(spark_3000_deals_last_month),
+            len(spark_3000_deals_last_month) - len(spark_3000_deals_before_last_month),
+            len(spark_3000_deals_last_month) - len(spark_3000_deals_quarter),
+            len(spark_3000_deals_last_month) - len(spark_3000_deals_start_year),
+        ])
+        worksheet.append([
+            'СпаркПлюс 22500',
+            len(spark_22500_deals_last_month),
+            len(spark_22500_deals_last_month) - len(spark_22500_deals_before_last_month),
+            len(spark_22500_deals_last_month) - len(spark_22500_deals_quarter),
+            len(spark_22500_deals_last_month) - len(spark_22500_deals_start_year),
+        ])
+        worksheet.append([
+            'РПД',
+            len(rpd_deals_last_month),
+            len(rpd_deals_last_month) - len(rpd_deals_before_last_month),
+            len(rpd_deals_last_month) - len(rpd_deals_quarter),
+            len(rpd_deals_last_month) - len(rpd_deals_start_year)
+        ])
+        worksheet.append([])
+
+        # Охват сервисами
+        # Отчетный месяц
+        #last_month_companies = list(map(lambda x: x['Компания'], last_month_deals_data))
+
+
+        worksheet.append(['Охват сервисами', f'на {report_month_last_day_date}', 'Прирост за месяц',
+                          'Прирост с начала года', 'На начало года'])
+        worksheet.append(['ИТС без сервисов'])
+        worksheet.append(['% ИТС без сервисов'])
+        worksheet.append(['ИТС без платных сервисов'])
+        worksheet.append(['% ИТС без платных сервисов'])
+        worksheet.append([])
+
+
         # Отчетность
         # Отчетный месяц
-        last_month_deals_data = read_deals_data_file(report_month, report_year)
         free_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)',
                                                       last_month_deals_data))
-
-        prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                      x['Группа'] == 'ИТС' and
-                                                      'Базовый' not in x['Тип'], last_month_deals_data))
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                      x['Группа'] == 'ИТС', last_month_deals_data))
 
         try:
             coverage_free_reporting_deals_last_month = round(len(free_reporting_deals_last_month) /
-                                                             len(prof_deals_last_month), 2) * 100
+                                                             len(its_prof_deals_last_month), 2) * 100
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
@@ -196,21 +356,16 @@ def create_employees_report(req):
             coverage_paid_reporting_deals_last_month = 0
 
         # Предшествующий отчетному месяц
-        before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
-
         free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)', before_last_month_deals_data))
 
-        prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                   x['Группа'] == 'ИТС' and
-                                                   'Базовый' not in x['Тип'], before_last_month_deals_data))
 
         its_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                   x['Группа'] == 'ИТС', before_last_month_deals_data))
 
         try:
             coverage_free_reporting_deals_before_last_month = round(round(len(free_reporting_deals_before_last_month) /
-                                                                    len(prof_deals_before_last_month), 2) * 100, 2)
+                                                                    len(its_prof_deals_before_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_before_last_month = 0
 
@@ -224,7 +379,6 @@ def create_employees_report(req):
             coverage_paid_reporting_deals_before_last_month = 0
 
         # Начало года
-        start_year_deals_data = read_deals_data_file(1, report_year)
         free_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)',
                                                       start_year_deals_data))
@@ -255,7 +409,7 @@ def create_employees_report(req):
 
 
         worksheet.append(['Отчетность', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала года',
-                          'На начало года'])
+                          'Количество на январь'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
@@ -389,7 +543,7 @@ def create_employees_report(req):
 
 if __name__ == '__main__':
     create_employees_report({
-        'users': 'user_355'  #'user_129'   #'group_dr27', 'user_135'
+        'users': 'group_dr27'  #'user_129'   #'group_dr27', 'user_135'
     })
 
 

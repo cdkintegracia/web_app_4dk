@@ -71,6 +71,7 @@ from web_app_4dk.modules.ClearTaskRegister import clear_task_registry
 from web_app_4dk.modules.CreateItsApplicationsFile import create_its_applications_file
 from web_app_4dk.modules.CompleteDossierTask import complete_dossier_task
 from web_app_4dk.modules.CreateEmployeesReport import create_employees_report
+from web_app_4dk.modules.CreateImplementationDepartmentReport import create_implementation_department_report
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -124,7 +125,8 @@ custom_webhooks = {
     'clear_task_registry': clear_task_registry,
     'create_its_applications_file': create_its_applications_file,
     'complete_dossier_task': complete_dossier_task,
-    'create_employees_report': create_employees_report
+    'create_employees_report': create_employees_report,
+    'create_implementation_department_report': create_implementation_department_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

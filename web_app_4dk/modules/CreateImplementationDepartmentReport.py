@@ -69,7 +69,7 @@ def create_implementation_department_report(req):
         for index, column_cells in enumerate(worksheet.columns):
             for cell in column_cells:
                 cell.alignment = cell.alignment.copy(wrapText=True)
-    report_name = f'{company_info["TITLE"]}_анализ_трудозатрат_на_{datetime.now().strftime("%d.%m.%Y_%S")}.xlsx'
+    report_name = f'{company_info["TITLE"].replace(" ", "_")}_анализ_трудозатрат_на_{datetime.now().strftime("%d.%m.%Y_%S")}.xlsx'
     workbook.save(report_name)
 
     # Загрузка отчета в Битрикс

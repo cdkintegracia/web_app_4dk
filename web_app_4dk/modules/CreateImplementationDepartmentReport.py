@@ -52,7 +52,7 @@ def create_implementation_department_report(req):
             user_info = list(filter(lambda x: x['ID'] == result['USER_ID'], users_info))[0]
             users_name[result['USER_ID']] = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
         worksheet.append([
-            datetime.fromisoformat(result['DATE_START']).strftime('%d.%m.%Y %H:%M'),
+            datetime.fromisoformat(result['CREATED_DATE']).strftime('%d.%m.%Y %H:%M'),
             users_name[result['USER_ID']],
             str(timedelta(seconds=int(result['SECONDS']))),
             result['COMMENT_TEXT']

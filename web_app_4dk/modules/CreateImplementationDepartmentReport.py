@@ -48,6 +48,7 @@ def create_implementation_department_report(req):
     ])
     for result in tasks_results:
         if result['USER_ID'] not in users_name:
+            print(result['USER_ID'], '!')
             user_info = list(filter(lambda x: x['ID'] == result['USER_ID'], users_info))[0]
             users_name[result['USER_ID']] = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
         worksheet.append([

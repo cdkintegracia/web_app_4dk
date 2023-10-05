@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import base64
+import os
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -67,12 +69,20 @@ def create_implementation_department_report(req):
         for index, column_cells in enumerate(worksheet.columns):
             for cell in column_cells:
                 cell.alignment = cell.alignment.copy(wrapText=True)
+    report_name = f'{company_info["TITLE"]}_анализ_трудозатрат_на_{datetime.now().strftime("%d.%m.%Y_%S")}.xlsx'
+    workbook.save(report_name)
 
-        workbook.save(f'{company_info["TITLE"]}_анализ_трудозатрат_на_{datetime.now().strftime("%d.%m.%Y_%S")}.xlsx')
-
-
-if __name__ == '__main__':
-    create_implementation_department_report({
-        'date_filter': '12.01.2021',
-        'company_id': '4401'
+    # Загрузка отчета в Битрикс
+    bitrix_folder_id = '613141'
+    with open(report_name, 'rb') as file:
+        report_file = file.read()
+    report_file_base64 = str(base64.b64encode(report_file))[2:]
+    upload_report = b.call('disk.folder.uploadfile', {
+        'id': bitrix_folder_id,
+        'data': {'NAME': report_name},
+        'fileContent': report_file_base64
     })
+    b.call('im.notify.system.add', {
+        'USER_ID': req['user_id'][5:],
+        'MESSAGE': f'Анализ трудозатрат для {company_info["TITLE"]} сформирован. {upload_report["DETAIL_URL"]}'})
+    os.remove(report_name)

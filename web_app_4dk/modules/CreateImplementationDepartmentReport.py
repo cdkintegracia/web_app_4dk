@@ -15,7 +15,7 @@ b = Bitrix(authentication('Bitrix'))
 def create_implementation_department_report(req):
     users_info = b.get_all('user.get', {
         'filter': {
-            'UF_DEPARTMENT': '225'
+            'UF_DEPARTMENT': ['225', '361']
         }
     })
     users_id = list(map(lambda x: x['ID'], users_info))

@@ -10,7 +10,7 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\' #f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 
 def create_current_month_deals_data_file(user_data=None, user_id='311'):
     if not user_data:
@@ -41,11 +41,27 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
             'OPPORTUNITY',
             'STAGE_ID',
             'UF_CRM_1657878818384',     # Группа
+            'COMPANY_ID',
         ],
         'filter': {'CATEGORY_ID': '1'}})
     formatted_deals_info = []
     for deal in deals_info:
         temp = {}
+
+        company_user = ''
+        if 'COMPANY_ID' in deal and deal['COMPANY_ID']:
+            company_info = b.get_all('crm.company.get', {
+                'ID': deal['COMPANY_ID'],
+                'select': ['ASSIGNED_BY_ID']
+            })
+            if company_info:
+                company_user = company_info['ASSIGNED_BY_ID']
+        if company_user:
+            company_user = list(filter(lambda x: x['ID'] == company_user, user_data))
+            if company_user:
+                company_user = company_user[0]
+                company_user = f"{company_user['NAME']} {company_user['LAST_NAME']}"
+
         user_info = list(filter(lambda x: x['ID'] == deal['ASSIGNED_BY_ID'], user_data))
         if user_info:
             user_info = user_info[0]
@@ -72,6 +88,8 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
         temp['Группа'] = UF_CRM_1657878818384_values[deal['UF_CRM_1657878818384']]
         temp['ID'] = deal['ID']
         temp['Название сделки'] = deal['TITLE']
+        temp['Компания'] = deal['COMPANY_ID'] if 'COMPANY_ID' in deal else ''
+        temp['Ответственный за компанию'] = company_user
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

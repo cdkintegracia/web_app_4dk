@@ -12,8 +12,8 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -316,7 +316,6 @@ def create_employees_report(req):
 
         # Охват сервисами
         # Отчетный месяц
-        #last_month_companies = list(map(lambda x: x['Компания'], last_month_deals_data))
 
 
         worksheet.append(['Охват сервисами', f'на {report_month_last_day_date}', 'Прирост за месяц',
@@ -547,7 +546,7 @@ def create_employees_report(req):
 
 if __name__ == '__main__':
     create_employees_report({
-        'users': 'group_dr27'  #'user_129'   #'group_dr27', 'user_135'
+        'users': 'user_129'  #'user_129'   #'group_dr27', 'user_135'
     })
 
 

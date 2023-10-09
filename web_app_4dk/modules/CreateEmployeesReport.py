@@ -151,9 +151,6 @@ def create_employees_report(req):
         10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
     }
 
-    deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
-    deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
-
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
         if index == 0:
@@ -441,6 +438,10 @@ def create_employees_report(req):
         worksheet.append([])
 
         # Продажи
+        deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
+        deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
+        deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
+
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
             'filter': {
@@ -461,7 +462,10 @@ def create_employees_report(req):
 
         worksheet.append(['Продажи', f'{month_names[report_month]} {report_year} шт.', f'{month_names[report_month]} {report_year} руб'])
         for field_value in deal_group_field:
-            grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'], sold_deals))
+            if field_value['VALUE'] == 'Лицензии':
+                grouped_deals = list(filter(lambda x: 'Лицензия' in ['Тип'], sold_deals))
+            else:
+                grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'], sold_deals))
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])

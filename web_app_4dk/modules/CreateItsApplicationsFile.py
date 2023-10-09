@@ -64,7 +64,7 @@ def create_its_applications_file(req):
         subscription_period = int(deal['UF_CRM_1638100416'])
         if req['process'] == 'reject':
             subscription_period = 12
-        elif code_1c in ['2001', '2004'] and deal['UF_CRM_1637933869479'] == '1':
+        elif code_1c in ['2001', '2003'] and deal['UF_CRM_1637933869479'] == '1':
             subscription_period = 12
         payment_method = list(filter(lambda x: x['ID'] == deal['UF_CRM_1642775558379'],
                                      deal_fields['UF_CRM_1642775558379']['items']))

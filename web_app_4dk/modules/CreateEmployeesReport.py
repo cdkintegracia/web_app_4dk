@@ -214,7 +214,8 @@ def create_employees_report(req):
                                              x not in spark_in_contract_deals_last_month and
                                              x not in spark_3000_deals_last_month and
                                              x not in spark_22500_deals_last_month and
-                                             x not in rpd_deals_last_month, last_month_deals_data))
+                                             x not in rpd_deals_last_month and
+                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], last_month_deals_data))
 
         # Предшествующий отчетному месяц
         its_prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -261,7 +262,9 @@ def create_employees_report(req):
                                                     x not in spark_in_contract_deals_before_last_month and
                                                     x not in spark_3000_deals_before_last_month and
                                                     x not in spark_22500_deals_before_last_month and
-                                                    x not in rpd_deals_before_last_month, before_last_month_deals_data))
+                                                    x not in rpd_deals_before_last_month and
+                                                    x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                    before_last_month_deals_data))
 
         # Начало квартала
         its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
@@ -306,7 +309,8 @@ def create_employees_report(req):
                                           x not in spark_in_contract_deals_quarter and
                                           x not in spark_3000_deals_quarter and
                                           x not in spark_22500_deals_quarter and
-                                          x not in rpd_deals_quarter,
+                                          x not in rpd_deals_quarter and
+                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                           quarter_deals_data))
 
         # Начало года
@@ -352,7 +356,8 @@ def create_employees_report(req):
                                              x not in spark_in_contract_deals_start_year and
                                              x not in spark_3000_deals_start_year and
                                              x not in spark_22500_deals_start_year and
-                                             x not in rpd_deals_start_year,
+                                             x not in rpd_deals_start_year and
+                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              start_year_deals_data))
 
         worksheet.append(['Сделки', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала квартала',

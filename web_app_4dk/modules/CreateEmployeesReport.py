@@ -173,38 +173,38 @@ def create_employees_report(req):
         its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 'Базовый' not in x['Тип'] and
-                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 last_month_deals_data))
 
         its_base_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 'Базовый' in x['Тип'] and
-                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 last_month_deals_data))
 
         countragent_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                    'Контрагент' in x['Тип'] and
-                                                   x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена']
+                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']
                                                    , last_month_deals_data))
 
         spark_in_contract_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                          '1Спарк в договоре' == x['Тип'] and
-                                                         x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                         x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                          last_month_deals_data))
 
         spark_3000_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                   '1Спарк 3000' == x['Тип'] and
-                                                  x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                  x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   last_month_deals_data))
 
         spark_22500_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                    '22500' in x['Тип'] and
-                                                   x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                    last_month_deals_data))
 
         rpd_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                            'РПД' in x['Тип'] and
-                                           x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                            last_month_deals_data))
 
         other_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -220,38 +220,38 @@ def create_employees_report(req):
         its_prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                        x['Группа'] == 'ИТС' and
                                                        'Базовый' not in x['Тип'] and
-                                                       x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                        before_last_month_deals_data))
 
         its_base_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                        x['Группа'] == 'ИТС' and
                                                        'Базовый' in x['Тип'] and
-                                                       x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                        before_last_month_deals_data))
 
         countragent_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                           'Контрагент' in x['Тип'] and
-                                                          x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                           before_last_month_deals_data))
 
         spark_in_contract_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                                 '1Спарк в договоре' == x['Тип'] and
-                                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                                 before_last_month_deals_data))
 
         spark_3000_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                          '1Спарк 3000' == x['Тип'] and
-                                                         x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                         x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                          before_last_month_deals_data))
 
         spark_22500_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                           '22500' in x['Тип'] and
-                                                          x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                           before_last_month_deals_data))
 
         rpd_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                   'РПД' in x['Тип'] and
-                                                  x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                  x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   before_last_month_deals_data))
 
         other_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -266,37 +266,37 @@ def create_employees_report(req):
         # Начало квартала
         its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                              'Базовый' not in x['Тип'] and
-                                             x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              quarter_deals_data))
 
         its_base_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                              'Базовый' in x['Тип'] and
-                                             x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              quarter_deals_data))
 
         countragent_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 'Контрагент' in x['Тип'] and
-                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
 
         spark_in_contract_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                       '1Спарк в договоре' == x['Тип'] and
-                                                      x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       quarter_deals_data))
 
         spark_3000_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                '1Спарк 3000' == x['Тип'] and
-                                               x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                               x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                quarter_deals_data))
 
         spark_22500_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 '22500' in x['Тип'] and
-                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
 
         rpd_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                         'РПД' in x['Тип'] and
-                                        x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                        x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                         quarter_deals_data))
 
         other_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -312,37 +312,37 @@ def create_employees_report(req):
         # Начало года
         its_prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                                 'Базовый' not in x['Тип'] and
-                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 start_year_deals_data))
 
         its_base_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                                 'Базовый' in x['Тип'] and
-                                                x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 start_year_deals_data))
 
         countragent_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                    'Контрагент' in x['Тип'] and
-                                                   x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                    start_year_deals_data))
 
         spark_in_contract_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                          '1Спарк в договоре' == x['Тип'] and
-                                                         x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                         x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                          start_year_deals_data))
 
         spark_3000_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                   '1Спарк 3000' == x['Тип'] and
-                                                  x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                  x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   start_year_deals_data))
 
         spark_22500_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                    '22500' in x['Тип'] and
-                                                   x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                    start_year_deals_data))
 
         rpd_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                            'РПД' in x['Тип'] and
-                                           x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                            start_year_deals_data))
 
         other_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -457,12 +457,12 @@ def create_employees_report(req):
         # Отчетный месяц
         free_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)' and
-                                                      x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       last_month_deals_data))
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                            x['Группа'] == 'ИТС' and
-                                           x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                            last_month_deals_data))
 
         try:
@@ -473,7 +473,7 @@ def create_employees_report(req):
 
         paid_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность' and
-                                                      x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       last_month_deals_data))
 
         try:
@@ -485,12 +485,12 @@ def create_employees_report(req):
         # Предшествующий отчетному месяц
         free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                              x['Тип'] == 'Отчетность (в рамках ИТС)' and
-                                                             x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                              before_last_month_deals_data))
 
         its_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                   x['Группа'] == 'ИТС' and
-                                                  x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                  x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   before_last_month_deals_data))
 
         try:
@@ -501,7 +501,7 @@ def create_employees_report(req):
 
         paid_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                              x['Тип'] == 'Отчетность' and
-                                                             x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                              before_last_month_deals_data))
 
         try:
@@ -513,18 +513,18 @@ def create_employees_report(req):
         # Начало года
         free_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)' and
-                                                      x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       start_year_deals_data))
 
         prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                             x['Группа'] == 'ИТС' and
                                             'Базовый' not in x['Тип'] and
-                                            x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             start_year_deals_data))
 
         its_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                            x['Группа'] == 'ИТС' and
-                                           x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                            start_year_deals_data))
 
         try:
@@ -535,7 +535,7 @@ def create_employees_report(req):
 
         paid_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность' and
-                                                      x['Стадия сделки'] not in ['Отказ от сопровождения', 'Услуга завершена'],
+                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       start_year_deals_data))
 
         try:
@@ -580,8 +580,8 @@ def create_employees_report(req):
 
         # Продажи
         deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
-        deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
         deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
+        deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',

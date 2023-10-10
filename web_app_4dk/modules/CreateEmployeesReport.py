@@ -12,8 +12,8 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -104,7 +104,7 @@ def read_deals_data_file(month, year):
     workbook = openpyxl.load_workbook(f'{deals_info_files_directory}{filename}')
     worksheet = workbook.active
     file_titles = ['Предполагаемая дата закрытия', 'Дата начала', 'Ответственный', 'Тип', 'Сумма', 'Стадия сделки',
-                   'Группа', 'ID', 'Название сделки']
+                   'Группа', 'ID', 'Название сделки', 'Компания', 'Ответственный за компанию']
     file_data = []
     for row in worksheet.rows:
         row_data = list(map(lambda x: x.value, row))
@@ -417,6 +417,31 @@ def create_employees_report(req):
 
         # Охват сервисами
         # Отчетный месяц
+        '''
+        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], last_month_deals_data))))
+        companies_without_services_last_month = 0
+        companies_without_paid_services_last_month = 0
+        for company in companies:
+            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], last_month_deals_data))
+            if not company_its:
+                continue
+
+            company_its_services = list(filter(lambda x: company == x['Компания'] and
+                                               'Контрагент' in x['Тип'] or
+                                               'Спарк' in x['Тип'] or
+                                               'РПД' in x['Тип'] or
+                                               'Отчетность' in x['Тип'] or
+                                               'Допы Облако' in x['Тип'], last_month_deals_data))
+            if not company_its_services:
+                companies_without_services_last_month += 1
+
+            company_its_paid_services = list(filter(lambda x: company == x['Компания'] and
+                                                         'Контрагент' in x['Тип'] or
+                                                         'Спарк' in x['Тип'] or
+                                                         'РПД' in x['Тип'] or
+                                                         'Отчетность' in x['Тип'] or
+                                                         'Допы Облако' in x['Тип'], last_month_deals_data))
+        '''
 
 
         worksheet.append(['Охват сервисами', f'на {report_month_last_day_date}', 'Прирост за месяц',

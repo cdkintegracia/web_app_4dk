@@ -6,7 +6,7 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 names = [
-    'Февраль_2023',
+    'Январь_2023',
     'Март_2023',
     'Апрель_2023',
     'Май_2023',
@@ -44,6 +44,7 @@ for name in names:
             temp.append('Ответственный за компанию')
         new_data.append(temp)
 
+    wl = openpyxl.Workbook()
     for row in new_data:
         ws.append(row)
     file.save(f'{name}_upd.xlsx')

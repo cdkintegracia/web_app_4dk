@@ -14,16 +14,16 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def create_its_applications_file(req):
-    UF_CRM_1643800749 = {
+    UF_CRM_1643800749 = { #поля из сделки Регистрация подписки в 1С
         'create': '371',
         'reject': '477'
     }
     deal_filter = {
         'UF_CRM_1643800749': UF_CRM_1643800749[req['process']],
-        'CATEGORY_ID': '1'
+        'CATEGORY_ID': '1' # направление сделок (воронка)
     }
     if req['process'] == 'reject':
-        deal_filter['UF_CRM_1637933869479'] = '0'
+        deal_filter['UF_CRM_1637933869479'] = '0' #выбираем те, гже автопролонгация = нет
 
     deal_fields = b.get_all('crm.deal.fields')
     deals = b.get_all('crm.deal.list', {
@@ -58,7 +58,7 @@ def create_its_applications_file(req):
             'id': product_row[0]['PRODUCT_ID']
         })
         try:
-            code_1c = product_info['PROPERTY_139']['value']
+            code_1c = product_info['PROPERTY_139']['value'] #код1С в товаре
         except:
             continue
         subscription_period = int(deal['UF_CRM_1638100416'])
@@ -76,18 +76,18 @@ def create_its_applications_file(req):
         company_requisite = send_bitrix_request('crm.requisite.list', {
             'select': ['*', 'UF_*'],
             'filter': {
-                'ENTITY_TYPE_ID': '4',
+                'ENTITY_TYPE_ID': '4', #Компания
                 'ENTITY_ID': deal['COMPANY_ID']
             }
         })[0]
         company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]
-        company_name = re.match(r'.+ \d+', company_info['TITLE'])
+        company_name = re.match(r'.+ \d+', company_info['TITLE']) #регулряное позволяет по паттерну найти подстроку
         if company_name:
-            company_name = company_name.group()
+            company_name = company_name.group() #группируем в одну строку
         else:
             company_name = '000000000000'
-        if 'PHONE' in company_info and company_info['PHONE']:
-            company_phone_code = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[1:4]
+        if 'PHONE' in company_info and company_info['PHONE']: #если в словаре есть ключ phone И если значение ключа не пустое
+            company_phone_code = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[1:4] #с первого по третий симвлы
             company_phone = company_info['PHONE'][0]['VALUE'].replace('-', '').replace('+', '')[4:]
         else:
             company_phone_code = '812'
@@ -165,24 +165,29 @@ def create_its_applications_file(req):
             b.call('crm.deal.update', {
                 'ID': deal['ID'],
                 'fields': {
-                    'UF_CRM_1643800749': '373'
+                    'UF_CRM_1643800749': '373' #Отправлено в 1С
                 }
             })
         elif req['process'] == 'reject':
             b.call('crm.deal.update', {
                 'ID': deal['ID'],
                 'fields': {
-                    'UF_CRM_1643800749': '479',
-                    'CLOSEDATE': deal['UF_CRM_1638958630625'],
-                    'UF_CRM_1638958630625': '',
+                    'UF_CRM_1643800749': '479', #Оформлен отказ
+                    #'CLOSEDATE': deal['UF_CRM_1638958630625'], #ДПО #аналогичный процесс замены ДЗ на ДПО есть в БП 759
+                    'UF_CRM_1638958630625': '', #обнуляем ДПО
                 }
             })
     try:
         workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
     except FileNotFoundError:
-        workbook = openpyxl.load_workbook('Шаблон заявок ИТС.xlsx')
+        #workbook = openpyxl.load_workbook('Шаблон заявок ИТС.xlsx')
+         b.call('im.notify.system.add', {
+                'USER_ID': req['user_id'][5:],
+                'MESSAGE': f'Не удалось сформировать файл'})
+         return
+    
     worklist = workbook.active
-    for row, row_data in enumerate(data_to_write, 11):
+    for row, row_data in enumerate(data_to_write, 11): #с 11 строки в файле
         for col, cell_value in enumerate(row_data, 1):
             worklist.cell(row=row, column=col).value = cell_value
     filenames = {
@@ -194,7 +199,7 @@ def create_its_applications_file(req):
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '568997'
-    with open(filename, 'rb') as file:
+    with open(filename, 'rb') as file: # r = read b = binary
         report_file = file.read()
     report_file_base64 = str(base64.b64encode(report_file))[2:]
     upload_report = b.call('disk.folder.uploadfile', {

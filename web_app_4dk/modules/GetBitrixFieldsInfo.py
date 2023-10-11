@@ -37,4 +37,4 @@ def get_bitrix_fields_info(req):
         else:
             fields_info += f'{code} {field_title} {fields[code]["type"]}\n'
 
-    bot_send_message({'chat_id': req['user_id'][5:], 'message': fields_info})
+    bot_send_message({'dialog_id': req['user_id'][5:], 'message': fields_info})

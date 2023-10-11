@@ -7,6 +7,7 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 names = [
     'Январь_2023',
+    'Февраль_2023',
     'Март_2023',
     'Апрель_2023',
     'Май_2023',
@@ -30,22 +31,18 @@ for name in names:
                 deal_info = b.get_all('crm.deal.get', {
                     'ID':  temp[7],
                 })
-                temp.append(deal_info['COMPANY_ID'])
-                company_info = b.get_all('crm.company.get', {
-                    'ID': deal_info['COMPANY_ID']
-                })
-                temp.append(company_info['ASSIGNED_BY_ID'])
+                temp.append(deal_info['UF_CRM_1640523562691'])
             except:
                 continue
         else:
             for cell in row:
                 temp.append(cell.value)
-            temp.append('Компания')
-            temp.append('Ответственный за компанию')
+            temp.append('Регномер')
         new_data.append(temp)
 
     wl = openpyxl.Workbook()
+    ws = wl.active
     for row in new_data:
         ws.append(row)
-    file.save(f'{name}_upd.xlsx')
+    wl.save(f'{name}_upd.xlsx')
 

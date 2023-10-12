@@ -447,6 +447,7 @@ def create_employees_report(req):
         for company in companies:
             company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, last_month_deals_data))))
             company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], last_month_deals_data))
+            non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x['Тип'] and 'Облако' not in x['Тип'], last_month_deals_data))
             if not company_its:
                 continue
 

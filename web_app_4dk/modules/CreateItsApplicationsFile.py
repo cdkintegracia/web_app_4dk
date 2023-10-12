@@ -47,6 +47,7 @@ def create_its_applications_file(req):
         }
     })
     data_to_write = []
+    deals_to_update = []
     for index, deal in enumerate(deals, 1):
         deal_date_start = datetime.fromisoformat(deal['BEGINDATE']).strftime('%d.%m.%Y')
         product_row = send_bitrix_request('crm.deal.productrows.get', {
@@ -73,13 +74,19 @@ def create_its_applications_file(req):
         else:
             payment_method = ''
 
-        company_requisite = send_bitrix_request('crm.requisite.list', {
-            'select': ['*', 'UF_*'],
-            'filter': {
-                'ENTITY_TYPE_ID': '4', #Компания
-                'ENTITY_ID': deal['COMPANY_ID']
-            }
-        })[0]
+        try:
+            company_requisite = send_bitrix_request('crm.requisite.list', {
+                'select': ['*', 'UF_*'],
+                'filter': {
+                    'ENTITY_TYPE_ID': '4', #Компания
+                    'ENTITY_ID': deal['COMPANY_ID']
+                }
+            })[0]
+        except:
+            b.call('im.notify.system.add', {
+                'USER_ID': req['user_id'][5:],
+                'MESSAGE': f'Ошибка при формировании файла с подписками ИТС: не удалось выгрузить реквизиты для https://vc4dk.bitrix24.ru/crm/company/details/{deal["COMPANY_ID"]}/'})
+
         company_info = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))[0]
         company_name = re.match(r'.+ \d+', company_info['TITLE']) #регулряное позволяет по паттерну найти подстроку
         if company_name:
@@ -161,22 +168,8 @@ def create_its_applications_file(req):
             payment_method,                     # Способ оплаты
         ])
 
-        if req['process'] == 'create':
-            b.call('crm.deal.update', {
-                'ID': deal['ID'],
-                'fields': {
-                    'UF_CRM_1643800749': '373' #Отправлено в 1С
-                }
-            })
-        elif req['process'] == 'reject':
-            b.call('crm.deal.update', {
-                'ID': deal['ID'],
-                'fields': {
-                    'UF_CRM_1643800749': '479', #Оформлен отказ
-                    #'CLOSEDATE': deal['UF_CRM_1638958630625'], #ДПО #аналогичный процесс замены ДЗ на ДПО есть в БП 759
-                    'UF_CRM_1638958630625': '', #обнуляем ДПО
-                }
-            })
+        deals_to_update.append(deal['ID'])
+
     try:
         workbook = openpyxl.load_workbook('/root/web_app_4dk/web_app_4dk/modules/Шаблон заявок ИТС.xlsx')
     except FileNotFoundError:
@@ -211,6 +204,24 @@ def create_its_applications_file(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Файл с заявками на подписки сформирован. {upload_report["DETAIL_URL"]}'})
     os_remove(filename)
+
+    for deal_id in deals_to_update:
+        if req['process'] == 'create':
+            send_bitrix_request('crm.deal.update', {
+                'ID': deal_id,
+                'fields': {
+                    'UF_CRM_1643800749': '373'  # Отправлено в 1С
+                }
+            })
+        elif req['process'] == 'reject':
+            send_bitrix_request('crm.deal.update', {
+                'ID': deal_id,
+                'fields': {
+                    'UF_CRM_1643800749': '479',  # Оформлен отказ
+                    # 'CLOSEDATE': deal['UF_CRM_1638958630625'], #ДПО #аналогичный процесс замены ДЗ на ДПО есть в БП 759
+                    'UF_CRM_1638958630625': '',  # обнуляем ДПО
+                }
+            })
 
 
 if __name__ == '__main__':

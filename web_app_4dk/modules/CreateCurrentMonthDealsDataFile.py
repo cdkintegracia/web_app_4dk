@@ -43,6 +43,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
             'UF_CRM_1657878818384',     # Группа
             'COMPANY_ID',
             'UF_CRM_1640523562691',     # Регномер
+            'UF_CRM_1638958630625',     # Дата проверки оплаты
         ],
         'filter': {'CATEGORY_ID': '1'}})
     formatted_deals_info = []
@@ -92,6 +93,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
         temp['Компания'] = deal['COMPANY_ID'] if 'COMPANY_ID' in deal else ''
         temp['Ответственный за компанию'] = company_user
         temp['Регномер'] = deal['UF_CRM_1640523562691']
+        temp['Дата проверки оплаты'] = deal['UF_CRM_1638958630625']
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

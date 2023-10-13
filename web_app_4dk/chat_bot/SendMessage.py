@@ -22,8 +22,8 @@ def bot_send_message(req: dict) -> None:
         message_text = message_text.replace('_', '\n')
     message_list_type = '2657' if 'message_list_type' not in req else req['message_list_type']
     data = {
-        'BOT_ID': '971',
-        'CLIENT_ID': '4so2clgikxlubo3xy49238j8gjpp0u66',
+        'BOT_ID': '495',
+        'CLIENT_ID': 'vv58t6uleb5nyr3li47xp2mj5r3n46tb',
         'DIALOG_ID': dialog_id,
         'MESSAGE': message_text,
     }

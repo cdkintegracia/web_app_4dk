@@ -33,7 +33,13 @@ def rewrite_call_statistic(month, year, b24_user_id):
         }
     year_codes = {
         '2022': '2239',
-        '2023': '2241'
+        '2023': '2241',
+        '2024': '2755',
+        '2025': '2757',
+        '2027': '2759',
+        '2028': '2761',
+        '2029': '2763',
+        '2030': '2765'
     }
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '175', 'filter': {'NAME': f"{month} {year}"}})
     companies = b.get_all('crm.company.list', {'select': ['TITLE']})

@@ -438,6 +438,13 @@ def get_edo_list_elements():
     edo_list_year_codes = {
         '2395': '2022',
         '2397': '2023',
+        '2741': '2024',
+        '2743': '2025',
+        '2745': '2026',
+        '2747': '2027',
+        '2749': '2028',
+        '2751': '2029',
+        '2753': '2030'
     }
     edo_list_elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '235'})
     edo_list_elements = list(map(lambda x: {

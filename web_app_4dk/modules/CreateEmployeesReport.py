@@ -496,7 +496,7 @@ def create_employees_report(req):
 
         ended_its = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_last_month))))
         ended_reporting = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_last_month))))
-        ended_others = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы', 'ИТС'], deals_ended_last_month))))
+        ended_others = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_last_month))))
         non_extended_date_deals_id = set(map(lambda x: x['ID'], non_extended_date_deals))
 
         worksheet.append(['Продление', 'Заканчивалось в прошлом месяце', 'Из них продлено', 'Не продлено'])

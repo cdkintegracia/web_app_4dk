@@ -26,4 +26,4 @@ def send_company_responsible_tlp_message(req):
     if company_info['ASSIGNED_BY_ID'] in ['129']:
         b.call('im.notify.system.add', {
             'USER_ID': company_info['ASSIGNED_BY_ID'],
-            'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]/}'})
+            'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})

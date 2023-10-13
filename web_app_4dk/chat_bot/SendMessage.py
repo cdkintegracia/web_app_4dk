@@ -27,7 +27,7 @@ def bot_send_message(req: dict) -> None:
         'DIALOG_ID': dialog_id,
         'MESSAGE': message_text,
     }
-    r = requests.post(url=f'{authentication("Chat-bot")}imbot.message.add', json=data)
+    r = requests.post(url=f'{authentication("Chat-bot")}/imbot.message.add', json=data)
     print(r.text)
     send_bitrix_request('lists.element.add', {
         'IBLOCK_TYPE_ID': 'lists',

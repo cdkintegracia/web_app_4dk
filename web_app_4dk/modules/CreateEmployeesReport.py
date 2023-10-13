@@ -210,7 +210,7 @@ def create_employees_report(req):
         # Отчетный месяц
         its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
-                                                'Базовый' not in x['Тип'] and
+                                                'Базовый' not in x['Тип'] and 'ГРМ' not in x['ТИП'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 last_month_deals_data))
 
@@ -258,7 +258,7 @@ def create_employees_report(req):
         # Предшествующий отчетному месяц
         its_prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                        x['Группа'] == 'ИТС' and
-                                                       'Базовый' not in x['Тип'] and
+                                                       'Базовый' not in x['Тип'] and 'ГРМ' not in x['ТИП'] and
                                                        x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                        before_last_month_deals_data))
 
@@ -306,7 +306,7 @@ def create_employees_report(req):
 
         # Начало квартала
         its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
-                                             'Базовый' not in x['Тип'] and
+                                             'Базовый' not in x['Тип'] and 'ГРМ' not in x['ТИП'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              quarter_deals_data))
 
@@ -353,7 +353,7 @@ def create_employees_report(req):
 
         # Начало года
         its_prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
-                                                'Базовый' not in x['Тип'] and
+                                                'Базовый' not in x['Тип'] and 'ГРМ' not in x['ТИП'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 start_year_deals_data))
 
@@ -540,7 +540,7 @@ def create_employees_report(req):
             if not company_its:
                 continue
 
-            non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x['Тип'] and 'Облако' not in x['Тип'], last_month_deals_data))
+            non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x['Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], last_month_deals_data))
             if non_prof_its:
                 company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
                                                    ('Контрагент' in x['Тип'] or
@@ -591,7 +591,7 @@ def create_employees_report(req):
                 continue
 
             non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x[
-                'Тип'] and 'Облако' not in x['Тип'], before_last_month_deals_data))
+                'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], before_last_month_deals_data))
             if non_prof_its:
 
                 company_its_services = list(
@@ -646,7 +646,7 @@ def create_employees_report(req):
                 continue
 
             non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x[
-                'Тип'] and 'Облако' not in x['Тип'], start_year_deals_data))
+                'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], start_year_deals_data))
 
             if non_prof_its:
                 company_its_services = list(

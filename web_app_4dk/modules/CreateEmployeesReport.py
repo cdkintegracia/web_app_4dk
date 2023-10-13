@@ -160,6 +160,10 @@ def create_employees_report(req):
     ddmmyyyy_pattern = '%d.%m.%Y'
     quarter_filters = get_quarter_filter(datetime.now().month - 1)
 
+    deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
+    deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
+    deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
+
     workbook = openpyxl.Workbook()
     report_name = f'Отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
     month_names = {
@@ -830,10 +834,6 @@ def create_employees_report(req):
         worksheet.append([])
 
         # Продажи
-        deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
-        deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
-        deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
-
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
             'filter': {

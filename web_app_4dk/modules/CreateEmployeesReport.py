@@ -12,8 +12,8 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -456,8 +456,8 @@ def create_employees_report(req):
 
 
         # Продление
-        deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_last_month_deals_data))
-        deals_ended_last_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_last_month_deals_data))
+        deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_before_last_month_deals_data))
+        deals_ended_last_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_before_last_month_deals_data))
         deals_ended_last_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа']}, deals_ended_last_month_dpo))
         deals_ended_last_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа']}, deals_ended_last_month_dk))
         deals_ended_last_month_dpo = list(filter(lambda x: datetime(day=1, month=before_last_month, year=before_last_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_last_month_range_days, month=before_last_month, year=before_last_month_year, hour=3), deals_ended_last_month_dpo))
@@ -465,9 +465,9 @@ def create_employees_report(req):
         deals_ended_last_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_last_month_dpo_id and (datetime(day=1, month=before_last_month, year=before_last_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_last_month_range_days, month=before_last_month, year=before_last_month_year)), deals_ended_last_month_dk))
         deals_ended_last_month = deals_ended_last_month_dk + deals_ended_last_month_dpo
 
-        last_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_before_last_month_deals_data))
+        last_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_last_month_deals_data))
         last_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': ''}, last_month_deals_data_datetime_dpo))
-        last_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_before_last_month_deals_data))
+        last_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_last_month_deals_data))
         last_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': ''}, last_month_deals_data_datetime_dk))
         non_extended_date_deals = []
         last_month_deals_data_datetime = last_month_deals_data_datetime_dpo + last_month_deals_data_datetime_dk
@@ -495,7 +495,7 @@ def create_employees_report(req):
                     non_extended_date_deals.append(deal)
 
         ended_its = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_last_month))))
-        ended_reporting = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы', deals_ended_last_month))))
+        ended_reporting = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_last_month))))
         ended_others = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы', 'ИТС'], deals_ended_last_month))))
         non_extended_date_deals_id = set(map(lambda x: x['ID'], non_extended_date_deals))
 
@@ -934,7 +934,7 @@ def create_employees_report(req):
 
 if __name__ == '__main__':
     create_employees_report({
-        'users': 'user_129'  #'user_129'   #'group_dr27', 'user_135'
+        'users': 'user_175'  #'user_129'   #'group_dr27', 'user_135'
     })
 
 

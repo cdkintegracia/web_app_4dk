@@ -86,7 +86,8 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
 
 def get_deal_value(deal_value, deal_type, deal_id, deal_name=None):
     if deal_type == 'РПД' and deal_name:
-        rpd_values = {'10000': 40000, '1000': 4500, '100': 600, '500': 2500}
+        rpd_values = {'10000': 40000, '1000': 4500, '100': 600, '500': 2500, '5000': 21000, '50000': 187500,
+                      '100000': 350000, '500000': 1625000}
         for page_count in rpd_values:
             if page_count in deal_name:
                 return rpd_values[page_count]

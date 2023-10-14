@@ -12,8 +12,9 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 #deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+deals_info_files_directory = f'C:\\Users\\mok\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\modules\\deals_info_files\\'
 month_int_names = {
         1: 'Январь',
         2: 'Февраль',
@@ -190,18 +191,18 @@ def create_employees_report(req):
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                           x['Группа'] == 'ИТС' and
+                                           x['Группа'] == 'ИТС' and 'ГРМ' not in x['Тип'] and
                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                            last_month_deals_data))
 
         its_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                            x['Группа'] == 'ИТС' and
+                                                            x['Группа'] == 'ИТС' and 'ГРМ' not in x['Тип'] and
                                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован',
                                                                                    'Счет отправлен клиенту'],
                                                   before_last_month_deals_data))
 
         its_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                     x['Группа'] == 'ИТС' and
+                                                     x['Группа'] == 'ИТС' and 'ГРМ' not in x['Тип'] and
                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован',
                                                                             'Счет отправлен клиенту'],
                                            start_year_deals_data))
@@ -503,14 +504,6 @@ def create_employees_report(req):
         ended_others = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_last_month))))
         non_extended_date_deals_id = set(map(lambda x: x['ID'], non_extended_date_deals))
 
-        print('Продленные')
-        for i in set(filter(lambda x: x not in non_extended_date_deals_id, ended_others)):
-            print(i)
-
-        print('Не продленные')
-        for i in set(filter(lambda x: x in non_extended_date_deals_id, ended_others)):
-            print(i)
-
         worksheet.append(['Продление', 'Заканчивалось в прошлом месяце', 'Из них продлено', 'Не продлено'])
         worksheet.append([
             'ИТС',
@@ -741,6 +734,9 @@ def create_employees_report(req):
 
         paid_reporting_deals_last_month = 0
         for company in companies_last_month:
+            is_company_has_its = list(filter(lambda x: x['Компания'] == company, its_deals_last_month))
+            if not is_company_has_its:
+                continue
             company_deals = list(filter(lambda x: x['Компания'] == company, last_month_deals_data))
             regnumbers = set(map(lambda x: x['Регномер'], company_deals))
             paid_reporting_deal = list(filter(lambda x: (x['Компания'] == company or x['Регномер'] in regnumbers) and x['Тип'] == 'Отчетность', last_month_deals_data))
@@ -767,6 +763,9 @@ def create_employees_report(req):
 
         paid_reporting_deals_before_last_month = 0
         for company in companies_before_last_month:
+            is_company_has_its = list(filter(lambda x: x['Компания'] == company, its_deals_before_last_month))
+            if not is_company_has_its:
+                continue
             company_deals = list(filter(lambda x: x['Компания'] == company, before_last_month_deals_data))
             regnumbers = set(map(lambda x: x['Регномер'], company_deals))
             paid_reporting_deal = list(filter(lambda x: (x['Компания'] == company or x['Регномер'] in regnumbers) and x['Тип'] == 'Отчетность', before_last_month_deals_data))
@@ -799,6 +798,9 @@ def create_employees_report(req):
 
         paid_reporting_deals_start_year = 0
         for company in companies_start_year:
+            is_company_has_its = list(filter(lambda x: x['Компания'] == company, its_deals_start_year))
+            if not is_company_has_its:
+                continue
             company_deals = list(filter(lambda x: x['Компания'] == company, start_year_deals_data))
             regnumbers = set(map(lambda x: x['Регномер'], company_deals))
             paid_reporting_deal = list(filter(lambda x: (x['Компания'] == company or x['Регномер'] in regnumbers) and x['Тип'] == 'Отчетность', start_year_deals_data))
@@ -831,10 +833,10 @@ def create_employees_report(req):
         ])
         worksheet.append([
             'Платных отчетностей',
-            len(paid_reporting_deals_last_month),
-            len(paid_reporting_deals_last_month) - len(paid_reporting_deals_before_last_month),
-            len(paid_reporting_deals_last_month) - len(paid_reporting_deals_start_year),
-            len(paid_reporting_deals_start_year),
+            paid_reporting_deals_last_month,
+            paid_reporting_deals_last_month - paid_reporting_deals_before_last_month,
+            paid_reporting_deals_last_month - paid_reporting_deals_start_year,
+            paid_reporting_deals_start_year,
         ])
         worksheet.append([
             'Охват платных отчетностей',

@@ -534,10 +534,10 @@ def create_employees_report(req):
 
         # Охват сервисами
         # Отчетный месяц
-        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], last_month_deals_data))))
+        companies_last_month = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], last_month_deals_data))))
         companies_without_services_last_month = 0
         companies_without_paid_services_last_month = 0
-        for company in companies:
+        for company in companies_last_month:
             company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, last_month_deals_data))))
             company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], last_month_deals_data))
             if not company_its:
@@ -581,11 +581,11 @@ def create_employees_report(req):
             coverage_its_without_paid_services_last_month = 0
 
         # Предшествующий отчетному месяц
-        companies = set(map(lambda x: x['Компания'], list(
+        companies_before_last_month = set(map(lambda x: x['Компания'], list(
             filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], before_last_month_deals_data))))
         companies_without_services_before_last_month = 0
         companies_without_paid_services_before_last_month = 0
-        for company in companies:
+        for company in companies_before_last_month:
             company_regnumbers = set(map(lambda x: x['Регномер'],
                                          list(filter(lambda x: x['Компания'] == company, before_last_month_deals_data))))
             company_its = list(
@@ -635,11 +635,11 @@ def create_employees_report(req):
             coverage_its_without_paid_services_before_last_month = 0
 
         # Начало года
-        companies = set(map(lambda x: x['Компания'], list(
+        companies_start_year = set(map(lambda x: x['Компания'], list(
             filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], start_year_deals_data))))
         companies_without_services_start_year = 0
         companies_without_paid_services_start_year = 0
-        for company in companies:
+        for company in companies_start_year:
             company_regnumbers = set(map(lambda x: x['Регномер'],
                                          list(filter(lambda x: x['Компания'] == company,
                                                      start_year_deals_data))))
@@ -739,13 +739,16 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
-        paid_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                      x['Тип'] == 'Отчетность' and
-                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      last_month_deals_data))
+        paid_reporting_deals_last_month = 0
+        for company in companies_last_month:
+            company_deals = list(filter(lambda x: x['Компания'] == company, last_month_deals_data))
+            regnumbers = set(map(lambda x: x['Регномер'], company_deals))
+            paid_reporting_deal = list(filter(lambda x: (x['Компания'] == company or x['Регномер'] in regnumbers) and x['Тип'] == 'Отчетность', last_month_deals_data))
+            if paid_reporting_deal:
+                paid_reporting_deals_last_month += 1
 
         try:
-            coverage_paid_reporting_deals_last_month = round(round(len(paid_reporting_deals_last_month) /
+            coverage_paid_reporting_deals_last_month = round(round(paid_reporting_deals_last_month /
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_last_month = 0
@@ -762,13 +765,16 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_before_last_month = 0
 
-        paid_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                             x['Тип'] == 'Отчетность' and
-                                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                             before_last_month_deals_data))
+        paid_reporting_deals_before_last_month = 0
+        for company in companies_before_last_month:
+            company_deals = list(filter(lambda x: x['Компания'] == company, before_last_month_deals_data))
+            regnumbers = set(map(lambda x: x['Регномер'], company_deals))
+            paid_reporting_deal = list(filter(lambda x: (x['Компания'] == company or x['Регномер'] in regnumbers) and x['Тип'] == 'Отчетность', before_last_month_deals_data))
+            if paid_reporting_deal:
+                paid_reporting_deals_before_last_month += 1
 
         try:
-            coverage_paid_reporting_deals_before_last_month = round(round(len(paid_reporting_deals_before_last_month) /
+            coverage_paid_reporting_deals_before_last_month = round(round(paid_reporting_deals_before_last_month /
                                                                     len(its_deals_before_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_before_last_month = 0
@@ -791,13 +797,16 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_start_year = 0
 
-        paid_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                      x['Тип'] == 'Отчетность' and
-                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      start_year_deals_data))
+        paid_reporting_deals_start_year = 0
+        for company in companies_start_year:
+            company_deals = list(filter(lambda x: x['Компания'] == company, start_year_deals_data))
+            regnumbers = set(map(lambda x: x['Регномер'], company_deals))
+            paid_reporting_deal = list(filter(lambda x: (x['Компания'] == company or x['Регномер'] in regnumbers) and x['Тип'] == 'Отчетность', start_year_deals_data))
+            if paid_reporting_deal:
+                paid_reporting_deals_start_year += 1
 
         try:
-            coverage_paid_reporting_deals_start_year = round(round(len(paid_reporting_deals_start_year) /
+            coverage_paid_reporting_deals_start_year = round(round(paid_reporting_deals_start_year /
                                                              len(its_deals_start_year), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_start_year = 0

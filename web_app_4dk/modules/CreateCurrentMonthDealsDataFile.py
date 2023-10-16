@@ -47,7 +47,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='311'):
             'UF_CRM_1638958630625',     # Дата проверки оплаты
         ],
         'filter': {'CATEGORY_ID': '1'}})
-    companies_id = list(set(lambda x: x['COMPANY_ID'], list(filter(lambda x: 'COMPANY_ID' in x and x['COMPANY_ID'], deals_info))))
+    companies_id = list(set(map(lambda x: x['COMPANY_ID'], list(filter(lambda x: 'COMPANY_ID' in x and x['COMPANY_ID'], deals_info)))))
     companies_info = b.get_all('crm.company.list', {
         'filter': {
             'ID': list(companies_id)

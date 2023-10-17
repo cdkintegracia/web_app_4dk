@@ -13,10 +13,12 @@ def auto_failure(req):
     logs = 'Обработанные сделки:\n\n'
     filter_date = datetime.strptime(req['date'], '%d.%m.%Y')
     filter_date_month = filter_date.month
+    filter_date_year = filter_date.year
     for i in range(2):
         filter_date_month += 1
         if filter_date_month == 13:
             filter_date_month = 1
+            filter_date_year += 1
     filter_date_end = datetime(day=1, month=filter_date_month, year=filter_date.year) - timedelta(days=2)
     filter_date_end = datetime.strftime(filter_date_end, '%Y-%m-%d')
     filter_date_start = datetime.strftime(filter_date, '%Y-%m-%d')

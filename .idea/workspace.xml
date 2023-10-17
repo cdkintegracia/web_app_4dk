@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/AutoFailure.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/AutoFailure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -421,6 +420,7 @@
       <workItem from="1693360419037" duration="2003000" />
       <workItem from="1693913475382" duration="687000" />
       <workItem from="1697312928806" duration="9371000" />
+      <workItem from="1697539197534" duration="319000" />
     </task>
     <servers />
   </component>

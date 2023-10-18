@@ -928,8 +928,17 @@ def create_employees_report(req):
                 'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
             }, edo_elements_info))
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
-            paid_traffic = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 0 and x['Сумма для клиента'] > 0, edo_elements_info))
-            paid_traffic = sum(list(map(lambda x: x['Сумма пакетов по владельцу'], paid_traffic)))
+            edo_elements_paid = b.get_all('lists.element.get', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '235',
+                'filter': {
+                    'PROPERTY_1581': users_id,
+                    'PROPERTY_1567': month_codes[month_int_names[report_month]],
+                    'PROPERTY_1569': year_codes[str(report_year)],
+                }
+            })
+            paid_traffic = list(filter(lambda x: x['PROPERTY_1573'] > 0 and x['PROPERTY_1575'] > 0, edo_elements_paid))
+            paid_traffic = sum(list(map(lambda x: x['PROPERTY_1573'], paid_traffic)))
 
         else:
             edo_companies_count = []

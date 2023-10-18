@@ -937,8 +937,8 @@ def create_employees_report(req):
                     'PROPERTY_1569': year_codes[str(report_year)],
                 }
             })
-            paid_traffic = list(filter(lambda x: x['PROPERTY_1573'] > 0 and x['PROPERTY_1575'] > 0, edo_elements_paid))
-            paid_traffic = sum(list(map(lambda x: x['PROPERTY_1573'], paid_traffic)))
+            paid_traffic = list(filter(lambda x: list(x['PROPERTY_1573'].values())[0] > 0 and list(x['PROPERTY_1575'].values())[0] > 0, edo_elements_paid))
+            paid_traffic = sum(list(map(lambda x: list(x['PROPERTY_1573'].values())[0], paid_traffic)))
 
         else:
             edo_companies_count = []

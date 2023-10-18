@@ -17,6 +17,7 @@ b = Bitrix(authentication('Bitrix'))
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 #deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 edo_year_codes = dict(zip(list(year_codes.values()), list(year_codes.keys())))
+print(edo_year_codes)
 
 
 def get_employee_id(users: str) -> list:

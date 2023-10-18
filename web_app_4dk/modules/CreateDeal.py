@@ -6,6 +6,9 @@ b = Bitrix(authentication('Bitrix'))
 
 def create_deal(req):
 
+    check_category_id = b.get_all('crm.deal.get',{'ID':req['data[FIELDS][ID]']})
+    if check_category_id['CATEGORY_ID'] != '1':
+        return
     ignore_fields = [
         'ID',       # ID
         'TITLE',        # Название

@@ -14,8 +14,8 @@ from web_app_4dk.modules.field_values import month_int_names
 
 
 b = Bitrix(authentication('Bitrix'))
-deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 
 
 def get_employee_id(users: str) -> list:
@@ -912,7 +912,7 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
                 }
             })
-            edo_companies_count = list(map(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
+            edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
             edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
@@ -929,6 +929,9 @@ def create_employees_report(req):
                 'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
             }, edo_elements_info))
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+            for i in traffic_more_than_1:
+                print(i)
+            exit()
             paid_traffic = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 0 and x['Сумма для клиента'] > 0, edo_elements_info))
             paid_traffic = sum(list(map(lambda x: x['Сумма пакетов по владельцу'], paid_traffic)))
 

@@ -75,4 +75,4 @@ def fill_feedback_task_fields(req):
                 }
             })
     except:
-        return 
+        return

@@ -145,6 +145,9 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
                 data.setdefault('Регномер', company_its[0]['UF_CRM_1640523562691'])
 
+        if company and ('Ответственный за ИТС' not in data or not data['Ответственный за ИТС']):
+            data.setdefault('Ответственный за ИТС', company['ASSIGNED_BY_ID'])
+
         create_edo_list_element(month, year, data)
 
     task_descriprtion = f'Данные за {month} {year} файла по ЭДО загружены '

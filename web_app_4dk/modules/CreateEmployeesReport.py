@@ -901,7 +901,6 @@ def create_employees_report(req):
         change_sheet_style(worksheet)
 
         # ЭДО
-        edo_year_codes = dict(zip(list(year_codes.values()), list(year_codes.keys())))
         all_its = its_prof_deals_last_month + its_base_deals_last_month
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
@@ -919,7 +918,7 @@ def create_employees_report(req):
                 'filter': {
                     'PROPERTY_1571': edo_companies_id,
                     'PROPERTY_1567': month_codes[month_int_names[report_month]],
-                    'PROPERTY_1569': edo_year_codes[str(report_year)],
+                    'PROPERTY_1569': year_codes[str(report_year)],
                 }
             })
             edo_elements_info = list(map(lambda x: {
@@ -929,9 +928,6 @@ def create_employees_report(req):
                 'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
             }, edo_elements_info))
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
-            for i in traffic_more_than_1:
-                print(i)
-            exit()
             paid_traffic = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 0 and x['Сумма для клиента'] > 0, edo_elements_info))
             paid_traffic = sum(list(map(lambda x: x['Сумма пакетов по владельцу'], paid_traffic)))
 

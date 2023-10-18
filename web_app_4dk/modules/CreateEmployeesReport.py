@@ -9,25 +9,14 @@ from openpyxl.styles import PatternFill, Font
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.modules.EdoInfoHandler import month_codes, year_codes
+from web_app_4dk.modules.field_values import month_int_names
 
 
 b = Bitrix(authentication('Bitrix'))
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 #deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
-month_int_names = {
-        1: 'Январь',
-        2: 'Февраль',
-        3: 'Март',
-        4: 'Апрель',
-        5: 'Май',
-        6: 'Июнь',
-        7: 'Июль',
-        8: 'Август',
-        9: 'Сентябрь',
-        10: 'Октябрь',
-        11: 'Ноябрь',
-        12: 'Декабрь',
-    }
+edo_year_codes = dict(zip(list(year_codes.values()), list(year_codes.keys())))
 
 
 def get_employee_id(users: str) -> list:
@@ -503,14 +492,6 @@ def create_employees_report(req):
         ended_others = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_last_month))))
         non_extended_date_deals_id = set(map(lambda x: x['ID'], non_extended_date_deals))
 
-        print('Продленные')
-        for i in set(filter(lambda x: x not in non_extended_date_deals_id, ended_others)):
-            print(i)
-
-        print('Не продленные')
-        for i in set(filter(lambda x: x in non_extended_date_deals_id, ended_others)):
-            print(i)
-
         worksheet.append(['Продление', 'Заканчивалось в прошлом месяце', 'Из них продлено', 'Не продлено'])
         worksheet.append([
             'ИТС',
@@ -916,8 +897,61 @@ def create_employees_report(req):
         worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
+        worksheet.append([])
 
         change_sheet_style(worksheet)
+
+        # ЭДО
+        all_its = its_prof_deals_last_month + its_base_deals_last_month
+        edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+
+        if edo_companies_id:
+            edo_companies = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1638093692254'],
+                'filter': {
+                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+                }
+            })
+            edo_companies_count = list(map(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
+            edo_elements_info = b.get_all('lists.element.get', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '235',
+                'filter': {
+                    'PROPERTY_1571': edo_companies_id,
+                    'PROPERTY_1567': month_codes[month_int_names[report_month]],
+                    'PROPERTY_1569': edo_year_codes[str(report_year)],
+                }
+            })
+            edo_elements_info = list(map(lambda x: {
+                'ID': x['ID'],
+                'Компания': list(x['PROPERTY_1571'].values())[0],
+                'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
+                'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
+            }, edo_elements_info))
+            traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+            paid_traffic = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 0 and x['Сумма для клиента'] > 0, edo_elements_info))
+            paid_traffic = sum(list(map(lambda x: x['Сумма пакетов по владельцу'], paid_traffic)))
+
+        else:
+            edo_companies_count = []
+            traffic_more_than_1 = []
+            paid_traffic = 0
+
+        try:
+            edo_companies_coverage = round((len(edo_companies_count) / len(all_its)) * 100, 2)
+        except ZeroDivisionError:
+            edo_companies_coverage = 0
+
+        try:
+            active_its_coverage = round((len(traffic_more_than_1) / len(all_its)) * 100, 2)
+        except ZeroDivisionError:
+            active_its_coverage = 0
+
+        worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
+        worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage])
+        worksheet.append(['Компании с трафиком больше 1', len(traffic_more_than_1)])
+        worksheet.append(['% активных ИТС', active_its_coverage])
+        worksheet.append(['Сумма платного трафика', paid_traffic])
 
     workbook.save(report_name)
 
@@ -942,7 +976,7 @@ def create_employees_report(req):
 
 if __name__ == '__main__':
     create_employees_report({
-        'users': 'user_177'  #'user_129'   #'group_dr27', 'user_135'
+        'users': 'user_181'  #'user_129'   #'group_dr27', 'user_135'
     })
 
 

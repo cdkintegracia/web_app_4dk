@@ -238,7 +238,10 @@ def fill_task_title(req, event):
 
 
 def task_handler(req, event=None):
-    task_info = fill_task_title(req, event)
+    try:
+        task_info = fill_task_title(req, event)
+    except:
+        return
     '''
     send_notification(task_info, 'Создание')
     '''

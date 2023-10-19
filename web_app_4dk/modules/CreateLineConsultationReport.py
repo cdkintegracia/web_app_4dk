@@ -173,13 +173,13 @@ def create_line_consultation_report(req):
             )
         except:
             pass
-        workbook = openpyxl.Workbook()
-        worksheet = workbook.active
-        for data in data_to_write:
-            worksheet.append(data)
-        create_time = datetime.now().strftime('%d-%m-%Y-%f')
-        report_name = f'Отчет_по_ЛК_{create_time}.xlsx'
-        workbook.save(report_name)
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    for data in data_to_write:
+        worksheet.append(data)
+    create_time = datetime.now().strftime('%d-%m-%Y-%f')
+    report_name = f'Отчет_по_ЛК_{create_time}.xlsx'
+    workbook.save(report_name)
 
     # Загрузка отчета в Битрикс
     bitrix_folder_id = '213023'

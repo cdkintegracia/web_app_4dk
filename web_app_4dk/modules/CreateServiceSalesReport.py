@@ -13,8 +13,8 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']

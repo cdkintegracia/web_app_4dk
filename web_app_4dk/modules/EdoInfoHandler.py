@@ -105,7 +105,7 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
     file_data = read_xlsx(filename)
     service_list_elements = get_service_list_elements()
     companies = b.get_all('crm.company.list', {'select': ['*', 'UF_*']})
-    deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'CATEGORY_ID': '1', '!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
+    deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'CATEGORY_ID': '1'}})
     for data in file_data:
 
         # Поиск компании по ИНН
@@ -132,7 +132,7 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
         company_deals = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'] and x['TYPE_ID'] not in ['UC_QQPYF0', 'UC_YIAJC8'], deals))
         for deal in company_deals:
             data['Регномер'] = deal['UF_CRM_1640523562691']
-            company_its = list(filter(lambda x: x['UF_CRM_1640523562691'] == data['Регномер'] and x['UF_CRM_1657878818384'] == '859', deals))
+            company_its = list(filter(lambda x: x['UF_CRM_1640523562691'] == data['Регномер'] and x['UF_CRM_1657878818384'] == '859' and x['STAGE_ID'] not in ['C1:WON', 'C1:LOSE'], deals))
             if company_its:
                 data.setdefault('Владелец ИТС', company_its[0]['COMPANY_ID'])
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])

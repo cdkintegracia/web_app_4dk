@@ -937,6 +937,10 @@ def create_employees_report(req):
                     'PROPERTY_1569': year_codes[str(report_year)],
                 }
             })
+            if user_info['ID'] == '187':
+                for i in traffic_more_than_1:
+                    print(i)
+                exit()
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
 

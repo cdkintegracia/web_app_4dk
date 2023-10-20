@@ -599,7 +599,7 @@ def create_service_sales_report(req):
     file_names_months = {}
     months_and_years = {}
 
-    get_month_range(req['months_count'], req['with_current_month'])
+    get_month_range(int(req['months_count']), req['with_current_month'])
     users_data = b.get_all('user.get')
     edo_list_elements = get_edo_list_elements()
     if req['with_current_month'] == 'Y':

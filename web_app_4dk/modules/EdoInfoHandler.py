@@ -74,6 +74,7 @@ def get_service_list_elements() -> list:
 
 
 def create_edo_list_element(month:str, year:str, data:dict):
+    sleep(1)
     b.call('lists.element.add', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '235', 'ELEMENT_CODE': time(), 'FIELDS': {
         'NAME': f"{month} {year}",
         'PROPERTY_1567': month_codes[month],

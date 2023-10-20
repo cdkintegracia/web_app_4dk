@@ -70,7 +70,7 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
     #current_year = datetime.now().year
     #current_month = datetime.now().month
     current_year = 2023
-    current_month = 9
+    current_month = 5
     if current_month < 6 and month in ['Декабрь', 'Ноябрь', 'Октябрь', 'Сентябрь', 'Август', 'Июль']:
         current_year -= 1
     if deal_type in service_deal_current_month:
@@ -561,7 +561,7 @@ def get_month_range(with_current_month='N'):
     #file_year = datetime.now().year
     #file_month = datetime.now().month
     file_year = 2023
-    file_month = 9
+    file_month = 5
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1

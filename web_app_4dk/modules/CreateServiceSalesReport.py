@@ -14,7 +14,6 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
@@ -130,7 +129,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
     service_deal_value_field = f'{month} Сервисы'
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))
     for deal_info in deals_info:
-        print(deal_info['ID'])
         if deal_info['Тип'] == 'Контрагент в договоре':
             deal_info['Тип'] = 'Контрагент'
         if deal_info['Ответственный'] not in handled_data:
@@ -150,6 +148,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
             deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'], deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
 
             if deal_info['Тип'] in service_deal_current_month:
+                if deal_info['ID'] == '81433':
+                    print(deal_start_date, deal_info['Дата начала'].strftime('%d.%m.%Y'))
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
                     deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
                     handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value

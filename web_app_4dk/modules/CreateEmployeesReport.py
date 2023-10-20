@@ -932,7 +932,7 @@ def create_employees_report(req):
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
                 'filter': {
-                    'PROPERTY_1581': users_id,
+                    'PROPERTY_1581': user_info['ID'],
                     'PROPERTY_1567': month_codes[month_int_names[report_month]],
                     'PROPERTY_1569': year_codes[str(report_year)],
                 }

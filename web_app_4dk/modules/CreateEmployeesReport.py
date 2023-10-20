@@ -937,10 +937,7 @@ def create_employees_report(req):
                     'PROPERTY_1569': year_codes[str(report_year)],
                 }
             })
-            b.call('im.notify.system.add', {
-            'USER_ID': '311',
-            'MESSAGE': ', '.join(list(map(lambda x: x['ID'], traffic_more_than_1)))})
-            exit()
+
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
 
@@ -961,7 +958,7 @@ def create_employees_report(req):
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage])
-        worksheet.append(['Компании с трафиком больше 1', len(traffic_more_than_1)])
+        worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))])
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic])
 

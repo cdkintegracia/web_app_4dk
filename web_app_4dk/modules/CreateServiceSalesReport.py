@@ -149,8 +149,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
             if deal_info['Тип'] in service_deal_current_month:
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
-                    if deal_info['ID'] == '81433':
-                        print(deal_start_date, deal_info, deal_value)
+                    #if deal_info['ID'] == '81433':
+                        #print(deal_start_date, deal_info, deal_value)
                     deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
                     handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                     handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
@@ -541,7 +541,7 @@ def sort_handled_data_keys():
     return sorted_handled_data
 
 
-def get_month_range(with_current_month='N'):
+def get_month_range(months_count, with_current_month='N'):
     global month_names, file_names_months, months_and_years
     month_int_names = {
         1: 'Январь',
@@ -562,7 +562,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(12):
+    for _ in range(months_count):
         file_month -= 1
         if file_month == 0:
             file_month = 12
@@ -599,7 +599,7 @@ def create_service_sales_report(req):
     file_names_months = {}
     months_and_years = {}
 
-    get_month_range(req['with_current_month'])
+    get_month_range(req['months_count'], req['with_current_month'])
     users_data = b.get_all('user.get')
     edo_list_elements = get_edo_list_elements()
     if req['with_current_month'] == 'Y':

@@ -556,8 +556,10 @@ def get_month_range(with_current_month='N'):
         11: 'Ноябрь',
         12: 'Декабрь',
     }
-    file_year = datetime.now().year
-    file_month = datetime.now().month
+    #file_year = datetime.now().year
+    #file_month = datetime.now().month
+    file_year = 2023
+    file_month = 9
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
@@ -573,7 +575,6 @@ def get_month_range(with_current_month='N'):
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
-    file_names_months = {'Декабрь_2022.xlsx': 'Декабрь'}
 
 
 def get_second_sheet_titles():

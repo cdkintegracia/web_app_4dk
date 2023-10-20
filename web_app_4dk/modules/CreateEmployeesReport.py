@@ -916,14 +916,14 @@ def create_employees_report(req):
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
                 'filter': {
-                    'PROPERTY_1571': edo_companies_id,
+                    'PROPERTY_1579': edo_companies_id,
                     'PROPERTY_1567': month_codes[month_int_names[report_month]],
                     'PROPERTY_1569': year_codes[str(report_year)],
                 }
             })
             edo_elements_info = list(map(lambda x: {
                 'ID': x['ID'],
-                'Компания': list(x['PROPERTY_1571'].values())[0],
+                'Компания': list(x['PROPERTY_1579'].values())[0],
                 'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
                 'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
             }, edo_elements_info))

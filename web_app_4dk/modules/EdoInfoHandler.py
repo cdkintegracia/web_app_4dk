@@ -131,12 +131,8 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
         # Поиск ИТС по компании
         company_deals = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'] and x['TYPE_ID'] not in ['UC_QQPYF0', 'UC_YIAJC8'], deals))
         for deal in company_deals:
-            print(deal['ID'], deal['UF_CRM_1640523562691'])
             data['Регномер'] = deal['UF_CRM_1640523562691']
-            print(data['Регномер'], data['Регномер'] == '802308033')
             company_its = list(filter(lambda x: x['UF_CRM_1640523562691'] == data['Регномер'] and x['UF_CRM_1657878818384'] == '859', deals))
-            for i in company_its:
-                print(i['ID'])
             if company_its:
                 data.setdefault('Владелец ИТС', company_its[0]['COMPANY_ID'])
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])

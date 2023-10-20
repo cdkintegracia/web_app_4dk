@@ -129,8 +129,6 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
                 continue
 
         # Поиск ИТС по компании
-        if data['Компания'] != '7407':
-            continue
         company_deals = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'] and x['TYPE_ID'] not in ['UC_QQPYF0', 'UC_YIAJC8'], deals))
         for deal in company_deals:
             print(deal['ID'], deal['UF_CRM_1640523562691'])

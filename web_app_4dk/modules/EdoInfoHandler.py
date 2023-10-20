@@ -105,7 +105,7 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
     file_data = read_xlsx(filename)
     service_list_elements = get_service_list_elements()
     companies = b.get_all('crm.company.list', {'select': ['*', 'UF_*']})
-    deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'CATEGORY_ID': '1'}})
+    deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'CATEGORY_ID': '1', '!TYPE_ID': ['C1:WON', 'C1:LOSE']}})
     for data in file_data:
 
         # Поиск компании по ИНН

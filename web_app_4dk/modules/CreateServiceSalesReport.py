@@ -13,8 +13,8 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
+#deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
@@ -67,10 +67,8 @@ def read_deals_from_xlsx(filename: str) -> list:
 
 
 def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal_date_start, id):
-    #current_year = datetime.now().year
-    #current_month = datetime.now().month
-    current_year = 2023
-    current_month = 5
+    current_year = datetime.now().year
+    current_month = datetime.now().month
     if current_month < 6 and month in ['Декабрь', 'Ноябрь', 'Октябрь', 'Сентябрь', 'Август', 'Июль']:
         current_year -= 1
     if deal_type in service_deal_current_month:
@@ -132,6 +130,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
     service_deal_value_field = f'{month} Сервисы'
     rpd_data = dict(zip(list(handled_data.keys()), [{} for _ in handled_data.keys()]))
     for deal_info in deals_info:
+        print(deal_info['ID'])
         if deal_info['Тип'] == 'Контрагент в договоре':
             deal_info['Тип'] = 'Контрагент'
         if deal_info['Ответственный'] not in handled_data:
@@ -558,14 +557,12 @@ def get_month_range(with_current_month='N'):
         11: 'Ноябрь',
         12: 'Декабрь',
     }
-    #file_year = datetime.now().year
-    #file_month = datetime.now().month
-    file_year = 2023
-    file_month = 5
+    file_year = datetime.now().year
+    file_month = datetime.now().month
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(6):
+    for _ in range(12):
         file_month -= 1
         if file_month == 0:
             file_month = 12

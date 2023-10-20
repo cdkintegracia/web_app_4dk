@@ -135,6 +135,7 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
         for deal in company_deals:
             print(deal['ID'], deal['UF_CRM_1640523562691'])
             data.setdefault('Регномер', deal['UF_CRM_1640523562691'])
+            print(data['Регномер'], data['Регномер'] == '802308033')
             company_its = list(filter(lambda x: x['UF_CRM_1640523562691'] == data['Регномер'] and x['UF_CRM_1657878818384'] == '859', deals))
             print(company_its)
             if company_its:

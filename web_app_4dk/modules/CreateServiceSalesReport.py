@@ -565,7 +565,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = []
     if with_current_month == 'Y':
         file_month += 1
-    for _ in range(12):
+    for _ in range(6):
         file_month -= 1
         if file_month == 0:
             file_month = 12

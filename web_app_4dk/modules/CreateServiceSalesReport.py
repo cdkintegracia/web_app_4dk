@@ -14,6 +14,7 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
+#deals_info_files_directory = f'C:\\Users\\Максим\\Documents\\GitHub\\web_app_4dk\\web_app_4dk\\deals_info_files\\'
 
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
@@ -86,8 +87,8 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
 
 def get_deal_value(deal_value, deal_type, deal_id, deal_name=None):
     if deal_type == 'РПД' and deal_name:
-        rpd_values = {'10000': 40000, '1000': 4500, '100': 600, '500': 2500, '5000': 21000, '50000': 187500,
-                      '100000': 350000, '500000': 1625000}
+        rpd_values = {'500000': 1625000, '100000': 350000, '50000': 187500, '5000': 21000, '10000': 40000, '1000': 4500,
+                      '100': 600, '500': 2500, }
         for page_count in rpd_values:
             if page_count in deal_name:
                 return rpd_values[page_count]
@@ -572,6 +573,7 @@ def get_month_range(with_current_month='N'):
     file_names_list = list(reversed(file_names_list))
     month_names = list(reversed(month_names))
     file_names_months = dict(zip(file_names_list, month_names))
+    file_names_months = {'Декабрь_2022.xlsx': 'Декабрь'}
 
 
 def get_second_sheet_titles():

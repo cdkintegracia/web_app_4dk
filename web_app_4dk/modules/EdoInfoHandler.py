@@ -143,7 +143,6 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
                 data.setdefault('Владелец ИТС', company_its[0]['COMPANY_ID'])
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
                 break
-        exit()
 
         # Поиск ИТС по значению поля компании "Связан с"
         if 'Владелец ИТС' not in data and company_link_company:

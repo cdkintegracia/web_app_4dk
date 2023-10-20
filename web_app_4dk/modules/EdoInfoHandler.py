@@ -74,7 +74,6 @@ def get_service_list_elements() -> list:
 
 
 def create_edo_list_element(month:str, year:str, data:dict):
-    sleep(1)
     b.call('lists.element.add', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '235', 'ELEMENT_CODE': time(), 'FIELDS': {
         'NAME': f"{month} {year}",
         'PROPERTY_1567': month_codes[month],
@@ -130,14 +129,20 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
                 continue
 
         # Поиск ИТС по компании
+        if data['Компания'] != '5381':
+            continue
         company_deals = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'] and x['TYPE_ID'] not in ['UC_QQPYF0', 'UC_YIAJC8'], deals))
         for deal in company_deals:
             data['Регномер'] = deal['UF_CRM_1640523562691']
+            print(deal['ID'], data['Регномер'])
             company_its = list(filter(lambda x: x['UF_CRM_1640523562691'] == data['Регномер'] and x['UF_CRM_1657878818384'] == '859', deals))
+            for i in company_its:
+                print(i['ID'], i['UF_CRM_1640523562691'])
             if company_its:
                 data.setdefault('Владелец ИТС', company_its[0]['COMPANY_ID'])
                 data.setdefault('Ответственный за ИТС', company_its[0]['ASSIGNED_BY_ID'])
                 break
+        exit()
 
         # Поиск ИТС по значению поля компании "Связан с"
         if 'Владелец ИТС' not in data and company_link_company:

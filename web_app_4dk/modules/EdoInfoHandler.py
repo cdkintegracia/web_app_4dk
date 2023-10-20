@@ -129,7 +129,7 @@ def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
                 continue
 
         # Поиск ИТС по компании
-        company_deals = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'] and x['Тип'] not in ['UC_QQPYF0', 'UC_YIAJC8'], deals))
+        company_deals = list(filter(lambda x: x['COMPANY_ID'] == data['Компания'] and x['TYPE_ID'] not in ['UC_QQPYF0', 'UC_YIAJC8'], deals))
         for deal in company_deals:
             data.setdefault('Регномер', deal['UF_CRM_1640523562691'])
             company_its = list(filter(lambda x: x['UF_CRM_1640523562691'] == data['Регномер'] and x['UF_CRM_1657878818384'] == '859', deals))

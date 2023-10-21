@@ -74,6 +74,7 @@ from web_app_4dk.modules.CreateEmployeesReport import create_employees_report
 from web_app_4dk.modules.CreateImplementationDepartmentReport import create_implementation_department_report
 from web_app_4dk.modules.GetBitrixFieldsInfo import get_bitrix_fields_info
 from web_app_4dk.modules.SendCompanyResponsibleTLPMessage import send_company_responsible_tlp_message
+from web_app_4dk.modules.SendCompanyInteractionInfo import send_company_interaction_info
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
@@ -131,6 +132,7 @@ custom_webhooks = {
     'create_implementation_department_report': create_implementation_department_report,
     'get_bitrix_fields_info': get_bitrix_fields_info,
     'send_company_responsible_tlp_message': send_company_responsible_tlp_message,
+    'send_company_interaction_info': send_company_interaction_info
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

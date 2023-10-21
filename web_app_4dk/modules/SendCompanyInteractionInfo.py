@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import monthrange
+from time import sleep
 
 from fast_bitrix24 import Bitrix
 
@@ -145,6 +146,7 @@ def send_company_interaction_info(req):
                            'FIELDS': {
                                'TITLE': f"{company_name} {top_deal} https://vc4dk.bitrix24.ru/crm/company/details/{company_id}/"}
                            } , raw=True)
+                sleep(1)
 
 
 

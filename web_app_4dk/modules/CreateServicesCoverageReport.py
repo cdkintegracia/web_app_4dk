@@ -363,7 +363,6 @@ def create_services_coverage_report(req):
         main_report_name_users = [
             '1',
             '157',
-            '311'
         ]
         upload_report_to_bitrix(report_name=main_report_name, users_id=main_report_name_users)
 

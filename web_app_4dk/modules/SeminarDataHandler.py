@@ -130,7 +130,7 @@ def company_in_b24(companies, company_inn=None, company_name=None, phone=None, e
 def is_company_type_client(company_id, companies):
     company_info = list(filter(lambda x: str(x['ID']) == str(company_id), companies))[0]
     if company_info['COMPANY_TYPE'] == 'CUSTOMER':
-        return '311'
+        return '1'
 
 
 def get_company_contact_by_surname(company_id, fio):

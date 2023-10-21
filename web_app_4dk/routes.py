@@ -223,7 +223,7 @@ def send_service_coverage_report_to_employees():
 
 @app.route('/send_request_fill_act_document_smart_process', methods=['GET'])
 def route_send_request_fill_document_smart_process():
-    fill_act_document_smart_process({'user_id': 'user_311'})
+    fill_act_document_smart_process({'user_id': 'user_1'})
     return 'OK'
 
 

@@ -225,4 +225,4 @@ def create_its_applications_file(req):
 
 
 if __name__ == '__main__':
-    create_its_applications_file({'user_id': 'user_311', 'process': 'reject'})
+    create_its_applications_file({'user_id': 'user_1', 'process': 'reject'})

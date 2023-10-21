@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/SendCompanyInteractionInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/SendCompanyInteractionInfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateItsApplicationsFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateItsApplicationsFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateRevenueListElements.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateRevenueListElements.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateServicesCoverageReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateServicesCoverageReport.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/FillActDocumentSmartProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/FillActDocumentSmartProcess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/SeminarDataHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/SeminarDataHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/TaskHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/TaskHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/TempChecko.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/TempChecko.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

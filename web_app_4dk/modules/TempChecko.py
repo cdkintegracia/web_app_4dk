@@ -291,7 +291,7 @@ def get_info_from_checko():
                     errors.append(company_info['UF_CRM_1656070716'])
                     break
 
-    users_for_notifications = ['311', '1']
+    users_for_notifications = ['1']
     if errors:
         count -= len(errors)
         notification_text = f'В УС "Выручка" было загружено {count} новых элементов\nНе удалось загрузить элементы для этих ИНН: {",".join(errors)}'

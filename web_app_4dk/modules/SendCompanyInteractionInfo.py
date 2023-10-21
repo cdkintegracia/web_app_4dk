@@ -9,8 +9,6 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def send_company_interaction_info(req):
-    print(req)
-    exit()
     current_day = datetime.now().day
     current_day = 31
     month_day_range = monthrange(datetime.now().year, datetime.now().month)[1]
@@ -128,7 +126,7 @@ def send_company_interaction_info(req):
         task = b.call('tasks.task.add', {
             'fields': {
                 'TITLE': 'Компании без взаимодействия',
-                'RESPONSIBLE_ID': '1' if 'responsibles' not in req else responsible,
+                'RESPONSIBLE_ID': '1' if req['responsibles'] == 'N' else responsible,
                 'CREATED_BY': '173',
                 'DESCRIPTION': 'По данным системы, с этими компаниями последнее взаимодействие произошло свыше 90 дней. Пожалуйста, свяжитесь с клиентами и/или укажите актуальные контактные данные в карточке компании и контактов',
                 'DEADLINE': f"{datetime.strftime(task_deadline_date, '%Y-%m-%d')} 19:00",

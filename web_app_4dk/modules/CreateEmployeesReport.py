@@ -706,7 +706,7 @@ def create_employees_report(req):
         worksheet.append([])
 
 
-        # Отчетность
+       # Отчетность
         # Отчетный месяц
         free_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)' and
@@ -719,13 +719,15 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
-        paid_reporting_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                      x['Тип'] == 'Отчетность' and
-                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      last_month_deals_data))
+        paid_reporting_deals_last_month = 0
+        for its_deal in its_deals_last_month:
+            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
+                                                       (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'), deals_ended_last_month))
+            if its_paid_reporting:
+                paid_reporting_deals_last_month += 1
 
         try:
-            coverage_paid_reporting_deals_last_month = round(round(len(paid_reporting_deals_last_month) /
+            coverage_paid_reporting_deals_last_month = round(round(paid_reporting_deals_last_month /
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_last_month = 0
@@ -742,13 +744,17 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_before_last_month = 0
 
-        paid_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                             x['Тип'] == 'Отчетность' and
-                                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                             before_last_month_deals_data))
+        paid_reporting_deals_before_last_month = 0
+        for its_deal in its_deals_last_month:
+            its_paid_reporting = list(
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
+                                 (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
+                       before_last_month_deals_data))
+            if its_paid_reporting:
+                paid_reporting_deals_before_last_month += 1
 
         try:
-            coverage_paid_reporting_deals_before_last_month = round(round(len(paid_reporting_deals_before_last_month) /
+            coverage_paid_reporting_deals_before_last_month = round(round(paid_reporting_deals_before_last_month /
                                                                     len(its_deals_before_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_before_last_month = 0
@@ -771,13 +777,17 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_start_year = 0
 
-        paid_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                      x['Тип'] == 'Отчетность' and
-                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      start_year_deals_data))
+        paid_reporting_deals_start_year = 0
+        for its_deal in its_deals_last_month:
+            its_paid_reporting = list(
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
+                                 (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
+                       start_year_deals_data))
+            if its_paid_reporting:
+                paid_reporting_deals_start_year += 1
 
         try:
-            coverage_paid_reporting_deals_start_year = round(round(len(paid_reporting_deals_start_year) /
+            coverage_paid_reporting_deals_start_year = round(round(paid_reporting_deals_start_year /
                                                              len(its_deals_start_year), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_start_year = 0
@@ -802,10 +812,10 @@ def create_employees_report(req):
         ])
         worksheet.append([
             'Платных отчетностей',
-            len(paid_reporting_deals_last_month),
-            len(paid_reporting_deals_last_month) - len(paid_reporting_deals_before_last_month),
-            len(paid_reporting_deals_last_month) - len(paid_reporting_deals_start_year),
-            len(paid_reporting_deals_start_year),
+            paid_reporting_deals_last_month,
+            paid_reporting_deals_last_month - paid_reporting_deals_before_last_month,
+            paid_reporting_deals_last_month - paid_reporting_deals_start_year,
+            paid_reporting_deals_start_year,
         ])
         worksheet.append([
             'Охват платных отчетностей',
@@ -815,6 +825,7 @@ def create_employees_report(req):
             f'{round(coverage_paid_reporting_deals_start_year, 2)}%',
         ])
         worksheet.append([])
+
 
         # Продажи
         sales = b.get_all('crm.item.list', {

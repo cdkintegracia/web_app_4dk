@@ -778,7 +778,7 @@ def create_employees_report(req):
             coverage_free_reporting_deals_start_year = 0
 
         paid_reporting_deals_start_year = 0
-         for its_deal in its_deals_start_year:
+        for its_deal in its_deals_start_year:
             its_paid_reporting = list(
                 filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
                                  (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),

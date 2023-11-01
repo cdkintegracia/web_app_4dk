@@ -721,7 +721,7 @@ def create_employees_report(req):
 
         paid_reporting_deals_last_month = 0
         for its_deal in its_deals_last_month:
-              its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
+            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
                                                        (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'), last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_last_month += 1

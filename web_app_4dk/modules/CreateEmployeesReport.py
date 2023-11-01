@@ -79,7 +79,12 @@ def get_quarter_filter(month_number):
     if month_number + 1 in quarter:
         quarter.remove(month_number + 1)
     quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
-    quarter_end_filter = datetime(day=1, month=quarter[-1] + 1, year=datetime.now().year)
+    month_end = month=quarter[-1] + 1
+    year_end=datetime.now().year
+    if month_end == 13:
+        month_end = 1
+        year_end = year_end + 1
+        quarter_end_filter = datetime(day=1, month=month_end, year=year_end)
 
     return {
         'start_date': quarter_start_filter,

@@ -450,17 +450,17 @@ def create_employees_report(req):
         # Продление
         deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_before_last_month_deals_data))
         deals_ended_last_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_before_last_month_deals_data))
-        deals_ended_last_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа']}, deals_ended_last_month_dpo))
-        deals_ended_last_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа']}, deals_ended_last_month_dk))
+        deals_ended_last_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_last_month_dpo))
+        deals_ended_last_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_last_month_dk))
         deals_ended_last_month_dpo = list(filter(lambda x: datetime(day=1, month=before_last_month, year=before_last_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_last_month_range_days, month=before_last_month, year=before_last_month_year, hour=3), deals_ended_last_month_dpo))
         deals_ended_last_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_last_month_dpo))
         deals_ended_last_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_last_month_dpo_id and (datetime(day=1, month=before_last_month, year=before_last_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_last_month_range_days, month=before_last_month, year=before_last_month_year)), deals_ended_last_month_dk))
         deals_ended_last_month = deals_ended_last_month_dk + deals_ended_last_month_dpo
 
         last_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], last_month_deals_data))
-        last_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки']}, last_month_deals_data_datetime_dpo))
+        last_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, last_month_deals_data_datetime_dpo))
         last_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, last_month_deals_data))
-        last_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки']}, last_month_deals_data_datetime_dk))
+        last_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, last_month_deals_data_datetime_dk))
         non_extended_date_deals = []
         last_month_deals_data_datetime = last_month_deals_data_datetime_dpo + last_month_deals_data_datetime_dk
 
@@ -721,8 +721,8 @@ def create_employees_report(req):
 
         paid_reporting_deals_last_month = 0
         for its_deal in its_deals_last_month:
-            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
-                                                       (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'), deals_ended_last_month))
+              its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
+                                                       (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'), last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_last_month += 1
 
@@ -745,7 +745,7 @@ def create_employees_report(req):
             coverage_free_reporting_deals_before_last_month = 0
 
         paid_reporting_deals_before_last_month = 0
-        for its_deal in its_deals_last_month:
+        for its_deal in its_deals_before_last_month:
             its_paid_reporting = list(
                 filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
                                  (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
@@ -778,7 +778,7 @@ def create_employees_report(req):
             coverage_free_reporting_deals_start_year = 0
 
         paid_reporting_deals_start_year = 0
-        for its_deal in its_deals_last_month:
+         for its_deal in its_deals_start_year:
             its_paid_reporting = list(
                 filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
                                  (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
@@ -998,7 +998,3 @@ if __name__ == '__main__':
     create_employees_report({
         'users': 'user_181'  #'user_129'   #'group_dr27', 'user_135'
     })
-
-
-
-

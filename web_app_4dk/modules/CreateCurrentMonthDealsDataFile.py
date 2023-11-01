@@ -97,7 +97,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
         temp['Компания'] = deal['COMPANY_ID'] if 'COMPANY_ID' in deal else ''
         temp['Ответственный за компанию'] = company_user
         temp['Регномер'] = deal['UF_CRM_1640523562691']
-        temp['Дата проверки оплаты'] = deal['UF_CRM_1638958630625']
+        temp['Дата проверки оплаты'] = datetime.fromisoformat(deal['UF_CRM_1638958630625']) if deal['UF_CRM_1638958630625'] else ''
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

@@ -567,7 +567,7 @@ def create_employees_report(req):
 
         # Предшествующий отчетному месяц
         companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_name, before_last_month_deals_data))))
+            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], before_last_month_deals_data))))
         companies_without_services_before_last_month = 0
         companies_without_paid_services_before_last_month = 0
         for company in companies:
@@ -621,7 +621,7 @@ def create_employees_report(req):
 
         # Начало года
         companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_name, start_year_deals_data))))
+            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], start_year_deals_data))))
         companies_without_services_start_year = 0
         companies_without_paid_services_start_year = 0
         for company in companies:

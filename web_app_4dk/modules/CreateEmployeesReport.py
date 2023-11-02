@@ -79,12 +79,12 @@ def get_quarter_filter(month_number):
     if month_number + 1 in quarter:
         quarter.remove(month_number + 1)
     quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
-    month_end = month=quarter[-1] + 1
+    month_end = quarter[-1] + 1
     year_end=datetime.now().year
     if month_end == 13:
         month_end = 1
         year_end = year_end + 1
-        quarter_end_filter = datetime(day=1, month=month_end, year=year_end)
+    quarter_end_filter = datetime(day=1, month=month_end, year=year_end)
 
     return {
         'start_date': quarter_start_filter,
@@ -519,7 +519,7 @@ def create_employees_report(req):
 
         # Охват сервисами
         # Отчетный месяц
-        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], last_month_deals_data))))
+        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, last_month_deals_data))))
         companies_without_services_last_month = 0
         companies_without_paid_services_last_month = 0
         for company in companies:
@@ -567,7 +567,7 @@ def create_employees_report(req):
 
         # Предшествующий отчетному месяц
         companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], before_last_month_deals_data))))
+            filter(lambda x: x['Ответственный за компанию'] == user_name, before_last_month_deals_data))))
         companies_without_services_before_last_month = 0
         companies_without_paid_services_before_last_month = 0
         for company in companies:
@@ -621,7 +621,7 @@ def create_employees_report(req):
 
         # Начало года
         companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], start_year_deals_data))))
+            filter(lambda x: x['Ответственный за компанию'] == user_name, start_year_deals_data))))
         companies_without_services_start_year = 0
         companies_without_paid_services_start_year = 0
         for company in companies:

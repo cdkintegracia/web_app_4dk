@@ -905,6 +905,18 @@ def create_employees_report(req):
         except ZeroDivisionError:
             average_tasks_ratings = '-'
 
+        #Попытка Дежурства
+        days_duty = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '301',
+            'filter': {
+                'PROPERTY_1753': user_info['ID'],
+                'PROPERTY_1769': int(report_month),
+                'PROPERTY_1771': int(report_year),
+            }
+        })
+        days_duty_amount = len(days_duty)
+
         worksheet.append(['', 'Незакрытых (и созд. в этом мес)', 'Всего создано в месяце'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
         worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
@@ -912,6 +924,7 @@ def create_employees_report(req):
         worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
+        worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
 
         change_sheet_style(worksheet)

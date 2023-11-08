@@ -916,6 +916,7 @@ def create_employees_report(req):
             }
         })
         days_duty_amount = len(days_duty)
+        print(days_duty_amount)
 
         worksheet.append(['', 'Незакрытых (и созд. в этом мес)', 'Всего создано в месяце'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])

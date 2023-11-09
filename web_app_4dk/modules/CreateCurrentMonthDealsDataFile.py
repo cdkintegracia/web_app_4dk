@@ -54,6 +54,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
         }
     })
 
+    string_date_format = '%d.%m.%Y'
     formatted_deals_info = []
     for deal in deals_info:
         temp = {}
@@ -79,12 +80,12 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
 
         if deal['CLOSEDATE']:
             closedate = dateutil.parser.isoparse(deal['CLOSEDATE'])
-            temp['Предполагаемая дата закрытия'] = datetime.strftime(closedate, '%d.%m.%Y')
+            temp['Предполагаемая дата закрытия'] = datetime.strftime(closedate, string_date_format)
         else:
             temp['Предполагаемая дата закрытия'] = ''
         if deal['BEGINDATE']:
             begindate = dateutil.parser.isoparse(deal['BEGINDATE'])
-            temp['Дата начала'] = datetime.strftime(begindate, '%d.%m.%Y')
+            temp['Дата начала'] = datetime.strftime(begindate, string_date_format)
         else:
             temp['Дата начала'] = ''
         temp['Ответственный'] = user_name
@@ -97,7 +98,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
         temp['Компания'] = deal['COMPANY_ID'] if 'COMPANY_ID' in deal else ''
         temp['Ответственный за компанию'] = company_user
         temp['Регномер'] = deal['UF_CRM_1640523562691']
-        temp['Дата проверки оплаты'] = datetime.fromisoformat(deal['UF_CRM_1638958630625']) if deal['UF_CRM_1638958630625'] else ''
+        temp['Дата проверки оплаты'] = (datetime.fromisoformat(deal['UF_CRM_1638958630625'])).strftime(string_date_format) if deal['UF_CRM_1638958630625'] else ''
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

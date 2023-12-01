@@ -48,15 +48,16 @@ def create_implementation_department_report(req):
         'Дата начала', 'Ответственный', 'Затраченное время', 'Работа'
     ])
     for result in tasks_results:
-        if result['USER_ID'] not in users_name:
-            user_info = list(filter(lambda x: x['ID'] == result['USER_ID'], users_info))[0]
-            users_name[result['USER_ID']] = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
-        worksheet.append([
+        if result['USER_ID'] in users_id:
+            if result['USER_ID'] not in users_name:
+                user_info = list(filter(lambda x: x['ID'] == result['USER_ID'], users_info))[0]
+                users_name[result['USER_ID']] = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
+            worksheet.append([
             datetime.fromisoformat(result['CREATED_DATE']).strftime('%d.%m.%Y %H:%M'),
             users_name[result['USER_ID']],
             str(timedelta(seconds=int(result['SECONDS']))),
             result['COMMENT_TEXT']
-        ])
+            ])
 
         columns_width = {
             0: 25,

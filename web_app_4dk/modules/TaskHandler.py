@@ -90,8 +90,10 @@ def task_registry(task_info, event):
             company_id = ufCrmCompany[0][3:]
             print(ufCrmCompany,company_id)
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+        print("ttt")
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]
+            print("ggg")
 
     groups = send_bitrix_request('sonet_group.get', {})  #получили инфо по всем группам, что есть на портале
     try:

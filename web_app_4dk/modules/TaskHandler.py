@@ -80,21 +80,21 @@ def task_registry(task_info, event):
         task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{["groupId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
     else:
         task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{["responsibleId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
+    print(task_url)
 
     company_id = ''
     contact_id = ''
     if 'ufCrmTask' in task_info and task_info['ufCrmTask']:
-        print("ddd")
         ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
         if ufCrmCompany:
             company_id = ufCrmCompany[0][3:]
-            print(ufCrmCompany,company_id)
+            
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         print("ttt")
         #print(task_info)
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]
-            print("ggg")
+            
 
     groups = send_bitrix_request('sonet_group.get', {})  #получили инфо по всем группам, что есть на портале
     try:

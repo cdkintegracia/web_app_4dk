@@ -76,12 +76,13 @@ def task_registry(task_info, event):
         "6": 355,
     }
 
-    if ['groupId'] and ['groupId'] != '0':
-        task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{["groupId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
+    if task_info['groupId'] and task_info['groupId'] != '0':
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{task_info['id']}/">Ссылка на задачу</a>'
     else:
-        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{["responsibleId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
+        task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{task_info['responsibleId']}/tasks/task/view/{task_info['id']}/">Ссылка на задачу</a>'
     print(task_url)
-    print('groupId', 'id', task_id )
+    
+
 
     company_id = ''
     contact_id = ''

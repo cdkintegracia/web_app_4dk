@@ -87,6 +87,7 @@ def task_registry(task_info, event):
         ufCrmCompany = list(filter(lambda x: 'CO_' in x, ['ufCrmTask']))
         if ufCrmCompany:
             company_id = ufCrmCompany[0][3:]
+            print(ufCrmCompany,company_id)
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]

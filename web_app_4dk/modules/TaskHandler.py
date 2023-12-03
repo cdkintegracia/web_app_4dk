@@ -81,6 +81,7 @@ def task_registry(task_info, event):
     else:
         task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{["responsibleId"]}/tasks/task/view/{["id"]}/">Ссылка на задачу</a>'
     print(task_url)
+    print(groupId, id, task_id )
 
     company_id = ''
     contact_id = ''
@@ -90,7 +91,6 @@ def task_registry(task_info, event):
             company_id = ufCrmCompany[0][3:]
             
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-        print("ttt")
         #print(task_info)
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]

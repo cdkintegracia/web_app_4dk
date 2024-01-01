@@ -151,7 +151,7 @@ def create_employees_report(req):
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
-    if get_quarter_filter(datetime.now().month == 1:
+    if get_quarter_filter(datetime.now().month) == 1:
         quarter_filters = get_quarter_filter(12)
     else:
         quarter_filters = get_quarter_filter(datetime.now().month - 1)

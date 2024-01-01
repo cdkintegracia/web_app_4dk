@@ -78,7 +78,12 @@ def get_quarter_filter(month_number):
     quarter = list(filter(lambda x: month_number in x, quarters))[0]
     if month_number + 1 in quarter:
         quarter.remove(month_number + 1)
-    quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
+    #добавлено 01 01 2024
+    if month_number == 12:
+        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-1)
+    else:
+        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
+    #quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
     month_end = quarter[-1] + 1
     year_end=datetime.now().year
     if month_end == 13:

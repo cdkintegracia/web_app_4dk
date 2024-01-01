@@ -151,7 +151,10 @@ def create_employees_report(req):
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
-    quarter_filters = get_quarter_filter(datetime.now().month - 1)
+    if get_quarter_filter(datetime.now().month == 1:
+        quarter_filters = get_quarter_filter(12)
+    else:
+        quarter_filters = get_quarter_filter(datetime.now().month - 1)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})

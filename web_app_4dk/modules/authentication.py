@@ -10,3 +10,4 @@ def authentication(key):
     }
     return base64.b64decode(credentials[key]).decode('utf-8')
 
+#test

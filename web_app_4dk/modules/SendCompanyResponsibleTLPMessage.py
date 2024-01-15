@@ -27,9 +27,9 @@ def send_company_responsible_tlp_message(req):
         b.call('im.notify.system.add', {
             'USER_ID': company_info['ASSIGNED_BY_ID'],
             'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
-    #предупреждение, если тип клиента = Закончился ИТС        
-    if company_info['COMPANY_TYPE'] in ['UC_E99TUC']:
+    #предупреждение, если тип клиента = Закончился ИТС
+    if company_info['COMPANY_TYPE'] in ['UC_E99TUC'] and task_info['groupId'] in ['7']:
         b.call('im.notify.system.add', {
             #'USER_ID': company_info['ASSIGNED_BY_ID'],
             'USER_ID': '1',
-            'MESSAGE': f'Для клиента без ИТС {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+            'MESSAGE': f'Для клиента без ИТС {company_info["TITLE"]} поставлена задача https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})

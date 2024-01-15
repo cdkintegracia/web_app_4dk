@@ -23,12 +23,12 @@ def send_company_responsible_tlp_message(req):
         'ID': company_id
     })
 
-    if company_info['ASSIGNED_BY_ID'] in ['129']:
+    if company_info['ASSIGNED_BY_ID'] in ['129'] and task_info['groupId'] in ['1']:
         b.call('im.notify.system.add', {
             'USER_ID': company_info['ASSIGNED_BY_ID'],
             'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
     #предупреждение, если тип клиента = Закончился ИТС
-    if company_info['COMPANY_TYPE'] in ['UC_E99TUC'] and task_info['groupId'] in ['7']:
+    if company_info['COMPANY_TYPE'] in ['UC_E99TUC']:
         b.call('im.notify.system.add', {
             #'USER_ID': company_info['ASSIGNED_BY_ID'],
             'USER_ID': '1',

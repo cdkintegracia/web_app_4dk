@@ -248,11 +248,11 @@ def fill_task_title(req, event):
 
     #перенос функций роботов: (1) уведомление Дениса Сулейманова о новых задачах на ТЛП
     #и (2) уведомление о новых задачах на ТЛП и ЛК для клиентов с типом компании "Закончился ИТС"
-    if company_info['ASSIGNED_BY_ID'] in ['129'] and task_info['groupId'] in ['1']:
+    if event == 'ONTASKADD' and company_info['ASSIGNED_BY_ID'] in ['129'] and task_info['groupId'] in ['1']:
         send_bitrix_request('im.notify.system.add',{
             'USER_ID': company_info['ASSIGNED_BY_ID'],
             'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
-    if company_info['COMPANY_TYPE'] in ['UC_E99TUC']:
+    if event == 'ONTASKADD' and company_info['COMPANY_TYPE'] in ['UC_E99TUC'] and task_info['groupId'] in ['1', '7'] :
         send_bitrix_request('im.notify.system.add', {
             #'USER_ID': company_info['ASSIGNED_BY_ID'],
             'USER_ID': '1',

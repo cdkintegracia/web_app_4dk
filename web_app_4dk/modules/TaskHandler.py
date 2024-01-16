@@ -84,9 +84,9 @@ def task_registry(task_info, event):
         respid = task_info['responsibleId']
         taskinfo=task_info['id']
         task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{respid}/tasks/task/view/{taskinfo}/">Ссылка на задачу</a>'
-        
-    
-    
+
+
+
 
 
     company_id = ''
@@ -95,12 +95,12 @@ def task_registry(task_info, event):
         ufCrmCompany = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
         if ufCrmCompany:
             company_id = ufCrmCompany[0][3:]
-            
+
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         #print(task_info)
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]
-            
+
 
     groups = send_bitrix_request('sonet_group.get', {})  #получили инфо по всем группам, что есть на портале
     try:
@@ -245,6 +245,19 @@ def fill_task_title(req, event):
                 'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                 'UF_CRM_TASK': uf_crm_task,
             }})
+
+    #перенос функций роботов: (1) уведомление Дениса Сулейманова о новых задачах на ТЛП
+    #и (2) уведомление о новых задачах на ТЛП и ЛК для клиентов с типом компании "Закончился ИТС"
+    if company_info['ASSIGNED_BY_ID'] in ['129'] and task_info['groupId'] in ['1']:
+        send_bitrix_request('im.notify.system.add',{
+            'USER_ID': company_info['ASSIGNED_BY_ID'],
+            'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+    if company_info['COMPANY_TYPE'] in ['UC_E99TUC']:
+        send_bitrix_request('im.notify.system.add', {
+            #'USER_ID': company_info['ASSIGNED_BY_ID'],
+            'USER_ID': '1',
+            'MESSAGE': f'Для клиента без ИТС {company_info["TITLE"]} поставлена задача https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+
     return task_info
 
 

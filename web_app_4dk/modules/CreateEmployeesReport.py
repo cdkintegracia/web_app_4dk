@@ -230,14 +230,27 @@ def create_employees_report(req):
                                                          '1Спарк в договоре' == x['Тип'] and
                                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                          last_month_deals_data))
+        # 2024-01-20
+        #spark_3000_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                          '1Спарк 3000' == x['Тип'] and
+        #                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                          last_month_deals_data))
+
 
         spark_3000_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                  '1Спарк 3000' == x['Тип'] and
+                                                  ('1Спарк 3000' == x['Тип'] or '1Спарк' == x['Тип']) and
                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   last_month_deals_data))
 
+        # 2024-01-20
+        #spark_22500_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                           '22500' in x['Тип'] and
+        #                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                           last_month_deals_data))
+
+
         spark_22500_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                   '22500' in x['Тип'] and
+                                                   ('22500' in x['Тип'] or '1СпаркПЛЮС' in x['Тип']) and
                                                    x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                    last_month_deals_data))
 
@@ -279,13 +292,24 @@ def create_employees_report(req):
                                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                                 before_last_month_deals_data))
 
+        #2024-01-20
+        #spark_3000_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                                 '1Спарк 3000' == x['Тип'] and
+        #                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                                 before_last_month_deals_data))
+
+        #spark_22500_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                                  '22500' in x['Тип'] and
+        #                                                  x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                                  before_last_month_deals_data))
+
         spark_3000_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                         '1Спарк 3000' == x['Тип'] and
+                                                         ('1Спарк 3000' == x['Тип'] or '1Спарк' == x['Тип']) and
                                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                          before_last_month_deals_data))
 
         spark_22500_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                          '22500' in x['Тип'] and
+                                                          ('22500' in x['Тип'] or '1СпаркПЛЮС' in x['Тип']) and
                                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                           before_last_month_deals_data))
 
@@ -326,13 +350,23 @@ def create_employees_report(req):
                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       quarter_deals_data))
 
+        #2024-01-20
+        #spark_3000_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                       '1Спарк 3000' == x['Тип'] and
+        #                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                       quarter_deals_data))
+
+        #spark_22500_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                        '22500' in x['Тип'] and
+        #                                        x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                        quarter_deals_data))
         spark_3000_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                               '1Спарк 3000' == x['Тип'] and
+                                               ('1Спарк 3000' == x['Тип'] or '1Спарк' == x['Тип']) and
                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                quarter_deals_data))
 
         spark_22500_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                '22500' in x['Тип'] and
+                                                ('22500' in x['Тип'] or '1СпаркПЛЮС' in x['Тип']) and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
 
@@ -373,13 +407,23 @@ def create_employees_report(req):
                                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                          start_year_deals_data))
 
+        #2024-01-20
+        #spark_3000_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                          '1Спарк 3000' == x['Тип'] and
+        #                                          x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                          start_year_deals_data))
+
+        #spark_22500_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
+        #                                           '22500' in x['Тип'] and
+        #                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+        #                                           start_year_deals_data))
         spark_3000_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                  '1Спарк 3000' == x['Тип'] and
+                                                  ('1Спарк 3000' == x['Тип'] or '1Спарк' == x['Тип']) and
                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   start_year_deals_data))
 
         spark_22500_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                   '22500' in x['Тип'] and
+                                                   ('22500' in x['Тип'] or '1СпаркПЛЮС' in x['Тип']) and
                                                    x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                    start_year_deals_data))
 
@@ -430,14 +474,16 @@ def create_employees_report(req):
             len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_start_year),
         ])
         worksheet.append([
-            'Спарк 3000',
+            #'Спарк 3000',
+            'Спарк',
             len(spark_3000_deals_last_month),
             len(spark_3000_deals_last_month) - len(spark_3000_deals_before_last_month),
             len(spark_3000_deals_last_month) - len(spark_3000_deals_quarter),
             len(spark_3000_deals_last_month) - len(spark_3000_deals_start_year),
         ])
         worksheet.append([
-            'СпаркПлюс 22500',
+            #'СпаркПлюс 22500',
+            'СпаркПлюс',
             len(spark_22500_deals_last_month),
             len(spark_22500_deals_last_month) - len(spark_22500_deals_before_last_month),
             len(spark_22500_deals_last_month) - len(spark_22500_deals_quarter),

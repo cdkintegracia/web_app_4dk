@@ -256,9 +256,9 @@ def fill_task_title(req, event):
             'fields': {
                 'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                 'UF_CRM_TASK': uf_crm_task,
-                'groupId': '167',
+                'GROUP_ID': '167',
                 'CREATED_BY': '173',
-                'responsibleId': task_info['auditors']
+                'RESPONSIBLE_ID': task_info['auditors'][0]
             }})
     else:
         send_bitrix_request('tasks.task.update', {

@@ -208,8 +208,10 @@ def find_top_deal(deals: list) -> str:
         'UC_O99QUW': 'Отчетность',
         'UC_OV4T7K': 'Отчетность (в рамках ИТС)',
         'UC_2B0CK2': '1Спарк в договоре',
-        'UC_86JXH1': '1Спарк 3000',
-        'UC_WUGAZ7': '1СпаркПЛЮС 22500',
+        #'UC_86JXH1': '1Спарк 3000',
+        #'UC_WUGAZ7': '1СпаркПЛЮС 22500',
+        'UC_86JXH1': '1Спарк',
+        'UC_WUGAZ7': '1СпаркПЛЮС',
         'UC_A7G0AM': '1С Контрагент',
         'GOODS': 'ГРМ',
         'UC_GZFC63': 'РПД',
@@ -350,4 +352,3 @@ def megafon_calls_handler(file_name, b24_user_id):
         'RESPONSIBLE_ID': b24_user_id
     }})
     os_remove(report_name)
-

@@ -20,8 +20,10 @@ deal_type_names = {
             'UC_O99QUW': 'Отчетность',
             'UC_OV4T7K': 'Отчетность (в рамках ИТС)',
             'UC_2B0CK2': '1Спарк в договоре',
-            'UC_86JXH1': '1Спарк 3000',
-            'UC_WUGAZ7': '1СпаркПЛЮС 22500',
+            #'UC_86JXH1': '1Спарк 3000',
+            'UC_86JXH1': '1Спарк',
+            'UC_WUGAZ7': '1СпаркПЛЮС',
+            #'UC_WUGAZ7': '1СпаркПЛЮС 22500',
             'UC_A7G0AM': '1С Контрагент',
             'GOODS': 'ГРМ',
             'UC_GZFC63': 'РПД',
@@ -387,4 +389,3 @@ def revise_new_sub(filename, b24_user_id):
     except:
         b.call('im.notify.system.add',
                {'USER_ID': b24_user_id, 'MESSAGE': f'Не удалось завершить сверку по NewSub'})
-

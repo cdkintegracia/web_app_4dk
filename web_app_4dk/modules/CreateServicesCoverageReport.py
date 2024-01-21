@@ -144,7 +144,8 @@ def create_services_coverage_report(req):
                 'Ответственный за сделку ИТС': user_name,
                 'Подразделение ответственного': departments_id_name[deal['UF_CRM_1640523703']] if deal['UF_CRM_1640523703'] is not None else '',
                 'Контрагент': counteragent,
-                'Спарк в договоре / Спарк 3000': 'Нет',
+                #'Спарк в договоре / Спарк 3000': 'Нет',
+                'Спарк в договоре / Спарк': 'Нет',
                 'Спарк Плюс': 'Нет',
                 'РПД платный': '',
                 'ЭДО': 0,
@@ -172,7 +173,7 @@ def create_services_coverage_report(req):
                         if service['TYPE_ID'] in ['UC_A7G0AM', '2'] and result_data[service['COMPANY_ID']][data_counter]['Контрагент'] == 'Нет':
                             result_data[service['COMPANY_ID']][data_counter]['Контрагент'] = 'Да'
                         elif service['TYPE_ID'] in ['UC_2B0CK2', 'UC_86JXH1']:
-                            result_data[service['COMPANY_ID']][data_counter]['Спарк в договоре / Спарк 3000'] = 'Да'
+                            result_data[service['COMPANY_ID']][data_counter]['Спарк в договоре / Спарк'] = 'Да'
                         elif service['TYPE_ID'] == 'UC_WUGAZ7':
                             result_data[service['COMPANY_ID']][data_counter]['Спарк Плюс'] = 'Да'
                         elif service['TYPE_ID'] == 'UC_GZFC63':
@@ -285,7 +286,7 @@ def create_services_coverage_report(req):
                 services_count += 1
                 if result_data[company_id][row]['Контрагент'] != 'Да (Тариф)':
                     paid_services_count += 1
-            if result_data[company_id][row]['Спарк в договоре / Спарк 3000'] != 'Нет':
+            if result_data[company_id][row]['Спарк в договоре / Спарк'] != 'Нет':
                 services_count += 1
                 paid_services_count += 1
             if result_data[company_id][row]['Спарк Плюс'] != 'Нет':
@@ -382,7 +383,7 @@ def create_services_coverage_report(req):
             user_name = f"{user['NAME']} {user['LAST_NAME']}"
             report_name = f"Отчет_по_охвату_сервисами_{user_name}_{datetime.now().strftime('%d-%m-%Y-%f')}.xlsx".replace(' ', '_')
             workbook = openpyxl.Workbook()
-    
+
             # Первый лист
             flag = False
             worksheet = workbook.active
@@ -396,14 +397,14 @@ def create_services_coverage_report(req):
                         worksheet.append(list(row.values()))
                         flag = True
             if flag:
-                
+
                 # Второй лист
                 worksheet = workbook.create_sheet('% Сервисов')
                 worksheet.append(second_list_titles)
                 for row in data_to_write_list:
                     if user_name == row[1]:
                         worksheet.append(row)
-                
+
                 if user['ID'] in ignore_users:
                     continue
                 workbook.save(report_name)
@@ -448,5 +449,3 @@ def create_services_coverage_report(req):
                     workbook.save(report_name)
                     color_cells(report_name)
                     upload_report_to_bitrix(users_id=[department_head], report_name=report_name, bitrix_folder_id=folder_id)
-
-

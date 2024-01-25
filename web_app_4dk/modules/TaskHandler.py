@@ -260,6 +260,17 @@ def fill_task_title(req, event):
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': task_info['auditors'][0]
             }})
+    #добавление ВМА как наблюдателя
+    elif company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129'] and task_info['groupId'] in ['23','9']:
+        audit = task_info['auditors']
+        audit.append('169')
+        send_bitrix_request('tasks.task.update', {
+            'taskId': task_id,
+            'fields': {
+                'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                'UF_CRM_TASK': uf_crm_task,
+                'AUDITORS': audit
+            }})
     else:
         send_bitrix_request('tasks.task.update', {
             'taskId': task_id,
@@ -279,6 +290,11 @@ def fill_task_title(req, event):
             #'USER_ID': company_info['ASSIGNED_BY_ID'],
             'USER_ID': '1',
             'MESSAGE': f'Для клиента без ИТС {company_info["TITLE"]} поставлена задача https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+    #уведомление для ВМА при постановке задач ее по ее клиентам и включение в наблюдатели
+    if event == 'ONTASKADD' and company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129'] and task_info['groupId'] in ['23','9']:
+        send_bitrix_request('im.notify.system.add',{
+            'USER_ID': '169',
+            'MESSAGE': f'Для клиента ГО 3 {company_info["TITLE"]} поставлена задача в ОВ https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
 
     return task_info
 

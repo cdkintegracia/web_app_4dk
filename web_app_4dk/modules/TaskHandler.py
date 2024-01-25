@@ -187,16 +187,7 @@ def fill_task_title(req, event):
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
         return
     task_info = task_info['task']
-    '''
-    #2024-01-21 Добавление кода для задач на "Пропущен звонок от клиента"
-    if "Пропущен звонок от клиента" in task_info["title"]:
 
-        send_bitrix_request('tasks.task.update', {
-            'taskId': task_id,
-            'fields': {
-                'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-            }})
-    '''
     task_registry(task_info, event)
     '''
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
@@ -243,11 +234,22 @@ def fill_task_title(req, event):
         return
 
     if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять
-        send_bitrix_request('tasks.task.update', {
-            'taskId': task_id,
-            'fields': {
-                'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-            }})
+        #ВМА
+        if company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129'] and task_info['groupId'] in ['23','9']:
+            audit = task_info['auditors']
+            audit.append('169')
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                    'AUDITORS': audit
+                    }})
+        else:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'TITLE': f"{task_info['title']} {company_info['TITLE']}"
+                    }})
     #2024-01-21
     elif "Пропущен звонок от клиента" in task_info["title"]:
         instead = task_info['auditors']

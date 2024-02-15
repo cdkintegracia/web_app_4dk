@@ -1,11 +1,16 @@
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
+from web_app_4dk.tools import send_bitrix_request
+from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
 b = Bitrix(authentication('Bitrix'))
 
 
 def fns_task_complete(req):
+    send_bitrix_request('im.notify.system.add',{
+        'USER_ID': '1',
+        'MESSAGE': f'Кто-то запустил процесс fns_task_complete'})
     uf_crm_task = 'CO_' + req['company_id']
     task = b.get_all('tasks.task.list', {'filter': {'UF_CRM_TASK': uf_crm_task, 'GROUP_ID': '89'}})
 

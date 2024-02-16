@@ -165,7 +165,7 @@ def write_logs_to_database(log):
         log['user_id'],
         additional_info,
     )
-    print(data)
+
     with connect:
         connect.execute(sql, data)
 
@@ -631,8 +631,8 @@ def complete_database_update():
 
 
 def connect_1c_event_handler(req):
+    print(req)
     if req['event_type'] != 'line':
-        print(req)
         return
     write_logs_to_database(req)
 

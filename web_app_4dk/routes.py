@@ -79,7 +79,7 @@ from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
 #2024-02-27
-from web_app_4dk.chat_bot.AddAuditorsandSendMessage import add_auditors_and_send_message
+from web_app_4dk.modules.AddAuditorsandSendMessage import add_auditors_and_send_message
 
 
 # Словарь функций для вызова из кастомного запроса

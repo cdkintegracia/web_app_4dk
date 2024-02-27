@@ -6,7 +6,7 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 
-def send_company_responsible_tlp_message(req):
+def add_auditors_and_send_message(req):
     task_info = b.get_all('tasks.task.get', {
         'select': ['*', 'UF_*'],
         'taskId': req['task_id']

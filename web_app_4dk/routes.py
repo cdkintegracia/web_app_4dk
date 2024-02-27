@@ -78,6 +78,8 @@ from web_app_4dk.modules.SendCompanyInteractionInfo import send_company_interact
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
+#2024-02-27
+from web_app_4dk.chat_bot.AddAuditorsandSendMessage import add_auditors_and_send_message
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -132,7 +134,9 @@ custom_webhooks = {
     'create_implementation_department_report': create_implementation_department_report,
     'get_bitrix_fields_info': get_bitrix_fields_info,
     'send_company_responsible_tlp_message': send_company_responsible_tlp_message,
-    'send_company_interaction_info': send_company_interaction_info
+    'send_company_interaction_info': send_company_interaction_info,
+    #2024-02-27
+    'add_auditors_and_send_message': add_auditors_and_send_message
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

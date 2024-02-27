@@ -28,7 +28,7 @@ def add_auditors_and_send_message(req):
     audit = task_info['auditors']
     audit.append('ASSIGNED_BY_ID')
     b.call('tasks.task.update', {
-        'taskId': task_id,
+        'taskId': req['task_id'],
         'fields': {
             'AUDITORS': audit
         }})

@@ -26,7 +26,7 @@ def add_auditors_and_send_message(req):
         'USER_ID': company_info['ASSIGNED_BY_ID'],
         'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
     audit = task_info['auditors']
-    audit.append('ASSIGNED_BY_ID')
+    audit.append(company_info['ASSIGNED_BY_ID'])
     b.call('tasks.task.update', {
         'taskId': req['task_id'],
         'fields': {

@@ -24,9 +24,25 @@ def add_auditors_and_send_message(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': company_info['ASSIGNED_BY_ID'],
-        'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+        'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} была поставлена задача внешнему исполнителю: https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
     audit = task_info['auditors']
     audit.append(company_info['ASSIGNED_BY_ID'])
+    if company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129','1203']:
+        audit.append('169')
+        b.call('im.notify.system.add', {
+            'USER_ID': '169',
+            'MESSAGE': f'Для клиента вашего сотрудника {company_info["TITLE"]} была поставлена задача внешнему исполнителю: https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+    elif company_info['ASSIGNED_BY_ID'] in ['291','187','191','179']:
+        audit.append('161')
+        b.call('im.notify.system.add', {
+            'USER_ID': '161',
+            'MESSAGE': f'Для клиента вашего сотрудника {company_info["TITLE"]} была поставлена задача внешнему исполнителю: https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+    #для проверки
+    elif company_info['ASSIGNED_BY_ID'] in ['1391']:
+        b.call('im.notify.system.add', {
+            'USER_ID': '1',
+            'MESSAGE': f'Для клиента вашего сотрудника {company_info["TITLE"]} была поставлена задача внешнему исполнителю: https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+
     b.call('tasks.task.update', {
         'taskId': req['task_id'],
         'fields': {

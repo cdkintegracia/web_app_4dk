@@ -80,6 +80,7 @@ from web_app_4dk.chat_bot.BotHandler import message_handler
 from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_user_message
 #2024-02-27
 from web_app_4dk.modules.AddAuditorsandSendMessage import add_auditors_and_send_message
+from web_app_4dk.modules.AutoFailureLog import auto_failure_log
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -136,7 +137,8 @@ custom_webhooks = {
     'send_company_responsible_tlp_message': send_company_responsible_tlp_message,
     'send_company_interaction_info': send_company_interaction_info,
     #2024-02-27
-    'add_auditors_and_send_message': add_auditors_and_send_message
+    'add_auditors_and_send_message': add_auditors_and_send_message,
+    'auto_failure_log': auto_failure_log
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

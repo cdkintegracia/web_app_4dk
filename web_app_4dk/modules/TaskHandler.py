@@ -40,7 +40,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
         '7': 'ЛК',
     }
     time_filter = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S') #вычитаем из тек даты 1 час
-    
+
     similar_tasks = send_bitrix_request('tasks.task.list', {
         'filter': {
             '!ID': task_info['id'],
@@ -52,7 +52,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
 
     if not similar_tasks:
         return
-        
+
     similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
     if similar_tasks:
         for user_id in users_id:
@@ -187,7 +187,7 @@ def fill_task_title(req, event):
 
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
         return
-    
+
     task_info = task_info['task']
 
     task_registry(task_info, event)
@@ -206,7 +206,7 @@ def fill_task_title(req, event):
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
             return
-        
+
         # если к задаче прикреплен только контакт
         contact_crm = contact_crm[0][2:]
         main_company = send_bitrix_request('crm.contact.get', {'id': contact_crm})['UF_CRM_1692058520'] # читаем поле Основная компания
@@ -217,7 +217,7 @@ def fill_task_title(req, event):
             if company_info['COMPANY_TYPE'] not in ['UC_E99TUC']: # если тип компании != Закончился ИТС
                 company_id = main_company
                 uf_crm_task = ['CO_' + company_id, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
-                
+
         if not main_company or company_info['COMPANY_TYPE'] in ['UC_E99TUC']: # если нет основной компании или у неё закончился ИТС
 
             contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
@@ -247,7 +247,7 @@ def fill_task_title(req, event):
                 best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
                 uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
                 company_id = best_value_company # это для тайтла
-        
+
     else:
         company_id = company_crm[0][3:]
 
@@ -255,7 +255,9 @@ def fill_task_title(req, event):
     if event == 'ONTASKADD':
         check_similar_tasks_this_hour(task_info, company_id)
         
-    
+    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
+        return
+
     company_info = send_bitrix_request('crm.company.get', { # читаем инфо о найденной компании
         'ID': company_id,
     })

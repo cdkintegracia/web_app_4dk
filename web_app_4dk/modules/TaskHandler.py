@@ -254,13 +254,13 @@ def fill_task_title(req, event):
 
     if event == 'ONTASKADD':
         check_similar_tasks_this_hour(task_info, company_id)
-        
-    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
-        return
 
     company_info = send_bitrix_request('crm.company.get', { # читаем инфо о найденной компании
         'ID': company_id,
     })
+
+    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
+        return
 
     if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять
         #ВМА

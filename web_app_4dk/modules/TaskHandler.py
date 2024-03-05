@@ -30,36 +30,36 @@ def send_notification(task_info, notification_type):
                     send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
                     flag = True
 
+
 def check_similar_tasks_this_hour(task_info, company_id):
-    users_id = [['createdBy'], '1']
-    if ['groupId'] not in ['1', '7']:
+    users_id = [task_info['createdBy'], '1391']
+    if task_info['groupId'] not in ['1', '7']:
         return
     group_names = {
         '1': 'ТЛП',
         '7': 'ЛК',
     }
-    end_time_filter = datetime.now().strftime('%Y-%m-%d %H:%M:%S') #форматируем дату в строку
-    start_time_filter = (datetime.now() - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S') #вычитаем из тек даты 1 час
+    time_filter = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S') #вычитаем из тек даты 1 час
+    
     similar_tasks = send_bitrix_request('tasks.task.list', {
         'filter': {
-            '!ID': ['id'],
-            '>=CREATED_DATE': start_time_filter,
-            '<CREATED_DATE': end_time_filter,
-            'GROUP_ID': ['groupId'],
+            '!ID': task_info['id'],
+            '>=CREATED_DATE': time_filter,
+            'GROUP_ID': task_info['groupId'],
             'UF_CRM_TASK': ['CO_' + company_id]
         }
     })
-    if similar_tasks:
-        similar_tasks = similar_tasks['tasks']
-    else:
+
+    if not similar_tasks:
         return
-    similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
+        
+    similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
     if similar_tasks:
         for user_id in users_id:
             send_bitrix_request('im.notify.system.add', {
                 'USER_ID': user_id,
-                'MESSAGE': f"Для текущей компании в группе {group_names[['groupId']]} уже были поставлены задачи за прошедший час\n"
-                           f"Новая задача: https://vc4dk.bitrix24.ru/workgroups/group/{['groupId']}/tasks/task/view/{['id']}/\n\n"
+                'MESSAGE': f"Для текущей компании в группе {group_names[task_info['groupId']]} уже были поставлены задачи за прошедший час\n"
+                           f"Новая задача: https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{task_info['id']}/\n\n"
                            f"Поставленные ранее:\n {similar_tasks_url}"
             })
 
@@ -180,12 +180,14 @@ def task_registry(task_info, event):
 
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']
-    task_info = send_bitrix_request('tasks.task.get', {
+    task_info = send_bitrix_request('tasks.task.get', { # читаем инфо о задаче
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
+
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
         return
+    
     task_info = task_info['task']
 
     task_registry(task_info, event)
@@ -199,39 +201,64 @@ def fill_task_title(req, event):
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
     uf_crm_task = []
+
     if not company_crm:
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
             return
+        
+        # если к задаче прикреплен только контакт
         contact_crm = contact_crm[0][2:]
-        contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
-        if not contact_companies:
-            return
-        contact_companies_info = send_bitrix_request('crm.company.list', {
-            'select': ['UF_CRM_1660818061808'],     # Вес сделок
-            'filter': {
-                'ID': contact_companies,
-            }
-        })
-        if contact_companies_info:
-            for i in range(len(contact_companies_info)):
-                if not contact_companies_info[i]['UF_CRM_1660818061808']:
-                    contact_companies_info[i]['UF_CRM_1660818061808'] = 0
-            best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] #последний элемент в общем списке - с макс value
-            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно толлько перезаписать обоими значениями заново
-            company_id = best_value_company #Это для тайтла
+        main_company = send_bitrix_request('crm.contact.get', {'id': contact_crm})['UF_CRM_1692058520'] # читаем поле Основная компания
+
+        if main_company: # если основная компания заполнена, то читаем у неё поле Тип компании
+            company_info = send_bitrix_request('crm.company.get', {'id': main_company, 'select': ['COMPANY_TYPE']})
+
+            if company_info['COMPANY_TYPE'] not in ['UC_E99TUC']: # если тип компании != Закончился ИТС
+                company_id = main_company
+                uf_crm_task = ['CO_' + company_id, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
+                
+        if not main_company or company_info['COMPANY_TYPE'] in ['UC_E99TUC']: # если нет основной компании или у неё закончился ИТС
+
+            contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
+            if not contact_companies: # если нет привязанных компаний к контакту
+                return
+            contact_companies_info = send_bitrix_request('crm.company.list', { # читаем вес сделок всех компаний, привязанных к контакту
+                'select': ['COMPANY_TYPE', 'UF_CRM_1660818061808'],     # Тип компании и Вес сделок
+                'filter': {
+                    'ID': contact_companies
+                }
+            })
+
+            active_companies = list(filter(lambda x: x['COMPANY_TYPE'] != 'UC_E99TUC', contact_companies_info)) # собираем компании с действующим ИТС
+
+            if active_companies: # если есть привязанные компании с действующим ИТС
+                for i in range(len(active_companies)):
+                    if not active_companies[i]['UF_CRM_1660818061808']: # если поле Вес не заполнено, то проставляем 0
+                        active_companies[i]['UF_CRM_1660818061808'] = 0
+                best_value_company = list(sorted(active_companies, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
+                uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
+                company_id = best_value_company # это для тайтла
+
+            elif contact_companies_info: # если есть привязанные компании с НЕ действующим ИТС
+                for i in range(len(contact_companies_info)):
+                    if not contact_companies_info[i]['UF_CRM_1660818061808']: # если поле Вес не заполнено, то проставляем 0
+                        contact_companies_info[i]['UF_CRM_1660818061808'] = 0
+                best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
+                uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
+                company_id = best_value_company # это для тайтла
+        
     else:
         company_id = company_crm[0][3:]
 
+
     if event == 'ONTASKADD':
         check_similar_tasks_this_hour(task_info, company_id)
-
-
-    company_info = send_bitrix_request('crm.company.get', {
+        
+    
+    company_info = send_bitrix_request('crm.company.get', { # читаем инфо о найденной компании
         'ID': company_id,
     })
-    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
-        return
 
     if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять
         #ВМА

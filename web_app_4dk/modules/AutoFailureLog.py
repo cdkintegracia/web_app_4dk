@@ -51,9 +51,9 @@ def auto_failure_log(req):
             #logs += f'{company[0]["TITLE"]} {index}. {deal["ID"]} {deal["TITLE"]}\n'
             list_element = [company[0]["TITLE"],deal["TITLE"],deal["ID"]]
         else:
-            list_element = [' ',deal["TITLE"],deal["ID"]] 
+            list_element = [' ',deal["TITLE"],deal["ID"]]
         log_list.append(list_element)
-    log_list.sort(key=lambda x: x[2])
+    log_list.sort(key=lambda x: x[0])
     for i in range (len(log_list)):
         logs += f'{i+1}. {log_list[i][0]} {log_list[i][1]} {log_list[i][2]}\n'
 

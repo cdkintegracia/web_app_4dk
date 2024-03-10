@@ -47,8 +47,6 @@ def auto_failure_log(req):
 
         company = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))
         if company:
-            #logs += f'{index}. {deal["ID"]} {deal["TITLE"]} {company[0]["TITLE"]}\n'
-            #logs += f'{company[0]["TITLE"]} {index}. {deal["ID"]} {deal["TITLE"]}\n'
             list_element = [company[0]["TITLE"],deal["TITLE"],deal["ID"]]
         else:
             list_element = [' ',deal["TITLE"],deal["ID"]]

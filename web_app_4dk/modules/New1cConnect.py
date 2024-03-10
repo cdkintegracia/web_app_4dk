@@ -631,7 +631,7 @@ def complete_database_update():
 
 
 def connect_1c_event_handler(req):
-    print(req)
+    #print(req)
     if req['event_type'] != 'line':
         return
     write_logs_to_database(req)

@@ -42,14 +42,21 @@ def auto_failure_log(req):
     if deals:
         companies = b.get_all('crm.company.list', {'filter': {'ID': list(map(lambda x: x['COMPANY_ID'], deals))}})
 
+    log_list = []
     for index, deal in enumerate(deals, 1):
 
         company = list(filter(lambda x: x['ID'] == deal['COMPANY_ID'], companies))
         if company:
-            logs += f'{index}. {deal["ID"]} {deal["TITLE"]} {company[0]["TITLE"]}\n'
+            #logs += f'{index}. {deal["ID"]} {deal["TITLE"]} {company[0]["TITLE"]}\n'
             #logs += f'{company[0]["TITLE"]} {index}. {deal["ID"]} {deal["TITLE"]}\n'
+            list_element = [company[0]["TITLE"],deal["TITLE"],deal["ID"]]
         else:
-            logs += f'{index}. {deal["ID"]} {deal["TITLE"]}\n'
+            list_element = [' ',deal["TITLE"],deal["ID"]] 
+        log_list.append(list_element)
+    log_list.sort(key=lambda x: x[2])
+    for i in range (len(log_list)):
+        logs += f'{i+1}. {log_list[i][0]} {log_list[i][1]} {log_list[i][2]}\n'
+
 
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],

@@ -1065,6 +1065,7 @@ def create_employees_report(req):
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по пользователям сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name)
+    #комментарий 
 
 
 if __name__ == '__main__':

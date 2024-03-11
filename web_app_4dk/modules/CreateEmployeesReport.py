@@ -1064,8 +1064,7 @@ def create_employees_report(req):
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по пользователям сформирован. {upload_report["DETAIL_URL"]}'})
-    os.remove(report_name)
-    #комментарий 
+    os.remove(report_name) 
 
 
 if __name__ == '__main__':

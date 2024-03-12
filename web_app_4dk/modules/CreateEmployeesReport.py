@@ -159,6 +159,7 @@ def create_employees_report(req):
         before_before_before_last_month_year -= 1
 
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
+    
     #month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     month_filter_end = datetime(day=1, month=1, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'

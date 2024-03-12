@@ -127,7 +127,7 @@ def create_employees_report(req):
 
     report_year = datetime.now().year
     #report_month = datetime.now().month - 1
-    report_month = 3
+    report_month = 2
     if report_month == 0:
         report_month = 12
         report_year -= 1

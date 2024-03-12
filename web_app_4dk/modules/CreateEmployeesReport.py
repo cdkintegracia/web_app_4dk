@@ -80,12 +80,15 @@ def get_quarter_filter(month_number):
         quarter.remove(month_number + 1)
     #добавлено 01 01 2024
     if month_number == 12:
-        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-1)
+        #quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-1)
+        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-2)
     else:
-        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
+        #quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
+        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-1)
     #quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
     month_end = quarter[-1] + 1
-    year_end=datetime.now().year
+    #year_end=datetime.now().year
+    year_end=datetime.now().year - 1
     if month_end == 13:
         month_end = 1
         year_end = year_end + 1
@@ -127,8 +130,7 @@ def create_employees_report(req):
 
     report_year = datetime.now().year
     #report_month = datetime.now().month - 1
-    
-    report_month = datetime.now().month
+    report_month = 0
 
     if report_month == 0:
         report_month = 12
@@ -158,13 +160,14 @@ def create_employees_report(req):
 
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     #month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
-    month_filter_end = datetime(day=1, month=datetime.now().month+1, year=datetime.now().year)
+    month_filter_end = datetime(day=1, month=1, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
-    if datetime.now().month == 1:
+    #if datetime.now().month == 1:
+    if datetime.now().month == 3:
         quarter_filters = get_quarter_filter(12)
     else:
         #quarter_filters = get_quarter_filter(datetime.now().month - 1)
-        quarter_filters = get_quarter_filter(datetime.now().month)
+        quarter_filters = get_quarter_filter(12)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -191,7 +194,7 @@ def create_employees_report(req):
 
         last_month_deals_data = read_deals_data_file(report_month, report_year)
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
-        start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
+        start_year_deals_data = read_deals_data_file(12, datetime.now().year-2)
 
         date_quarter = get_quarter_filter(report_month)['start_date'] - timedelta(days=1)
         print(date_quarter)

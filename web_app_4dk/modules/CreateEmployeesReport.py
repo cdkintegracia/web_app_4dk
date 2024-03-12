@@ -126,7 +126,8 @@ def create_employees_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     report_year = datetime.now().year
-    report_month = datetime.now().month - 1
+    #report_month = datetime.now().month - 1
+    report_month = datetime.now().month
 
     if report_month == 0:
         report_month = 12
@@ -155,12 +156,14 @@ def create_employees_report(req):
         before_before_before_last_month_year -= 1
 
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
-    month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
+    #month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
+    month_filter_end = datetime(day=1, month=datetime.now().month+1, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
     if datetime.now().month == 1:
         quarter_filters = get_quarter_filter(12)
     else:
-        quarter_filters = get_quarter_filter(datetime.now().month - 1)
+        #quarter_filters = get_quarter_filter(datetime.now().month - 1)
+        quarter_filters = get_quarter_filter(datetime.now().month)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})

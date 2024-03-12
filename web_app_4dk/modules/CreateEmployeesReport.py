@@ -190,6 +190,7 @@ def create_employees_report(req):
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
         date_quarter = get_quarter_filter(report_month)['start_date'] - timedelta(days=1)
+        print(date_quarter)
         quarter_deals_data = read_deals_data_file(date_quarter.month, date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 

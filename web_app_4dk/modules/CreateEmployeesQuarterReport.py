@@ -125,8 +125,7 @@ def create_employees_quarter_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     report_year = datetime.now().year
-    #report_month = datetime.now().month - 1
-    report_month = datetime.now().month
+    report_month = datetime.now().month - 1
 
     if report_month == 0:
         report_month = 12

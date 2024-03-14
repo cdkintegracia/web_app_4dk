@@ -125,7 +125,8 @@ def create_employees_quarter_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     report_year = datetime.now().year
-    report_month = datetime.now().month - 1
+    #report_month = datetime.now().month - 1
+    report_month = datetime.now().month
 
     if report_month == 0:
         report_month = 12
@@ -193,8 +194,7 @@ def create_employees_quarter_report(req):
 
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
-        print(start_date_quarter)
-        print(end_date_quarter)
+
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 

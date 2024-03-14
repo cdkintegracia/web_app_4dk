@@ -896,7 +896,7 @@ def create_employees_quarter_report(req):
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
                 '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
-                '<=CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+                '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
             },
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })

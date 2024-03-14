@@ -71,6 +71,7 @@ from web_app_4dk.modules.ClearTaskRegister import clear_task_registry
 from web_app_4dk.modules.CreateItsApplicationsFile import create_its_applications_file
 from web_app_4dk.modules.CompleteDossierTask import complete_dossier_task
 from web_app_4dk.modules.CreateEmployeesReport import create_employees_report
+from web_app_4dk.modules.CreateEmployeesQuarterReport import create_employees_quarter_report
 from web_app_4dk.modules.CreateImplementationDepartmentReport import create_implementation_department_report
 from web_app_4dk.modules.GetBitrixFieldsInfo import get_bitrix_fields_info
 from web_app_4dk.modules.SendCompanyResponsibleTLPMessage import send_company_responsible_tlp_message
@@ -132,6 +133,7 @@ custom_webhooks = {
     'create_its_applications_file': create_its_applications_file,
     'complete_dossier_task': complete_dossier_task,
     'create_employees_report': create_employees_report,
+    'create_employees_quarter_report': create_employees_quarter_report,
     'create_implementation_department_report': create_implementation_department_report,
     'get_bitrix_fields_info': get_bitrix_fields_info,
     'send_company_responsible_tlp_message': send_company_responsible_tlp_message,

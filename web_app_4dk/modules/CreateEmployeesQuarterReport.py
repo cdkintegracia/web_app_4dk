@@ -189,8 +189,8 @@ def create_employees_quarter_report(req):
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
-        date_quarter = get_quarter_filter(report_month)['start_date'] - timedelta(days=1)
-        quarter_deals_data = read_deals_data_file(date_quarter.month, date_quarter.year)
+        start_date_quarter = get_quarter_filter(report_month)['start_date'] - timedelta(days=1)
+        quarter_deals_data = read_deals_data_file(start_date_quarter.month, date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -908,15 +908,16 @@ def create_employees_quarter_report(req):
             average_tasks_ratings = '-'
 
         #Попытка Дежурства
+        end_date_quarter = get_quarter_filter(report_month)['end_date'] - timedelta(days=1)
         days_duty = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
                 '>=PROPERTY_1769': int(quarter_filters['start_date'].month),
-                '<=PROPERTY_1769': int(quarter_filters['end_date'].month),
+                '<=PROPERTY_1769': int(end_date_quarter.month),
                 '>=PROPERTY_1771': int(quarter_filters['start_date'].year),
-                '<=PROPERTY_1771': int(quarter_filters['end_date'].year),
+                '<=PROPERTY_1771': int(end_date_quarter.year),
             }
         })
         days_duty_amount = len(days_duty)

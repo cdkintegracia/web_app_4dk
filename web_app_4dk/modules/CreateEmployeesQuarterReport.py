@@ -189,8 +189,9 @@ def create_employees_quarter_report(req):
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
-        start_date_quarter = get_quarter_filter(report_month)['start_date'] - timedelta(days=1)
-        quarter_deals_data = read_deals_data_file(start_date_quarter.month, date_quarter.year)
+        date_quarter = get_quarter_filter(report_month)
+        start_date_quarter = date_quarter['start_date'] - timedelta(days=1)
+        quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -908,7 +909,7 @@ def create_employees_quarter_report(req):
             average_tasks_ratings = '-'
 
         #Попытка Дежурства
-        end_date_quarter = get_quarter_filter(report_month)['end_date'] - timedelta(days=1)
+        end_date_quarter = date_quarter['end_date'] - timedelta(days=1)
         days_duty = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '301',

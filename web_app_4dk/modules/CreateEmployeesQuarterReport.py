@@ -152,7 +152,7 @@ def create_employees_report(req):
     if before_before_before_last_month == 0:
         before_before_before_last_month = 12
         before_before_before_last_month_year -= 1
-
+    '''
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
@@ -160,6 +160,7 @@ def create_employees_report(req):
         quarter_filters = get_quarter_filter(12)
     else:
         quarter_filters = get_quarter_filter(datetime.now().month - 1)
+    '''
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -401,62 +402,54 @@ def create_employees_report(req):
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              start_year_deals_data))
 
-        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {report_month_last_day_date}', 'Прирост с начала квартала'])
+        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {date_quarter}', 'Прирост с начала квартала'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
-            len(its_prof_deals_last_month) - len(its_prof_deals_before_last_month),
-            len(its_prof_deals_last_month) - len(its_prof_deals_quarter),
-            len(its_prof_deals_last_month) - len(its_prof_deals_start_year)
+            len(its_prof_deals_quarter),
+            len(its_prof_deals_last_month) - len(its_prof_deals_quarter)
         ])
         worksheet.append([
             'ИТС Базовые',
             len(its_base_deals_last_month),
-            len(its_base_deals_last_month) - len(its_base_deals_before_last_month),
-            len(its_base_deals_last_month) - len(its_base_deals_quarter),
-            len(its_base_deals_last_month) - len(its_base_deals_start_year),
+            len(its_base_deals_quarter),
+            len(its_base_deals_last_month) - len(its_base_deals_quarter)
         ])
         worksheet.append([
             'Контрагент',
             len(countragent_deals_last_month),
-            len(countragent_deals_last_month) - len(countragent_deals_before_last_month),
-            len(countragent_deals_last_month) - len(countragent_deals_quarter),
-            len(countragent_deals_last_month) - len(countragent_deals_start_year),
+            len(countragent_deals_quarter),
+            len(countragent_deals_last_month) - len(countragent_deals_quarter)
         ])
         worksheet.append([
             'Спарк в договоре',
             len(spark_in_contract_deals_last_month),
-            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_before_last_month),
-            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_quarter),
-            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_start_year),
+            len(spark_in_contract_deals_quarter),
+            len(spark_in_contract_deals_last_month) - len(spark_in_contract_deals_quarter)
         ])
         worksheet.append([
             'Спарк',
             len(spark_deals_last_month),
-            len(spark_deals_last_month) - len(spark_deals_before_last_month),
-            len(spark_deals_last_month) - len(spark_deals_quarter),
-            len(spark_deals_last_month) - len(spark_deals_start_year),
+            len(spark_deals_quarter),
+            len(spark_deals_last_month) - len(spark_deals_quarter)
         ])
         worksheet.append([
             'СпаркПлюс',
             len(spark_plus_deals_last_month),
-            len(spark_plus_deals_last_month) - len(spark_plus_deals_before_last_month),
-            len(spark_plus_deals_last_month) - len(spark_plus_deals_quarter),
-            len(spark_plus_deals_last_month) - len(spark_plus_deals_start_year),
+            len(spark_plus_deals_quarter),
+            len(spark_plus_deals_last_month) - len(spark_plus_deals_quarter)
         ])
         worksheet.append([
             'РПД',
             len(rpd_deals_last_month),
-            len(rpd_deals_last_month) - len(rpd_deals_before_last_month),
-            len(rpd_deals_last_month) - len(rpd_deals_quarter),
-            len(rpd_deals_last_month) - len(rpd_deals_start_year)
+            len(rpd_deals_quarter),
+            len(rpd_deals_last_month) - len(rpd_deals_quarter)
         ])
         worksheet.append([
             'Остальные',
             len(other_deals_last_month),
-            len(other_deals_last_month) - len(other_deals_before_last_month),
-            len(other_deals_last_month) - len(other_deals_quarter),
-            len(other_deals_last_month) - len(other_deals_start_year)
+            len(other_deals_quarter),
+            len(other_deals_last_month) - len(other_deals_quarter)
         ])
         worksheet.append([])
 

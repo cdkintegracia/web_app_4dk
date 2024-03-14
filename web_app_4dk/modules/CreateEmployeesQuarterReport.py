@@ -263,7 +263,7 @@ def create_employees_quarter_report(req):
                                              x not in spark_plus_deals_last_month and
                                              x not in rpd_deals_last_month and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], last_month_deals_data))
-
+        '''
         # Предшествующий отчетному месяц
         its_prof_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                        x['Группа'] == 'ИТС' and
@@ -312,7 +312,7 @@ def create_employees_quarter_report(req):
                                                     x not in rpd_deals_before_last_month and
                                                     x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                     before_last_month_deals_data))
-
+        '''
         # Начало квартала
         its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                              'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
@@ -359,7 +359,7 @@ def create_employees_quarter_report(req):
                                           x not in rpd_deals_quarter and
                                           x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                           quarter_deals_data))
-
+        '''
         # Начало года
         its_prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                                 'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
@@ -406,8 +406,9 @@ def create_employees_quarter_report(req):
                                              x not in rpd_deals_start_year and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              start_year_deals_data))
+        '''
 
-        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {end_date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
+        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {start_date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),

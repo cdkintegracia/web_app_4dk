@@ -916,7 +916,7 @@ def create_employees_quarter_report(req):
                 '>=PROPERTY_1769': int(quarter_filters['start_date'].month),
                 '<=PROPERTY_1769': int(quarter_filters['end_date'].month),
                 '>=PROPERTY_1771': int(quarter_filters['start_date'].year),
-                '<=PROPERTY_1771': int(quarter_filters['start_date'].year),
+                '<=PROPERTY_1771': int(quarter_filters['end_date'].year),
             }
         })
         days_duty_amount = len(days_duty)

@@ -152,7 +152,7 @@ def create_employees_quarter_report(req):
     if before_before_before_last_month == 0:
         before_before_before_last_month = 12
         before_before_before_last_month_year -= 1
-    '''
+    
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
@@ -160,7 +160,7 @@ def create_employees_quarter_report(req):
         quarter_filters = get_quarter_filter(12)
     else:
         quarter_filters = get_quarter_filter(datetime.now().month - 1)
-    '''
+    
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -453,7 +453,7 @@ def create_employees_quarter_report(req):
         ])
         worksheet.append([])
 
-    '''
+        '''
         # Продление
         deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_before_last_month_deals_data))
         deals_ended_last_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_before_last_month_deals_data))
@@ -884,13 +884,13 @@ def create_employees_quarter_report(req):
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), non_quarter_documents_debts])
         worksheet.append([])
-
+        '''
         # Задачи
         tasks = b.get_all('tasks.task.list', {
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
-                '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
-                '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+                '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
+                '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
             },
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
@@ -913,14 +913,16 @@ def create_employees_quarter_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                'PROPERTY_1769': int(report_month),
-                'PROPERTY_1771': int(report_year),
+                '>=PROPERTY_1769': int(quarter_filters['start_date'].month),
+                '<=PROPERTY_1769': int(quarter_filters['end_date'].month),
+                '>=PROPERTY_1771': int(quarter_filters['start_date'].year),
+                '<=PROPERTY_1771': int(quarter_filters['start_date'].year),
             }
         })
         days_duty_amount = len(days_duty)
         print(days_duty_amount)
 
-        worksheet.append(['', 'Незакрытых (и созд. в этом мес)', 'Всего создано в месяце'])
+        worksheet.append(['', 'Незакрытых (и созд. в этом кварт)', 'Всего создано в квартале'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
         worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
         worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
@@ -931,7 +933,7 @@ def create_employees_quarter_report(req):
         worksheet.append([])
 
         change_sheet_style(worksheet)
-
+        '''
         # ЭДО
         all_its = its_prof_deals_last_month + its_base_deals_last_month
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
@@ -994,7 +996,6 @@ def create_employees_quarter_report(req):
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic])
     '''
-    change_sheet_style(worksheet)
     workbook.save(report_name)
 
     if 'user_id' not in req:

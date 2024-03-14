@@ -994,6 +994,7 @@ def create_employees_quarter_report(req):
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic])
     '''
+    change_sheet_style(worksheet)
     workbook.save(report_name)
 
     if 'user_id' not in req:

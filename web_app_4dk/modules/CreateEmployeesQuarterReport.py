@@ -156,11 +156,13 @@ def create_employees_quarter_report(req):
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
     month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
+    '''
     if datetime.now().month == 1:
         quarter_filters = get_quarter_filter(12)
     else:
         quarter_filters = get_quarter_filter(datetime.now().month - 1)
-    
+    '''
+    quarter_filters = get_quarter_filter(report_month)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -189,9 +191,9 @@ def create_employees_quarter_report(req):
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
-        date_quarter = get_quarter_filter(report_month)
-        start_date_quarter = date_quarter['start_date'] - timedelta(days=1)
-        end_date_quarter = date_quarter['end_date'] - timedelta(days=1)
+        print(quarter_filters)
+        start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
+        end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
 
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
@@ -892,8 +894,8 @@ def create_employees_quarter_report(req):
         tasks = b.get_all('tasks.task.list', {
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
-                '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
-                '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+                '>=CREATED_DATE': start_date_quarter.strftime(ddmmyyyy_pattern),
+                '<=CREATED_DATE': end_date_quarter.strftime(ddmmyyyy_pattern),
             },
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
@@ -918,8 +920,7 @@ def create_employees_quarter_report(req):
                 'PROPERTY_1753': user_info['ID'],
                 '>=PROPERTY_1769': int(quarter_filters['start_date'].month),
                 '<=PROPERTY_1769': int(end_date_quarter.month),
-                '>=PROPERTY_1771': int(quarter_filters['start_date'].year),
-                '<=PROPERTY_1771': int(end_date_quarter.year),
+                'PROPERTY_1771': int(end_date_quarter.year),
             }
         })
         days_duty_amount = len(days_duty)

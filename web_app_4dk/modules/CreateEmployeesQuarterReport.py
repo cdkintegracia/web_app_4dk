@@ -403,7 +403,7 @@ def create_employees_quarter_report(req):
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              start_year_deals_data))
 
-        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
+        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {date_quarter['end_date'].strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),

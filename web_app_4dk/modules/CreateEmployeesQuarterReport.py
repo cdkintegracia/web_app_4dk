@@ -191,6 +191,8 @@ def create_employees_quarter_report(req):
 
         date_quarter = get_quarter_filter(report_month)
         start_date_quarter = date_quarter['start_date'] - timedelta(days=1)
+        end_date_quarter = date_quarter['end_date'] - timedelta(days=1)
+
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 
@@ -403,7 +405,7 @@ def create_employees_quarter_report(req):
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              start_year_deals_data))
 
-        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {date_quarter['end_date'].strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
+        worksheet.append(['Сделки', f'на {report_month_last_day_date}', f'на {end_date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -909,7 +911,6 @@ def create_employees_quarter_report(req):
             average_tasks_ratings = '-'
 
         #Попытка Дежурства
-        end_date_quarter = date_quarter['end_date'] - timedelta(days=1)
         days_duty = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '301',

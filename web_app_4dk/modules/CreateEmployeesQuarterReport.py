@@ -113,7 +113,7 @@ def read_deals_data_file(month, year):
     return file_data
 
 
-def create_employees_report(req):
+def create_employees_quarter_report(req):
     users_id = get_employee_id(req['users'])
     users_info = b.get_all('user.get', {
         'filter': {
@@ -1016,6 +1016,6 @@ def create_employees_report(req):
 
 
 if __name__ == '__main__':
-    create_employees_report({
+    create_employees_quarter_report({
         'users': 'user_1391'
     })

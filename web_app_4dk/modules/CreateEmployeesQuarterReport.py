@@ -191,7 +191,6 @@ def create_employees_quarter_report(req):
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
-        print(quarter_filters)
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
 
@@ -895,7 +894,7 @@ def create_employees_quarter_report(req):
         tasks = b.get_all('tasks.task.list', {
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
-                '>=CREATED_DATE': start_date_quarter.strftime(ddmmyyyy_pattern),
+                '>CREATED_DATE': start_date_quarter.strftime(ddmmyyyy_pattern),
                 '<=CREATED_DATE': end_date_quarter.strftime(ddmmyyyy_pattern),
             },
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']

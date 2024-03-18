@@ -193,8 +193,8 @@ def create_employees_quarter_report(req):
 
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
-
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
+        
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -458,7 +458,7 @@ def create_employees_quarter_report(req):
         ])
         worksheet.append([])
 
-        '''
+        
         # Продление
         deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_before_last_month_deals_data))
         deals_ended_last_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_before_last_month_deals_data))
@@ -503,7 +503,7 @@ def create_employees_quarter_report(req):
         ended_others = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_last_month))))
         non_extended_date_deals_id = set(map(lambda x: x['ID'], non_extended_date_deals))
 
-        worksheet.append(['Продление', 'Заканчивалось в прошлом месяце', 'Из них продлено', 'Не продлено'])
+        worksheet.append(['Продление', f'Заканчивалось на {start_date_quarter.strftime("%d.%m")}', 'Из них продлено', 'Не продлено'])
         worksheet.append([
             'ИТС',
             len(ended_its),
@@ -523,7 +523,7 @@ def create_employees_quarter_report(req):
             len(set(filter(lambda x: x in non_extended_date_deals_id, ended_others)))
         ])
         worksheet.append([])
-
+        '''
         # Охват сервисами
         # Отчетный месяц
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, last_month_deals_data))))
@@ -912,7 +912,7 @@ def create_employees_quarter_report(req):
         except ZeroDivisionError:
             average_tasks_ratings = '-'
 
-        #Попытка Дежурства
+        #Дежурства
         days_duty = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '301',

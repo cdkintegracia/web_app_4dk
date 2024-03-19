@@ -152,7 +152,7 @@ def create_employees_quarter_report(req):
         before_3_month_year -= 1
     before_3_month_range = monthrange(before_3_month_year, before_3_month)[1]
 
-    quarter_filters = get_quarter_filter(before__month)
+    quarter_filters = get_quarter_filter(before_2_month)
     print(quarter_filters)
 
     sys.exit()

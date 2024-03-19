@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from calendar import monthrange
 import base64
 import os
+import sys
 
 import openpyxl
 from openpyxl.utils import get_column_letter
@@ -134,6 +135,12 @@ def create_employees_quarter_report(req):
     before_1_month_last_day_date = (f'{before_1_month_range}.'
                                   f'{before_1_month if len(str(before_1_month)) == 2 else "0" + str(before_1_month)}.'
                                   f'{before_1_month_year}')
+    
+    quarter_filters = get_quarter_filter(before_1_month)
+    print(quarter_filters)
+
+    sys.exit()
+    
     before_2_month = before_1_month - 1
     before_2_month_year = before_1_month_year
     if before_2_month == 0:
@@ -153,21 +160,12 @@ def create_employees_quarter_report(req):
     if before_4_month == 0:
         before_4_month = 12
         before_4_month_year -= 1
-    before_4_month_range = monthrange(before_4_month_year, before_4_month)[1]
 
     before_5_month = before_4_month - 1
     before_5_month_year = before_4_month_year
     if before_5_month == 0:
         before_5_month = 12
         before_5_month_year -= 1
-    before_5_month_range = monthrange(before_5_month_year, before_5_month)[1]
-
-    before_6_month = before_5_month - 1
-    before_6_month_year = before_5_month_year
-    if before_3_month == 0:
-        before_6_month = 12
-        before_6_month_year -= 1
-    before_6_month_range = monthrange(before_6_month_year, before_6_month)[1]
 
     
     month_filter_start = datetime(day=1, month=before_1_month, year=before_1_month_year)
@@ -179,7 +177,6 @@ def create_employees_quarter_report(req):
     else:
         quarter_filters = get_quarter_filter(datetime.now().month - 1)
     '''
-    quarter_filters = get_quarter_filter(before_1_month)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -204,18 +201,18 @@ def create_employees_quarter_report(req):
         worksheet.append([])
         worksheet.append([])
 
-        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year)
-        before_2_month_deals_data = read_deals_data_file(before_2_month, before_2_month_year)
+
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
 
+        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year)
+        before_2_month_deals_data = read_deals_data_file(before_2_month, before_2_month_year)
         before_3_month_deals_data = read_deals_data_file(before_3_month, before_3_month_year)
         before_4_month_deals_data = read_deals_data_file(before_4_month, before_4_month_year)
         before_5_month_deals_data = read_deals_data_file(before_5_month, before_5_month_year)
-        before_6_month_deals_data = read_deals_data_file(before_6_month, before_6_month_year)
 
         its_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                            x['Группа'] == 'ИТС' and
@@ -629,7 +626,7 @@ def create_employees_quarter_report(req):
             len(ended_its_4),
             len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))),
             len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))+ len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
             ])
         worksheet.append([
             'Сервисы',

@@ -526,7 +526,7 @@ def create_employees_quarter_report(req):
         ended_others_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_3_month))))
         non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_3))
 
-        title.insert(0, f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено')
+        title.insert(0, [f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
 
         #второй месяц
         if before_1_month not in [3, 6, 9, 12]:

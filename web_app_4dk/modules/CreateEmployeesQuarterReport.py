@@ -146,14 +146,14 @@ def create_employees_quarter_report(req):
     if before_3_month == 0:
         before_3_month = 12
         before_3_month_year -= 1
-        before_3_month_range = monthrange(before_3_month_year, before_3_month)[1]
+    before_3_month_range = monthrange(before_3_month_year, before_3_month)[1]
 
     before_4_month = before_3_month - 1
     before_4_month_year = before_3_month_year
     if before_4_month == 0:
         before_4_month = 12
         before_4_month_year -= 1
-        before_4_month_range = monthrange(before_4_month_year, before_4_month)[1]
+    before_4_month_range = monthrange(before_4_month_year, before_4_month)[1]
 
     before_5_month = before_4_month - 1
     before_5_month_year = before_4_month_year
@@ -167,7 +167,7 @@ def create_employees_quarter_report(req):
     if before_3_month == 0:
         before_6_month = 12
         before_6_month_year -= 1
-        before_6_month_range = monthrange(before_6_month_year, before_6_month)[1]
+    before_6_month_range = monthrange(before_6_month_year, before_6_month)[1]
 
     
     month_filter_start = datetime(day=1, month=before_1_month, year=before_1_month_year)

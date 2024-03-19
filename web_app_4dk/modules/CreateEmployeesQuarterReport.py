@@ -614,9 +614,9 @@ def create_employees_quarter_report(req):
         non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_2))
 
         #формируем заголовки
-        worksheet.append(['Продление', f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
-                          f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
-                          f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+        worksheet.append(['Продление', f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
+                          f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
+                          f'Заканчивалось на {datetime(day=before_1_month_range, month=before_1_month, year=before_1_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
         worksheet.append([
             'ИТС',
             len(ended_its_4),

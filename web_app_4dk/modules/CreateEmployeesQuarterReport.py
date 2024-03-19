@@ -527,6 +527,12 @@ def create_employees_quarter_report(req):
         non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_3))
 
         title.extend([f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+        table_its =  ['ИТС', len(ended_its_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_its_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))]
+        table_service = ['Сервисы', len(ended_reporting_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))]
+        table_other = ['Остальное', len(ended_others_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))]
+        count_its = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))
+        count_service = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))
+        count_other = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))
 
         #второй месяц
         if before_1_month not in [3, 6, 9, 12]:
@@ -573,7 +579,13 @@ def create_employees_quarter_report(req):
             ended_others_3 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_4_month))))
             non_extended_date_deals_id_3 = set(map(lambda x: x['ID'], non_extended_date_deals_4))
 
-            title.extend(['Продление', f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+            title.extend([f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+            table_its.extend([len(ended_its_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))])
+            table_service.extend([len(ended_reporting_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))])
+            table_other.extend([len(ended_others_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))])
+            count_its += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))
+            count_service += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))
+            count_other += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))
 
         #третий месяц
         if before_1_month not in [2, 5, 8, 11, 3, 6, 9, 12]:
@@ -620,51 +632,26 @@ def create_employees_quarter_report(req):
             ended_others_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_5_month))))
             non_extended_date_deals_id_4 = set(map(lambda x: x['ID'], non_extended_date_deals_5))
 
-            title.extend(['Продление', f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+            title.extend([ f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+            table_its.extend([len(ended_its_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))])
+            table_service.extend([len(ended_reporting_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))])
+            table_other.extend([len(ended_others_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))])
+            count_its += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
+            count_service += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))
+            count_other += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
 
-        #добавляем заголовки
+        #добавляем заголовки и сновную часть в таблицу
+        title.extend(['Всего продлено'])
         worksheet.append(title)
-        '''
-        worksheet.append([
-            'ИТС',
-            len(ended_its_2),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_its_2))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2))),
-            len(ended_its_3),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3))),
-            len(ended_its_4),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
-            ])
-        worksheet.append([
-            'Сервисы',
-            len(ended_reporting_2),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2))),
-            len(ended_reporting_3),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3))),
-            len(ended_reporting_4),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))
-        ])
-        worksheet.append([
-            'Остальное',
-            len(ended_others_2),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2))),
-            len(ended_others_3),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3))),
-            len(ended_others_4),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
-        ])
-        '''
+
+        table_its.extend([count_its])
+        table_service.extend([count_service])
+        table_other.extend([count_other])
+
+        worksheet.append([table_its])
+        worksheet.append([table_service])
+        worksheet.append([table_other])
+        
         worksheet.append([])
         '''
         # Охват сервисами

@@ -480,52 +480,55 @@ def create_employees_quarter_report(req):
 
         
         # Продление
+        title = ['Продление']
 
-        #второй месяц квартала
-        deals_ended_before_5_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_6_month_deals_data))
-        deals_ended_before_5_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_6_month_deals_data))
-        deals_ended_before_5_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dpo))
-        deals_ended_before_5_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dk))
-        deals_ended_before_5_month_dpo = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year, hour=3), deals_ended_before_5_month_dpo))
-        deals_ended_before_5_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_5_month_dpo))
-        deals_ended_before_5_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_5_month_dpo_id and (datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year)), deals_ended_before_5_month_dk))
-        deals_ended_before_5_month = deals_ended_before_5_month_dk + deals_ended_before_5_month_dpo
+        #первый месяц
+        deals_ended_before_3_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_4_month_deals_data))
+        deals_ended_before_3_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
+        deals_ended_before_3_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_3_month_dpo))
+        deals_ended_before_3_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_3_month_dk))
+        deals_ended_before_3_month_dpo = list(filter(lambda x: datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year, hour=3), deals_ended_before_3_month_dpo))
+        deals_ended_before_3_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_3_month_dpo))
+        deals_ended_before_3_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_3_month_dpo_id and (datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year)), deals_ended_before_3_month_dk))
+        deals_ended_before_3_month = deals_ended_before_3_month_dk + deals_ended_before_3_month_dpo
 
-        before_5_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_4_month_deals_data))
-        before_5_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_5_month_deals_data_datetime_dpo))
-        before_5_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
-        before_5_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_5_month_deals_data_datetime_dk))
-        non_extended_date_deals_5 = []
-        before_5_month_deals_data_datetime = before_5_month_deals_data_datetime_dpo + before_5_month_deals_data_datetime_dk
+        before_3_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_2_month_deals_data))
+        before_3_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_3_month_deals_data_datetime_dpo))
+        before_3_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_2_month_deals_data))
+        before_3_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_3_month_deals_data_datetime_dk))
+        non_extended_date_deals_3 = []
+        before_3_month_deals_data_datetime = before_3_month_deals_data_datetime_dpo + before_3_month_deals_data_datetime_dk
 
-        for deal in deals_ended_before_5_month:
-            before_5_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_5_month_deals_data_datetime))
-            if not before_5_month_deal:
-                non_extended_date_deals_5.append(deal)
+        for deal in deals_ended_before_3_month:
+            before_3_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_3_month_deals_data_datetime))
+            if not before_3_month_deal:
+                non_extended_date_deals_3.append(deal)
             else:
-                if not before_5_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
+                if not before_3_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
                     continue
-                if before_5_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_5_month_deal[0]['Стадия'] != 'Услуга завершена':
-                    non_extended_date_deals_5.append(deal)
+                if before_3_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_3_month_deal[0]['Стадия'] != 'Услуга завершена':
+                    non_extended_date_deals_3.append(deal)
 
-        for deal in deals_ended_before_5_month:
-            if deal in non_extended_date_deals_5:
+        for deal in deals_ended_before_3_month:
+            if deal in non_extended_date_deals_3:
                 continue
-            before_5_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_5_month_deals_data_datetime))
-            if not before_5_month_deal:
-                non_extended_date_deals_5.append(deal)
+            before_3_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_3_month_deals_data_datetime))
+            if not before_3_month_deal:
+                non_extended_date_deals_3.append(deal)
             else:
-                if not before_5_month_deal[0]['Предполагаемая дата закрытия']:
+                if not before_3_month_deal[0]['Предполагаемая дата закрытия']:
                     continue
-                if before_5_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_5_month_deal[0]['Стадия'] != 'Услуга завершена':
-                    non_extended_date_deals_5.append(deal)
+                if before_3_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_3_month_deal[0]['Стадия'] != 'Услуга завершена':
+                    non_extended_date_deals_3.append(deal)
 
-        ended_its_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_5_month))))
-        ended_reporting_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_5_month))))
-        ended_others_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_5_month))))
-        non_extended_date_deals_id_4 = set(map(lambda x: x['ID'], non_extended_date_deals_5))
+        ended_its_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_3_month))))
+        ended_reporting_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_3_month))))
+        ended_others_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_3_month))))
+        non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_3))
 
-        #первый месяц квартала
+        title.insert(0, f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено')
+
+        #второй месяц
         if before_1_month not in [3, 6, 9, 12]:
             deals_ended_before_4_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_5_month_deals_data))
             deals_ended_before_4_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_5_month_deals_data))
@@ -570,56 +573,58 @@ def create_employees_quarter_report(req):
             ended_others_3 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_4_month))))
             non_extended_date_deals_id_3 = set(map(lambda x: x['ID'], non_extended_date_deals_4))
 
-        #месяц перед началом квартала
+            title.insert(0, ['Продление', f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+
+        #третий месяц
         if before_1_month not in [2, 5, 8, 11, 3, 6, 9, 12]:
-            deals_ended_before_3_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_4_month_deals_data))
-            deals_ended_before_3_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
-            deals_ended_before_3_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_3_month_dpo))
-            deals_ended_before_3_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_3_month_dk))
-            deals_ended_before_3_month_dpo = list(filter(lambda x: datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year, hour=3), deals_ended_before_3_month_dpo))
-            deals_ended_before_3_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_3_month_dpo))
-            deals_ended_before_3_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_3_month_dpo_id and (datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year)), deals_ended_before_3_month_dk))
-            deals_ended_before_3_month = deals_ended_before_3_month_dk + deals_ended_before_3_month_dpo
+            deals_ended_before_5_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_6_month_deals_data))
+            deals_ended_before_5_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_6_month_deals_data))
+            deals_ended_before_5_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dpo))
+            deals_ended_before_5_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dk))
+            deals_ended_before_5_month_dpo = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year, hour=3), deals_ended_before_5_month_dpo))
+            deals_ended_before_5_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_5_month_dpo))
+            deals_ended_before_5_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_5_month_dpo_id and (datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year)), deals_ended_before_5_month_dk))
+            deals_ended_before_5_month = deals_ended_before_5_month_dk + deals_ended_before_5_month_dpo
 
-            before_3_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_2_month_deals_data))
-            before_3_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_3_month_deals_data_datetime_dpo))
-            before_3_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_2_month_deals_data))
-            before_3_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_3_month_deals_data_datetime_dk))
-            non_extended_date_deals_3 = []
-            before_3_month_deals_data_datetime = before_3_month_deals_data_datetime_dpo + before_3_month_deals_data_datetime_dk
+            before_5_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_4_month_deals_data))
+            before_5_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_5_month_deals_data_datetime_dpo))
+            before_5_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
+            before_5_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_5_month_deals_data_datetime_dk))
+            non_extended_date_deals_5 = []
+            before_5_month_deals_data_datetime = before_5_month_deals_data_datetime_dpo + before_5_month_deals_data_datetime_dk
 
-            for deal in deals_ended_before_3_month:
-                before_3_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_3_month_deals_data_datetime))
-                if not before_3_month_deal:
-                    non_extended_date_deals_3.append(deal)
+            for deal in deals_ended_before_5_month:
+                before_5_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_5_month_deals_data_datetime))
+                if not before_5_month_deal:
+                    non_extended_date_deals_5.append(deal)
                 else:
-                    if not before_3_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
+                    if not before_5_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
                         continue
-                    if before_3_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_3_month_deal[0]['Стадия'] != 'Услуга завершена':
-                        non_extended_date_deals_3.append(deal)
+                    if before_5_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_5_month_deal[0]['Стадия'] != 'Услуга завершена':
+                        non_extended_date_deals_5.append(deal)
 
-            for deal in deals_ended_before_3_month:
-                if deal in non_extended_date_deals_3:
+            for deal in deals_ended_before_5_month:
+                if deal in non_extended_date_deals_5:
                     continue
-                before_3_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_3_month_deals_data_datetime))
-                if not before_3_month_deal:
-                    non_extended_date_deals_3.append(deal)
+                before_5_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_5_month_deals_data_datetime))
+                if not before_5_month_deal:
+                    non_extended_date_deals_5.append(deal)
                 else:
-                    if not before_3_month_deal[0]['Предполагаемая дата закрытия']:
+                    if not before_5_month_deal[0]['Предполагаемая дата закрытия']:
                         continue
-                    if before_3_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_3_month_deal[0]['Стадия'] != 'Услуга завершена':
-                        non_extended_date_deals_3.append(deal)
+                    if before_5_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_5_month_deal[0]['Стадия'] != 'Услуга завершена':
+                        non_extended_date_deals_5.append(deal)
 
-            ended_its_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_3_month))))
-            ended_reporting_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_3_month))))
-            ended_others_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_3_month))))
-            non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_3))
+            ended_its_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_5_month))))
+            ended_reporting_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_5_month))))
+            ended_others_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_5_month))))
+            non_extended_date_deals_id_4 = set(map(lambda x: x['ID'], non_extended_date_deals_5))
 
-        #формируем заголовки
-        worksheet.append(['Продление', f'Заканчивалось на {datetime(day=before_1_month_range, month=before_1_month, year=before_1_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
-                          f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
-                          f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено',
-                          'Всего не продлено'])
+            title.insert(0, ['Продление', f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+
+        #добавляем заголовки
+        worksheet.append(title)
+
         worksheet.append([
             'ИТС',
             len(ended_its_2),

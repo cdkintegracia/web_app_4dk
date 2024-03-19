@@ -136,10 +136,7 @@ def create_employees_quarter_report(req):
                                   f'{before_1_month if len(str(before_1_month)) == 2 else "0" + str(before_1_month)}.'
                                   f'{before_1_month_year}')
     
-    quarter_filters = get_quarter_filter(before_1_month)
-    print(quarter_filters)
 
-    sys.exit()
     
     before_2_month = before_1_month - 1
     before_2_month_year = before_1_month_year
@@ -154,6 +151,11 @@ def create_employees_quarter_report(req):
         before_3_month = 12
         before_3_month_year -= 1
     before_3_month_range = monthrange(before_3_month_year, before_3_month)[1]
+
+    quarter_filters = get_quarter_filter(before__month)
+    print(quarter_filters)
+
+    sys.exit()
 
     before_4_month = before_3_month - 1
     before_4_month_year = before_3_month_year

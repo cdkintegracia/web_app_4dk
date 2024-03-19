@@ -614,44 +614,48 @@ def create_employees_quarter_report(req):
         non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_2))
 
         #формируем заголовки
-        worksheet.append(['Продление', f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
+        worksheet.append(['Продление', f'Заканчивалось на {datetime(day=before_1_month_range, month=before_1_month, year=before_1_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
                           f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено', 
-                          f'Заканчивалось на {datetime(day=before_1_month_range, month=before_1_month, year=before_1_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+                          f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено',
+                          'Всего не продлено'])
         worksheet.append([
             'ИТС',
-            len(ended_its_4),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4))),
+            len(ended_its_2),
+            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_its_2))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2))),
             len(ended_its_3),
             len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3))),
             len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3))),
-            len(ended_its_2),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_its_2))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))
-        ])
+            len(ended_its_4),
+            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))+ len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
+            ])
         worksheet.append([
             'Сервисы',
-            len(ended_reporting_4),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4))),
+            len(ended_reporting_2),
+            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2))),
             len(ended_reporting_3),
             len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))),
             len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3))),
-            len(ended_reporting_2),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))
+            len(ended_reporting_4),
+            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))
         ])
         worksheet.append([
             'Остальное',
-            len(ended_others_4),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4))),
+            len(ended_others_2),
+            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2))),
             len(ended_others_3),
             len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))),
             len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3))),
-            len(ended_others_2),
-            len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2))),
-            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))
+            len(ended_others_4),
+            len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4))),
+            len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
         ])
         worksheet.append([])
         '''

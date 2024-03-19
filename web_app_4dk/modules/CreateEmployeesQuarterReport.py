@@ -580,9 +580,9 @@ def create_employees_quarter_report(req):
             non_extended_date_deals_id_3 = set(map(lambda x: x['ID'], non_extended_date_deals_4))
 
             title.extend([f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
-            table_its.extend(['len(ended_its_3)', 'len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3)))', 'len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))'])
-            table_service.extend(['len(ended_reporting_3)', 'len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3)))', 'len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))'])
-            table_other.extend(['len(ended_others_3)', 'len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3)))', 'len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))'])
+            table_its.extend([len(ended_its_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))])
+            table_service.extend([len(ended_reporting_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))])
+            table_other.extend([len(ended_others_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))])
             count_its += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))
             count_service += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))
             count_other += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))
@@ -648,9 +648,9 @@ def create_employees_quarter_report(req):
         table_service.extend([count_service])
         table_other.extend([count_other])
 
-        worksheet.append([table_its])
-        worksheet.append([table_service])
-        worksheet.append([table_other])
+        worksheet.append(table_its)
+        worksheet.append(table_service)
+        worksheet.append(table_other)
         
         worksheet.append([])
         '''

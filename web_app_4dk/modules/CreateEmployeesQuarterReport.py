@@ -624,7 +624,7 @@ def create_employees_quarter_report(req):
 
         #добавляем заголовки
         worksheet.append(title)
-
+        '''
         worksheet.append([
             'ИТС',
             len(ended_its_2),
@@ -664,6 +664,7 @@ def create_employees_quarter_report(req):
             len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4))),
             len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))+len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))+len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
         ])
+        '''
         worksheet.append([])
         '''
         # Охват сервисами

@@ -480,7 +480,7 @@ def create_employees_quarter_report(req):
 
         
         # Продление
-        title = 'Продление'
+        title = ['Продление']
 
         #первый месяц
         deals_ended_before_3_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_4_month_deals_data))
@@ -526,7 +526,7 @@ def create_employees_quarter_report(req):
         ended_others_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_3_month))))
         non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_3))
 
-        title.append(f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено')
+        title.extend([f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
 
         #второй месяц
         if before_1_month not in [3, 6, 9, 12]:
@@ -573,7 +573,7 @@ def create_employees_quarter_report(req):
             ended_others_3 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_4_month))))
             non_extended_date_deals_id_3 = set(map(lambda x: x['ID'], non_extended_date_deals_4))
 
-            title.append('Продление', f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено')
+            title.extend(['Продление', f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
 
         #третий месяц
         if before_1_month not in [2, 5, 8, 11, 3, 6, 9, 12]:
@@ -620,7 +620,7 @@ def create_employees_quarter_report(req):
             ended_others_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_5_month))))
             non_extended_date_deals_id_4 = set(map(lambda x: x['ID'], non_extended_date_deals_5))
 
-            title.append('Продление', f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено')
+            title.extend(['Продление', f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
 
         #добавляем заголовки
         worksheet.append(title)

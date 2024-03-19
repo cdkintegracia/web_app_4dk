@@ -580,9 +580,9 @@ def create_employees_quarter_report(req):
             non_extended_date_deals_id_3 = set(map(lambda x: x['ID'], non_extended_date_deals_4))
 
             title.extend([f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
-            table_its.extend([len(ended_its_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))])
-            table_service.extend([len(ended_reporting_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))])
-            table_other.extend([len(ended_others_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))])
+            table_its.extend(['len(ended_its_3)', 'len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3)))', 'len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))'])
+            table_service.extend(['len(ended_reporting_3)', 'len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3)))', 'len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))'])
+            table_other.extend(['len(ended_others_3)', 'len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3)))', 'len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))'])
             count_its += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))
             count_service += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))
             count_other += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))
@@ -632,7 +632,7 @@ def create_employees_quarter_report(req):
             ended_others_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_5_month))))
             non_extended_date_deals_id_4 = set(map(lambda x: x['ID'], non_extended_date_deals_5))
 
-            title.extend([ f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
+            title.extend([f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
             table_its.extend([len(ended_its_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))])
             table_service.extend([len(ended_reporting_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))])
             table_other.extend([len(ended_others_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))])

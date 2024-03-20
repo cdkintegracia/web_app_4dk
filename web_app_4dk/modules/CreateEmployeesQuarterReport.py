@@ -126,7 +126,7 @@ def create_employees_quarter_report(req):
 
     before_1_month_year = datetime.now().year
     #before_1_month = datetime.now().month - 1
-    before_1_month = 4
+    before_1_month = 3
 
     if before_1_month == 0:
         before_1_month = 12

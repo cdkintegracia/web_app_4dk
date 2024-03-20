@@ -199,7 +199,7 @@ def create_employees_quarter_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        worksheet.append([user_name, '', f'{month_names[before_1_month]} {before_1_month_year}'])
+        #worksheet.append([user_name, '', f'{month_names[before_1_month]} {before_1_month_year}'])
         worksheet.append([])
         worksheet.append([])
 

@@ -536,7 +536,7 @@ def create_employees_quarter_report(req):
         count_other = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))
         
         #второй месяц
-        if before_1_month not in [3, 6, 9, 12]:
+        if before_1_month not in [1, 4, 7, 10]:
             deals_ended_before_4_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_4_month_deals_data))
             deals_ended_before_4_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
             deals_ended_before_4_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_4_month_dpo))
@@ -589,7 +589,7 @@ def create_employees_quarter_report(req):
             count_other += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))
         
         #третий месяц
-        if before_1_month not in [2, 5, 8, 11, 3, 6, 9, 12]:
+        if before_1_month not in [2, 5, 8, 11, 1, 4, 7, 10]:
             deals_ended_before_5_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_5_month_deals_data))
             deals_ended_before_5_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_5_month_deals_data))
             deals_ended_before_5_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dpo))

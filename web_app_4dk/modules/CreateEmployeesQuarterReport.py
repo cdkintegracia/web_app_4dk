@@ -125,7 +125,8 @@ def create_employees_quarter_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     before_1_month_year = datetime.now().year
-    before_1_month = datetime.now().month - 1
+    #before_1_month = datetime.now().month - 1
+    before_1_month = 4
 
     if before_1_month == 0:
         before_1_month = 12
@@ -641,7 +642,7 @@ def create_employees_quarter_report(req):
             count_other += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
         
         #добавляем заголовки и сновную часть в таблицу
-        title.extend(['Всего продлено'])
+        title.extend(['Всего не продлено'])
         worksheet.append(title)
 
         table_its.extend([count_its])

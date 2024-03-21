@@ -213,6 +213,8 @@ def create_employees_quarter_report(req):
                                                 x['Группа'] == 'ИТС' and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
+        print(len(start_quarter_its_deals))
+        print(len(its_deals_before_1_month))
 
         # Сделки
         # Отчетный месяц
@@ -601,15 +603,12 @@ def create_employees_quarter_report(req):
             coverage_its_without_paid_services_last_month = 0
 
         #Начало квартала
-        companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], quarter_deals_data))))
+        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], quarter_deals_data))))
         companies_without_services_start_quarter = 0
         companies_without_paid_services_start_quarter = 0
         for company in companies:
-            company_regnumbers = set(map(lambda x: x['Регномер'],
-                                         list(filter(lambda x: x['Компания'] == company, quarter_deals_data))))
-            company_its = list(
-                filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], quarter_deals_data))
+            company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, quarter_deals_data))))
+            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], quarter_deals_data))
             if not company_its:
                 continue
 
@@ -617,27 +616,24 @@ def create_employees_quarter_report(req):
                 'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], quarter_deals_data))
             if non_prof_its:
 
-                company_its_services = list(
-                    filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                     ('Контрагент' in x['Тип'] or
-                                      'Спарк' in x['Тип'] or
-                                      'РПД' in x['Тип'] or
-                                      'Отчетность' in x['Тип'] or
-                                      'Допы Облако' in x['Тип'] or
-                                      'Кабинет сотрудника' in x['Тип']),
-                           quarter_deals_data))
+                company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                                    ('Контрагент' in x['Тип'] or
+                                                    'Спарк' in x['Тип'] or
+                                                    'РПД' in x['Тип'] or
+                                                    'Отчетность' in x['Тип'] or
+                                                    'Допы Облако' in x['Тип'] or
+                                                    'Кабинет сотрудника' in x['Тип']), quarter_deals_data))
 
                 if not company_its_services:
                     companies_without_services_start_quarter += 1
 
-            company_its_paid_services = list(
-                filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                 ('Контрагент' in x['Тип'] or
-                                  'Спарк' in x['Тип'] or
-                                  'РПД' in x['Тип'] or
-                                  'Отчетность' == x['Тип'] or
-                                  'Допы Облако' in x['Тип'] or
-                                  'Кабинет сотрудника' in x['Тип']), quarter_deals_data))
+            company_its_paid_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                                    ('Контрагент' in x['Тип'] or
+                                                    'Спарк' in x['Тип'] or
+                                                    'РПД' in x['Тип'] or
+                                                    'Отчетность' == x['Тип'] or
+                                                    'Допы Облако' in x['Тип'] or
+                                                    'Кабинет сотрудника' in x['Тип']), quarter_deals_data))
 
             if not company_its_paid_services:
                 companies_without_paid_services_start_quarter += 1

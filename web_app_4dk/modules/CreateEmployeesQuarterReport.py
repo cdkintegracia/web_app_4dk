@@ -641,8 +641,8 @@ def create_employees_quarter_report(req):
         try:
             coverage_its_without_services_start_quarter = round(round(companies_without_services_start_quarter /
                                                                    len(start_quarter_its_deals), 2) * 100, 2)
-            print(companies_without_services_start_quarter)
-            print(start_quarter_its_deals)
+            print(len(companies_without_services_start_quarter))
+            print(len(start_quarter_its_deals))
         except ZeroDivisionError:
             coverage_its_without_services_start_quarter = 0
 
@@ -650,8 +650,8 @@ def create_employees_quarter_report(req):
             coverage_its_without_paid_services_start_quarter = round(round(companies_without_paid_services_start_quarter /
                                                                         len(start_quarter_its_deals), 2) * 100, 2)
             
-            print(companies_without_paid_services_start_quarter)
-            print(start_quarter_its_deals)
+            print(len(companies_without_paid_services_start_quarter))
+            print(len(start_quarter_its_deals))
         except ZeroDivisionError:
             coverage_its_without_paid_services_start_quarter = 0
 

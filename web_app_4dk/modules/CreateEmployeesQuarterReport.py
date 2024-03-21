@@ -194,7 +194,6 @@ def create_employees_quarter_report(req):
         quarter_filters = get_quarter_filter(before_1_month)
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
-        print(start_date_quarter)
 
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
@@ -211,10 +210,9 @@ def create_employees_quarter_report(req):
                                                 before_1_month_deals_data))
 
         start_quarter_its_deals = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                            x['Группа'] == 'ИТС' and
-                                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован',
-                                                                                   'Счет отправлен клиенту'],
-                                                  quarter_deals_data))
+                                                x['Группа'] == 'ИТС' and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                quarter_deals_data))
 
         # Сделки
         # Отчетный месяц

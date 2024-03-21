@@ -560,8 +560,8 @@ def create_employees_quarter_report(req):
         companies_without_services_last_month = 0
         companies_without_paid_services_last_month = 0
         for company in companies:
-            company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, before_1_month_deals_data))))
-            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], before_1_month_deals_data))
+            company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, before_1_month_deals_data)))) #читаем все сделки с заданным регномером за последний месяц
+            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], before_1_month_deals_data)) #читаем все сделки из группы итс за последний месяц
             if not company_its:
                 continue
 
@@ -641,12 +641,17 @@ def create_employees_quarter_report(req):
         try:
             coverage_its_without_services_start_quarter = round(round(companies_without_services_start_quarter /
                                                                    len(start_quarter_its_deals), 2) * 100, 2)
+            print(companies_without_services_start_quarter)
+            print(start_quarter_its_deals)
         except ZeroDivisionError:
             coverage_its_without_services_start_quarter = 0
 
         try:
             coverage_its_without_paid_services_start_quarter = round(round(companies_without_paid_services_start_quarter /
                                                                         len(start_quarter_its_deals), 2) * 100, 2)
+            
+            print(companies_without_paid_services_start_quarter)
+            print(start_quarter_its_deals)
         except ZeroDivisionError:
             coverage_its_without_paid_services_start_quarter = 0
 

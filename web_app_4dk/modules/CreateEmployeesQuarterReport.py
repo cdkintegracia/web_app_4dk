@@ -196,6 +196,7 @@ def create_employees_quarter_report(req):
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
 
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
+        start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
 
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year)
         before_2_month_deals_data = read_deals_data_file(before_2_month, before_2_month_year)
@@ -203,6 +204,16 @@ def create_employees_quarter_report(req):
         before_4_month_deals_data = read_deals_data_file(before_4_month, before_4_month_year)
         before_5_month_deals_data = read_deals_data_file(before_5_month, before_5_month_year)
 
+        its_deals_before_1_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                before_1_month_deals_data))
+
+        start_quarter_its_deals = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                            x['Группа'] == 'ИТС' and
+                                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован',
+                                                                                   'Счет отправлен клиенту'],
+                                                  quarter_deals_data))
 
         # Сделки
         # Отчетный месяц
@@ -352,6 +363,7 @@ def create_employees_quarter_report(req):
         ])
         worksheet.append([])
         
+        '''
         
         # Продление
         title = ['Продление']
@@ -539,9 +551,141 @@ def create_employees_quarter_report(req):
         worksheet.append(table_other)
         
         worksheet.append([])
-        
-        # Задачи
+        ''' 
 
+        # Охват сервисами
+        #Последний месяц квартала
+        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
+        companies_without_services_last_month = 0
+        companies_without_paid_services_last_month = 0
+        for company in companies:
+            company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, before_1_month_deals_data))))
+            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], before_1_month_deals_data))
+            if not company_its:
+                continue
+
+            non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x['Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], before_1_month_deals_data))
+            if non_prof_its:
+                company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                                   ('Контрагент' in x['Тип'] or
+                                                   'Спарк' in x['Тип'] or
+                                                   'РПД' in x['Тип'] or
+                                                   'Отчетность' in x['Тип'] or
+                                                   'Допы Облако' in x['Тип'] or
+                                                   'Кабинет сотрудника' in x['Тип']),
+                                                    before_1_month_deals_data))
+
+                if not company_its_services:
+                    companies_without_services_last_month += 1
+
+            company_its_paid_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                                    ('Контрагент' in x['Тип'] or
+                                                    'Спарк' in x['Тип'] or
+                                                    'РПД' in x['Тип'] or
+                                                    'Отчетность' == x['Тип'] or
+                                                    'Допы Облако' in x['Тип'] or
+                                                    'Кабинет сотрудника' in x['Тип']), before_1_month_deals_data))
+
+            if not company_its_paid_services:
+                companies_without_paid_services_last_month += 1
+
+        try:
+            coverage_its_without_services_last_month = round(round(companies_without_services_last_month /
+                                                                    len(its_deals_before_1_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_its_without_services_last_month = 0
+
+        try:
+            coverage_its_without_paid_services_last_month = round(round(companies_without_paid_services_last_month /
+                                                                    len(its_deals_before_1_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_its_without_paid_services_last_month = 0
+
+        #Начало квартала
+        companies = set(map(lambda x: x['Компания'], list(
+            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], quarter_deals_data))))
+        companies_without_services_start_quarter = 0
+        companies_without_paid_services_start_quarter = 0
+        for company in companies:
+            company_regnumbers = set(map(lambda x: x['Регномер'],
+                                         list(filter(lambda x: x['Компания'] == company, quarter_deals_data))))
+            company_its = list(
+                filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], quarter_deals_data))
+            if not company_its:
+                continue
+
+            non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x[
+                'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], quarter_deals_data))
+            if non_prof_its:
+
+                company_its_services = list(
+                    filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                     ('Контрагент' in x['Тип'] or
+                                      'Спарк' in x['Тип'] or
+                                      'РПД' in x['Тип'] or
+                                      'Отчетность' in x['Тип'] or
+                                      'Допы Облако' in x['Тип'] or
+                                      'Кабинет сотрудника' in x['Тип']),
+                           quarter_deals_data))
+
+                if not company_its_services:
+                    companies_without_services_start_quarter += 1
+
+            company_its_paid_services = list(
+                filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                 ('Контрагент' in x['Тип'] or
+                                  'Спарк' in x['Тип'] or
+                                  'РПД' in x['Тип'] or
+                                  'Отчетность' == x['Тип'] or
+                                  'Допы Облако' in x['Тип'] or
+                                  'Кабинет сотрудника' in x['Тип']), quarter_deals_data))
+
+            if not company_its_paid_services:
+                companies_without_paid_services_start_quarter += 1
+
+        try:
+            coverage_its_without_services_start_quarter = round(round(companies_without_services_start_quarter /
+                                                                   len(start_quarter_its_deals), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_its_without_services_start_quarter = 0
+
+        try:
+            coverage_its_without_paid_services_start_quarter = round(round(companies_without_paid_services_start_quarter /
+                                                                        len(start_quarter_its_deals), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_its_without_paid_services_start_quarter = 0
+
+        
+        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {start_date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
+        worksheet.append([
+            'ИТС без сервисов',
+            companies_without_services_last_month,
+            companies_without_services_start_quarter,
+            companies_without_services_start_quarter - companies_without_services_last_month,
+        ])
+        worksheet.append([
+            '% ИТС без сервисов',
+            f'{coverage_its_without_services_last_month}%',
+            f'{coverage_its_without_services_start_quarter}%',
+            f'{coverage_its_without_services_last_month - coverage_its_without_services_start_quarter}%'
+        ])
+        worksheet.append([
+            'ИТС без платных сервисов',
+            companies_without_paid_services_last_month,
+            companies_without_paid_services_start_quarter,
+            companies_without_paid_services_last_month - companies_without_paid_services_start_quarter
+        ])
+        worksheet.append([
+            '% ИТС без платных сервисов',
+            f'{coverage_its_without_paid_services_last_month}%',
+            f'{coverage_its_without_paid_services_start_quarter}%',
+            f'{coverage_its_without_paid_services_last_month - coverage_its_without_paid_services_start_quarter}%'
+        ])
+        worksheet.append([])
+
+
+        '''
+        # Задачи
         tasks = b.get_all('tasks.task.list', {
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
@@ -586,7 +730,7 @@ def create_employees_quarter_report(req):
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
-
+        '''
         change_sheet_style(worksheet)
        
     workbook.save(report_name)

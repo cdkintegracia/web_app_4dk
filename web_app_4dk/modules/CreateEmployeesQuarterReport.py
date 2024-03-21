@@ -405,9 +405,9 @@ def create_employees_quarter_report(req):
         table_service = ['Сервисы', len(ended_reporting_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))]
         table_other = ['Остальное', len(ended_others_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))]
 
-        count_its = len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_its_2)))
-        count_service = len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2)))
-        count_other = len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2)))
+        count_its = len(ended_its_2)
+        count_service = len(ended_reporting_2)
+        count_other = len(ended_others_2)
         count_its_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))
         count_service_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))
         count_other_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))
@@ -462,9 +462,9 @@ def create_employees_quarter_report(req):
             table_service.extend([len(ended_reporting_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))])
             table_other.extend([len(ended_others_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))])
 
-            count_its += len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3)))
-            count_service += len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3)))
-            count_other += len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3)))
+            count_its += len(ended_its_3)
+            count_service += len(ended_reporting_3)
+            count_other += len(ended_others_3)
             count_its_non += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))
             count_service_non += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))
             count_other_non += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))
@@ -519,15 +519,15 @@ def create_employees_quarter_report(req):
             table_service.extend([len(ended_reporting_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))])
             table_other.extend([len(ended_others_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))])\
             
-            count_its += len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4)))
-            count_service += len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4)))
-            count_other += len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4)))
+            count_its += len(ended_its_4)
+            count_service += len(ended_reporting_4)
+            count_other += len(ended_others_4)
             count_its_non += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
             count_service_non += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))
             count_other_non += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
         
         #добавляем заголовки и сновную часть в таблицу
-        title.extend(['Всего продлено', 'Всего не продлено'])
+        title.extend(['Всего к продлению', 'Всего не продлено'])
         worksheet.append(title)
 
         table_its.extend([count_its, count_its_non])

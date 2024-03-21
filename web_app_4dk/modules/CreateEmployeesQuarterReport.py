@@ -661,25 +661,25 @@ def create_employees_quarter_report(req):
             'ИТС без сервисов',
             companies_without_services_last_month,
             companies_without_services_start_quarter,
-            companies_without_services_start_quarter - companies_without_services_last_month,
+            companies_without_services_last_month - companies_without_services_start_quarter,
         ])
         worksheet.append([
             '% ИТС без сервисов',
             f'{coverage_its_without_services_last_month}%',
             f'{coverage_its_without_services_start_quarter}%',
-            f'{coverage_its_without_services_start_quarter - coverage_its_without_services_last_month}%'
+            f'{coverage_its_without_services_last_month - coverage_its_without_services_start_quarter}%'
         ])
         worksheet.append([
             'ИТС без платных сервисов',
             companies_without_paid_services_last_month,
             companies_without_paid_services_start_quarter,
-            companies_without_paid_services_start_quarter - companies_without_paid_services_last_month
+            companies_without_paid_services_last_month - companies_without_paid_services_start_quarter
         ])
         worksheet.append([
             '% ИТС без платных сервисов',
             f'{coverage_its_without_paid_services_last_month}%',
             f'{coverage_its_without_paid_services_start_quarter}%',
-            f'{coverage_its_without_paid_services_start_quarter - coverage_its_without_paid_services_last_month}%'
+            f'{coverage_its_without_paid_services_last_month - coverage_its_without_paid_services_start_quarter}%'
         ])
         worksheet.append([])
 

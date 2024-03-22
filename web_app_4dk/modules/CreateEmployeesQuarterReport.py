@@ -555,7 +555,7 @@ def create_employees_quarter_report(req):
         
         worksheet.append([])
         ''' 
-        '''
+        
         # Охват сервисами
         #Последний месяц квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
@@ -735,7 +735,7 @@ def create_employees_quarter_report(req):
 
         try:
             coverage_paid_reporting_deals_start_quarter = round(paid_reporting_deals_start_quarter /
-                                                             len(its_prof_deals_quarter) * 100, 2)
+                                                             len(start_quarter_its_deals) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_start_quarter = 0
 
@@ -767,7 +767,7 @@ def create_employees_quarter_report(req):
             f'{round(coverage_paid_reporting_deals_start_quarter - coverage_paid_reporting_deals_last_month, 2)}%'
         ])
         worksheet.append([])
-        '''
+       
 
         # Продажи
         sales = b.get_all('crm.item.list', {

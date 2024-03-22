@@ -213,8 +213,6 @@ def create_employees_quarter_report(req):
                                                 x['Группа'] == 'ИТС' and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
-        print(len(start_quarter_its_deals))
-        print(len(its_deals_before_1_month))
 
         # Сделки
         # Отчетный месяц
@@ -604,10 +602,12 @@ def create_employees_quarter_report(req):
 
         #Начало квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], quarter_deals_data))))
+        print(len(companies))
         companies_without_services_start_quarter = 0
         companies_without_paid_services_start_quarter = 0
         for company in companies:
             company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, quarter_deals_data))))
+            print(len(company_regnumbers))
             company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], quarter_deals_data))
             if not company_its:
                 continue
@@ -615,7 +615,6 @@ def create_employees_quarter_report(req):
             non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x[
                 'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], quarter_deals_data))
             if non_prof_its:
-
                 company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
                                                     ('Контрагент' in x['Тип'] or
                                                     'Спарк' in x['Тип'] or

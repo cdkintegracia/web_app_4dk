@@ -601,7 +601,7 @@ def create_employees_quarter_report(req):
             coverage_its_without_paid_services_last_month = 0
 
         #Начало квартала
-        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], quarter_deals_data))))
+        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info, quarter_deals_data))))
         print(len(companies))
         print(len(quarter_deals_data))
         companies_without_services_start_quarter = 0

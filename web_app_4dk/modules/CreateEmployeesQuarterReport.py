@@ -213,6 +213,9 @@ def create_employees_quarter_report(req):
                                                 x['Группа'] == 'ИТС' and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
+        
+        print(its_deals_before_1_month)
+        print(start_quarter_its_deals)
 
         # Сделки
         # Отчетный месяц
@@ -555,6 +558,8 @@ def create_employees_quarter_report(req):
         # Охват сервисами
         #Последний месяц квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
+        print(len(companies))
+        print(len(before_1_month_deals_data))
         companies_without_services_last_month = 0
         companies_without_paid_services_last_month = 0
         for company in companies:

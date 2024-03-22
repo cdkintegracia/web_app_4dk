@@ -638,8 +638,8 @@ def create_employees_quarter_report(req):
                 companies_without_paid_services_start_quarter += 1
 
         try:
-            coverage_its_without_services_start_quarter = round(round(companies_without_services_start_quarter /
-                                                                   len(start_quarter_its_deals), 2) * 100, 2)
+            coverage_its_without_services_start_quarter = round(companies_without_services_start_quarter /
+                                                                   len(start_quarter_its_deals) * 100, 2)
             print(companies_without_services_start_quarter)
             print(len(start_quarter_its_deals))
             print('123')
@@ -647,8 +647,8 @@ def create_employees_quarter_report(req):
             coverage_its_without_services_start_quarter = 0
 
         try:
-            coverage_its_without_paid_services_start_quarter = round(round(companies_without_paid_services_start_quarter /
-                                                                        len(start_quarter_its_deals), 2) * 100, 2)
+            coverage_its_without_paid_services_start_quarter = round(companies_without_paid_services_start_quarter /
+                                                                        len(start_quarter_its_deals) * 100, 2)
             
             print(companies_without_paid_services_start_quarter)
             print(len(start_quarter_its_deals))

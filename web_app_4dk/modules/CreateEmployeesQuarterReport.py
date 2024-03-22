@@ -787,7 +787,7 @@ def create_employees_quarter_report(req):
         else:
             sold_deals = []
 
-        worksheet.append(['Продажи', f'number_quarter квартал {end_date_quarter.year} шт.', f'number_quarter квартал {end_date_quarter.year} руб'])
+        worksheet.append(['Продажи', f'{number_quarter} квартал {end_date_quarter.year} шт.', f'{number_quarter} квартал {end_date_quarter.year} руб'])
         for field_value in deal_group_field:
             if field_value['VALUE'] == 'Лицензии':
                 grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals))

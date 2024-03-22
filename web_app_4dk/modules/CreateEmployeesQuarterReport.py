@@ -163,8 +163,6 @@ def create_employees_quarter_report(req):
         before_5_month = 12
         before_5_month_year -= 1
  
-    month_filter_start = datetime(day=1, month=before_1_month, year=before_1_month_year)
-    month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
@@ -214,9 +212,10 @@ def create_employees_quarter_report(req):
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
         
-        print(len(its_deals_before_1_month))
-        print(len(start_quarter_its_deals))
-        print('000')
+        if start_date_quarter.month == 1: number_quarter = 1
+        elif start_date_quarter.month == 4: number_quarter = 2
+        elif start_date_quarter.month == 7: number_quarter = 3
+        else: number_quarter = 4
 
         # Сделки
         # Отчетный месяц
@@ -555,7 +554,7 @@ def create_employees_quarter_report(req):
         
         worksheet.append([])
         ''' 
-
+        '''
         # Охват сервисами
         #Последний месяц квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
@@ -766,6 +765,37 @@ def create_employees_quarter_report(req):
             f'{coverage_paid_reporting_deals_start_quarter}%',
             f'{round(coverage_paid_reporting_deals_start_quarter - coverage_paid_reporting_deals_last_month, 2)}%'
         ])
+        worksheet.append([])
+        '''
+
+        # Продажи
+        sales = b.get_all('crm.item.list', {
+            'entityTypeId': '133',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=ufCrm3_1654248264': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
+                '<ufCrm3_1654248264': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+            }
+        })
+        if sales:
+            sold_deals = b.get_all('crm.deal.list', {
+                'select': ['UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
+                'filter': {
+                    'ID': list(map(lambda x: x['parentId2'], sales))
+                }
+            })
+        else:
+            sold_deals = []
+
+        worksheet.append(['Продажи', f'number_quarter квартал {end_date_quarter.year} шт.', f'number_quarter квартал {end_date_quarter.year} руб'])
+        for field_value in deal_group_field:
+            if field_value['VALUE'] == 'Лицензии':
+                grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals))
+            else:
+                grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'] and x['TYPE_ID'] not in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals))
+            worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
+        worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
+        worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         worksheet.append([])
 
         '''

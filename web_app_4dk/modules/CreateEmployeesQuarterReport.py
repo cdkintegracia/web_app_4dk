@@ -603,11 +603,13 @@ def create_employees_quarter_report(req):
         #Начало квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], quarter_deals_data))))
         print(len(companies))
+        print(len(quarter_deals_data))
         companies_without_services_start_quarter = 0
         companies_without_paid_services_start_quarter = 0
         for company in companies:
             company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, quarter_deals_data))))
             print(len(company_regnumbers))
+            print('123')
             company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], quarter_deals_data))
             if not company_its:
                 continue
@@ -642,6 +644,7 @@ def create_employees_quarter_report(req):
                                                                    len(start_quarter_its_deals), 2) * 100, 2)
             print(companies_without_services_start_quarter)
             print(len(start_quarter_its_deals))
+            print('123')
         except ZeroDivisionError:
             coverage_its_without_services_start_quarter = 0
 

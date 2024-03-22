@@ -214,8 +214,8 @@ def create_employees_quarter_report(req):
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
         
-        print(its_deals_before_1_month)
-        print(start_quarter_its_deals)
+        print(len(its_deals_before_1_month))
+        print(len(start_quarter_its_deals))
 
         # Сделки
         # Отчетный месяц

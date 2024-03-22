@@ -589,14 +589,14 @@ def create_employees_quarter_report(req):
                 companies_without_paid_services_last_month += 1
 
         try:
-            coverage_its_without_services_last_month = round(round(companies_without_services_last_month /
-                                                                    len(its_deals_before_1_month), 2) * 100, 2)
+            coverage_its_without_services_last_month = round(companies_without_services_last_month /
+                                                                    len(its_deals_before_1_month) * 100, 2)
         except ZeroDivisionError:
             coverage_its_without_services_last_month = 0
 
         try:
-            coverage_its_without_paid_services_last_month = round(round(companies_without_paid_services_last_month /
-                                                                    len(its_deals_before_1_month), 2) * 100, 2)
+            coverage_its_without_paid_services_last_month = round(companies_without_paid_services_last_month /
+                                                                    len(its_deals_before_1_month) * 100, 2)
         except ZeroDivisionError:
             coverage_its_without_paid_services_last_month = 0
 

@@ -746,25 +746,25 @@ def create_employees_quarter_report(req):
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
             len(free_reporting_deals_start_quarter),
-            len(free_reporting_deals_start_quarter) - len(free_reporting_deals_last_month),
+            len(free_reporting_deals_last_month) - len(free_reporting_deals_start_quarter),
         ])
         worksheet.append([
             'Охват льготной отчетностью',
             f'{coverage_free_reporting_deals_last_month}%',
             f'{coverage_free_reporting_deals_start_quarter}%',
-            f'{round(coverage_free_reporting_deals_start_quarter - coverage_free_reporting_deals_last_month, 2)}%'
+            f'{round(coverage_free_reporting_deals_last_month - coverage_free_reporting_deals_start_quarter, 2)}%'
         ])
         worksheet.append([
             'Платных отчетностей',
             paid_reporting_deals_last_month,
             paid_reporting_deals_start_quarter,
-            paid_reporting_deals_start_quarter - paid_reporting_deals_last_month,
+            paid_reporting_deals_last_month - paid_reporting_deals_start_quarter,
         ])
         worksheet.append([
             'Охват платных отчетностей',
             f'{coverage_paid_reporting_deals_last_month}%',
             f'{coverage_paid_reporting_deals_start_quarter}%',
-            f'{round(coverage_paid_reporting_deals_start_quarter - coverage_paid_reporting_deals_last_month, 2)}%'
+            f'{round(coverage_paid_reporting_deals_last_month - coverage_paid_reporting_deals_start_quarter, 2)}%'
         ])
         worksheet.append([])
        

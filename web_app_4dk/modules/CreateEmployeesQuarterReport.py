@@ -216,6 +216,7 @@ def create_employees_quarter_report(req):
         
         print(len(its_deals_before_1_month))
         print(len(start_quarter_its_deals))
+        print('000')
 
         # Сделки
         # Отчетный месяц
@@ -560,6 +561,7 @@ def create_employees_quarter_report(req):
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
         print(len(companies))
         print(len(before_1_month_deals_data))
+        print('111')
         companies_without_services_last_month = 0
         companies_without_paid_services_last_month = 0
         for company in companies:
@@ -609,6 +611,7 @@ def create_employees_quarter_report(req):
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, quarter_deals_data))))
         print(len(companies))
         print(len(quarter_deals_data))
+        print('333')
         companies_without_services_start_quarter = 0
         companies_without_paid_services_start_quarter = 0
         for company in companies:
@@ -647,7 +650,7 @@ def create_employees_quarter_report(req):
                                                                    len(start_quarter_its_deals) * 100, 2)
             print(companies_without_services_start_quarter)
             print(len(start_quarter_its_deals))
-            print('123')
+            print('444')
         except ZeroDivisionError:
             coverage_its_without_services_start_quarter = 0
 

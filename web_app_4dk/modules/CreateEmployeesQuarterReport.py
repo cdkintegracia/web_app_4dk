@@ -608,8 +608,6 @@ def create_employees_quarter_report(req):
         companies_without_paid_services_start_quarter = 0
         for company in companies:
             company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, quarter_deals_data))))
-            print(len(company_regnumbers))
-            print('123')
             company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], quarter_deals_data))
             if not company_its:
                 continue

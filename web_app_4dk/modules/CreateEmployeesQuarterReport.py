@@ -932,9 +932,7 @@ def create_employees_quarter_report(req):
             }, edo_elements_info))
             
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
-            print(len(traffic_more_than_1))
             traffic_more_than_1 = len(set(map(lambda x: x['Компания'], traffic_more_than_1)))
-            print(traffic_more_than_1)
 
             edo_elements_paid = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -945,10 +943,10 @@ def create_employees_quarter_report(req):
                     'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
             })
-            print(len(edo_elements_paid))
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
+            print(paid_traffic)
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
-            print(traffic_more_than_1)
+            print(paid_traffic)
 
         else:
             traffic_more_than_1 = []

@@ -192,7 +192,6 @@ def create_employees_quarter_report(req):
         quarter_filters = get_quarter_filter(before_1_month)
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
-        print(quarter_filters)
 
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
@@ -366,8 +365,7 @@ def create_employees_quarter_report(req):
         ])
         worksheet.append([])
         
-        '''
-        
+               
         # Продление
         title = ['Продление']
 
@@ -767,8 +765,7 @@ def create_employees_quarter_report(req):
             f'{round(coverage_paid_reporting_deals_last_month - coverage_paid_reporting_deals_start_quarter, 2)}%'
         ])
         worksheet.append([])
-       '''
-        '''
+
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -795,7 +792,7 @@ def create_employees_quarter_report(req):
             else:
                 grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'] and x['TYPE_ID'] not in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals)) # если группы равны и тип не лицензии
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
-            if field_value['VALUE'] == 'Остальное': print(grouped_deals['ID'])
+
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         worksheet.append([])
@@ -861,7 +858,6 @@ def create_employees_quarter_report(req):
             }
         })
         days_duty_amount = len(days_duty)
-        print(days_duty_amount)
 
         worksheet.append(['', 'Незакрытых (и созд. в этом кварт)', 'Всего создано в квартале'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
@@ -872,7 +868,7 @@ def create_employees_quarter_report(req):
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
-        '''
+        
 
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
@@ -955,11 +951,11 @@ def create_employees_quarter_report(req):
         except ZeroDivisionError:
             active_its_coverage = 0
 
-        worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
-        worksheet.append(['Компании с трафиком больше 1 за квартал', traffic_more_than_1])
-        worksheet.append(['% активных ИТС за квартал', active_its_coverage])
-        worksheet.append(['Сумма платного трафика за квартал', paid_traffic])
+        worksheet.append(['ЭДО', 'Всего ИТС на конец квартала', 'С ЭДО', '%'])
+        worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
+        worksheet.append(['Компании с трафиком больше 1', traffic_more_than_1])
+        worksheet.append(['% активных ИТС', active_its_coverage])
+        worksheet.append(['Сумма платного трафика', paid_traffic])
 
         change_sheet_style(worksheet)
        

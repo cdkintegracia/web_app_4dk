@@ -889,7 +889,7 @@ def create_employees_quarter_report(req):
 
 
         all_its = all_its_last_month
-        name_month = month_codes[month_int_names[before_1_month]]
+        name_month = [month_codes[month_int_names[before_1_month]]]
 
         if before_1_month not in [1, 4, 7, 10]:
             name_month.append(month_codes[month_int_names[before_2_month]])

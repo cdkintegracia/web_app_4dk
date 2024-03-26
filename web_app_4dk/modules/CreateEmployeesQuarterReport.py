@@ -893,6 +893,7 @@ def create_employees_quarter_report(req):
         print(len(all_its_last_month))
         all_its = all_its_last_month
         name_month = [month_codes[month_int_names[before_1_month]]]
+        print(len(all_its_last_month))
 
         if before_1_month not in [2, 5, 8, 11]:
             name_month.append(month_codes[month_int_names[before_2_month]])
@@ -913,7 +914,7 @@ def create_employees_quarter_report(req):
                         all_its.append(deals_2)
          
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-        
+        print(len(all_its_last_month))
         if edo_companies_id:
             edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -950,7 +951,7 @@ def create_employees_quarter_report(req):
         else:
             traffic_more_than_1 = []
             paid_traffic = 0
-
+        print(len(all_its_last_month))
         try:
             edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:

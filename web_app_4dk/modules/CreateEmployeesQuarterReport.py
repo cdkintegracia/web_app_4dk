@@ -930,8 +930,12 @@ def create_employees_quarter_report(req):
                 'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
                 'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
             }, edo_elements_info))
-            print(len(edo_elements_info))
+            
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+            print(len(traffic_more_than_1))
+            traffic_more_than_1 = len(set(map(lambda x: x['Компания'], traffic_more_than_1)))
+            print(len(traffic_more_than_1))
+
             edo_elements_paid = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
@@ -944,7 +948,7 @@ def create_employees_quarter_report(req):
             print(len(edo_elements_paid))
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
-            print(len(traffic_more_than_1))
+            print(traffic_more_than_1)
 
         else:
             traffic_more_than_1 = []
@@ -962,7 +966,7 @@ def create_employees_quarter_report(req):
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
-        worksheet.append(['Компании с трафиком больше 1 за квартал', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))])
+        worksheet.append(['Компании с трафиком больше 1 за квартал', traffic_more_than_1])
         worksheet.append(['% активных ИТС за квартал', active_its_coverage])
         worksheet.append(['Сумма платного трафика за квартал', paid_traffic])
 

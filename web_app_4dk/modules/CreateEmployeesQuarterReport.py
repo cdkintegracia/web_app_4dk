@@ -825,7 +825,7 @@ def create_employees_quarter_report(req):
         non_last_documents_debts = len(non_documents_debts) - len(non_quarter_documents_debts) #все незакрытые долги за предыдущие периоды
 
         worksheet.append(['Долги по документам', 'Всего выписано за квартал', 'Не сдано за квартал', 'Не сдано за предыдущие периоды'])
-        worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts), len(non_last_documents_debts)])
+        worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts), non_last_documents_debts])
         worksheet.append([])
 
         '''

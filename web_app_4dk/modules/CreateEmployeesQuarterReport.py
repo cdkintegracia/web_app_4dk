@@ -912,6 +912,7 @@ def create_employees_quarter_report(req):
                         all_its.append(deals_2)
          
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+        print(all_its['ID'])
 
         if edo_companies_id:
             edo_elements_info = b.get_all('lists.element.get', {
@@ -944,9 +945,7 @@ def create_employees_quarter_report(req):
                 }
             })
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
-            print(paid_traffic)
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
-            print(paid_traffic)
 
         else:
             traffic_more_than_1 = []

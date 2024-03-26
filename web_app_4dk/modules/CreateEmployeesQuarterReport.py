@@ -934,7 +934,7 @@ def create_employees_quarter_report(req):
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
             print(len(traffic_more_than_1))
             traffic_more_than_1 = len(set(map(lambda x: x['Компания'], traffic_more_than_1)))
-            print(len(traffic_more_than_1))
+            print(traffic_more_than_1)
 
             edo_elements_paid = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',

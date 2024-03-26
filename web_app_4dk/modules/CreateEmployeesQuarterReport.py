@@ -219,7 +219,7 @@ def create_employees_quarter_report(req):
         else: number_quarter = 4
 
         # Сделки
-        # Отчетный месяц
+        # Последний месяц квартала
         its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
@@ -428,7 +428,7 @@ def create_employees_quarter_report(req):
         count_other_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))
         
         #второй месяц
-        if before_1_month not in [2, 5, 8, 11]:
+        if before_1_month not in [1, 4, 7, 10]:
             deals_ended_before_4_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_4_month_deals_data))
             deals_ended_before_4_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
             deals_ended_before_4_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_4_month_dpo))
@@ -799,14 +799,13 @@ def create_employees_quarter_report(req):
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         worksheet.append([])
-        '''
+        
 
         # Долги по документам
         documents_debts = b.get_all('crm.item.list', { #все выписанные долги
             'entityTypeId': '161',
             'filter': {
                 'assignedById': user_info['ID'],
-                #'stageId': 'DT161_53:NEW',
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
         })
@@ -827,8 +826,7 @@ def create_employees_quarter_report(req):
         worksheet.append(['Долги по документам', 'Всего выписано за квартал', 'Не сдано за квартал', 'Не сдано за предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts), non_last_documents_debts])
         worksheet.append([])
-
-        '''
+       
         # Задачи
         tasks = b.get_all('tasks.task.list', {
             'filter': {
@@ -875,6 +873,103 @@ def create_employees_quarter_report(req):
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
         '''
+
+        # ЭДО
+        all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
+        edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
+
+        if edo_companies_id_last_month:
+            edo_companies_last_month = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1638093692254'],
+                'filter': {
+                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
+                }
+            })
+            edo_companies_count_last_month = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies_last_month))
+
+
+        all_its = all_its_last_month
+        name_month = month_codes[month_int_names[before_1_month]]
+
+        if before_1_month not in [1, 4, 7, 10]:
+            name_month.append(month_codes[month_int_names[before_2_month]])
+            all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
+            for deals in all_its_start_quarter:
+                if deals not in all_its: 
+                    all_its += deals
+                    
+            if before_1_month not in [2, 5, 8, 11]:
+                name_month.append(month_codes[month_int_names[before_3_month]])
+                all_its_deals_middle_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and
+                                                'ГРМ' not in x['Тип'] and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                before_2_month_deals_data))
+                for deals in all_its_deals_middle_month:
+                    if deals not in all_its: 
+                        all_its += deals
+         
+        edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+
+        if edo_companies_id:
+            edo_companies = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1638093692254'],
+                'filter': {
+                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+                }
+            })
+            edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
+
+            edo_elements_info = b.get_all('lists.element.get', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '235',
+                'filter': {
+                    'PROPERTY_1579': edo_companies_id,
+                    'PROPERTY_1567': name_month,
+                    'PROPERTY_1569': year_codes[str(before_1_month_year)],
+                }
+            })
+            edo_elements_info = list(map(lambda x: {
+                'ID': x['ID'],
+                'Компания': list(x['PROPERTY_1579'].values())[0],
+                'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
+                'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
+            }, edo_elements_info))
+            traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+            edo_elements_paid = b.get_all('lists.element.get', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '235',
+                'filter': {
+                    'PROPERTY_1581': user_info['ID'],
+                    'PROPERTY_1567': name_month,
+                    'PROPERTY_1569': year_codes[str(before_1_month_year)],
+                }
+            })
+
+            paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
+            paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
+
+        else:
+            edo_companies_count = []
+            traffic_more_than_1 = []
+            paid_traffic = 0
+
+        try:
+            edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            edo_companies_coverage = 0
+
+        try:
+            active_its_coverage = round((len(traffic_more_than_1) / len(all_its)) * 100, 2)
+        except ZeroDivisionError:
+            active_its_coverage = 0
+
+        worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
+        worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count), edo_companies_coverage])
+        worksheet.append(['Компании с трафиком больше 1 за квартал', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))])
+        worksheet.append(['% активных ИТС за квартал', active_its_coverage])
+        worksheet.append(['Сумма платного трафика за квартал', paid_traffic])
+
         change_sheet_style(worksheet)
        
     workbook.save(report_name)

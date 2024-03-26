@@ -896,7 +896,7 @@ def create_employees_quarter_report(req):
             all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
             for deals in all_its_start_quarter:
                 if deals not in all_its: 
-                    all_its += deals
+                    all_its.append(deals)
                     
             if before_1_month not in [2, 5, 8, 11]:
                 name_month.append(month_codes[month_int_names[before_3_month]])
@@ -907,7 +907,7 @@ def create_employees_quarter_report(req):
                                                 before_2_month_deals_data))
                 for deals in all_its_deals_middle_month:
                     if deals not in all_its: 
-                        all_its += deals
+                        all_its.append(deals)
          
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 

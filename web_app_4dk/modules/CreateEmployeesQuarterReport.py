@@ -944,6 +944,7 @@ def create_employees_quarter_report(req):
             print(len(edo_elements_paid))
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
+            print(len(traffic_more_than_1))
 
         else:
             traffic_more_than_1 = []

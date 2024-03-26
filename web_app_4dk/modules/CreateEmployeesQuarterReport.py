@@ -895,24 +895,28 @@ def create_employees_quarter_report(req):
 
         if before_1_month not in [2, 5, 8, 11]:
             name_month.append(month_codes[month_int_names[before_2_month]])
+            print(len(all_its_last_month))
             all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
             for deals_1 in all_its_start_quarter:
                 if deals_1 not in all_its: 
                     all_its.append(deals_1)
-                    
+            print(len(all_its_last_month))        
             if before_1_month not in [1, 4, 7, 10]:
+                print(len(all_its_last_month))
                 name_month.append(month_codes[month_int_names[before_3_month]])
+                print(len(all_its_last_month))
                 all_its_deals_middle_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 'ГРМ' not in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_2_month_deals_data))
+                print(len(all_its_last_month))
                 for deals_2 in all_its_deals_middle_month:
                     if deals_2 not in all_its: 
                         all_its.append(deals_2)
         print(len(all_its_last_month)) 
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-        print(len(all_its_last_month))
+
         if edo_companies_id:
             edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -949,7 +953,6 @@ def create_employees_quarter_report(req):
         else:
             traffic_more_than_1 = []
             paid_traffic = 0
-        print(len(all_its_last_month))
         try:
             edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
@@ -959,8 +962,6 @@ def create_employees_quarter_report(req):
             active_its_coverage = round((traffic_more_than_1 / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
             active_its_coverage = 0
-
-        print(len(all_its_last_month))
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])

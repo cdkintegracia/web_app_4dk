@@ -919,9 +919,7 @@ def create_employees_quarter_report(req):
                 'IBLOCK_ID': '235',
                 'filter': {
                     'PROPERTY_1579': edo_companies_id,
-                    'PROPERTY_1567': name_month[0],
-                    'PROPERTY_1567': name_month[1],
-                    'PROPERTY_1567': name_month[2],
+                    'PROPERTY_1567': name_month[0] or name_month[1] or name_month[2],
                     'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
             })
@@ -937,9 +935,7 @@ def create_employees_quarter_report(req):
                 'IBLOCK_ID': '235',
                 'filter': {
                     'PROPERTY_1581': user_info['ID'],
-                    'PROPERTY_1567': name_month[0],
-                    'PROPERTY_1567': name_month[1],
-                    'PROPERTY_1567': name_month[2],
+                    'PROPERTY_1567': name_month[0] or name_month[1] or name_month[2],
                     'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
             })
@@ -948,7 +944,6 @@ def create_employees_quarter_report(req):
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
 
         else:
-            edo_companies_count = []
             traffic_more_than_1 = []
             paid_traffic = 0
 

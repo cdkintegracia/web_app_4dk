@@ -894,14 +894,10 @@ def create_employees_quarter_report(req):
 
         if before_1_month not in [2, 5, 8, 11]:
             name_month.append(month_codes[month_int_names[before_2_month]])
-            print(len(all_its_last_month))
             all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
-            print(len(all_its_last_month))  
             for deals_1 in all_its_start_quarter:
                 if deals_1 not in all_its:
-                    print(len(all_its_last_month)) 
-                    all_its.append(deals_1)
-            print(len(all_its_last_month))        
+                    all_its.append(deals_1)      
             if before_1_month not in [1, 4, 7, 10]:
                 name_month.append(month_codes[month_int_names[before_3_month]])
                 all_its_deals_middle_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -924,7 +920,6 @@ def create_employees_quarter_report(req):
                     'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
             })
-            print(len(edo_elements_info))
             edo_elements_info = list(map(lambda x: {
                 'ID': x['ID'],
                 'Компания': list(x['PROPERTY_1579'].values())[0],

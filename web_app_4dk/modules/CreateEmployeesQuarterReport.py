@@ -891,30 +891,27 @@ def create_employees_quarter_report(req):
 
         all_its = all_its_last_month
         name_month = [month_codes[month_int_names[before_1_month]]]
-        print(len(all_its_last_month))
 
         if before_1_month not in [2, 5, 8, 11]:
             name_month.append(month_codes[month_int_names[before_2_month]])
             print(len(all_its_last_month))
             all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
+            print(len(all_its_last_month))  
             for deals_1 in all_its_start_quarter:
-                if deals_1 not in all_its: 
+                if deals_1 not in all_its:
+                    print(len(all_its_last_month)) 
                     all_its.append(deals_1)
             print(len(all_its_last_month))        
             if before_1_month not in [1, 4, 7, 10]:
-                print(len(all_its_last_month))
                 name_month.append(month_codes[month_int_names[before_3_month]])
-                print(len(all_its_last_month))
                 all_its_deals_middle_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 'ГРМ' not in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_2_month_deals_data))
-                print(len(all_its_last_month))
                 for deals_2 in all_its_deals_middle_month:
                     if deals_2 not in all_its: 
                         all_its.append(deals_2)
-        print(len(all_its_last_month)) 
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
         if edo_companies_id:

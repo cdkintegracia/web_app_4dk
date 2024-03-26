@@ -876,7 +876,6 @@ def create_employees_quarter_report(req):
 
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
-        print(len(all_its_last_month))
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
 
         if edo_companies_id_last_month:
@@ -890,7 +889,6 @@ def create_employees_quarter_report(req):
         else:
             edo_companies_count_last_month = []
 
-        print(len(all_its_last_month))
         all_its = all_its_last_month
         name_month = [month_codes[month_int_names[before_1_month]]]
         print(len(all_its_last_month))
@@ -912,7 +910,7 @@ def create_employees_quarter_report(req):
                 for deals_2 in all_its_deals_middle_month:
                     if deals_2 not in all_its: 
                         all_its.append(deals_2)
-         
+        print(len(all_its_last_month)) 
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
         print(len(all_its_last_month))
         if edo_companies_id:

@@ -941,7 +941,9 @@ def create_employees_quarter_report(req):
                 'IBLOCK_ID': '235',
                 'filter': {
                     'PROPERTY_1581': user_info['ID'],
-                    'PROPERTY_1567': name_month,
+                    'PROPERTY_1567': name_month[0],
+                    'PROPERTY_1567': name_month[1],
+                    'PROPERTY_1567': name_month[2],
                     'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
             })

@@ -886,6 +886,8 @@ def create_employees_quarter_report(req):
                 }
             })
             edo_companies_count_last_month = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies_last_month))
+        else:
+            edo_companies_count_last_month = []
 
 
         all_its = all_its_last_month
@@ -912,20 +914,14 @@ def create_employees_quarter_report(req):
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
         if edo_companies_id:
-            edo_companies = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1638093692254'],
-                'filter': {
-                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-                }
-            })
-            edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
-
             edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
                 'filter': {
                     'PROPERTY_1579': edo_companies_id,
-                    'PROPERTY_1567': name_month,
+                    'PROPERTY_1567': name_month[0],
+                    'PROPERTY_1567': name_month[1],
+                    'PROPERTY_1567': name_month[2],
                     'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
             })
@@ -967,7 +963,7 @@ def create_employees_quarter_report(req):
             active_its_coverage = 0
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count), edo_companies_coverage])
+        worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
         worksheet.append(['Компании с трафиком больше 1 за квартал', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))])
         worksheet.append(['% активных ИТС за квартал', active_its_coverage])
         worksheet.append(['Сумма платного трафика за квартал', paid_traffic])

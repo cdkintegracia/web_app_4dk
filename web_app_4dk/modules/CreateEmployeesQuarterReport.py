@@ -125,8 +125,8 @@ def create_employees_quarter_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     before_1_month_year = datetime.now().year
-    before_1_month = datetime.now().month - 1
-    #before_1_month = 3
+    #before_1_month = datetime.now().month - 1
+    before_1_month = 3
 
     if before_1_month == 0:
         before_1_month = 12
@@ -768,7 +768,7 @@ def create_employees_quarter_report(req):
         ])
         worksheet.append([])
        '''
-
+        '''
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -798,6 +798,34 @@ def create_employees_quarter_report(req):
             if field_value['VALUE'] == 'Остальное': print(grouped_deals['ID'])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+        worksheet.append([])
+        '''
+
+        # Долги по документам
+        documents_debts = b.get_all('crm.item.list', { #все выписанные долги
+            'entityTypeId': '161',
+            'filter': {
+                'assignedById': user_info['ID'],
+                #'stageId': 'DT161_53:NEW',
+                '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
+            }
+        })
+
+        non_documents_debts = list(filter(lambda x: x['stageId'] == 'DT161_53:NEW', documents_debts)) #все незакрытые долги
+
+        quarter_documents_debts = list(filter(lambda x: #все выписанные долги за квартал
+                                              quarter_filters['start_date'].timestamp() <=
+                                              datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), documents_debts))
+        
+        non_quarter_documents_debts = list(filter(lambda x: #все незакрытые долги за квартал
+                                        quarter_filters['start_date'].timestamp() <=
+                                        datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), non_documents_debts))
+
+
+        non_last_documents_debts = len(non_documents_debts) - len(non_quarter_documents_debts) #все незакрытые долги за предыдущие периоды
+
+        worksheet.append(['Долги по документам', 'Всего выписано за квартал', 'Не сдано за квартал', 'Не сдано за предыдущие периоды'])
+        worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts), len(non_last_documents_debts)])
         worksheet.append([])
 
         '''

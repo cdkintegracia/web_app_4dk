@@ -876,6 +876,7 @@ def create_employees_quarter_report(req):
 
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
+        print(len(all_its_last_month))
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
 
         if edo_companies_id_last_month:
@@ -889,7 +890,7 @@ def create_employees_quarter_report(req):
         else:
             edo_companies_count_last_month = []
 
-
+        print(len(all_its_last_month))
         all_its = all_its_last_month
         name_month = [month_codes[month_int_names[before_1_month]]]
 
@@ -912,8 +913,7 @@ def create_employees_quarter_report(req):
                         all_its.append(deals_2)
          
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-        print(all_its['ID'])
-
+        
         if edo_companies_id:
             edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -960,6 +960,8 @@ def create_employees_quarter_report(req):
             active_its_coverage = round((traffic_more_than_1 / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
             active_its_coverage = 0
+
+        print(len(all_its_last_month))
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО на текущий момент', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])

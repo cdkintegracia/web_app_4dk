@@ -889,7 +889,7 @@ def create_employees_quarter_report(req):
         else:
             edo_companies_count_last_month = []
 
-        all_its = all_its_last_month
+        all_its = its_prof_deals_last_month + its_base_deals_last_month
         name_month = [month_codes[month_int_names[before_1_month]]]
 
         if before_1_month not in [2, 5, 8, 11]:

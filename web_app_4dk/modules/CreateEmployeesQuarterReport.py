@@ -184,17 +184,17 @@ def create_employees_quarter_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        if quarter_filters['start_date'].month == 1: number_quarter = 1
-        elif quarter_filters['start_date'].month == 4: number_quarter = 2
-        elif quarter_filters['start_date'].month == 7: number_quarter = 3
-        else: number_quarter = 4
-
         quarter_filters = get_quarter_filter(before_1_month)
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
         end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
 
         quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
+
+        if quarter_filters['start_date'].month == 1: number_quarter = 1
+        elif quarter_filters['start_date'].month == 4: number_quarter = 2
+        elif quarter_filters['start_date'].month == 7: number_quarter = 3
+        else: number_quarter = 4
 
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year)
         before_2_month_deals_data = read_deals_data_file(before_2_month, before_2_month_year)

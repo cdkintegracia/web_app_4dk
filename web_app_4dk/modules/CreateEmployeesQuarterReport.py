@@ -184,10 +184,10 @@ def create_employees_quarter_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        #worksheet.append([user_name, '', f'{month_names[before_1_month]} {before_1_month_year}'])
-        worksheet.append([user_name])
-        worksheet.append([])
-        worksheet.append([])
+        if quarter_filters['start_date'].month == 1: number_quarter = 1
+        elif quarter_filters['start_date'].month == 4: number_quarter = 2
+        elif quarter_filters['start_date'].month == 7: number_quarter = 3
+        else: number_quarter = 4
 
         quarter_filters = get_quarter_filter(before_1_month)
         start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
@@ -202,6 +202,10 @@ def create_employees_quarter_report(req):
         before_4_month_deals_data = read_deals_data_file(before_4_month, before_4_month_year)
         before_5_month_deals_data = read_deals_data_file(before_5_month, before_5_month_year)
 
+        worksheet.append([user_name, '', f'{number_quarter} квартал {end_date_quarter.year} г.'])
+        worksheet.append([])
+        worksheet.append([])
+
         its_deals_before_1_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
@@ -211,11 +215,6 @@ def create_employees_quarter_report(req):
                                                 x['Группа'] == 'ИТС' and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
-        
-        if quarter_filters['start_date'].month == 1: number_quarter = 1
-        elif quarter_filters['start_date'].month == 4: number_quarter = 2
-        elif quarter_filters['start_date'].month == 7: number_quarter = 3
-        else: number_quarter = 4
 
         # Сделки
         # Последний месяц квартала

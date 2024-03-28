@@ -796,11 +796,9 @@ def create_employees_report(req):
 
         #любая отчетность за прошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_last_month))
-        print(regnumbers)
-        continue
         any_reporting_deals_last_month = 0
         for regnum in regnumbers:
-            any_reporting = list(filter(lambda x: x['Регномер'] == regnum['Регномер'] and x['Тип'] in ['Отчетность', 'Отчетность (в рамках ИТС)'], other_deals_last_month))
+            any_reporting = list(filter(lambda x: x['Регномер'] == regnum and 'Отчетность' in x['Тип'], other_deals_last_month))
             if any_reporting:
                 any_reporting_deals_last_month += 1
 

@@ -796,13 +796,14 @@ def create_employees_report(req):
 
         #любая отчетность за прошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_last_month))
+        print(regnumbers)
+        continue
         any_reporting_deals_last_month = 0
         for regnum in regnumbers:
             any_reporting = list(filter(lambda x: x['Регномер'] == regnum['Регномер'] and x['Тип'] in ['Отчетность', 'Отчетность (в рамках ИТС)'], other_deals_last_month))
             if any_reporting:
                 any_reporting_deals_last_month += 1
-        print(regnumbers)
-        continue
+
         try:
             coverage_any_reporting_deals_last_month = round(round(any_reporting_deals_last_month /
                                                              len(its_deals_last_month), 2) * 100, 2)

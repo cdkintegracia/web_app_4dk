@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from calendar import monthrange
 import base64
-import os8
+import os
 
 import openpyxl
 from openpyxl.utils import get_column_letter

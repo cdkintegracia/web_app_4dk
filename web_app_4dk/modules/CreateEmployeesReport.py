@@ -799,7 +799,7 @@ def create_employees_report(req):
         any_reporting_deals_last_month = 0
         for regnum in regnumbers:
             regnum.strip()
-            any_reporting = list(filter(lambda x: x['Регномер'] == regnum and 'Отчетность' in x['Тип'], other_deals_last_month))
+            any_reporting = list(filter(lambda x: x['Регномер'].strip() == regnum and 'Отчетность' in x['Тип'], other_deals_last_month))
             if any_reporting:
                 any_reporting_deals_last_month += 1
 
@@ -841,7 +841,7 @@ def create_employees_report(req):
         regnum.strip()
         any_reporting_deals_before_last_month = 0
         for regnum in regnumbers:
-            any_reporting = list(filter(lambda x: x['Регномер'] == regnum and 'Отчетность' in x['Тип'], other_deals_before_last_month))
+            any_reporting = list(filter(lambda x: x['Регномер'].strip() == regnum and 'Отчетность' in x['Тип'], other_deals_before_last_month))
             if any_reporting:
                 any_reporting_deals_before_last_month += 1
 
@@ -889,7 +889,7 @@ def create_employees_report(req):
         regnum.strip()
         any_reporting_deals_start_year = 0
         for regnum in regnumbers:
-            any_reporting = list(filter(lambda x: x['Регномер'] == regnum and 'Отчетность' in x['Тип'], other_deals_start_year))
+            any_reporting = list(filter(lambda x: x['Регномер'].strip() == regnum and 'Отчетность' in x['Тип'], other_deals_start_year))
             if any_reporting:
                 any_reporting_deals_start_year += 1
 

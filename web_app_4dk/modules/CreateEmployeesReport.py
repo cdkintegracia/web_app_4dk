@@ -802,7 +802,7 @@ def create_employees_report(req):
             print(len(regnum))
             any_reporting = list(filter(lambda x: regnum == x['Регномер'] and 'Отчетность' in x['Тип'], other_deals_last_month))
             if any_reporting:
-                print(any_reporting['Регномер'])
+                print(any_reporting)
                 print('00000')
                 any_reporting_deals_last_month += 1
 

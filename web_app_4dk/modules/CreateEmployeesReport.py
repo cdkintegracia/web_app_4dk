@@ -800,7 +800,7 @@ def create_employees_report(req):
         any_reporting_deals_last_month = 0
         for regnum in regnumbers:
             regnum.strip()
-            any_reporting = list(filter(lambda x: regnum == x['Регномер'] and 'Отчетность' in x['Тип'], other_deals_last_month))
+            any_reporting = list(filter(lambda x: regnum == str(x['Регномер']).strip() and 'Отчетность' in x['Тип'], other_deals_last_month))
             if any_reporting:
                 #print(regnum, len(any_reporting))
                 any_reporting_deals_last_month += 1

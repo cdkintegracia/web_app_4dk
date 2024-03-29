@@ -802,7 +802,6 @@ def create_employees_report(req):
             any_reporting = list(filter(lambda x: regnum == x['Регномер'] and 'Отчетность' in x['Тип'], other_deals_last_month))
             if any_reporting:
                 print(regnum, len(any_reporting))
-                print('00000')
                 any_reporting_deals_last_month += 1
 
         try:
@@ -810,7 +809,7 @@ def create_employees_report(req):
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_last_month = 0
-        continue
+        
         # Предшествующий отчетному месяц
         free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                              x['Тип'] == 'Отчетность (в рамках ИТС)' and

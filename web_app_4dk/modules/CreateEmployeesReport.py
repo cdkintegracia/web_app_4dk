@@ -985,7 +985,7 @@ def create_employees_report(req):
             f'{round(coverage_paid_reporting_deals_last_month - coverage_paid_reporting_deals_start_year, 2)}%',
             f'{round(coverage_paid_reporting_deals_start_year, 2)}%',
         ])
-        '''
+
         worksheet.append([
             'Любая отчетность',
             any_reporting_deals_last_month,
@@ -1000,7 +1000,7 @@ def create_employees_report(req):
             f'{round(coverage_any_reporting_deals_last_month - coverage_any_reporting_deals_start_year, 2)}%',
             f'{round(coverage_any_reporting_deals_start_year, 2)}%',
         ])
-        '''
+
         worksheet.append([])
 
 

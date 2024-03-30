@@ -784,7 +784,7 @@ def create_employees_report(req):
         paid_reporting_deals_last_month_num = 0 #>ibs 20240330
         paid_reporting_deals_last_month = 0
         for its_deal in its_deals_last_month:
-            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), last_month_deals_data))
+            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность' and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_last_month += 1
                 for i in range(len(its_paid_reporting)): #>ibs 20240330
@@ -843,7 +843,7 @@ def create_employees_report(req):
         paid_reporting_deals_before_last_month_num = 0 #>ibs 20240330
         for its_deal in its_deals_before_last_month:
             its_paid_reporting = list(
-                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность' and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
                        before_last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_before_last_month += 1
@@ -905,7 +905,7 @@ def create_employees_report(req):
         paid_reporting_deals_start_year_num = 0 #>ibs 20240330
         for its_deal in its_deals_start_year:
             its_paid_reporting = list(
-                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность' and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
                        start_year_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_start_year += 1

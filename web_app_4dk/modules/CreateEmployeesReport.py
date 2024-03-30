@@ -624,7 +624,7 @@ def create_employees_report(req):
 
         # Предшествующий отчетному месяц
         companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], before_last_month_deals_data))))
+            filter(lambda x: x['Ответственный за компанию'] == user_name, before_last_month_deals_data))))
         companies_without_services_before_last_month = 0
         companies_without_paid_services_before_last_month = 0
         for company in companies:
@@ -678,7 +678,7 @@ def create_employees_report(req):
 
         # Начало года
         companies = set(map(lambda x: x['Компания'], list(
-            filter(lambda x: x['Ответственный за компанию'] == user_info['ID'], start_year_deals_data))))
+            filter(lambda x: x['Ответственный за компанию'] == user_name, start_year_deals_data))))
         companies_without_services_start_year = 0
         companies_without_paid_services_start_year = 0
         for company in companies:
@@ -805,14 +805,14 @@ def create_employees_report(req):
             if any_reporting:
                 #print(regnum, len(any_reporting))
                 any_reporting_deals_last_month += 1
-        
+
         try:
             coverage_any_reporting_deals_last_month = round(round(any_reporting_deals_last_month /
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_last_month = 0
         '''
-            
+
         # Предшествующий отчетному месяц
         free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                                              x['Тип'] == 'Отчетность (в рамках ИТС)' and
@@ -848,7 +848,7 @@ def create_employees_report(req):
             any_reporting = list(filter(lambda x: regnum == x['Регномер'] and 'Отчетность' in x['Тип'], other_deals_before_last_month))
             if any_reporting:
                 any_reporting_deals_before_last_month += 1
-        
+
         try:
             coverage_any_reporting_deals_before_last_month = round(round(any_reporting_deals_before_last_month /
                                                              len(its_deals_before_last_month), 2) * 100, 2)
@@ -897,7 +897,7 @@ def create_employees_report(req):
             any_reporting = list(filter(lambda x: regnum == x['Регномер'] and 'Отчетность' in x['Тип'], other_deals_start_year))
             if any_reporting:
                 any_reporting_deals_start_year += 1
-        
+
         try:
             coverage_any_reporting_deals_start_year = round(round(any_reporting_deals_start_year /
                                                              len(its_deals_start_year), 2) * 100, 2)
@@ -1132,7 +1132,7 @@ def create_employees_report(req):
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
         'MESSAGE': f'Отчет по пользователям сформирован. {upload_report["DETAIL_URL"]}'})
-    os.remove(report_name) 
+    os.remove(report_name)
 
 
 if __name__ == '__main__':

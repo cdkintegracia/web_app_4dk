@@ -781,18 +781,32 @@ def create_employees_report(req):
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
+        paid_reporting_deals_last_month_num = 0 #>ibs 20240330
         paid_reporting_deals_last_month = 0
         for its_deal in its_deals_last_month:
-            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
-                                                       (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'), last_month_deals_data))
+            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_last_month += 1
-
+                for i in range(len(its_paid_reporting)): #>ibs 20240330
+                    paid_reporting_deals_last_month_num +=1 #>ibs 20240330
         try:
             coverage_paid_reporting_deals_last_month = round(round(paid_reporting_deals_last_month /
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_last_month = 0
+
+        # ibs 20240330>
+        any_reporting_deals_last_month = 0
+        for its_deal in its_deals_last_month:
+            any_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and 'Отчетность' in x['Тип'] and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),last_month_deals_data))
+            if any_reporting:
+                any_reporting_deals_last_month += 1
+        try:
+            coverage_any_reporting_deals_last_month = round(round(any_reporting_deals_last_month /
+                                                             len(its_deals_last_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            any_reporting_deals_last_month = 0
+        # >ibs 20240330
 
         '''
         #любая отчетность за прошлый месяц 28-03-2024
@@ -826,19 +840,32 @@ def create_employees_report(req):
             coverage_free_reporting_deals_before_last_month = 0
 
         paid_reporting_deals_before_last_month = 0
+        paid_reporting_deals_before_last_month_num = 0 #>ibs 20240330
         for its_deal in its_deals_before_last_month:
             its_paid_reporting = list(
-                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
-                                 (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
                        before_last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_before_last_month += 1
-
+                for i in range(len(its_paid_reporting)): #>ibs 20240330
+                    paid_reporting_deals_before_last_month_num +=1 #>ibs 20240330
         try:
             coverage_paid_reporting_deals_before_last_month = round(round(paid_reporting_deals_before_last_month /
                                                                     len(its_deals_before_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_before_last_month = 0
+        # ibs 20240330>
+        any_reporting_deals_before_last_month = 0
+        for its_deal in its_deals_before_last_month:
+            any_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and 'Отчетность' in x['Тип'] and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), before_last_month_deals_data))
+            if any_reporting:
+                any_reporting_deals_before_last_month += 1
+        try:
+            coverage_any_reporting_deals_before_last_month = round(round(any_reporting_deals_before_last_month /
+                                                             len(its_deals_before_last_month), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_any_reporting_deals_before_last_month = 0
+        # >ibs  20240330
         '''
         #любая отчетность за позапрошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_before_last_month))
@@ -875,19 +902,33 @@ def create_employees_report(req):
             coverage_free_reporting_deals_start_year = 0
 
         paid_reporting_deals_start_year = 0
+        paid_reporting_deals_start_year_num = 0 #>ibs 20240330
         for its_deal in its_deals_start_year:
             its_paid_reporting = list(
-                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
-                                 (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
                        start_year_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_start_year += 1
-
+                for i in range(len(its_paid_reporting)): #>ibs 20240330
+                    paid_reporting_deals_start_year_num +=1 #>ibs 20240330
         try:
             coverage_paid_reporting_deals_start_year = round(round(paid_reporting_deals_start_year /
                                                              len(its_deals_start_year), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_start_year = 0
+
+        # ibs> 20240330
+        any_reporting_deals_start_year  = 0
+        for its_deal in its_deals_start_year:
+            any_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and 'Отчетность' in x['Тип'] and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), start_year_deals_data))
+            if any_reporting:
+                any_reporting_deals_start_year  += 1
+        try:
+            coverage_any_reporting_deals_start_year = round(round(any_reporting_deals_start_year /
+                                                             len(its_deals_start_year), 2) * 100, 2)
+        except ZeroDivisionError:
+            coverage_any_reporting_deals_start_year = 0
+        # >ibs 20240330
         '''
         #любая отчетность на начало года 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_start_year))
@@ -921,8 +962,17 @@ def create_employees_report(req):
             f'{round(coverage_free_reporting_deals_last_month - coverage_free_reporting_deals_start_year, 2)}%',
             f'{round(coverage_free_reporting_deals_start_year, 2)}%',
         ])
+        #ibs 20240330>
         worksheet.append([
-            'Платных отчетностей',
+            'Сделок платных отчетностей',
+            paid_reporting_deals_last_month_num,
+            paid_reporting_deals_last_month_num - paid_reporting_deals_before_last_month_num,
+            paid_reporting_deals_last_month_num - paid_reporting_deals_start_year_num,
+            paid_reporting_deals_start_year_num,
+        ])
+        #>ibs  20240330
+        worksheet.append([
+            'ИТС с платной отчетностью',
             paid_reporting_deals_last_month,
             paid_reporting_deals_last_month - paid_reporting_deals_before_last_month,
             paid_reporting_deals_last_month - paid_reporting_deals_start_year,

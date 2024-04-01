@@ -780,11 +780,18 @@ def create_employees_report(req):
                                                              len(its_prof_deals_last_month), 2) * 100
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
-
+        '''
         paid_reporting_deals_last_month = 0
         for its_deal in its_deals_last_month:
             its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
                                                        (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'), last_month_deals_data))
+            if its_paid_reporting:
+                paid_reporting_deals_last_month += 1
+        '''
+
+        paid_reporting_deals_last_month = 0
+        for its_deal in its_deals_last_month:
+            its_paid_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность' and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_last_month += 1
 
@@ -793,6 +800,7 @@ def create_employees_report(req):
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_paid_reporting_deals_last_month = 0
+        
 
         '''
         #любая отчетность за прошлый месяц 28-03-2024
@@ -828,8 +836,7 @@ def create_employees_report(req):
         paid_reporting_deals_before_last_month = 0
         for its_deal in its_deals_before_last_month:
             its_paid_reporting = list(
-                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
-                                 (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность' and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
                        before_last_month_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_before_last_month += 1
@@ -877,8 +884,7 @@ def create_employees_report(req):
         paid_reporting_deals_start_year = 0
         for its_deal in its_deals_start_year:
             its_paid_reporting = list(
-                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность') or
-                                 (x['Компания'] == its_deal['Компания'] and x['Тип'] == 'Отчетность'),
+                filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and x['Тип'] == 'Отчетность' and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
                        start_year_deals_data))
             if its_paid_reporting:
                 paid_reporting_deals_start_year += 1

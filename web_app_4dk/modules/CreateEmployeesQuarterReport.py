@@ -711,8 +711,8 @@ def create_employees_quarter_report(req):
             if any_reporting:
                 any_reporting_deals_last_month += 1
         try:
-            coverage_any_reporting_deals_last_month = round(round(any_reporting_deals_last_month /
-                                                             len(its_deals_before_1_month), 2) * 100, 2)
+            coverage_any_reporting_deals_last_month = round(any_reporting_deals_last_month /
+                                                             len(its_deals_before_1_month) * 100, 2)
         except ZeroDivisionError:
             any_reporting_deals_last_month = 0
 
@@ -756,8 +756,8 @@ def create_employees_quarter_report(req):
             if any_reporting:
                 any_reporting_deals_start_quarter += 1
         try:
-            coverage_any_reporting_deals_start_quarter = round(round(any_reporting_deals_start_quarter /
-                                                             len(start_quarter_its_deals), 2) * 100, 2)
+            coverage_any_reporting_deals_start_quarter = round(any_reporting_deals_start_quarter /
+                                                             len(start_quarter_its_deals) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_start_quarter = 0
 

@@ -29,7 +29,6 @@ def send_satisfaction_assessment_message(req):
         }})
 
     if not calls:
-        print ('no calls')
         return
     call_phone_number = calls[0]['PHONE_NUMBER']
     if '812' in call_phone_number[:6]:

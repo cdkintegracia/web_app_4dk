@@ -154,6 +154,8 @@ default_webhooks = {
     'ONTASKADD': task_handler,
     'ONTASKUPDATE': task_handler,
     'ONCRMCONTACTUPDATE': update_contact_photo,
+    #тест 23-04-2024 прооработка по сервисам
+    #'ONCRMACTIVITYUPDATE': complete_call_activity
 }
 
 

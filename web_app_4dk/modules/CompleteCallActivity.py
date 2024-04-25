@@ -6,7 +6,7 @@ from web_app_4dk.modules.authentication import authentication
 def complete_call_activity(req):
     #time_change = datetime.datetime.now()
     time = datetime.datetime.now()
-    time_change = time.strftime('%Y-%m-%d %H:%M:%S')
+    time_change = time.strftime('%Y-%m-%d %H:%M')
     activity_id = req['data[FIELDS][ID]']
     req_data = {
         'filter': {
@@ -31,6 +31,6 @@ def complete_call_activity(req):
             print('2')
             id_element = activity_info_2[0]['OWNER_ID'] #id элемента смарт-процесса
             print(id_element)
-            req_data = {'entityTypeId': 150, 'id': id_element, 'fields': {'ufCrm49ServiceField': time_change}}
+            req_data = {'entityTypeId': 150, 'id': id_element, 'fields': {'ufCrm49ServiceField': time_change, 'ufCrm491714066794':time_change}}
             print(req_data)
             requests.post(url=f"{authentication('Bitrix')}crm.item.update", json=req_data_2)

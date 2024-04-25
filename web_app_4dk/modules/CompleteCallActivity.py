@@ -30,6 +30,6 @@ def complete_call_activity(req):
         if activity_info_2:
             print('2')
             id_element = activity_info_2[0]['OWNER_ID'] #id элемента смарт-процесса
-            req_data2 = {'entityTypeId': 150, 'id': id_element, 'fields': {'ufCrm49_ServiceField': time_change, 'ufCrm49_1714066794':'test'}}
+            req_data2 = {'entityTypeId': 150, 'id': id_element, 'fields': {'ufCrm49_ServiceField': time_change}
             print(req_data2)
             requests.post(url=f"{authentication('Bitrix')}crm.item.update", json=req_data2)

@@ -6,7 +6,7 @@ from web_app_4dk.modules.authentication import authentication
 def complete_call_activity(req):
     #time_change = datetime.datetime.now()
     time = datetime.datetime.now()
-    time_change = time.strftime("%d.%m.%Y %H:%M")
+    time_change = time.strftime('%Y-%m-%d %H:%M:%S')
     activity_id = req['data[FIELDS][ID]']
     req_data = {
         'filter': {

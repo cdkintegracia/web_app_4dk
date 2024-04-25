@@ -4,7 +4,9 @@ import datetime
 from web_app_4dk.modules.authentication import authentication
 
 def complete_call_activity(req):
-    time_change = datetime.datetime.now()
+    #time_change = datetime.datetime.now()
+    time = datetime.datetime.now()
+    time_change = time.strftime("%d.%m.%Y %H:%M")
     activity_id = req['data[FIELDS][ID]']
     req_data = {
         'filter': {

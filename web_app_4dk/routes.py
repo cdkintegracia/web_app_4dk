@@ -82,6 +82,8 @@ from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_us
 #2024-02-27
 from web_app_4dk.modules.AddAuditorsandSendMessage import add_auditors_and_send_message
 from web_app_4dk.modules.AutoFailureLog import auto_failure_log
+#2024-04-28
+from web_app_4dk.modules.ActivityUpdate import activity_update
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -154,8 +156,8 @@ default_webhooks = {
     'ONTASKADD': task_handler,
     'ONTASKUPDATE': task_handler,
     'ONCRMCONTACTUPDATE': update_contact_photo,
-    #тест 23-04-2024 прооработка по сервисам
-    'ONCRMACTIVITYUPDATE': complete_call_activity,
+    #тест 23-04-2024 проработка по сервисам
+    'ONCRMACTIVITYUPDATE': activity_update,
 }
 
 

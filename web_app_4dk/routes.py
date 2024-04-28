@@ -157,7 +157,7 @@ default_webhooks = {
     'ONTASKUPDATE': task_handler,
     'ONCRMCONTACTUPDATE': update_contact_photo,
     #тест 23-04-2024 проработка по сервисам
-    'ONCRMACTIVITYUPDATE': activity_update,
+    #'ONCRMACTIVITYUPDATE': activity_update,
 }
 
 

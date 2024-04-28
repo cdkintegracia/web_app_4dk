@@ -83,7 +83,7 @@ from web_app_4dk.chat_bot.SendDealChangedUserMessage import send_deal_changed_us
 from web_app_4dk.modules.AddAuditorsandSendMessage import add_auditors_and_send_message
 from web_app_4dk.modules.AutoFailureLog import auto_failure_log
 #2024-04-28
-from web_app_4dk.modules.ActivityUpdate import activity_update
+#from web_app_4dk.modules.ActivityUpdate import activity_update
 
 
 # Словарь функций для вызова из кастомного запроса

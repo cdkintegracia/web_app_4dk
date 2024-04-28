@@ -11,7 +11,7 @@ def complete_call_activity(req):
     req_data = {
         'filter': {
             'PROVIDER_TYPE_ID': 'CALL',
-            #'COMPLETED': 'N',
+            'COMPLETED': 'N',
             'ID': activity_id
         }}
     req_data_2 = {

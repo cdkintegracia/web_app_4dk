@@ -105,14 +105,21 @@ def fill_act_document_smart_process(req):
             for row in new_companies:
                 b.call('task.checklistitem.add', [task, {'TITLE': row}], raw=True)  #пост-запрос, делаем пункты чек-листа
 
+        #elements = b.get_all('crm.item.list', {
+        #    'entityTypeId': '161',
+        #    'filter': {
+        #        'stageId': 'DT161_53:NEW',
+        #        '!ufCrm41_1689101216': None,   # не дата сдачи = пустая
+        #    }
+        #})
+        
         elements = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'filter': {
                 'stageId': 'DT161_53:NEW',
-                '!ufCrm41_1689101216': None,   # не дата сдачи = пустая
+                '>ufCrm41_1689101216': '2020-03-19T02:00:00+02:00'   # не дата сдачи = пустая
             }
         })
-
     for element in elements:
         send_bitrix_request('crm.item.update', { # еще раз переносим в заверщенные те записи. у которых дата сдачи заполнена, но они в "новых"
             'entityTypeId': '161',

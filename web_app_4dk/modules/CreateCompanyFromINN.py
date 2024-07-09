@@ -69,7 +69,7 @@ def create_company_from_inn(req):
                         'UF_CRM_1712668987 ': new_company_id,
                         'STAGE_ID': 'UC_0XG0S5'
                         }
-                    }')
+                    })
 
     elif len(company_info) == 12:
         method = 'entrepreneur'
@@ -104,6 +104,6 @@ def create_company_from_inn(req):
                         'STAGE_ID': 'UC_0XG0S5'
                         }
                     }')
-                    
+
 if __name__ == '__main__':
     create_company_from_inn()

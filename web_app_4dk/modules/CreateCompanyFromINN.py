@@ -53,9 +53,10 @@ def create_company_from_inn(req):
                         'UF_CRM_1656070716':company_info
                             }
                         })
-                print(q)
-                '''
-                new_company_id = q['order0000000000']
+                #print(q)
+
+                #new_company_id = q['order0000000000']
+                new_company_id = q
                 b.call('crm.requisite.add', {
                     'fields':{
                         'ENTITY_TYPE_ID':4,
@@ -75,7 +76,7 @@ def create_company_from_inn(req):
                         'STAGE_ID': 'UC_0XG0S5'
                         }
                     })
-                '''
+
     elif len(company_info) == 12:
         method = 'entrepreneur'
         checko_request = requests.get(url=create_request(method, [f"inn={company_info}"]))

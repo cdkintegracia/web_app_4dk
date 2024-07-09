@@ -72,7 +72,7 @@ def create_company_from_inn(req):
                 b.call('crm.deal.update', {
                     'ID': req['deal_id'],
                     'fields': {
-                        'UF_CRM_1712668987 ': new_company_id,
+                        'UF_CRM_1712668987': new_company_id,
                         'STAGE_ID': 'UC_0XG0S5'
                         }
                     })
@@ -107,7 +107,7 @@ def create_company_from_inn(req):
                 b.call('crm.deal.update', {
                     'ID': req['deal_id'],
                     'fields': {
-                        'UF_CRM_1712668987 ': new_company_id,
+                        'UF_CRM_1712668987': new_company_id,
                         'STAGE_ID': 'UC_0XG0S5'
                         }
                     })

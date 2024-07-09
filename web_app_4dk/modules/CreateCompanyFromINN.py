@@ -91,7 +91,8 @@ def create_company_from_inn(req):
                             }
                         })
 
-                new_company_id = q['order0000000000']
+                #new_company_id = q['order0000000000']
+                new_company_id = q
                 b.call('crm.requisite.add', {
                     'fields':{
                         'ENTITY_TYPE_ID':4,

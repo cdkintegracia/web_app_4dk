@@ -5,7 +5,10 @@ from fast_bitrix24 import Bitrix
 import requests
 #from tabulate import tabulate
 
-from authentication import authentication
+try:
+    from authentication import authentication
+except ModuleNotFoundError:
+    from web_app_4dk.modules.authentication import authentication
 
 
 

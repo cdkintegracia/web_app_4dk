@@ -53,6 +53,7 @@ def create_company_from_inn(req):
                         'UF_CRM_1656070716':company_info
                             }
                         })
+                print(q)
                 new_company_id = q['order0000000000']
                 b.call('crm.requisite.add', {
                     'fields':{

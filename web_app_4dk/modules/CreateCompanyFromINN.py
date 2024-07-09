@@ -3,7 +3,7 @@ from datetime import datetime
 
 from fast_bitrix24 import Bitrix
 import requests
-from tabulate import tabulate
+#from tabulate import tabulate
 
 from authentication import authentication
 

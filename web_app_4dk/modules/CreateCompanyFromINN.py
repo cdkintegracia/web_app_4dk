@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 
 
 
-b = Bitrix(authentication('Bitrix'),ssl=False)
+b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
 api_key = 'jMw7CIIIJtOKSNUb'
 

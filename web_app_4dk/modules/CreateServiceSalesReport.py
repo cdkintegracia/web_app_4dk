@@ -19,7 +19,7 @@ deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
 service_deal_values = {'Контрагент': 5800, 'Кабинет сотрудника': None, 'Линк': None, 'МДЛП': None, '1Спарк 3000': 3000, '1Спарк': 3600,
                        '1СпаркПЛЮС 22500': 22500, '1СпаркПЛЮС': 25500,  '1Спарк в договоре': 3600, 'Спарк сумма': None, 'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'РПД': None,
-                       'ЭТП': None,  'Кабинет садовода': 1000, 'ЭДО': None, 'mag1c': 5100, '1С-Администратор': 17500}
+                       'ЭТП': None,  'Кабинет садовода': 1000, 'ЭДО': None, 'mag1c': 5100, '1С-Администратор': 17500, 'Доки': None}
 spark_names = ['1Спарк', '1Спарк в договоре', '1СПАРК Риски', '1СпаркПЛЮС 22500', '1Спарк 3000','1СпаркПЛЮС']
 service_deal_types = list(service_deal_values.keys())
 month_names_numbers = {
@@ -465,7 +465,7 @@ def get_edo_list_elements():
 def find_all_responsibles(file_data, month, users_info):
     department_names = {29: 'ГО4', 27: 'ГО3', 5: 'ЦС', 231: 'ЛК', 225: 'ОВ', 1: '4DK', 233: 'Служебные',
                         363: 'Отдел развития'}
-    ignore_names = ['Иван Иванов', 'Максим Карпов', 'Борис Ишкин', 'Отчет Сервисный выезд', 'Робот Задач']
+    ignore_names = ['Иван Иванов', 'Максим Карпов', 'Борис Ишкин', 'Отчет Сервисный выезд', 'Робот Задач', 'Александра Семеновых']
     its_deal_value_field = f'{month} ИТС'
     service_deal_value_field = f'{month} Сервисы'
     for deal_info in file_data:

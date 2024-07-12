@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from time import time
+#2024-07-12
+import calendar
 import copy
 import os
 import base64
@@ -75,6 +77,15 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         #return {'Месяц': int(month_names_numbers[month]), 'Год': int(current_year)}
     elif deal_type == 'Подпись 1000' and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
         return f'{deal_date_start.month}.{deal_date_start.year}'
+    #2024-07-12 >
+    elif deal_type =='7':
+        new_deal_date_start = deal_date_start - timedelta(days=1)
+        new_deal_date_start_year = new_deal_date_start.year
+        new_deal_date_start_month = new_deal_date_start.month -3
+        if new_deal_date_start_month <1:
+            new_deal_date_start_month +=12
+            new_deal_date_start_year = new_deal_date_start.year -1
+        return f"{new_deal_date_start_month}.{new_deal_date_start.year}"
     else:
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)

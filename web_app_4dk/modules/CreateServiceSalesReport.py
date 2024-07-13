@@ -79,13 +79,16 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         return f'{deal_date_start.month}.{deal_date_start.year}'
     #2024-07-12 >
     elif deal_type =='Доки':
+        print(deal_date_start)
         new_deal_date_start = deal_date_start - timedelta(days=1)
         new_deal_date_start_year = new_deal_date_start.year
         new_deal_date_start_month = new_deal_date_start.month -3
+        print (new_deal_date_start_year,new_deal_date_start_month)
         if new_deal_date_start_month <1:
             new_deal_date_start_month +=12
             new_deal_date_start_year = new_deal_date_start.year -1
-        return f"{new_deal_date_start_month}.{new_deal_date_start.year}"
+            print (new_deal_date_start_year,new_deal_date_start_month)
+        return f"{new_deal_date_start_month}.{new_deal_date_start_year}"
     else:
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)

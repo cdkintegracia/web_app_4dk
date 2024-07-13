@@ -168,7 +168,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                         #print(deal_start_date, deal_info, deal_value)
                     deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
                     if deal_info['Тип'] == 'Доки':
-                        print (deal_info['ID']))
+                        print (deal_info['ID'])
                     handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                     handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
 

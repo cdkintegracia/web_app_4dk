@@ -79,18 +79,14 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         return f'{deal_date_start.month}.{deal_date_start.year}'
     #2024-07-12 >
     elif deal_type =='Доки':
-        print(deal_date_start)
         new_deal_date_start = deal_date_start - timedelta(days=1)
         new_deal_date_start_year = new_deal_date_start.year
         new_deal_date_start_month = new_deal_date_start.month -3
-        print (new_deal_date_start_year,new_deal_date_start_month)
         if new_deal_date_start_month <1:
             new_deal_date_start_month +=12
             new_deal_date_start_year = new_deal_date_start.year -1
-            print (new_deal_date_start_year,new_deal_date_start_month)
-        datestr = str(new_deal_date_start.day)+'.'+str(new_deal_date_start_month)+'.'+str(new_deal_date_start.year)
+        datestr = str(new_deal_date_start.day)+'.'+str(new_deal_date_start_month)+'.'+str(new_deal_date_start_year)
         datestr_to_date = datetime.strptime(datestr,'%d.%m.%Y')
-        print (datestr_to_date)
         return f"{datestr_to_date.strftime('%m')}.{new_deal_date_start_year}"
     else:
         new_deal_date_start_year = deal_date_end.year - 1
@@ -162,8 +158,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
         elif deal_info['Тип'] in service_deal_types and deal_info['Стадия сделки'] == 'Услуга активна':
             deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'], deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
-            if deal_info['Тип'] == 'Доки':
-                print (deal_info['ID'], deal_start_date)
             if deal_info['Тип'] in service_deal_current_month:
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
                     #if deal_info['ID'] == '81433':
@@ -202,8 +196,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                         deal_value = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'])
                     handled_data[deal_info['Ответственный']][service_deal_value_field] += deal_value
                     handled_data[deal_info['Ответственный']]['Сервисы'][f"{month} {deal_info['Тип']}"] += deal_value
-                    if deal_info['Тип'] == 'Доки':
-                        print (deal_info['ID'], deal_value)
+
     for responsible in rpd_data:
         rpd_values = list(rpd_data[responsible].values())
         handled_data[responsible][service_deal_value_field] += sum(rpd_values)

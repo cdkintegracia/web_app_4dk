@@ -162,7 +162,7 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
             if deal_info['Тип'] in service_deal_current_month:
                 if deal_info['Тип'] == 'Доки':
-                    print (deal_info['ID']), deal_start_date)
+                    print (deal_info['ID'], deal_start_date)
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
                     #if deal_info['ID'] == '81433':
                         #print(deal_start_date, deal_info, deal_value)

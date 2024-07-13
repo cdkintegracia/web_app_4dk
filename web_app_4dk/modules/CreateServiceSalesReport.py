@@ -262,7 +262,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     for department in departments:
         for employee in data:
             #print (data[employee])
-            print(department)
+            #print(department)
             row = []
             its_value = 0
             service_value = 0

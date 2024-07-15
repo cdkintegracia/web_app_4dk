@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from time import time
+#2024-07-12
+import calendar
 import copy
 import os
 import base64
@@ -19,7 +21,7 @@ deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
 service_deal_values = {'Контрагент': 5800, 'Кабинет сотрудника': None, 'Линк': None, 'МДЛП': None, '1Спарк 3000': 3000, '1Спарк': 3600,
                        '1СпаркПЛЮС 22500': 22500, '1СпаркПЛЮС': 25500,  '1Спарк в договоре': 3600, 'Спарк сумма': None, 'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'РПД': None,
-                       'ЭТП': None,  'Кабинет садовода': 1000, 'ЭДО': None, 'mag1c': 5100, '1С-Администратор': 17500}
+                       'ЭТП': None,  'Кабинет садовода': 1000, 'ЭДО': None, 'mag1c': 5100, '1С-Администратор': 17500, 'Доки': None}
 spark_names = ['1Спарк', '1Спарк в договоре', '1СПАРК Риски', '1СпаркПЛЮС 22500', '1Спарк 3000','1СпаркПЛЮС']
 service_deal_types = list(service_deal_values.keys())
 month_names_numbers = {
@@ -75,6 +77,17 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         #return {'Месяц': int(month_names_numbers[month]), 'Год': int(current_year)}
     elif deal_type == 'Подпись 1000' and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
         return f'{deal_date_start.month}.{deal_date_start.year}'
+    #2024-07-12 >
+    elif deal_type =='Доки':
+        new_deal_date_start = deal_date_start - timedelta(days=1)
+        new_deal_date_start_year = new_deal_date_start.year
+        new_deal_date_start_month = new_deal_date_start.month -3
+        if new_deal_date_start_month <1:
+            new_deal_date_start_month +=12
+            new_deal_date_start_year = new_deal_date_start.year -1
+        datestr = str(new_deal_date_start.day)+'.'+str(new_deal_date_start_month)+'.'+str(new_deal_date_start_year)
+        datestr_to_date = datetime.strptime(datestr,'%d.%m.%Y')
+        return f"{datestr_to_date.strftime('%m')}.{new_deal_date_start_year}"
     else:
         new_deal_date_start_year = deal_date_end.year - 1
         new_deal_date_start = deal_date_end + timedelta(days=1)
@@ -145,7 +158,6 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
 
         elif deal_info['Тип'] in service_deal_types and deal_info['Стадия сделки'] == 'Услуга активна':
             deal_start_date = get_service_deal_start_dates(month, deal_info['Тип'], deal_info['Предполагаемая дата закрытия'], deal_info['Дата начала'], deal_info['ID'])
-
             if deal_info['Тип'] in service_deal_current_month:
                 if deal_start_date in deal_info['Дата начала'].strftime('%d.%m.%Y'):
                     #if deal_info['ID'] == '81433':
@@ -248,7 +260,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     for department in departments:
         for employee in data:
             #print (data[employee])
-            print(department)
+            #print(department)
             row = []
             its_value = 0
             service_value = 0
@@ -465,7 +477,7 @@ def get_edo_list_elements():
 def find_all_responsibles(file_data, month, users_info):
     department_names = {29: 'ГО4', 27: 'ГО3', 5: 'ЦС', 231: 'ЛК', 225: 'ОВ', 1: '4DK', 233: 'Служебные',
                         363: 'Отдел развития'}
-    ignore_names = ['Иван Иванов', 'Максим Карпов', 'Борис Ишкин', 'Отчет Сервисный выезд', 'Робот Задач']
+    ignore_names = ['Иван Иванов', 'Максим Карпов', 'Борис Ишкин', 'Отчет Сервисный выезд', 'Робот Задач', 'Александра Семеновых']
     its_deal_value_field = f'{month} ИТС'
     service_deal_value_field = f'{month} Сервисы'
     for deal_info in file_data:

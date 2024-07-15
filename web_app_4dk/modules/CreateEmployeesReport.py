@@ -858,38 +858,38 @@ def create_employees_report(req):
         ])
         worksheet.append([
             'МДЛП',
-            len(link_deals_last_month),
-            len(link_deals_last_month) - len(link_deals_before_last_month),
-            len(link_deals_last_month) - len(link_deals_quarter),
-            len(link_deals_last_month) - len(link_deals_start_year)
+            len(mdlp_deals_last_month),
+            len(mdlp_deals_last_month) - len(mdlp_deals_before_last_month),
+            len(mdlp_deals_last_month) - len(mdlp_deals_quarter),
+            len(mdlp_deals_last_month) - len(mdlp_deals_start_year)
         ])
         worksheet.append([
             'Коннект',
-            len(unics_deals_last_month),
-            len(unics_deals_last_month) - len(unics_deals_before_last_month),
-            len(unics_deals_last_month) - len(unics_deals_quarter),
-            len(unics_deals_last_month) - len(unics_deals_start_year)
+            len(connect_deals_last_month),
+            len(connect_deals_last_month) - len(connect_deals_before_last_month),
+            len(connect_deals_last_month) - len(connect_deals_quarter),
+            len(connect_deals_last_month) - len(connect_deals_start_year)
         ])
         worksheet.append([
             'ИТС Отраслевой',
-            len(cab_sotrudnik_deals_last_month),
-            len(cab_sotrudnik_deals_last_month) - len(cab_sotrudnik_deals_before_last_month),
-            len(cab_sotrudnik_deals_last_month) - len(cab_sotrudnik_deals_quarter),
-            len(cab_sotrudnik_deals_last_month) - len(cab_sotrudnik_deals_start_year)
+            len(its_otrasl_deals_last_month),
+            len(its_otrasl_deals_last_month) - len(its_otrasl_deals_before_last_month),
+            len(its_otrasl_deals_last_month) - len(its_otrasl_deals_quarter),
+            len(its_otrasl_deals_last_month) - len(its_otrasl_deals_start_year)
         ])
         worksheet.append([
             'ОФД',
-            len(cab_sadovod_deals_last_month),
-            len(cab_sadovod_deals_last_month) - len(cab_sadovod_deals_before_last_month),
-            len(cab_sadovod_deals_last_month) - len(cab_sadovod_deals_quarter),
-            len(cab_sadovod_deals_last_month) - len(cab_sadovod_deals_start_year)
+            len(ofd_deals_last_month),
+            len(ofd_deals_last_month) - len(ofd_deals_before_last_month),
+            len(ofd_deals_last_month) - len(ofd_deals_quarter),
+            len(ofd_deals_last_month) - len(ofd_deals_start_year)
         ])
         worksheet.append([
             'Битрикс24',
-            len(edo_deals_last_month),
-            len(edo_deals_last_month) - len(edo_deals_before_last_month),
-            len(edo_deals_last_month) - len(edo_deals_quarter),
-            len(edo_deals_last_month) - len(edo_deals_start_year)
+            len(bitrix24_deals_last_month),
+            len(bitrix24_deals_last_month) - len(bitrix24_deals_before_last_month),
+            len(bitrix24_deals_last_month) - len(bitrix24_deals_quarter),
+            len(bitrix24_deals_last_month) - len(bitrix24_deals_start_year)
         ])
         '''worksheet.append([
             'Остальные',

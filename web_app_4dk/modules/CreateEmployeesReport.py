@@ -1436,7 +1436,7 @@ def create_employees_report(req):
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))
                 print(deal)
                 if deal:
-                    print(deal['Тип'])
+                    #print(deal['Тип'])
                     print({deal['Тип']})
                     print([deal['Тип']])
                     #list_of_sales.append([{'TYPE': deal['Тип'], 'COMPANY': deal['Компания'], 'OPPORTUNITY': deal['Сумма']}])

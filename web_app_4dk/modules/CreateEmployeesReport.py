@@ -1431,7 +1431,7 @@ def create_employees_report(req):
                 }
             })'''
             list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
-            list_of_sales.extend([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+            #list_of_sales.extend([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
             for deal_last_month in sold_deals:
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))
                 if deal:

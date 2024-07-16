@@ -1430,7 +1430,7 @@ def create_employees_report(req):
             company_title = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
-                    'ID': list(map(lambda x: x['ID'], sold_deals))
+                    'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals))
                 }
             })
             print(company_title)

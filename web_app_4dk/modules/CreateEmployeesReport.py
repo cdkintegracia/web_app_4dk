@@ -1450,10 +1450,11 @@ def create_employees_report(req):
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
-        worksheet.append(['', 'Перечень продаж', ''])
-        worksheet.append(['Тип сделки', 'Компания', 'Сумма'])
-        for selling in list_of_sales:
-            worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
+        if list_of_sales:
+            worksheet.append(['', 'Перечень продаж', ''])
+            #worksheet.append(['Тип сделки', 'Компания', 'Сумма'])
+            for selling in list_of_sales:
+                worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
 
 

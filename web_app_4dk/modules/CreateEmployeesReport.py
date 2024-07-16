@@ -1440,7 +1440,7 @@ def create_employees_report(req):
                 #print(deal)
                 if deal:
                     #list_of_sales.append([{'TYPE': deal['Тип'], 'COMPANY': deal['Компания'], 'OPPORTUNITY': deal['Сумма']}])
-                    list_of_sales.append([{deal[0]['Тип'], deal[0]['Компания'], deal[0]['Сумма']}])
+                    list_of_sales.append([{'TYPE': deal[0]['Тип'], 'COMPANY': deal[0]['Компания'], 'OPPORTUNITY': deal[0]['Сумма']}])
             #тип, сумма из last_month_deals_data, компания из company_title, по айди сделки из sold_deals
             #companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))))
         else:
@@ -1459,6 +1459,7 @@ def create_employees_report(req):
             worksheet.append(['', 'Перечень продаж', ''])
             print(list_of_sales)
             for selling in list_of_sales:
+                print(selling)
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
 

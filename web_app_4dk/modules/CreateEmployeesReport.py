@@ -1460,7 +1460,7 @@ def create_employees_report(req):
             print(list_of_sales)
             for selling in list_of_sales:
                 print(selling)
-                worksheet.append([selling[0]['TYPE'], selling[0]['COMPANY'], selling[0]['OPPORTUNITY']])
+                worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
 
         '''

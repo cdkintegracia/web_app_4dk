@@ -209,7 +209,7 @@ def create_employees_report(req):
                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован',
                                                                             'Счет отправлен клиенту'],
                                            start_year_deals_data))
-        '''
+        
         # Сделки
         # Отчетный месяц
         its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -912,7 +912,7 @@ def create_employees_report(req):
             len(other_deals_last_month) - len(other_deals_start_year)
         ])
         worksheet.append([])
-        '''
+        
 
         # Продление
         deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_before_last_month_deals_data))

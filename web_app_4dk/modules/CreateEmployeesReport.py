@@ -1419,7 +1419,7 @@ def create_employees_report(req):
         })
 
         list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
-        
+
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
                 'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
@@ -1437,9 +1437,8 @@ def create_employees_report(req):
             #list_of_sales.extend([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
             for deal_last_month in sold_deals:
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))
-                print(deal)
+                #print(deal)
                 if deal:
-                    print(deal[0]['Тип'])
                     #list_of_sales.append([{'TYPE': deal['Тип'], 'COMPANY': deal['Компания'], 'OPPORTUNITY': deal['Сумма']}])
                     list_of_sales.append([{deal[0]['Тип'], deal[0]['Компания'], deal[0]['Сумма']}])
             #тип, сумма из last_month_deals_data, компания из company_title, по айди сделки из sold_deals
@@ -1456,9 +1455,9 @@ def create_employees_report(req):
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
-        if len(list_of_sales) > 0:
+        if len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
-            #worksheet.append(['Тип сделки', 'Компания', 'Сумма'])
+            print(list_of_sales)
             for selling in list_of_sales:
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])

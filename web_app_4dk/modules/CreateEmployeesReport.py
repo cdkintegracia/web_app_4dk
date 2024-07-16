@@ -1437,8 +1437,6 @@ def create_employees_report(req):
                 print(deal)
                 if deal:
                     print(deal[0]['Тип'])
-                    print({deal[0]['Тип']})
-                    print([deal['Тип']])
                     #list_of_sales.append([{'TYPE': deal['Тип'], 'COMPANY': deal['Компания'], 'OPPORTUNITY': deal['Сумма']}])
                     list_of_sales.append([{deal[0]['Тип'], deal[0]['Компания'], deal[0]['Сумма']}])
             #тип, сумма из last_month_deals_data, компания из company_title, по айди сделки из sold_deals

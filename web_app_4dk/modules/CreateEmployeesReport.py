@@ -1436,7 +1436,7 @@ def create_employees_report(req):
             print(company_title)
             #list_of_sales.extend([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
             for deal_last_month in sold_deals:
-                print(deal_last_month)
+                #print(deal_last_month)
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))
                 company_title = list(filter(lambda x: x['ID'] == deal_last_month['COMPANY_ID'], company_title))
                 if deal:
@@ -1458,7 +1458,7 @@ def create_employees_report(req):
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         if len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
-            print(list_of_sales)
+            #print(list_of_sales)
             for selling in list_of_sales:
                 print(selling)
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])

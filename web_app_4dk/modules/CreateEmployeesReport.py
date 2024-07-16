@@ -1427,23 +1427,24 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['parentId2'], sales))
                 }
             })
-            company_title = b.get_all('crm.company.list', {
+            company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
                     'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals))
                 }
             })
-            print(company_title)
+            print(company_titles)
             #list_of_sales.extend([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
             for deal_last_month in sold_deals:
-                print(deal_last_month)
+                #print(deal_last_month)
                 #print(last_month_deals_data)
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))
-                company = list(filter(lambda x: x['ID'] == deal_last_month['COMPANY_ID'], company_title))
+                for title in company_titles:
+                    company = list(filter(lambda x: x['ID'] == deal_last_month['COMPANY_ID'], company_titles))
                 if deal:
                     #list_of_sales.append([{'TYPE': deal['Тип'], 'COMPANY': deal['Компания'], 'OPPORTUNITY': deal['Сумма']}])
                     list_of_sales.append({'TYPE': deal[0]['Тип'], 'COMPANY': company, 'OPPORTUNITY': deal[0]['Сумма']})
-            #тип, сумма из last_month_deals_data, компания из company_title, по айди сделки из sold_deals
+            #тип, сумма из last_month_deals_data, компания из company_titles, по айди сделки из sold_deals
             #companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))))
         else:
             sold_deals = []

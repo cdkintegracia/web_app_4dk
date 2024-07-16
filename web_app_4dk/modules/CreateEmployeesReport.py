@@ -1440,7 +1440,7 @@ def create_employees_report(req):
                 #print(last_month_deals_data)
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
                 #print(deal)
-                title = set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles))))
+                title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                 print(title)
                 '''for company in company_titles:
                     print(company)

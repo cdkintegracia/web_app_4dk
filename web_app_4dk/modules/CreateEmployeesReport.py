@@ -209,7 +209,7 @@ def create_employees_report(req):
                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован',
                                                                             'Счет отправлен клиенту'],
                                            start_year_deals_data))
-
+        '''
         # Сделки
         # Отчетный месяц
         its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -912,7 +912,7 @@ def create_employees_report(req):
             len(other_deals_last_month) - len(other_deals_start_year)
         ])
         worksheet.append([])
-
+        '''
 
         # Продление
         deals_ended_last_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_before_last_month_deals_data))
@@ -1407,7 +1407,7 @@ def create_employees_report(req):
         ])
 
         worksheet.append([])
-
+        
 
         # Продажи
         sales = b.get_all('crm.item.list', {
@@ -1420,11 +1420,26 @@ def create_employees_report(req):
         })
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
-                'select': ['UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
+                'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
                 'filter': {
                     'ID': list(map(lambda x: x['parentId2'], sales))
                 }
             })
+            '''company_title = b.get_all('crm.company.list', {
+                'select': ['ID', 'TITLE'],
+                'filter': {
+                    'ID': list(map(lambda x: x['ID'], sold_deals))
+                }
+            })'''
+            list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+            list_of_sales.extend([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+            for deal_last_month in sold_deals:
+                deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))
+                list_of_sales.extend([{'TYPE': deal['Тип'],
+                                       'COMPANY': deal['Компания'],
+                                       'OPPORTUNITY': deal['Сумма']}])
+            #тип, сумма из last_month_deals_data, компания из company_title, по айди сделки из sold_deals
+            #companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))))
         else:
             sold_deals = []
 
@@ -1437,6 +1452,10 @@ def create_employees_report(req):
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+        worksheet.append(['', 'Перечень продаж', ''])
+        worksheet.append(['Тип сделки', 'Компания', 'Сумма'])
+        for selling in list_of_sales:
+            worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
 
 

@@ -1085,12 +1085,13 @@ def create_employees_quarter_report(req):
             print(before_3_month_deals_data[0])
             print(sold_deals[0])
             for deal_quarter in sold_deals:
-                deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_3_month_deals_data))[0]
+                deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_3_month_deals_data))
                 if not deal:
-                    deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_2_month_deals_data))[0]
+                    deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_2_month_deals_data))
                 if not deal:
-                    deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_1_month_deals_data))[0]
+                    deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_1_month_deals_data))
                 if deal:
+                    deal = deal[0]
                     title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                     list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
         else:

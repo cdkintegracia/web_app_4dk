@@ -449,7 +449,7 @@ def create_employees_report(req):
                                                   before_last_month_deals_data))
         
         bitrix24_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                       'Битрикс24' == x['Тип'] and
+                                                       'Битрикс24' == x['Тип'] and 'БИТРИКС24' == x['Тип'] and
                                                        x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                        before_last_month_deals_data))
 
@@ -575,7 +575,7 @@ def create_employees_report(req):
                                            quarter_deals_data))
         
         bitrix24_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                'Битрикс24' == x['Тип'] and
+                                                'Битрикс24' == x['Тип'] and 'БИТРИКС24' == x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
 
@@ -701,7 +701,7 @@ def create_employees_report(req):
                                                   start_year_deals_data))
         
         bitrix24_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                       'Битрикс24' == x['Тип'] and
+                                                       'Битрикс24' == x['Тип'] and 'БИТРИКС24' == x['Тип'] and
                                                        x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                        start_year_deals_data))
 

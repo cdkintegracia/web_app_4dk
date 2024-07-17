@@ -260,11 +260,6 @@ def create_employees_report(req):
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             last_month_deals_data))
         
-        license_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
-                                               'Лицензия' in x['Тип'] and
-                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                last_month_deals_data))
-        
         report_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                               'Отчетность' in x['Тип'] and 
                                               x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
@@ -335,7 +330,7 @@ def create_employees_report(req):
                                              x not in countragent_deals_last_month and x not in spark_in_contract_deals_last_month and
                                              x not in spark_3000_deals_last_month and x not in spark_22500_deals_last_month and
                                              x not in rpd_deals_last_month and x not in grm_deals_last_month and
-                                             x not in doki_deals_last_month and x not in license_deals_last_month and
+                                             x not in doki_deals_last_month and
                                              x not in report_deals_last_month and x not in signature_deals_last_month and
                                              x not in dop_oblako_deals_last_month and x not in link_deals_last_month and
                                              x not in unics_deals_last_month and x not in cab_sotrudnik_deals_last_month and
@@ -392,11 +387,6 @@ def create_employees_report(req):
                                                    'Доки' == x['Тип'] and
                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   before_last_month_deals_data))
-        
-        license_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                      'Лицензия' in x['Тип'] and
-                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      before_last_month_deals_data))
         
         report_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                      'Отчетность' in x['Тип'] and
@@ -468,7 +458,7 @@ def create_employees_report(req):
                                              x not in countragent_deals_before_last_month and x not in spark_in_contract_deals_before_last_month and
                                              x not in spark_3000_deals_before_last_month and x not in spark_22500_deals_before_last_month and
                                              x not in rpd_deals_before_last_month and x not in grm_deals_before_last_month and
-                                             x not in doki_deals_before_last_month and x not in license_deals_before_last_month and
+                                             x not in doki_deals_before_last_month and
                                              x not in report_deals_before_last_month and x not in signature_deals_before_last_month and
                                              x not in dop_oblako_deals_before_last_month and x not in link_deals_before_last_month and
                                              x not in unics_deals_before_last_month and x not in cab_sotrudnik_deals_before_last_month and
@@ -523,11 +513,6 @@ def create_employees_report(req):
                                             'Доки' == x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             quarter_deals_data))
-        
-        license_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
-                                               'Лицензия' in x['Тип'] and
-                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                quarter_deals_data))
         
         report_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                               'Отчетность' in x['Тип'] and 
@@ -599,7 +584,7 @@ def create_employees_report(req):
                                              x not in countragent_deals_quarter and x not in spark_in_contract_deals_quarter and
                                              x not in spark_3000_deals_quarter and x not in spark_22500_deals_quarter and
                                              x not in rpd_deals_quarter and x not in grm_deals_quarter and
-                                             x not in doki_deals_quarter and x not in license_deals_quarter and
+                                             x not in doki_deals_quarter and
                                              x not in report_deals_quarter and x not in signature_deals_quarter and
                                              x not in dop_oblako_deals_quarter and x not in link_deals_quarter and
                                              x not in unics_deals_quarter and x not in cab_sotrudnik_deals_quarter and
@@ -654,12 +639,7 @@ def create_employees_report(req):
                                                    'Доки' == x['Тип'] and
                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                   start_year_deals_data))
-        
-        license_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                      'Лицензия' in x['Тип'] and
-                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      start_year_deals_data))
-        
+               
         report_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                      'Отчетность' in x['Тип'] and
                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
@@ -730,7 +710,7 @@ def create_employees_report(req):
                                              x not in countragent_deals_start_year and x not in spark_in_contract_deals_start_year and
                                              x not in spark_3000_deals_start_year and x not in spark_22500_deals_start_year and
                                              x not in rpd_deals_start_year and x not in grm_deals_start_year and
-                                             x not in doki_deals_start_year and x not in license_deals_start_year and
+                                             x not in doki_deals_start_year and
                                              x not in report_deals_start_year and x not in signature_deals_start_year and
                                              x not in dop_oblako_deals_start_year and x not in link_deals_start_year and
                                              x not in unics_deals_start_year and x not in cab_sotrudnik_deals_start_year and
@@ -805,13 +785,6 @@ def create_employees_report(req):
             len(doki_deals_last_month) - len(doki_deals_before_last_month),
             len(doki_deals_last_month) - len(doki_deals_quarter),
             len(doki_deals_last_month) - len(doki_deals_start_year)
-        ])
-        worksheet.append([
-            'Лицензии',
-            len(license_deals_last_month),
-            len(license_deals_last_month) - len(license_deals_before_last_month),
-            len(license_deals_last_month) - len(license_deals_quarter),
-            len(license_deals_last_month) - len(license_deals_start_year)
         ])
         worksheet.append([
             'Отчетности',
@@ -897,13 +870,14 @@ def create_employees_report(req):
             len(ofd_deals_last_month) - len(ofd_deals_quarter),
             len(ofd_deals_last_month) - len(ofd_deals_start_year)
         ])
-        worksheet.append([
-            'Битрикс24',
-            len(bitrix24_deals_last_month),
-            len(bitrix24_deals_last_month) - len(bitrix24_deals_before_last_month),
-            len(bitrix24_deals_last_month) - len(bitrix24_deals_quarter),
-            len(bitrix24_deals_last_month) - len(bitrix24_deals_start_year)
-        ])
+        if len(bitrix24_deals_last_month) > 0 and len(bitrix24_deals_before_last_month) > 0 and len(bitrix24_deals_quarter) > 0 and len(bitrix24_deals_start_year) > 0:
+            worksheet.append([
+                'Битрикс24',
+                len(bitrix24_deals_last_month),
+                len(bitrix24_deals_last_month) - len(bitrix24_deals_before_last_month),
+                len(bitrix24_deals_last_month) - len(bitrix24_deals_quarter),
+                len(bitrix24_deals_last_month) - len(bitrix24_deals_start_year)
+            ])
         worksheet.append([
             'Прочие',
             len(other_deals_last_month),

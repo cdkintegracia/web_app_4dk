@@ -266,11 +266,6 @@ def create_employees_quarter_report(req):
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             before_1_month_deals_data))
         
-        license_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
-                                               'Лицензия' in x['Тип'] and
-                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                before_1_month_deals_data))
-        
         report_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                               'Отчетность' in x['Тип'] and 
                                               x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
@@ -341,7 +336,7 @@ def create_employees_quarter_report(req):
                                              x not in countragent_deals_last_month and x not in spark_in_contract_deals_last_month and
                                              x not in spark_deals_last_month and x not in spark_plus_deals_last_month and
                                              x not in rpd_deals_last_month and x not in grm_deals_last_month and
-                                             x not in doki_deals_last_month and x not in license_deals_last_month and
+                                             x not in doki_deals_last_month and
                                              x not in report_deals_last_month and x not in signature_deals_last_month and
                                              x not in dop_oblako_deals_last_month and x not in link_deals_last_month and
                                              x not in unics_deals_last_month and x not in cab_sotrudnik_deals_last_month and
@@ -396,11 +391,6 @@ def create_employees_quarter_report(req):
                                             'Доки' == x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             quarter_deals_data))
-        
-        license_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
-                                               'Лицензия' in x['Тип'] and
-                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                quarter_deals_data))
         
         report_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                               'Отчетность' in x['Тип'] and 
@@ -472,7 +462,7 @@ def create_employees_quarter_report(req):
                                              x not in countragent_deals_quarter and x not in spark_in_contract_deals_quarter and
                                              x not in spark_deals_quarter and x not in spark_plus_deals_quarter and
                                              x not in rpd_deals_quarter and x not in grm_deals_quarter and
-                                             x not in doki_deals_quarter and x not in license_deals_quarter and
+                                             x not in doki_deals_quarter and
                                              x not in report_deals_quarter and x not in signature_deals_quarter and
                                              x not in dop_oblako_deals_quarter and x not in link_deals_quarter and
                                              x not in unics_deals_quarter and x not in cab_sotrudnik_deals_quarter and
@@ -535,12 +525,6 @@ def create_employees_quarter_report(req):
             len(doki_deals_last_month),
             len(doki_deals_quarter),
             len(doki_deals_last_month) - len(doki_deals_quarter)
-        ])
-        worksheet.append([
-            'Лицензии',
-            len(license_deals_last_month),
-            len(license_deals_quarter),
-            len(license_deals_last_month) - len(license_deals_quarter)
         ])
         worksheet.append([
             'Отчетности',
@@ -614,12 +598,13 @@ def create_employees_quarter_report(req):
             len(ofd_deals_quarter),
             len(ofd_deals_last_month) - len(ofd_deals_quarter)
         ])
-        worksheet.append([
-            'Битрикс24',
-            len(bitrix24_deals_last_month),
-            len(bitrix24_deals_quarter),
-            len(bitrix24_deals_last_month) - len(bitrix24_deals_quarter)
-        ])
+        if len(bitrix24_deals_last_month) > 0 and len(bitrix24_deals_quarter) > 0:
+            worksheet.append([
+                'Битрикс24',
+                len(bitrix24_deals_last_month),
+                len(bitrix24_deals_quarter),
+                len(bitrix24_deals_last_month) - len(bitrix24_deals_quarter)
+            ])
         worksheet.append([
             'Прочие',
             len(other_deals_last_month),
@@ -1081,13 +1066,29 @@ def create_employees_quarter_report(req):
                 '<ufCrm3_1654248264': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
             }
         })
+
+        list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
-                'select': ['UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
+                'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
                 'filter': {
                     'ID': list(map(lambda x: x['parentId2'], sales))
                 }
             })
+            company_titles = b.get_all('crm.company.list', {
+                'select': ['ID', 'TITLE'],
+                'filter': {
+                    'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals))
+                }
+            })
+            all_deals_quarter = list(set(before_1_month_deals_data + before_2_month_deals_data + before_3_month_deals_data))
+            print(len(all_deals_quarter))
+            for deal_quarter in sold_deals:
+                deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], all_deals_quarter))[0]
+                title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                if deal:
+                    list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
         else:
             sold_deals = []
 
@@ -1101,6 +1102,10 @@ def create_employees_quarter_report(req):
 
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+        if len(list_of_sales) > 1:
+            worksheet.append(['', 'Перечень продаж', ''])
+            for selling in list_of_sales:
+                worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
         
 

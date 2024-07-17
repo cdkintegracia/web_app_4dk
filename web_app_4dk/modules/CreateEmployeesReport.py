@@ -870,7 +870,7 @@ def create_employees_report(req):
             len(ofd_deals_last_month) - len(ofd_deals_quarter),
             len(ofd_deals_last_month) - len(ofd_deals_start_year)
         ])
-        if len(bitrix24_deals_last_month) > 0 or len(bitrix24_deals_before_last_month) > 0 or len(bitrix24_deals_quarter) > 0 or len(bitrix24_deals_start_year) > 0:
+        if len(bitrix24_deals_last_month) != 0 or len(bitrix24_deals_before_last_month) != 0 or len(bitrix24_deals_quarter) != 0 or len(bitrix24_deals_start_year) != 0:
             worksheet.append([
                 'Битрикс24',
                 len(bitrix24_deals_last_month),

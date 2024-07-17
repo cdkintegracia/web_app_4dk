@@ -453,7 +453,7 @@ def create_employees_quarter_report(req):
                                            quarter_deals_data))
         
         bitrix24_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
-                                                'Битрикс24' == x['Тип'] and 'БИТРИКС24' == x['Тип'] and
+                                                ('Битрикс24' == x['Тип'] or 'БИТРИКС24' == x['Тип']) and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 quarter_deals_data))
 

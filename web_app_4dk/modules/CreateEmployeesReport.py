@@ -1401,10 +1401,18 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['parentId2'], sales))
                 }
             })
+
+            #поиск источников без сделок
+            sourse_sans_deals = list(filter(lambda x: x['parentId2'] == '', sales))
+            print(len(sourse_sans_deals))
+            if sourse_sans_deals:
+                fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})
+
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
-                    'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals))
+                    'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals)),
+                    'ID': list(map(lambda x: x['COMPANY_ID'], sourse_sans_deals))
                 }
             })
             for deal_last_month in sold_deals:
@@ -1424,10 +1432,18 @@ def create_employees_report(req):
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+
+        #детализация про продажам в источниках со сделками
         if len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
+        #детализация про продажам в источниках без сделок
+        if sourse_sans_deals:
+            worksheet.append(['', 'Продажи без сделок', ''])
+            for selling in sourse_sans_deals:
+                worksheet.append([selling['ufCrm3_1654248332'], selling['COMPANY'], selling['opportunity']])
+
         worksheet.append([])
 
         

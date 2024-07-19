@@ -1407,7 +1407,7 @@ def create_employees_report(req):
             if sourse_sans_deals:
                 fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})
                 field_type_source = fields_sales["fields"]["ufCrm3_1654248332"]["items"]
-                print(field_type_source)
+                #print(field_type_source)
                 sales_not_deals = ([{'TYPE': 'Тип источника', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
             company_titles = b.get_all('crm.company.list', {
@@ -1427,6 +1427,9 @@ def create_employees_report(req):
             for source_last_month in sourse_sans_deals:
                 title_source = list(set(map(lambda x: x["VALUE"], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
                 title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
+                print(title_source)
+                print(title_company)
+                print(source_last_month)
                 if source_last_month:
                     sales_not_deals.append({'TYPE': title_source, 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})
         else:

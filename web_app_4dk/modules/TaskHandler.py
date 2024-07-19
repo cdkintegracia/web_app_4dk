@@ -206,7 +206,8 @@ def fill_task_title(req, event):
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
             return
-
+#2024-07-19 временно отключим
+'''
         # если к задаче прикреплен только контакт
         contact_crm = contact_crm[0][2:]
         main_company = send_bitrix_request('crm.contact.get', {'id': contact_crm})['UF_CRM_1692058520'] # читаем поле Основная компания
@@ -247,6 +248,39 @@ def fill_task_title(req, event):
                 best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
                 uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
                 company_id = best_value_company # это для тайтла
+'''
+        contact_crm = contact_crm[0][2:]
+
+
+        contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
+        if not contact_companies: # если нет привязанных компаний к контакту
+            return
+        contact_companies_info = send_bitrix_request('crm.company.list', { # читаем вес сделок всех компаний, привязанных к контакту
+            'select': ['COMPANY_TYPE', 'UF_CRM_1660818061808'],     # Тип компании и Вес сделок
+            'filter': {
+                'ID': contact_companies
+            }
+        })
+
+        active_companies = list(filter(lambda x: x['COMPANY_TYPE'] != 'UC_E99TUC', contact_companies_info)) # собираем компании с действующим ИТС
+
+        if active_companies: # если есть привязанные компании с действующим ИТС
+            for i in range(len(active_companies)):
+                if not active_companies[i]['UF_CRM_1660818061808']: # если поле Вес не заполнено, то проставляем 0
+                    active_companies[i]['UF_CRM_1660818061808'] = 0
+            best_value_company = list(sorted(active_companies, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
+            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
+            company_id = best_value_company # это для тайтла
+
+        elif contact_companies_info: # если есть привязанные компании с НЕ действующим ИТС
+            for i in range(len(contact_companies_info)):
+                if not contact_companies_info[i]['UF_CRM_1660818061808']: # если поле Вес не заполнено, то проставляем 0
+                    contact_companies_info[i]['UF_CRM_1660818061808'] = 0
+            best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
+            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
+            company_id = best_value_company # это для тайтла
+
+#2024-07-19 конец вставки
 
     else:
         company_id = company_crm[0][3:]

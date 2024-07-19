@@ -1423,12 +1423,12 @@ def create_employees_report(req):
                 title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                 if deal:
                     list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
-            '''#массив с инфой о продажах без сделок
+            #массив с инфой о продажах без сделок
             for source_last_month in sourse_sans_deals:
                 title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
                 title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
                 if source_last_month:
-                    sales_not_deals.append({'TYPE': title_source[0], 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})'''
+                    sales_not_deals.append({'TYPE': title_source[0], 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})
         else:
             sold_deals = []
 
@@ -1447,11 +1447,11 @@ def create_employees_report(req):
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
-        '''#детализация про продажам в источниках без сделок
+        #детализация про продажам в источниках без сделок
         if len(sales_not_deals) > 1:
             worksheet.append(['', 'Продажи без сделок', ''])
             for selling in sales_not_deals:
-                worksheet.append([selling['ufCrm3_1654248332'], selling['companyId'], selling['opportunity']])'''
+                worksheet.append([selling['ufCrm3_1654248332'], selling['companyId'], selling['opportunity']])
 
         worksheet.append([])
 

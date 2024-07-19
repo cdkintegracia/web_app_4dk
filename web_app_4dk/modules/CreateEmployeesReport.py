@@ -1412,7 +1412,7 @@ def create_employees_report(req):
                 'select': ['ID', 'TITLE'],
                 'filter': {
                     'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals)),
-                    'ID': list(map(lambda x: x['COMPANY_ID'], sourse_sans_deals))
+                    'ID': list(map(lambda x: x['companyId'], sourse_sans_deals))
                 }
             })
             for deal_last_month in sold_deals:
@@ -1442,7 +1442,7 @@ def create_employees_report(req):
         if sourse_sans_deals:
             worksheet.append(['', 'Продажи без сделок', ''])
             for selling in sourse_sans_deals:
-                worksheet.append([selling['ufCrm3_1654248332'], selling['COMPANY'], selling['opportunity']])
+                worksheet.append([selling['ufCrm3_1654248332'], selling['companyId'], selling['opportunity']])
 
         worksheet.append([])
 

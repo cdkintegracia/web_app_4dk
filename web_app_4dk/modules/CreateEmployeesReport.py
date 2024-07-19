@@ -1405,7 +1405,7 @@ def create_employees_report(req):
             #поиск источников без сделок
             sourse_sans_deals = list(filter(lambda x: not x['parentId2'], sales))
             if sourse_sans_deals:
-                fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})[0]
+                fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})["result"]
                 field_type_source = fields_sales[0]
                 print(field_type_source)
                 sales_not_deals = ([{'TYPE': 'Тип источника', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])

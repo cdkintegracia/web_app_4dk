@@ -207,7 +207,7 @@ def fill_task_title(req, event):
         if not contact_crm:
             return
 #2024-07-19 временно отключим
-'''
+        '''
         # если к задаче прикреплен только контакт
         contact_crm = contact_crm[0][2:]
         main_company = send_bitrix_request('crm.contact.get', {'id': contact_crm})['UF_CRM_1692058520'] # читаем поле Основная компания
@@ -248,7 +248,7 @@ def fill_task_title(req, event):
                 best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
                 uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
                 company_id = best_value_company # это для тайтла
-'''
+        '''
         contact_crm = contact_crm[0][2:]
 
 

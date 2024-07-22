@@ -126,8 +126,7 @@ def create_employees_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     report_year = datetime.now().year
-    #report_month = datetime.now().month - 1
-    report_month = 5
+    report_month = datetime.now().month - 1
 
     if report_month == 0:
         report_month = 12
@@ -156,8 +155,7 @@ def create_employees_report(req):
         before_before_before_last_month_year -= 1
 
     month_filter_start = datetime(day=1, month=report_month, year=report_year)
-    #month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
-    month_filter_end = datetime(day=1, month=datetime.now().month-1, year=datetime.now().year)
+    month_filter_end = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
     ddmmyyyy_pattern = '%d.%m.%Y'
     if datetime.now().month == 1:
         quarter_filters = get_quarter_filter(12)
@@ -1395,7 +1393,6 @@ def create_employees_report(req):
         })
 
         list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
-        sales_not_deals = ([{'TYPE': 'Тип источника', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
@@ -1405,40 +1402,12 @@ def create_employees_report(req):
                 }
             })
 
-            #поиск источников без сделок
-            sourse_sans_deals = list(filter(lambda x: not x['parentId2'], sales))
-            if sourse_sans_deals:
-                fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})
-                field_type_source = fields_sales["fields"]["ufCrm3_1654248332"]["items"]
-                print(field_type_source)
-            company_id = list(set(list(map(lambda x: x['COMPANY_ID'], sold_deals)) + list(map(lambda x: x['companyId'], sourse_sans_deals))))
-            company_titles = b.get_all('crm.company.list', {
-                'select': ['ID', 'TITLE'],
-                'filter': {
-                    'ID': company_id
-                }
-            })
-            print(company_titles)
-
             #массив с инфой о продажах со сделками
             for deal_last_month in sold_deals:
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
                 title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                 if deal:
                     list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
-            #массив с инфой о продажах без сделок
-            for source_last_month in sourse_sans_deals:
-                print(source_last_month['ufCrm3_1654248332'])
-                title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
-                print(list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))
-                print(source_last_month['companyId'])
-                print(company_titles[0]['ID'])
-                title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
-                print(title_source)
-                print(title_company)
-                #print(source_last_month)
-                if source_last_month:
-                    sales_not_deals.append({'TYPE': title_source[0], 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})
         else:
             sold_deals = []
 
@@ -1457,12 +1426,6 @@ def create_employees_report(req):
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
-        #детализация про продажам в источниках без сделок
-        if len(sales_not_deals) > 1:
-            worksheet.append(['', 'Продажи без сделок', ''])
-            for selling in sales_not_deals:
-                worksheet.append([selling['ufCrm3_1654248332'], selling['companyId'], selling['opportunity']])
-
         worksheet.append([])
 
         

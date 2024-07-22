@@ -1411,7 +1411,9 @@ def create_employees_report(req):
                 fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})
                 field_type_source = fields_sales["fields"]["ufCrm3_1654248332"]["items"]
                 #print(field_type_source)
-            company_id = list(map(lambda x: x['COMPANY_ID'], sold_deals)) + list(map(lambda x: x['companyId'], sourse_sans_deals))
+            company_id = list(map(lambda x: x['COMPANY_ID'], sold_deals))
+            print(company_id)
+            company_id.append(list(map(lambda x: x['companyId'], sourse_sans_deals)))
             print(company_id)
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],

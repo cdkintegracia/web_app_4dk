@@ -1418,8 +1418,7 @@ def create_employees_report(req):
                     'ID': company_id
                 }
             })
-            print(company_titles[0])
-            company_titles = company_titles[0]
+            print(company_titles)
 
             #массив с инфой о продажах со сделками
             for deal_last_month in sold_deals:

@@ -1431,9 +1431,10 @@ def create_employees_report(req):
                     list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
             #массив с инфой о продажах без сделок
             for source_last_month in sourse_sans_deals:
-                #print(source_last_month)
+                print(source_last_month['ufCrm3_1654248332'])
                 title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
                 print(list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))
+                print(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source))
                 print(source_last_month['companyId'])
                 print(company_titles[0]['ID'])
                 title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))

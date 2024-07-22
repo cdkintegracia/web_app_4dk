@@ -1429,7 +1429,7 @@ def create_employees_report(req):
                 title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
                 tc = list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles))
                 print(source_last_month['companyId'])
-                print(company_titles[0])
+                print(company_titles[0]['ID'])
                 print(tc)
                 title_company = list(set(map(lambda x: x['TITLE'], tc)))
                 #print(title_source)

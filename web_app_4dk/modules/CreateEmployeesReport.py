@@ -1412,7 +1412,7 @@ def create_employees_report(req):
                 field_type_source = fields_sales["fields"]["ufCrm3_1654248332"]["items"]
                 #print(field_type_source)
             company_id = list(map(lambda x: x['COMPANY_ID'], sold_deals)) + list(map(lambda x: x['companyId'], sourse_sans_deals))
-            print(len(company_id))
+            print(company_id)
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {

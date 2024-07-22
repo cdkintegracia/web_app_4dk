@@ -1454,12 +1454,12 @@ def create_employees_report(req):
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
 
         #детализация про продажам в источниках со сделками
-        if len(list_of_sales) > 1:
+        if list_of_sales and len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
                 worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
         #детализация про продажам в источниках без сделок
-        if len(sales_not_deals) > 1:
+        if sales_not_deals and len(sales_not_deals) > 1:
             worksheet.append(['', 'Продажи без сделок', ''])
             for selling in sales_not_deals:
                 worksheet.append([selling['ufCrm3_1654248332'], selling['companyId'], selling['opportunity']])

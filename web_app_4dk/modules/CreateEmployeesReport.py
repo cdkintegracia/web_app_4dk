@@ -1411,7 +1411,7 @@ def create_employees_report(req):
                 fields_sales = b.get_all('crm.item.fields', {'entityTypeId': '133'})
                 field_type_source = fields_sales["fields"]["ufCrm3_1654248332"]["items"]
                 #print(field_type_source)
-            company_id = list(map(lambda x: x['COMPANY_ID'], sold_deals)) + list(map(lambda x: x['companyId'], sourse_sans_deals))
+            company_id = list(set(list(map(lambda x: x['COMPANY_ID'], sold_deals)) + list(map(lambda x: x['companyId'], sourse_sans_deals))))
             print(company_id)
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
@@ -1433,10 +1433,10 @@ def create_employees_report(req):
             #массив с инфой о продажах без сделок
             for source_last_month in sourse_sans_deals:
                 print(source_last_month)
-                title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
-                print(list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))
+                title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['uf_Crm3_1654248332'], field_type_source)))))
+                print(list(filter(lambda x: x['ID'] == source_last_month['uf_Crm3_1654248332'], field_type_source)))
                 print(source_last_month['companyId'])
-                print(company_titles['ID'])
+                print(company_titles[0]['ID'])
                 title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
                 print(title_source)
                 print(title_company)

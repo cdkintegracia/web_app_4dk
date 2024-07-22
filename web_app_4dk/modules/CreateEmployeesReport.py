@@ -1414,10 +1414,11 @@ def create_employees_report(req):
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
-                    'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals)),
-                    'ID': list(map(lambda x: x['companyId'], sourse_sans_deals))
+                    '=ID': list(map(lambda x: x['COMPANY_ID'], sold_deals)),
+                    '=ID': list(map(lambda x: x['companyId'], sourse_sans_deals))
                 }
             })
+            print(len(company_titles))
 
             #массив с инфой о продажах со сделками
             for deal_last_month in sold_deals:

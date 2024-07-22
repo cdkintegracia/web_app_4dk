@@ -1417,6 +1417,7 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['companyId'], sourse_sans_deals))
                 }
             })
+            print(company_titles)
             #массив с инфой о продажах со сделками
             for deal_last_month in sold_deals:
                 deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
@@ -1426,11 +1427,11 @@ def create_employees_report(req):
             #массив с инфой о продажах без сделок
             for source_last_month in sourse_sans_deals:
                 ts = list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source))
-                print(ts)
+                #print(ts)
                 title_source = list(set(map(lambda x: x['VALUE'], ts)))
                 title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
-                print(title_source)
-                print(title_company)
+                #print(title_source)
+                #print(title_company)
                 #print(source_last_month)
                 if source_last_month:
                     sales_not_deals.append({'TYPE': title_source[0], 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})

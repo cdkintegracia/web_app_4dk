@@ -126,7 +126,8 @@ def create_employees_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     report_year = datetime.now().year
-    report_month = datetime.now().month - 1
+    #report_month = datetime.now().month - 1
+    report_month = 6
 
     if report_month == 0:
         report_month = 12
@@ -1419,28 +1420,26 @@ def create_employees_report(req):
             })
 
             #массив с инфой о продажах со сделками
-            if sold_deals:
-                for deal_last_month in sold_deals:
-                    deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
-                    title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                    print(deal['Компания'])
-                    print(company_titles[0]['ID'])
-                    print(title)
-                    if deal:
-                        list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+            for deal_last_month in sold_deals:
+                deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
+                title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                print(deal['Компания'])
+                print(company_titles[0]['ID'])
+                print(title)
+                if deal:
+                    list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
             #массив с инфой о продажах без сделок
-            if sourse_sans_deals:
-                for source_last_month in sourse_sans_deals:
-                    #print(source_last_month)
-                    title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
-                    print(source_last_month['companyId'])
-                    print(company_titles[0]['ID'])
-                    title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
-                    #print(title_source)
-                    print(title_company)
-                    #print(source_last_month)
-                    if source_last_month:
-                        sales_not_deals.append({'TYPE': title_source[0], 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})
+            for source_last_month in sourse_sans_deals:
+                #print(source_last_month)
+                title_source = list(set(map(lambda x: x['VALUE'], list(filter(lambda x: x['ID'] == source_last_month['ufCrm3_1654248332'], field_type_source)))))
+                print(source_last_month['companyId'])
+                print(company_titles[0]['ID'])
+                title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == source_last_month['companyId'], company_titles)))))
+                #print(title_source)
+                print(title_company)
+                #print(source_last_month)
+                if source_last_month:
+                    sales_not_deals.append({'TYPE': title_source[0], 'COMPANY': title_company[0], 'OPPORTUNITY': source_last_month['opportunity']})
         else:
             sold_deals = []
 

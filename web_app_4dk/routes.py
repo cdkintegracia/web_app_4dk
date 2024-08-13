@@ -88,6 +88,8 @@ from web_app_4dk.modules.AutoFailureLog import auto_failure_log
 from web_app_4dk.modules.CreateConsultLineTaskReport import create_consultline_task_report
 #2024-07-09
 from web_app_4dk.modules.CreateCompanyFromINN import create_company_from_inn
+#2024-08-13
+from web_app_4dk.modules.CheckKPPfromChecko import check_kpp_from_checko
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -149,7 +151,9 @@ custom_webhooks = {
     'auto_failure_log': auto_failure_log,
     'create_consultline_task_report': create_consultline_task_report,
     #2024-07-09
-    'create_company_from_inn': create_company_from_inn
+    'create_company_from_inn': create_company_from_inn,
+    #2024-08-13
+    'check_kpp_from_checko': check_kpp_from_checko
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

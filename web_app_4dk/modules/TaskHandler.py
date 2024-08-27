@@ -195,8 +195,8 @@ def fill_task_title(req, event):
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
         send_notification(task_info, 'Завершение')
     '''
-    #2024-08-27
-    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask'] or "Пропущен звонок от клиента" not in task_info["title"]: # ufCrmTask - связь с сущностью (список)
+
+    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']: # ufCrmTask - связь с сущностью (список)
         return
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
@@ -204,8 +204,7 @@ def fill_task_title(req, event):
 
     if not company_crm:
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-        #2024-08-27
-        if not contact_crm or "Пропущен звонок от клиента" not in task_info["title"]:
+        if not contact_crm:
             return
 #2024-07-19 временно отключим
         '''
@@ -254,8 +253,7 @@ def fill_task_title(req, event):
 
 
         contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
-        #2024-08-27
-        if not contact_companies or "Пропущен звонок от клиента" not in task_info["title"]: # если нет привязанных компаний к контакту
+        if not contact_companies: # если нет привязанных компаний к контакту
             return
         contact_companies_info = send_bitrix_request('crm.company.list', { # читаем вес сделок всех компаний, привязанных к контакту
             'select': ['COMPANY_TYPE', 'UF_CRM_1660818061808'],     # Тип компании и Вес сделок
@@ -294,8 +292,8 @@ def fill_task_title(req, event):
     company_info = send_bitrix_request('crm.company.get', { # читаем инфо о найденной компании
         'ID': company_id,
     })
-    #2024-08-27
-    if company_info and company_info['TITLE'].strip() in task_info['title'] or "Пропущен звонок от клиента" not in task_info["title"]: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
+
+    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
         return
 
     if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять

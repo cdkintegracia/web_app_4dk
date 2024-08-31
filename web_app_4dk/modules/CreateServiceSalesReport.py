@@ -20,7 +20,7 @@ deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_
 
 service_deal_current_month = ['Контрагент', 'Линк', 'МДЛП', 'Старт ЭДО', 'Кабинет сотрудника']
 service_deal_values = {'Контрагент': 5800, 'Кабинет сотрудника': None, 'Линк': None, 'МДЛП': None, '1Спарк 3000': 3000, '1Спарк': 3600,
-                       '1СпаркПЛЮС 22500': 22500, '1СпаркПЛЮС': 25500,  '1Спарк в договоре': 3600, 'Спарк сумма': None, 'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'РПД': None,
+                       '1СпаркПЛЮС 22500': 22500, '1СпаркПЛЮС': 25500,  '1Спарк в договоре': 3600, 'Спарк сумма': None, 'Старт ЭДО': 3000, 'Подпись': 0, 'Подпись 1000': 1000, 'Подпись 1200': 1200, 'РПД': None,
                        'ЭТП': None,  'Кабинет садовода': 1000, 'ЭДО': None, 'mag1c': 5100, '1С-Администратор': 17500, 'Доки': None}
 spark_names = ['1Спарк', '1Спарк в договоре', '1СПАРК Риски', '1СпаркПЛЮС 22500', '1Спарк 3000','1СпаркПЛЮС']
 service_deal_types = list(service_deal_values.keys())
@@ -75,7 +75,7 @@ def get_service_deal_start_dates(month: str, deal_type: str, deal_date_end, deal
         return f'{month_names_numbers[month]}.{current_year}'
     #elif deal_type == 'Кабинет садовода':
         #return {'Месяц': int(month_names_numbers[month]), 'Год': int(current_year)}
-    elif deal_type == 'Подпись 1000' and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
+    elif (deal_type == 'Подпись 1000' or deal_type == 'Подпись 1200') and f'{deal_date_start.day}.{deal_date_start.month}' == f'{deal_date_end.day}.{deal_date_end.month}':
         return f'{deal_date_start.month}.{deal_date_start.year}'
     #2024-07-12 >
     elif deal_type =='Доки':
@@ -189,6 +189,8 @@ def deal_info_handler(deals_info, users_info, month, edo_list_elements=None):
                         deal_value = 600
                     elif deal_info['Тип'] == 'Подпись':
                         deal_value = 0
+                    elif deal_info['Тип'] == 'Подпись 1200':
+                        deal_value = 750
                     elif deal_info['Тип'] == 'РПД':
                         rpd_data[deal_info['Ответственный']][deal_info['ID']] = get_deal_value(deal_info['Сумма'], deal_info['Тип'], deal_info['ID'], deal_info['Название сделки'])
                         continue

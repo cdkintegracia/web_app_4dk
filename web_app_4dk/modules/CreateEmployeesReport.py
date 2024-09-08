@@ -1411,10 +1411,13 @@ def create_employees_report(req):
             #массив с инфой о продажах со сделками
             for deal_last_month in sold_deals:
                 print (deal_last_month)
-                deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
-                title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                if deal:
-                    list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                try:
+                    deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
+                    title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                    if deal:
+                        list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                except:
+                    continue
         else:
             sold_deals = []
 

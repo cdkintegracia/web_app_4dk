@@ -1422,7 +1422,7 @@ def create_employees_report(req):
                     for user_id in users_id:
                         b.call('im.notify.system.add', {
                             'USER_ID': user_id,
-                            'MESSAGE': f'Проблемы при поиске сделки из источников продаж \n {deal_last_month}'})
+                            'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
         else:
             sold_deals = []
 

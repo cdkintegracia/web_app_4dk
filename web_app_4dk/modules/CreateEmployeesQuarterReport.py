@@ -1096,7 +1096,7 @@ def create_employees_quarter_report(req):
                         list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
                 except:
                     #2024-09-10 saa
-                    users_id = ['1391', '173']
+                    users_id = ['1391', '1']
                     for user_id in users_id:
                         b.call('im.notify.system.add', {
                             'USER_ID': user_id,

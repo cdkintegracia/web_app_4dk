@@ -1083,7 +1083,7 @@ def create_employees_quarter_report(req):
                 }
             })
             for deal_quarter in sold_deals:
-                print (deal_quarter)
+                #print (deal_quarter)
                 try:
                     deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_3_month_deals_data))
                     if not deal:

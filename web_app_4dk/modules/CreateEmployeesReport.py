@@ -1410,7 +1410,7 @@ def create_employees_report(req):
 
             #массив с инфой о продажах со сделками
             for deal_last_month in sold_deals:
-                print (deal_last_month)
+                #print (deal_last_month)
                 try:
                     deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
                     title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))

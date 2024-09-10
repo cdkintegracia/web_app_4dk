@@ -1417,7 +1417,12 @@ def create_employees_report(req):
                     if deal:
                         list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
                 except:
-                    continue
+                    #2024-09-10 saa
+                    users_id = ['1391', '173']
+                    for user_id in users_id:
+                        b.call('im.notify.system.add', {
+                            'USER_ID': user_id,
+                            'MESSAGE': f'Проблемы при поиске сделки из источников продаж \n {deal_last_month}'})
         else:
             sold_deals = []
 

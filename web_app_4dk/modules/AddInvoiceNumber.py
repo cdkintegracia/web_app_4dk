@@ -24,6 +24,7 @@ def add_invoice_number(req):
         'id': req['id'],
         'fields': {
             'ufCrm_SMART_INVOICE_1684919199892': f"{invoice_info['item']['title']} {document_number}",
-            'ufCrm_SMART_INVOICE_1691071952214': document_number
+            'ufCrm_SMART_INVOICE_1691071952214': document_number,
+            'ufCrm_SMART_INVOICE_3862188824191':document_number
         }
     })

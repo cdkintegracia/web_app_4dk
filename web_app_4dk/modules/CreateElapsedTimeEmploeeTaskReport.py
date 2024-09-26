@@ -48,7 +48,7 @@ def create_eladsed_time_employee_report(req):
     user_name = f'{user_info[0]["NAME"]} {user_info[0]["LAST_NAME"]}'
     worksheet.append([user_name])
     worksheet.append([
-        'Дата начала', 'Ответственный', 'Затраченное время', 'Работа'
+        'Дата начала', 'Затраченное время', 'Работа'
     ])
     for result in tasks_results:
         if result['USER_ID'] == user_id:

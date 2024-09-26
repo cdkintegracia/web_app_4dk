@@ -45,18 +45,15 @@ def create_eladsed_time_employee_report(req):
 
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
-    users_name = dict()
+    user_name = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
+    worksheet.append([user_name])
     worksheet.append([
         'Дата начала', 'Ответственный', 'Затраченное время', 'Работа'
     ])
     for result in tasks_results:
         if result['USER_ID'] == user_id:
-            if result['USER_ID'] not in users_name:
-                user_info = list(filter(lambda x: x['ID'] == result['USER_ID'], user_info))[0]
-                users_name[result['USER_ID']] = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
             worksheet.append([
             datetime.fromisoformat(result['CREATED_DATE']).strftime('%d.%m.%Y %H:%M'),
-            users_name[result['USER_ID']],
             str(timedelta(seconds=int(result['SECONDS']))),
             result['COMMENT_TEXT']
             ])

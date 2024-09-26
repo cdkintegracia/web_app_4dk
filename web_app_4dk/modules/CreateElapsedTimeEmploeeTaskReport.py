@@ -77,7 +77,7 @@ def create_eladsed_time_employee_report(req):
     workbook.save(report_name)
 
     # Загрузка отчета в Битрикс
-    bitrix_folder_id = '613141'
+    bitrix_folder_id = '1077329'
     with open(report_name, 'rb') as file:
         report_file = file.read()
     report_file_base64 = str(base64.b64encode(report_file))[2:]

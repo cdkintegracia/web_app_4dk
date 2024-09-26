@@ -90,6 +90,8 @@ from web_app_4dk.modules.CreateConsultLineTaskReport import create_consultline_t
 from web_app_4dk.modules.CreateCompanyFromINN import create_company_from_inn
 #2024-08-13
 from web_app_4dk.modules.CheckKPPfromChecko import check_kpp_from_checko
+#2024-09-26
+from web_app_4dk.modules.CreateElapsedTimeEmploeeTaskReport import create_eladsed_time_employee_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -153,7 +155,9 @@ custom_webhooks = {
     #2024-07-09
     'create_company_from_inn': create_company_from_inn,
     #2024-08-13
-    'check_kpp_from_checko': check_kpp_from_checko
+    'check_kpp_from_checko': check_kpp_from_checko,
+    #2024-09-26
+    'create_eladsed_time_employee_report': create_eladsed_time_employee_report
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

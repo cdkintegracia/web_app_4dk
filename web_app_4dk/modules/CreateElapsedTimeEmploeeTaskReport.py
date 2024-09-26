@@ -45,7 +45,7 @@ def create_eladsed_time_employee_report(req):
 
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
-    user_name = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
+    user_name = f'{user_info[0]["NAME"]} {user_info[0]["LAST_NAME"]}'
     worksheet.append([user_name])
     worksheet.append([
         'Дата начала', 'Ответственный', 'Затраченное время', 'Работа'

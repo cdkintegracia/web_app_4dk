@@ -47,6 +47,7 @@ def create_eladsed_time_employee_report(req):
     worksheet = workbook.active
     user_name = f'{user_info[0]["NAME"]} {user_info[0]["LAST_NAME"]}'
     worksheet.append([user_name])
+    worksheet.append([])
     worksheet.append([
         'Дата начала', 'Затраченное время', 'Работа'
     ])
@@ -60,9 +61,8 @@ def create_eladsed_time_employee_report(req):
 
         columns_width = {
             0: 25,
-            1: 30,
-            2: 25,
-            3: 50
+            1: 25,
+            2: 50
         }
         for index, column_cells in enumerate(worksheet.columns):
             worksheet.column_dimensions[get_column_letter(column_cells[0].column)].width = columns_width[index]

@@ -963,7 +963,6 @@ def create_employees_quarter_report(req):
             coverage_any_reporting_deals_last_month = round(any_reporting_deals_last_month /
                                                              len(its_deals_before_1_month) * 100, 2)
         except ZeroDivisionError:
-            #any_reporting_deals_last_month = 0
             coverage_any_reporting_deals_last_month = 0
 
         # Начало квартала
@@ -1049,8 +1048,6 @@ def create_employees_quarter_report(req):
             any_reporting_deals_start_quarter,
             any_reporting_deals_last_month - any_reporting_deals_start_quarter,
         ])
-        print(coverage_any_reporting_deals_last_month)
-        print(coverage_any_reporting_deals_last_month)
         worksheet.append([
             'Охват любой отчетностью',
             f'{coverage_any_reporting_deals_last_month}%',
@@ -1271,7 +1268,8 @@ def create_employees_quarter_report(req):
             edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
             edo_companies_coverage = 0
-
+        print(traffic_more_than_1)
+        print(all_its_last_month)
         try:
             active_its_coverage = round((traffic_more_than_1 / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:

@@ -1268,7 +1268,7 @@ def create_employees_quarter_report(req):
             edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
             edo_companies_coverage = 0
-        print(traffic_more_than_1)
+
         try:
             active_its_coverage = round((traffic_more_than_1 / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:

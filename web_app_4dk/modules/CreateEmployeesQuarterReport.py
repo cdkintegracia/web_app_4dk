@@ -963,7 +963,7 @@ def create_employees_quarter_report(req):
             coverage_any_reporting_deals_last_month = round(any_reporting_deals_last_month /
                                                              len(its_deals_before_1_month) * 100, 2)
         except ZeroDivisionError:
-            any_reporting_deals_last_month = 0
+            #any_reporting_deals_last_month = 0
             coverage_any_reporting_deals_last_month = 0
 
         # Начало квартала

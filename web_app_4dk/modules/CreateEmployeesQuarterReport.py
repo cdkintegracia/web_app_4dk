@@ -964,6 +964,7 @@ def create_employees_quarter_report(req):
                                                              len(its_deals_before_1_month) * 100, 2)
         except ZeroDivisionError:
             any_reporting_deals_last_month = 0
+            coverage_any_reporting_deals_last_month = 0
 
         # Начало квартала
         free_reporting_deals_start_quarter = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -1048,6 +1049,8 @@ def create_employees_quarter_report(req):
             any_reporting_deals_start_quarter,
             any_reporting_deals_last_month - any_reporting_deals_start_quarter,
         ])
+        print(coverage_any_reporting_deals_last_month)
+        print(coverage_any_reporting_deals_last_month)
         worksheet.append([
             'Охват любой отчетностью',
             f'{coverage_any_reporting_deals_last_month}%',

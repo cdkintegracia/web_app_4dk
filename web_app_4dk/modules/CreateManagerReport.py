@@ -181,7 +181,7 @@ def create_manager_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
+        worksheet.append(['', user_name])
         worksheet.append([])
         worksheet.append([])
 
@@ -1436,6 +1436,7 @@ def create_manager_report(req):
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+        worksheet.append([])
 
         #детализация про продажам в источниках со сделками
         if len(list_of_sales) > 1:

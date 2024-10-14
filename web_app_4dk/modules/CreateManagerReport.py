@@ -167,7 +167,7 @@ def create_manager_report(req):
     deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     workbook = openpyxl.Workbook()
-    report_name = f'Отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    report_name = f'Отчет_по_источникам продаж_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
     month_names = {
         1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август', 9: 'Сентябрь',
         10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
@@ -1443,6 +1443,8 @@ def create_manager_report(req):
             for selling in list_of_sales:
                 worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
+
+        change_sheet_style(worksheet)
 
         '''
         # Долги по документам

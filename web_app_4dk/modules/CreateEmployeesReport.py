@@ -1392,7 +1392,7 @@ def create_employees_report(req):
             }
         })
 
-        list_of_sales = ([{'TYPE': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+        list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         if sales:
             sold_deals = b.get_all('crm.deal.list', {

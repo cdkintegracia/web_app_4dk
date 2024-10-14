@@ -1067,7 +1067,7 @@ def create_employees_quarter_report(req):
             }
         })
 
-        list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+        list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
@@ -1093,7 +1093,7 @@ def create_employees_quarter_report(req):
                     if deal:
                         deal = deal[0]
                         title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                        list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                        list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
                 except:
                     #2024-09-10 saa
                     users_id = ['1391', '1']
@@ -1117,7 +1117,7 @@ def create_employees_quarter_report(req):
         if len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
-                worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
+                worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
         
 

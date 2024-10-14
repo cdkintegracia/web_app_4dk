@@ -1392,7 +1392,7 @@ def create_employees_report(req):
             }
         })
 
-        list_of_sales = ([{'TYPE': 'Тип сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+        list_of_sales = ([{'TYPE': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
@@ -1415,7 +1415,7 @@ def create_employees_report(req):
                     deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
                     title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                     if deal:
-                        list_of_sales.append({'TYPE': deal['Тип'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                        list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
                 except:
                     #2024-09-10 saa
                     users_id = ['1391', '1']
@@ -1440,7 +1440,7 @@ def create_employees_report(req):
         if len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
-                worksheet.append([selling['TYPE'], selling['COMPANY'], selling['OPPORTUNITY']])
+                worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
 
 

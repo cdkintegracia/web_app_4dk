@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 b = Bitrix(authentication('Bitrix'))
 checko_url = 'https://api.checko.ru/v2/'
-api_key = 'jMw7CIIIJtOKSNUb'
+api_key = authentication('Checko')
 
 def create_request(method: str, parameters: list) -> str:
     return f"{checko_url}{method}?key={api_key}&{'&'.join(parameters)}"

@@ -1,7 +1,7 @@
 from time import asctime
 import os
 
-from flask import request, render_template, redirect, url_for, session
+from flask import request, render_template, redirect, url_for, session, abort
 from flask_login import login_user, login_required, current_user
 
 from web_app_4dk import app
@@ -186,7 +186,15 @@ bot_custom_webhooks = {
     'send_message': bot_send_message,
     'send_deal_changed_user_message': send_deal_changed_user_message,
 }
+#2024-12-04 ИБС
+ip_ban_list = ['89.249.18.109','162.142.125.199']
 
+@app.before_request
+def block_method():
+    ip = request.environ.get('REMOTE_ADDR')
+    print(ip)
+    if ip in ip_ban_list:
+        abort(403)
 
 # Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])

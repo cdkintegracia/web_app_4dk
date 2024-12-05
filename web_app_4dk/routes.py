@@ -194,6 +194,7 @@ def block_method():
     ip = request.environ.get('REMOTE_ADDR')
     print(ip)
     if ip in ip_ban_list:
+        print ('omg', ip)
         abort(403)
 
 # Обработчик стандартных вебхуков Битрикс

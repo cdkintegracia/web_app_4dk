@@ -53,6 +53,7 @@ def find_employee_id(users, fio):
     user_info = list(filter(lambda x: x['NAME'] == name and x['LAST_NAME'] == last_name, users))
     if user_info:
         return user_info[0]['ID']
+    '''
     b.call('tasks.task.add', {
         'fields': {
             'TITLE': f'Не удалось создать отпуск для {fio}',
@@ -60,7 +61,7 @@ def find_employee_id(users, fio):
             'GROUP_ID': '13',
             'CREATED_BY': '173'
         }})
-
+    '''
 
 def create_vacation(filename):
     file_data = read_xlsx_file(filename)
@@ -85,5 +86,6 @@ def create_vacation(filename):
                     'Parameter2': end_date,
                     'old_start': '',
                     'old_end': '',
+                    'event_type':'v1',
                 }
             })

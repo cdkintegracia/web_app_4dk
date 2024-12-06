@@ -187,7 +187,7 @@ bot_custom_webhooks = {
     'send_deal_changed_user_message': send_deal_changed_user_message,
 }
 #2024-12-04 ИБС
-ip_ban_list = ['89.249.18.109','162.142.125.199']
+ip_ban_list = ['89.249.18.109','162.142.125.199','82.148.22.35']
 
 @app.before_request
 def block_method():

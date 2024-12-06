@@ -86,6 +86,5 @@ def create_vacation(filename):
                     'Parameter2': end_date,
                     'old_start': '',
                     'old_end': '',
-                    'event_type':'v1',
                 }
             })

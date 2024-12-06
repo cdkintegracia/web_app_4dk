@@ -192,7 +192,6 @@ ip_ban_list = ['89.249.18.109','162.142.125.199','82.148.22.35']
 @app.before_request
 def block_method():
     ip = request.environ.get('REMOTE_ADDR')
-    print(ip)
     if ip in ip_ban_list:
         print ('omg', ip)
         abort(403)

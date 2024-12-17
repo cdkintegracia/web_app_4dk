@@ -69,7 +69,7 @@ def fill_act_document_smart_process(req):
                 elif element['ufCrm41_1690283806'] == 'e0677df2-dd6e-11e6-8e7c-0050569f0c3a':
                     update_fields['assignedById'] = '161'
 
-            if element['stageId'] == 'DT161_53:NEW' and element['ufCrm41_1689101216']:#если первая стадия и заполнена дата сдачи, то перевод в завершенные
+            if (element['stageId'] == 'DT161_53:NEW' or element['stageId'] == 'DT161_53:1') and element['ufCrm41_1689101216']:#если первая или вторая стадия и заполнена дата сдачи, то перевод в завершенные
                 update_fields['stageId'] = 'DT161_53:SUCCESS'
 
             send_bitrix_request('crm.item.update', { #обновлеям в б24

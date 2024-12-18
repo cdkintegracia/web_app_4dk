@@ -116,7 +116,7 @@ def fill_act_document_smart_process(req):
         elements = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'filter': {
-                'stageId': 'DT161_53:NEW',
+                'stageId': ['DT161_53:NEW', 'DT161_53:1'],
                 '>ufCrm41_1689101216': '2020-03-19T02:00:00+02:00'   # не дата сдачи = пустая
             }
         })

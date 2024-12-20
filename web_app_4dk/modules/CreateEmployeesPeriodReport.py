@@ -125,7 +125,7 @@ def create_employees_period_report(req):
 
     before_1_month_year = datetime.now().year
     #before_1_month = datetime.now().month - 1
-    before_1_month = 12
+    before_1_month = 11
 
     if before_1_month == 0:
         before_1_month = 12

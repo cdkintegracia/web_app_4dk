@@ -77,7 +77,6 @@ def get_quarter_filter(month_number):
     quarter = list(filter(lambda x: month_number in x, quarters))[0]
     if month_number + 1 in quarter:
         quarter.remove(month_number + 1)
-    #добавлено 01 01 2024
     if month_number == 12:
         quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-1)
     else:
@@ -125,8 +124,8 @@ def create_employees_period_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     before_1_month_year = datetime.now().year
-    before_1_month = datetime.now().month - 1
-    #before_1_month = 3
+    #before_1_month = datetime.now().month - 1
+    before_1_month = 12
 
     if before_1_month == 0:
         before_1_month = 12
@@ -170,7 +169,7 @@ def create_employees_period_report(req):
     deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     workbook = openpyxl.Workbook()
-    report_name = f'Квартальный_отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    report_name = f'Годовой_отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
     month_names = {
         1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август', 9: 'Сентябрь',
         10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
@@ -211,10 +210,10 @@ def create_employees_period_report(req):
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_1_month_deals_data))
 
-        start_quarter_its_deals = list(filter(lambda x: x['Ответственный'] == user_name and
+        start_year_its_deals = list(filter(lambda x: x['Ответственный'] == user_name and
                                                 x['Группа'] == 'ИТС' and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                quarter_deals_data))
+                                                start_year_deals_data))
 
         # Сделки
         # Последний месяц квартала
@@ -349,113 +348,113 @@ def create_employees_period_report(req):
         its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                              'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                             quarter_deals_data))
+                                             start_year_deals_data))
 
         its_base_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
                                              'Базовый' in x['Тип'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                             quarter_deals_data))
+                                             start_year_deals_data))
 
         countragent_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 'Контрагент' in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                quarter_deals_data))
+                                                start_year_deals_data))
 
         spark_in_contract_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                       '1Спарк в договоре' == x['Тип'] and
                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                      quarter_deals_data))
+                                                      start_year_deals_data))
 
         spark_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                ('1Спарк 3000' == x['Тип'] or '1Спарк' == x['Тип']) and
                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                               quarter_deals_data))
+                                               start_year_deals_data))
 
         spark_plus_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 ('22500' in x['Тип'] or '1СпаркПЛЮС' in x['Тип']) and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                quarter_deals_data))
+                                                start_year_deals_data))
 
         rpd_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                         'РПД' in x['Тип'] and
                                         x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                        quarter_deals_data))
+                                        start_year_deals_data))
         
         #добавлено 15-07-2024
         grm_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                            'ГРМ' in x['Тип'] and
                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                           quarter_deals_data))
+                                           start_year_deals_data))
         
         doki_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                             'Доки' == x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                            quarter_deals_data))
+                                            start_year_deals_data))
         
         report_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                               'Отчетность' in x['Тип'] and 
                                               x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                              quarter_deals_data))
+                                              start_year_deals_data))
         
         signature_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                                  'Подпись' in x['Тип'] and
                                                  x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                 quarter_deals_data))
+                                                 start_year_deals_data))
         
         dop_oblako_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and 
                                                   'Допы Облако' == x['Тип'] and
                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                  quarter_deals_data))
+                                                  start_year_deals_data))
         
         link_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                             'Линк' == x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                            quarter_deals_data))
+                                            start_year_deals_data))
         
         unics_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                              'Уникс' == x['Тип'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                             quarter_deals_data))
+                                             start_year_deals_data))
         
         cab_sotrudnik_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                      'Кабинет сотрудника' == x['Тип'] and
                                                      x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                     quarter_deals_data))
+                                                     start_year_deals_data))
         
         cab_sadovod_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                    'Кабинет садовода' == x['Тип'] and
                                                    x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                   quarter_deals_data))
+                                                   start_year_deals_data))
         
         edo_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                            'ЭДО' == x['Тип'] and
                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                           quarter_deals_data))
+                                           start_year_deals_data))
         
         mdlp_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                             'МДЛП' == x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                            quarter_deals_data))
+                                            start_year_deals_data))
         
         connect_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                'Коннект' == x['Тип'] and
                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                               quarter_deals_data))
+                                               start_year_deals_data))
                 
         its_otrasl_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                   'ИТС Отраслевой' == x['Тип'] and
                                                   x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                  quarter_deals_data))
+                                                  start_year_deals_data))
         
         ofd_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                            'ОФД' == x['Тип'] and
                                            x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                           quarter_deals_data))
+                                           start_year_deals_data))
         
         bitrix24_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 ('Битрикс24' == x['Тип'] or 'БИТРИКС24' == x['Тип']) and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                quarter_deals_data))
+                                                start_year_deals_data))
 
         other_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and
                                              x not in its_prof_deals_quarter and x not in its_base_deals_quarter and
@@ -469,9 +468,9 @@ def create_employees_period_report(req):
                                              x not in cab_sadovod_deals_quarter and x not in edo_deals_quarter and
                                              x not in mdlp_deals_quarter and x not in connect_deals_quarter and
                                              x not in its_otrasl_deals_quarter and x not in ofd_deals_quarter and
-                                             x not in bitrix24_deals_quarter and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], quarter_deals_data))
+                                             x not in bitrix24_deals_quarter and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], start_year_deals_data))
         
-        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {start_date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
+        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на 31.12.2023', 'Прирост с начала года'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -612,7 +611,7 @@ def create_employees_period_report(req):
             len(other_deals_last_month) - len(other_deals_quarter)
         ])
         worksheet.append([])
-        
+    '''        
                
         # Продление
         title = ['Продление']
@@ -800,8 +799,8 @@ def create_employees_period_report(req):
         worksheet.append(table_other)
         
         worksheet.append([])
-        ''' 
-        '''
+
+
         # Охват сервисами
         #Последний месяц квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
@@ -1281,7 +1280,7 @@ def create_employees_period_report(req):
         worksheet.append(['Сумма платного трафика', paid_traffic])
 
         change_sheet_style(worksheet)
-       
+    '''   
     workbook.save(report_name)
 
     if 'user_id' not in req:
@@ -1299,7 +1298,7 @@ def create_employees_period_report(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по пользователям за квартал сформирован. {upload_report["DETAIL_URL"]}'})
+        'MESSAGE': f'Отчет по пользователям за год сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name) 
 
 

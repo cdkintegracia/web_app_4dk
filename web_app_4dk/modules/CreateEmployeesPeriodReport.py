@@ -1104,7 +1104,7 @@ def create_employees_period_report(req):
         non_documents_debts = list(filter(lambda x: x['stageId'] == 'DT161_53:NEW', documents_debts)) #все незакрытые долги
 
         period_documents_debts = list(filter(lambda x: #все выписанные долги за период
-                                              quarter_filters['start_date'].timestamp() <=
+                                              start_filter.timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), documents_debts))
         
         non_period_documents_debts = list(filter(lambda x: #все незакрытые долги за период

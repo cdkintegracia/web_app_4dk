@@ -1091,47 +1091,40 @@ def create_employees_period_report(req):
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
         worksheet.append([])
         
-    '''
+
         # Долги по документам
         documents_debts = b.get_all('crm.item.list', { #все выписанные долги
             'entityTypeId': '161',
             'filter': {
                 'assignedById': user_info['ID'],
-                '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
+                '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
             }
         })
 
         non_documents_debts = list(filter(lambda x: x['stageId'] == 'DT161_53:NEW', documents_debts)) #все незакрытые долги
 
-        quarter_documents_debts = list(filter(lambda x: #все выписанные долги за квартал
+        period_documents_debts = list(filter(lambda x: #все выписанные долги за период
                                               quarter_filters['start_date'].timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), documents_debts))
         
-        non_quarter_documents_debts = list(filter(lambda x: #все незакрытые долги за квартал
-                                        quarter_filters['start_date'].timestamp() <=
+        non_period_documents_debts = list(filter(lambda x: #все незакрытые долги за период
+                                        start_filter.timestamp() <=
                                         datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), non_documents_debts))
 
 
-        non_last_documents_debts = len(non_documents_debts) - len(non_quarter_documents_debts) #все незакрытые долги за предыдущие периоды
-
-        worksheet.append(['Долги по документам', 'Всего выписано за квартал', 'Не сдано за квартал', 'Не сдано за предыдущие периоды'])
-        worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts), non_last_documents_debts])
+        worksheet.append(['Долги по документам', 'Всего выписано за год', 'Не сдано за год'])
+        worksheet.append(['Штук', len(period_documents_debts), len(non_period_documents_debts)])
         worksheet.append([])
        
         # Задачи
         tasks = b.get_all('tasks.task.list', {
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
-                '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
-                '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+                '>=CREATED_DATE': start_filter.strftime(ddmmyyyy_pattern),
+                '<CREATED_DATE': end_filter.strftime(ddmmyyyy_pattern),
             },
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
-        completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
-        service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
-        completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
-        completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
-        non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
@@ -1146,24 +1139,19 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                '>=PROPERTY_1769': int(quarter_filters['start_date'].month),
+                '>=PROPERTY_1769': int(start_filter.month),
                 '<=PROPERTY_1769': int(end_date_quarter.month),
                 'PROPERTY_1771': int(end_date_quarter.year),
             }
         })
         days_duty_amount = len(days_duty)
 
-        worksheet.append(['', 'Незакрытых (и созд. в этом кварт)', 'Всего создано в квартале'])
-        worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
-        worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
-        worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
-        worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
         
-
+    '''
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))

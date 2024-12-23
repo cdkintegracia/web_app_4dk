@@ -165,7 +165,7 @@ def create_employees_period_report(req):
     ddmmyyyy_pattern = '%d.%m.%Y'
 
     start_filter = datetime(day=1, month=1, year=datetime.now().year)
-    end_filter = datetime(day=1, month=datetime.now().month-1, year=datetime.now().year)
+    end_filter = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})

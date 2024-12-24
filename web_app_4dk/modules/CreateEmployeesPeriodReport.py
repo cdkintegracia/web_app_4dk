@@ -970,6 +970,7 @@ def create_employees_period_report(req):
          # ЭДО
         all_its = its_prof_deals_last_month + its_base_deals_last_month
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+        print(edo_companies_id)
 
         if edo_companies_id:
             edo_companies = b.get_all('crm.company.list', {

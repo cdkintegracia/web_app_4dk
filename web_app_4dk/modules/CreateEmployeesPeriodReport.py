@@ -995,7 +995,6 @@ def create_employees_period_report(req):
                 }
         })
         print(edo_elements_info[0]['PROPERTY_1579'].values())
-        print(edo_elements_info['PROPERTY_1579'])
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
             'Компания': list(x['PROPERTY_1579'].values())[0],

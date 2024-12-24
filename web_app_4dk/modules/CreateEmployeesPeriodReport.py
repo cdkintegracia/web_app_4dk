@@ -614,228 +614,41 @@ def create_employees_period_report(req):
             len(other_deals_last_month) - len(other_deals_first_month)
         ])
         worksheet.append([])
-        '''        
-               
-        # Продление
-        title = ['Продление']
-
-        #первый месяц
-        deals_ended_before_3_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_3_month_deals_data))
-        deals_ended_before_3_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_3_month_deals_data))
-        deals_ended_before_3_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_3_month_dpo))
-        deals_ended_before_3_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_3_month_dk))
-        deals_ended_before_3_month_dpo = list(filter(lambda x: datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year, hour=3), deals_ended_before_3_month_dpo))
-        deals_ended_before_3_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_3_month_dpo))
-        deals_ended_before_3_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_3_month_dpo_id and (datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year)), deals_ended_before_3_month_dk))
-        deals_ended_before_3_month = deals_ended_before_3_month_dk + deals_ended_before_3_month_dpo
-
-        before_3_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_1_month_deals_data))
-        before_3_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_3_month_deals_data_datetime_dpo))
-        before_3_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_1_month_deals_data))
-        before_3_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_3_month_deals_data_datetime_dk))
-        non_extended_date_deals_3 = []
-        before_3_month_deals_data_datetime = before_3_month_deals_data_datetime_dpo + before_3_month_deals_data_datetime_dk
-
-        for deal in deals_ended_before_3_month:
-            before_3_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_3_month_deals_data_datetime))
-            if not before_3_month_deal:
-                non_extended_date_deals_3.append(deal)
-            else:
-                if not before_3_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
-                    continue
-                if before_3_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_3_month_deal[0]['Стадия'] != 'Услуга завершена':
-                    non_extended_date_deals_3.append(deal)
-
-        for deal in deals_ended_before_3_month:
-            if deal in non_extended_date_deals_3:
-                continue
-            before_3_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_3_month_deals_data_datetime))
-            if not before_3_month_deal:
-                non_extended_date_deals_3.append(deal)
-            else:
-                if not before_3_month_deal[0]['Предполагаемая дата закрытия']:
-                    continue
-                if before_3_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_3_month_deal[0]['Стадия'] != 'Услуга завершена':
-                    non_extended_date_deals_3.append(deal)
-
-        ended_its_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_3_month))))
-        ended_reporting_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_3_month))))
-        ended_others_2 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_3_month))))
-        non_extended_date_deals_id_2 = set(map(lambda x: x['ID'], non_extended_date_deals_3))
-
-        title.extend([f'Заканчивалось на {datetime(day=before_2_month_range, month=before_2_month, year=before_2_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
-        table_its =  ['ИТС', len(ended_its_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_its_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))]
-        table_service = ['Сервисы', len(ended_reporting_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_reporting_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))]
-        table_other = ['Остальное', len(ended_others_2), len(set(filter(lambda x: x not in non_extended_date_deals_id_2, ended_others_2))), len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))]
-
-        count_its = len(ended_its_2)
-        count_service = len(ended_reporting_2)
-        count_other = len(ended_others_2)
-        count_its_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_its_2)))
-        count_service_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_reporting_2)))
-        count_other_non = len(set(filter(lambda x: x in non_extended_date_deals_id_2, ended_others_2)))
         
-        #второй месяц
-        if before_1_month not in [1, 4, 7, 10]:
-            deals_ended_before_4_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_4_month_deals_data))
-            deals_ended_before_4_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_4_month_deals_data))
-            deals_ended_before_4_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_4_month_dpo))
-            deals_ended_before_4_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_4_month_dk))
-            deals_ended_before_4_month_dpo = list(filter(lambda x: datetime(day=1, month=before_3_month, year=before_3_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year, hour=3), deals_ended_before_4_month_dpo))
-            deals_ended_before_4_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_4_month_dpo))
-            deals_ended_before_4_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_4_month_dpo_id and (datetime(day=1, month=before_3_month, year=before_3_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year)), deals_ended_before_4_month_dk))
-            deals_ended_before_4_month = deals_ended_before_4_month_dk + deals_ended_before_4_month_dpo
-
-            before_4_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_2_month_deals_data))
-            before_4_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_4_month_deals_data_datetime_dpo))
-            before_4_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_2_month_deals_data))
-            before_4_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_4_month_deals_data_datetime_dk))
-            non_extended_date_deals_4 = []
-            before_4_month_deals_data_datetime = before_4_month_deals_data_datetime_dpo + before_4_month_deals_data_datetime_dk
-
-            for deal in deals_ended_before_4_month:
-                before_4_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_4_month_deals_data_datetime))
-                if not before_4_month_deal:
-                    non_extended_date_deals_4.append(deal)
-                else:
-                    if not before_4_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
-                        continue
-                    if before_4_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_4_month_deal[0]['Стадия'] != 'Услуга завершена':
-                        non_extended_date_deals_4.append(deal)
-
-            for deal in deals_ended_before_4_month:
-                if deal in non_extended_date_deals_4:
-                    continue
-                before_4_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_4_month_deals_data_datetime))
-                if not before_4_month_deal:
-                    non_extended_date_deals_4.append(deal)
-                else:
-                    if not before_4_month_deal[0]['Предполагаемая дата закрытия']:
-                        continue
-                    if before_4_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_4_month_deal[0]['Стадия'] != 'Услуга завершена':
-                        non_extended_date_deals_4.append(deal)
-
-            ended_its_3 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_4_month))))
-            ended_reporting_3 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_4_month))))
-            ended_others_3 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_4_month))))
-            non_extended_date_deals_id_3 = set(map(lambda x: x['ID'], non_extended_date_deals_4))
-
-            title.extend([f'Заканчивалось на {datetime(day=before_3_month_range, month=before_3_month, year=before_3_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
-            table_its.extend([len(ended_its_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_its_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))])
-            table_service.extend([len(ended_reporting_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_reporting_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))])
-            table_other.extend([len(ended_others_3), len(set(filter(lambda x: x not in non_extended_date_deals_id_3, ended_others_3))), len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))])
-
-            count_its += len(ended_its_3)
-            count_service += len(ended_reporting_3)
-            count_other += len(ended_others_3)
-            count_its_non += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_its_3)))
-            count_service_non += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_reporting_3)))
-            count_other_non += len(set(filter(lambda x: x in non_extended_date_deals_id_3, ended_others_3)))
-        
-        #третий месяц
-        if before_1_month not in [2, 5, 8, 11, 1, 4, 7, 10]:
-            deals_ended_before_5_month_dpo = list(filter(lambda x: x['Дата проверки оплаты'] and x['Ответственный'] == user_name, before_5_month_deals_data))
-            deals_ended_before_5_month_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_5_month_deals_data))
-            deals_ended_before_5_month_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dpo))
-            deals_ended_before_5_month_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Группа': x['Группа'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, deals_ended_before_5_month_dk))
-            deals_ended_before_5_month_dpo = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['Дата проверки оплаты'] <= datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year, hour=3), deals_ended_before_5_month_dpo))
-            deals_ended_before_5_month_dpo_id = list(map(lambda x: x['ID'], deals_ended_before_5_month_dpo))
-            deals_ended_before_5_month_dk = list(filter(lambda x: x['ID'] not in deals_ended_before_5_month_dpo_id and (datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['Предполагаемая дата закрытия'] <= datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year)), deals_ended_before_5_month_dk))
-            deals_ended_before_5_month = deals_ended_before_5_month_dk + deals_ended_before_5_month_dpo
-
-            before_5_month_deals_data_datetime_dpo = list(filter(lambda x: x['Ответственный'] == user_name and x['Дата проверки оплаты'], before_3_month_deals_data))
-            before_5_month_deals_data_datetime_dpo = list(map(lambda x: {'ID': x['ID'], 'Дата проверки оплаты': datetime.strptime(x['Дата проверки оплаты'], '%d.%m.%Y %H:%M:%S'), 'Предполагаемая дата закрытия': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_5_month_deals_data_datetime_dpo))
-            before_5_month_deals_data_datetime_dk = list(filter(lambda x: x['Ответственный'] == user_name, before_3_month_deals_data))
-            before_5_month_deals_data_datetime_dk = list(map(lambda x: {'ID': x['ID'], 'Предполагаемая дата закрытия': datetime.strptime(x['Предполагаемая дата закрытия'], '%d.%m.%Y'), 'Дата проверки оплаты': '', 'Стадия': x['Стадия сделки'], 'Регномер': x['Регномер'], 'Компания': x['Компания'], 'Тип': x['Тип']}, before_5_month_deals_data_datetime_dk))
-            non_extended_date_deals_5 = []
-            before_5_month_deals_data_datetime = before_5_month_deals_data_datetime_dpo + before_5_month_deals_data_datetime_dk
-
-            for deal in deals_ended_before_5_month:
-                before_5_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_5_month_deals_data_datetime))
-                if not before_5_month_deal:
-                    non_extended_date_deals_5.append(deal)
-                else:
-                    if not before_5_month_deal[0]['Дата проверки оплаты'] or not deal['Дата проверки оплаты']:
-                        continue
-                    if before_5_month_deal[0]['Дата проверки оплаты'] <= deal['Дата проверки оплаты'] and before_5_month_deal[0]['Стадия'] != 'Услуга завершена':
-                        non_extended_date_deals_5.append(deal)
-
-            for deal in deals_ended_before_5_month:
-                if deal in non_extended_date_deals_5:
-                    continue
-                before_5_month_deal = list(filter(lambda x: x['ID'] == deal['ID'], before_5_month_deals_data_datetime))
-                if not before_5_month_deal:
-                    non_extended_date_deals_5.append(deal)
-                else:
-                    if not before_5_month_deal[0]['Предполагаемая дата закрытия']:
-                        continue
-                    if before_5_month_deal[0]['Предполагаемая дата закрытия'] <= deal['Предполагаемая дата закрытия'] and before_5_month_deal[0]['Стадия'] != 'Услуга завершена':
-                        non_extended_date_deals_5.append(deal)
-
-            ended_its_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'ИТС', deals_ended_before_5_month))))
-            ended_reporting_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] == 'Сервисы ИТС', deals_ended_before_5_month))))
-            ended_others_4 = set(map(lambda x: x['ID'], list(filter(lambda x: x['Группа'] not in ['Сервисы ИТС', 'ИТС'], deals_ended_before_5_month))))
-            non_extended_date_deals_id_4 = set(map(lambda x: x['ID'], non_extended_date_deals_5))
-
-            title.extend([f'Заканчивалось на {datetime(day=before_4_month_range, month=before_4_month, year=before_4_month_year).strftime("%d.%m.%Y")}', 'Из них продлено', 'Не продлено'])
-            table_its.extend([len(ended_its_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_its_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))])
-            table_service.extend([len(ended_reporting_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_reporting_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))])
-            table_other.extend([len(ended_others_4), len(set(filter(lambda x: x not in non_extended_date_deals_id_4, ended_others_4))), len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))])\
-            
-            count_its += len(ended_its_4)
-            count_service += len(ended_reporting_4)
-            count_other += len(ended_others_4)
-            count_its_non += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_its_4)))
-            count_service_non += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_reporting_4)))
-            count_other_non += len(set(filter(lambda x: x in non_extended_date_deals_id_4, ended_others_4)))
-        
-        #добавляем заголовки и сновную часть в таблицу
-        title.extend(['Всего к продлению', 'Всего не продлено'])
-        worksheet.append(title)
-
-        table_its.extend([count_its, count_its_non])
-        table_service.extend([count_service, count_service_non])
-        table_other.extend([count_other, count_other_non])
-
-        worksheet.append(table_its)
-        worksheet.append(table_service)
-        worksheet.append(table_other)
-        
-        worksheet.append([])
-        '''
 
         # Охват сервисами
         #Последний месяц
-        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
+        companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data)))) #компании из сделок отв на последний месяц
         companies_without_services_last_month = 0
         companies_without_paid_services_last_month = 0
         for company in companies:
-            company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, before_1_month_deals_data)))) #читаем все сделки с заданным регномером за последний месяц
-            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], before_1_month_deals_data)) #читаем все сделки из группы итс за последний месяц
+            company_regnumbers = set(map(lambda x: x['Регномер'], list(filter(lambda x: x['Компания'] == company, before_1_month_deals_data)))) #регномера компании из сделок на последний месяц
+            company_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'], before_1_month_deals_data)) #сделки итс компании на последний месяц
             if not company_its:
                 continue
-
+            #сделки итс компании КРОМЕ профов, облако и грм (т.е. базовый земля, идвид, беспл, садовод, медицина, аов)
             non_prof_its = list(filter(lambda x: x['Группа'] == 'ИТС' and company == x['Компания'] and 'ПРОФ' not in x['Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], before_1_month_deals_data))
             if non_prof_its:
                 company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                                   ('Контрагент' in x['Тип'] or
-                                                   'Спарк' in x['Тип'] or
-                                                   'РПД' in x['Тип'] or
-                                                   'Отчетность' in x['Тип'] or
-                                                   'Допы Облако' in x['Тип'] or
-                                                   'Кабинет сотрудника' in x['Тип']),
-                                                    before_1_month_deals_data))
+                                                   ('Контрагент' in x['Тип'] or 'Спарк' in x['Тип'] or
+                                                   'РПД' in x['Тип'] or 'Отчетность' in x['Тип'] or
+                                                   'Допы Облако' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                   'Подпись 1200' in x['Тип'] or 'Коннект' in x['Тип'] or
+                                                   'mag1c' in x['Тип'] or 'Облачный архив' in x['Тип'] or
+                                                   'Сканер чехов' in x['Тип']),
+                                                    before_1_month_deals_data)) #если есть сделки итс компании КРОМЕ профов, то считаем сервисы включая бесплатную отчетность
 
                 if not company_its_services:
                     companies_without_services_last_month += 1
 
             company_its_paid_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                                    ('Контрагент' in x['Тип'] or
-                                                    'Спарк' in x['Тип'] or
-                                                    'РПД' in x['Тип'] or
-                                                    'Отчетность' == x['Тип'] or
-                                                    'Допы Облако' in x['Тип'] or
-                                                    'Кабинет сотрудника' in x['Тип']), before_1_month_deals_data))
+                                                    ('Контрагент' in x['Тип'] or 'Спарк' in x['Тип'] or
+                                                   'РПД' in x['Тип'] or 'Отчетность' == x['Тип'] or
+                                                   'Допы Облако' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                   'Подпись 1200' in x['Тип'] or 'Коннект' in x['Тип'] or
+                                                   'mag1c' in x['Тип'] or 'Облачный архив' in x['Тип'] or
+                                                   'Сканер чехов' in x['Тип']),
+                                                    before_1_month_deals_data)) #если сделки итс только профы, то считаем сервисы без бесплатной отчетности
 
             if not company_its_paid_services:
                 companies_without_paid_services_last_month += 1
@@ -866,23 +679,25 @@ def create_employees_period_report(req):
                 'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], first_month_deals_data))
             if non_prof_its:
                 company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                                    ('Контрагент' in x['Тип'] or
-                                                    'Спарк' in x['Тип'] or
-                                                    'РПД' in x['Тип'] or
-                                                    'Отчетность' in x['Тип'] or
-                                                    'Допы Облако' in x['Тип'] or
-                                                    'Кабинет сотрудника' in x['Тип']), first_month_deals_data))
+                                                    ('Контрагент' in x['Тип'] or 'Спарк' in x['Тип'] or
+                                                   'РПД' in x['Тип'] or 'Отчетность' in x['Тип'] or
+                                                   'Допы Облако' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                   'Подпись 1200' in x['Тип'] or 'Коннект' in x['Тип'] or
+                                                   'mag1c' in x['Тип'] or 'Облачный архив' in x['Тип'] or
+                                                   'Сканер чехов' in x['Тип']),
+                                                    first_month_deals_data))
 
                 if not company_its_services:
                     companies_without_services_first_month += 1
 
             company_its_paid_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                                    ('Контрагент' in x['Тип'] or
-                                                    'Спарк' in x['Тип'] or
-                                                    'РПД' in x['Тип'] or
-                                                    'Отчетность' == x['Тип'] or
-                                                    'Допы Облако' in x['Тип'] or
-                                                    'Кабинет сотрудника' in x['Тип']), first_month_deals_data))
+                                                    ('Контрагент' in x['Тип'] or 'Спарк' in x['Тип'] or
+                                                   'РПД' in x['Тип'] or 'Отчетность' == x['Тип'] or
+                                                   'Допы Облако' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                   'Подпись 1200' in x['Тип'] or 'Коннект' in x['Тип'] or
+                                                   'mag1c' in x['Тип'] or 'Облачный архив' in x['Тип'] or
+                                                   'Сканер чехов' in x['Тип']),
+                                                    first_month_deals_data))
 
             if not company_its_paid_services:
                 companies_without_paid_services_first_month += 1
@@ -1151,96 +966,69 @@ def create_employees_period_report(req):
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
         
-    '''
-        # ЭДО
-        all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
-        edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
-
-        if edo_companies_id_last_month:
-            edo_companies_last_month = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1638093692254'],
-                'filter': {
-                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
-                }
-            })
-            edo_companies_count_last_month = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies_last_month))
-        else:
-            edo_companies_count_last_month = []
-
+    
+         # ЭДО
         all_its = its_prof_deals_last_month + its_base_deals_last_month
-        name_month = [month_codes[month_int_names[before_1_month]]]
-
-        if before_1_month not in [2, 5, 8, 11]:
-            name_month.append(month_codes[month_int_names[before_2_month]])
-            all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
-            for deals_1 in all_its_start_quarter:
-                if deals_1 not in all_its:
-                    all_its.append(deals_1)      
-            if before_1_month not in [1, 4, 7, 10]:
-                name_month.append(month_codes[month_int_names[before_3_month]])
-                all_its_deals_middle_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                x['Группа'] == 'ИТС' and
-                                                'ГРМ' not in x['Тип'] and
-                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                before_2_month_deals_data))
-                for deals_2 in all_its_deals_middle_month:
-                    if deals_2 not in all_its: 
-                        all_its.append(deals_2)
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
         if edo_companies_id:
-            edo_elements_info = b.get_all('lists.element.get', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '235',
+            edo_companies = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1638093692254'],
                 'filter': {
-                    'PROPERTY_1579': edo_companies_id,
-                    'PROPERTY_1567': name_month,
-                    'PROPERTY_1569': year_codes[str(before_1_month_year)],
+                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
                 }
             })
-            edo_elements_info = list(map(lambda x: {
-                'ID': x['ID'],
-                'Компания': list(x['PROPERTY_1579'].values())[0],
-                'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
-                'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
-            }, edo_elements_info))
-            
-            traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
-            traffic_more_than_1 = len(set(map(lambda x: x['Компания'], traffic_more_than_1)))
-
-            edo_elements_paid = b.get_all('lists.element.get', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '235',
-                'filter': {
-                    'PROPERTY_1581': user_info['ID'],
-                    'PROPERTY_1567': name_month,
-                    'PROPERTY_1569': year_codes[str(before_1_month_year)],
-                }
-            })
-            paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
-            paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
+            edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
 
         else:
-            traffic_more_than_1 = 0
-            paid_traffic = 0
+            edo_companies_count = []
+
+        traffic_more_than_1 = []
+        paid_traffic = 0
+        
+        edo_elements_info = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '235',
+            'filter': {
+                'PROPERTY_1581': user_info['ID'],
+                'PROPERTY_1569': year_codes[str(before_1_month_year)],
+                }
+        })
+        edo_elements_info = list(map(lambda x: {
+            'ID': x['ID'],
+            'Компания': list(x['PROPERTY_1579'].values())[0],
+            'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
+            'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
+        }, edo_elements_info))
+        traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+        edo_elements_paid = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '235',
+            'filter': {
+                'PROPERTY_1581': user_info['ID'],
+                'PROPERTY_1569': year_codes[str(before_1_month_year)],
+            }
+        })
+
+        paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
+        paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
+
         try:
-            edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
+            edo_companies_coverage = round((len(edo_companies_count) / len(all_its)) * 100, 2)
         except ZeroDivisionError:
             edo_companies_coverage = 0
 
         try:
-            active_its_coverage = round((traffic_more_than_1 / len(all_its_last_month)) * 100, 2)
+            active_its_coverage = round((len(traffic_more_than_1) / len(all_its)) * 100, 2)
         except ZeroDivisionError:
             active_its_coverage = 0
 
-        worksheet.append(['ЭДО', 'Всего ИТС на конец квартала', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
-        worksheet.append(['Компании с трафиком больше 1', traffic_more_than_1])
+        worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
+        worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
+        worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
         worksheet.append(['% активных ИТС', active_its_coverage])
-        worksheet.append(['Сумма платного трафика', paid_traffic])
-
-        change_sheet_style(worksheet)
-    '''   
+        worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь год
+   
     workbook.save(report_name)
 
     if 'user_id' not in req:

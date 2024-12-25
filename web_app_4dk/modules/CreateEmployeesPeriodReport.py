@@ -66,35 +66,6 @@ def change_sheet_style(sheet) -> None:
         length = max(len(str(cell.value) if cell.value else '') for cell in column_cells)
         sheet.column_dimensions[get_column_letter(column_cells[0].column)].width = length * 1.1
 
-
-def get_quarter_filter(month_number):
-    quarters = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-        [10, 11, 12]
-    ]
-    quarter = list(filter(lambda x: month_number in x, quarters))[0]
-    if month_number + 1 in quarter:
-        quarter.remove(month_number + 1)
-    if month_number == 12:
-        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year-1)
-    else:
-        quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
-    #quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
-    month_end = quarter[-1] + 1
-    year_end=datetime.now().year
-    if month_end == 13:
-        month_end = 1
-        year_end = year_end + 1
-    quarter_end_filter = datetime(day=1, month=month_end, year=year_end)
-
-    return {
-        'start_date': quarter_start_filter,
-        'end_date': quarter_end_filter
-    }
-
-
 def read_deals_data_file(month, year):
     filename = f'{month_int_names[month]}_{year}.xlsx'
     workbook = openpyxl.load_workbook(f'{deals_info_files_directory}{filename}')
@@ -960,7 +931,9 @@ def create_employees_period_report(req):
             'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
             'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
         }, edo_elements_info))
+
         traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+
         edo_elements_paid = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '235',
@@ -988,6 +961,7 @@ def create_employees_period_report(req):
         worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь год
+        change_sheet_style(worksheet)
    
     workbook.save(report_name)
 

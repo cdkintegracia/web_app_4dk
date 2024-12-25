@@ -1532,14 +1532,12 @@ def create_employees_report(req):
                     'PROPERTY_1569': year_codes[str(report_year)],
                 }
             })
-            print(edo_elements_info)
             edo_elements_info = list(map(lambda x: {
                 'ID': x['ID'],
                 'Компания': list(x['PROPERTY_1579'].values())[0],
                 'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
                 'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
             }, edo_elements_info))
-            print(edo_elements_info)
             traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
             edo_elements_paid = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',

@@ -842,7 +842,7 @@ def create_employees_period_report(req):
             }
         })
 
-        non_documents_debts = list(filter(lambda x: x['stageId'] == 'DT161_53:NEW', documents_debts)) #все незакрытые долги
+        non_documents_debts = list(filter(lambda x: x['stageId'] in ['DT161_53:NEW', 'DT161_53:1'], documents_debts)) #все незакрытые долги
 
         period_documents_debts = list(filter(lambda x: #все выписанные долги за период
                                               start_filter.timestamp() <=

@@ -399,7 +399,7 @@ def create_employees_period_report(req):
                                              x not in its_otrasl_deals_first_month and x not in ofd_deals_first_month and
                                              x not in bitrix24_deals_first_month and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], first_month_deals_data))
         
-        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
+        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -641,7 +641,7 @@ def create_employees_period_report(req):
             coverage_its_without_paid_services_first_month = 0
 
         
-        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
+        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'ИТС без сервисов',
             companies_without_services_last_month,
@@ -754,8 +754,7 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             coverage_any_reporting_deals_first_month = 0
 
-        print(last_day_of_last_year)
-        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
+        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),

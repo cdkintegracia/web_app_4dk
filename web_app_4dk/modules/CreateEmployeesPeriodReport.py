@@ -134,33 +134,6 @@ def create_employees_period_report(req):
     before_1_month_last_day_date = (f'{before_1_month_range}.'
                                   f'{before_1_month if len(str(before_1_month)) == 2 else "0" + str(before_1_month)}.'
                                   f'{before_1_month_year}')
-      
-    before_2_month = before_1_month - 1
-    before_2_month_year = before_1_month_year
-    if before_2_month == 0:
-        before_2_month = 12
-        before_2_month_year -= 1
-    before_2_month_range = monthrange(before_2_month_year, before_2_month)[1]
-
-    before_3_month = before_2_month - 1
-    before_3_month_year = before_2_month_year
-    if before_3_month == 0:
-        before_3_month = 12
-        before_3_month_year -= 1
-    before_3_month_range = monthrange(before_3_month_year, before_3_month)[1]
-
-    before_4_month = before_3_month - 1
-    before_4_month_year = before_3_month_year
-    if before_4_month == 0:
-        before_4_month = 12
-        before_4_month_year -= 1
-    before_4_month_range = monthrange(before_4_month_year, before_4_month)[1]
-
-    before_5_month = before_4_month - 1
-    before_5_month_year = before_4_month_year
-    if before_5_month == 0:
-        before_5_month = 12
-        before_5_month_year -= 1
  
     ddmmyyyy_pattern = '%d.%m.%Y'
 
@@ -186,26 +159,10 @@ def create_employees_period_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        quarter_filters = get_quarter_filter(before_1_month)
-        start_date_quarter = quarter_filters['start_date'] - timedelta(days=1)
-        end_date_quarter = quarter_filters['end_date'] - timedelta(days=1)
+        first_month_deals_data = read_deals_data_file(12, datetime.now().year-1) #конец прошлого года
+        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #последний месяц
 
-        quarter_deals_data = read_deals_data_file(start_date_quarter.month, start_date_quarter.year)
-        start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
-        first_month_deals_data = read_deals_data_file(12, datetime.now().year-1)
-
-        if quarter_filters['start_date'].month == 1: number_quarter = 1
-        elif quarter_filters['start_date'].month == 4: number_quarter = 2
-        elif quarter_filters['start_date'].month == 7: number_quarter = 3
-        else: number_quarter = 4
-
-        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year)
-        before_2_month_deals_data = read_deals_data_file(before_2_month, before_2_month_year)
-        before_3_month_deals_data = read_deals_data_file(before_3_month, before_3_month_year)
-        before_4_month_deals_data = read_deals_data_file(before_4_month, before_4_month_year)
-        before_5_month_deals_data = read_deals_data_file(before_5_month, before_5_month_year)
-
-        worksheet.append([user_name, '', f'{number_quarter} квартал {end_date_quarter.year} г.'])
+        worksheet.append([user_name, '', f'{end_filter.year} г.'])
         worksheet.append([])
         worksheet.append([])
 
@@ -818,7 +775,8 @@ def create_employees_period_report(req):
 
         any_reporting_deals_first_month = 0
         for its_deal in first_month_its_deals:
-            any_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and 'Отчетность' in x['Тип'] and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']), quarter_deals_data))
+            any_reporting = list(filter(lambda x: (x['Регномер'] == its_deal['Регномер'] and 'Отчетность' in x['Тип'] and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту']),
+                                        first_month_deals_data))
             if any_reporting:
                 any_reporting_deals_first_month += 1
         try:
@@ -828,7 +786,7 @@ def create_employees_period_report(req):
             coverage_any_reporting_deals_first_month = 0
 
 
-        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {start_date_quarter.strftime("%d.%m.%Y")}', 'Прирост с начала квартала'])
+        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {start_filter.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
@@ -955,8 +913,8 @@ def create_employees_period_report(req):
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
                 '>=PROPERTY_1769': int(start_filter.month),
-                '<=PROPERTY_1769': int(end_date_quarter.month),
-                'PROPERTY_1771': int(end_date_quarter.year),
+                '<=PROPERTY_1769': int(end_filter.month),
+                'PROPERTY_1771': int(end_filter.year),
             }
         })
         days_duty_amount = len(days_duty)
@@ -991,7 +949,6 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '235',
             'filter': {
                 'PROPERTY_1581': user_info['ID'],
-                #'>=PROPERTY_1573': 1,
                 'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 '!PROPERTY_1579': '',
                 }
@@ -1003,7 +960,6 @@ def create_employees_period_report(req):
             'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
             'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
         }, edo_elements_info))
-        #print(edo_elements_info[0]['PROPERTY_1579'].values())
         traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
         edo_elements_paid = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',

@@ -967,7 +967,7 @@ def create_employees_period_report(req):
         worksheet.append([])
         
     
-         # ЭДО
+        # ЭДО
         all_its = its_prof_deals_last_month + its_base_deals_last_month
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
@@ -997,7 +997,7 @@ def create_employees_period_report(req):
         print(edo_elements_info[0]['PROPERTY_1579'].values())
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
-            'Компания': list(x['PROPERTY_1579'].values())[0],
+            #'Компания': list(x['PROPERTY_1579'].values())[0],
             'Сумма пакетов по владельцу': int(list(x['PROPERTY_1573'].values())[0]),
             'Сумма для клиента': int(list(x['PROPERTY_1575'].values())[0]),
         }, edo_elements_info))

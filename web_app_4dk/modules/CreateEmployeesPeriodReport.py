@@ -991,6 +991,7 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '235',
             'filter': {
                 'PROPERTY_1581': user_info['ID'],
+                '>=PROPERTY_1573': 1,
                 'PROPERTY_1569': year_codes[str(before_1_month_year)],
                 }
         })

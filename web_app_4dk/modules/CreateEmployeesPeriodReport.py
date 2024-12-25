@@ -993,7 +993,7 @@ def create_employees_period_report(req):
                 'PROPERTY_1581': user_info['ID'],
                 #'>=PROPERTY_1573': 1,
                 'PROPERTY_1569': year_codes[str(before_1_month_year)],
-                '!PROPERTY_1579': None,
+                '!PROPERTY_1579': '',
                 }
         })
 

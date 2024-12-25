@@ -646,25 +646,25 @@ def create_employees_period_report(req):
             'ИТС без сервисов',
             companies_without_services_last_month,
             companies_without_services_first_month,
-            companies_without_services_last_month - companies_without_services_first_month,
+            companies_without_services_first_month - companies_without_services_last_month,
         ])
         worksheet.append([
             '% ИТС без сервисов',
             f'{coverage_its_without_services_last_month}%',
             f'{coverage_its_without_services_first_month}%',
-            f'{round(coverage_its_without_services_last_month - coverage_its_without_services_first_month, 2)}%'
+            f'{round(coverage_its_without_services_first_month - coverage_its_without_services_last_month, 2)}%'
         ])
         worksheet.append([
             'ИТС без платных сервисов',
             companies_without_paid_services_last_month,
             companies_without_paid_services_first_month,
-            companies_without_paid_services_last_month - companies_without_paid_services_first_month
+            companies_without_paid_services_first_month - companies_without_paid_services_last_month,
         ])
         worksheet.append([
             '% ИТС без платных сервисов',
             f'{coverage_its_without_paid_services_last_month}%',
             f'{coverage_its_without_paid_services_first_month}%',
-            f'{round(coverage_its_without_paid_services_last_month - coverage_its_without_paid_services_first_month, 2)}%'
+            f'{round(coverage_its_without_paid_services_first_month - coverage_its_without_paid_services_last_month, 2)}%'
         ])
         worksheet.append([])
     

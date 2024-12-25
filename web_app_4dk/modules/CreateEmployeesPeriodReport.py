@@ -109,8 +109,8 @@ def create_employees_period_report(req):
     ddmmyyyy_pattern = '%d.%m.%Y'
 
     start_filter = datetime(day=1, month=1, year=before_1_month_year)
-    #end_filter = datetime(day=1, month=datetime.now().month, year=before_1_month_year)
-    end_filter = datetime(day=1, month=1, year=before_1_month_year) #для теста, как будто уже янв 2025
+    #end_filter = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
+    end_filter = datetime(day=1, month=1, year=datetime.now().year+1) #для теста, как будто уже янв 2025
     last_day_of_last_year = datetime(day=31, month=12, year=before_1_month_year-1)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
@@ -131,7 +131,7 @@ def create_employees_period_report(req):
         first_month_deals_data = read_deals_data_file(12, before_1_month_year-1) #конец прошлого года
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #последний месяц
 
-        worksheet.append([user_name, '', f'{end_filter.year} г.'])
+        worksheet.append([user_name, '', f'{start_filter.year} г.'])
         worksheet.append([])
         worksheet.append([])
 
@@ -820,7 +820,7 @@ def create_employees_period_report(req):
         else:
             sold_deals = []
 
-        worksheet.append(['Продажи', f'за {end_filter.year} год, шт.', f'за {end_filter.year} год, руб'])
+        worksheet.append(['Продажи', f'за {start_filter.year} год, шт.', f'за {start_filter.year} год, руб'])
         for field_value in deal_group_field:
             if field_value['VALUE'] == 'Лицензии':
                 grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals)) # тип лицензия с купоном или лицензия
@@ -880,7 +880,7 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                'PROPERTY_1771': int(end_filter.year),
+                'PROPERTY_1771': int(start_filter.year),
             }
         })
         days_duty_amount = len(days_duty)

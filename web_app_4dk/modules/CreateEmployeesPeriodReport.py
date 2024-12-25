@@ -96,7 +96,7 @@ def create_employees_period_report(req):
 
     before_1_month_year = datetime.now().year
     #before_1_month = datetime.now().month - 1
-    before_1_month = 0 #для теста, как будто уже янв 2025
+    before_1_month = 12 #для теста, как будто уже янв 2025
 
     if before_1_month == 0:
         before_1_month = 12
@@ -110,7 +110,7 @@ def create_employees_period_report(req):
 
     start_filter = datetime(day=1, month=1, year=before_1_month_year)
     #end_filter = datetime(day=1, month=datetime.now().month, year=before_1_month_year)
-    end_filter = datetime(day=1, month=datetime.now().month+1, year=before_1_month_year) #для теста, как будто уже янв 2025
+    end_filter = datetime(day=1, month=1, year=before_1_month_year) #для теста, как будто уже янв 2025
     last_day_of_last_year = datetime(day=31, month=12, year=before_1_month_year-1)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']

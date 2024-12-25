@@ -95,8 +95,8 @@ def create_employees_period_report(req):
     deal_fields = b.get_all('crm.deal.fields')
 
     before_1_month_year = datetime.now().year
-    #before_1_month = datetime.now().month - 1
-    before_1_month = 11
+    before_1_month = datetime.now().month - 1
+    #before_1_month = 12 #для теста, как будто уже янв 2025
 
     if before_1_month == 0:
         before_1_month = 12
@@ -108,8 +108,10 @@ def create_employees_period_report(req):
  
     ddmmyyyy_pattern = '%d.%m.%Y'
 
-    start_filter = datetime(day=1, month=1, year=datetime.now().year)
-    end_filter = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
+    start_filter = datetime(day=1, month=1, year=before_1_month_year)
+    end_filter = datetime(day=1, month=datetime.now().month, year=before_1_month_year)
+    #end_filter = datetime(day=1, month=datetime.now().month+1, year=before_1_month_year) #для теста, как будто уже янв 2025
+    last_day_of_last_year = datetime(day=31, month=12, year=before_1_month_year-1)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -117,10 +119,6 @@ def create_employees_period_report(req):
 
     workbook = openpyxl.Workbook()
     report_name = f'Годовой_отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
-    month_names = {
-        1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август', 9: 'Сентябрь',
-        10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
-    }
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
@@ -130,7 +128,7 @@ def create_employees_period_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        first_month_deals_data = read_deals_data_file(12, datetime.now().year-1) #конец прошлого года
+        first_month_deals_data = read_deals_data_file(12, before_1_month_year-1) #конец прошлого года
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #последний месяц
 
         worksheet.append([user_name, '', f'{end_filter.year} г.'])
@@ -401,7 +399,7 @@ def create_employees_period_report(req):
                                              x not in its_otrasl_deals_first_month and x not in ofd_deals_first_month and
                                              x not in bitrix24_deals_first_month and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], first_month_deals_data))
         
-        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на 31.12.2023', 'Прирост с начала года'])
+        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -643,7 +641,7 @@ def create_employees_period_report(req):
             coverage_its_without_paid_services_first_month = 0
 
         
-        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на 31.12.2023', 'Прирост с начала года'])
+        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
         worksheet.append([
             'ИТС без сервисов',
             companies_without_services_last_month,
@@ -757,7 +755,7 @@ def create_employees_period_report(req):
             coverage_any_reporting_deals_first_month = 0
 
 
-        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {start_filter.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
+        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
@@ -883,8 +881,6 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                '>=PROPERTY_1769': int(start_filter.month),
-                '<=PROPERTY_1769': int(end_filter.month),
                 'PROPERTY_1771': int(end_filter.year),
             }
         })

@@ -754,7 +754,7 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             coverage_any_reporting_deals_first_month = 0
 
-
+        print(last_day_of_last_year)
         worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year}', 'Прирост с начала года'])
         worksheet.append([
             'Льготных отчетностей',

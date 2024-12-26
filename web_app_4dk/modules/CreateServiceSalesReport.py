@@ -239,7 +239,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     service_names = copy.deepcopy(service_deal_types)
     workbook = openpyxl.Workbook()
     filename = f'Отчет по сумме сервисов{time()}.xlsx'.replace(' ', '_')
-    departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие']
+    departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие','Битрикс']
 
     if update:
         google_access = gspread.service_account(f"/root/credentials/{authentication('Google')}")

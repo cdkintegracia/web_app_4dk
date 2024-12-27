@@ -239,7 +239,7 @@ def write_data_to_xlsx(data, month_titles=None, service_titles=None, month_count
     service_names = copy.deepcopy(service_deal_types)
     workbook = openpyxl.Workbook()
     filename = f'Отчет по сумме сервисов{time()}.xlsx'.replace(' ', '_')
-    departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие']
+    departments = ['ГО4', 'ГО3', 'ОВ', 'ЦС', 'Служебные', '4DK', 'Прочие','Битрикс']
 
     if update:
         google_access = gspread.service_account(f"/root/credentials/{authentication('Google')}")
@@ -479,7 +479,7 @@ def get_edo_list_elements():
 def find_all_responsibles(file_data, month, users_info):
     department_names = {29: 'ГО4', 27: 'ГО3', 5: 'ЦС', 231: 'ЛК', 225: 'ОВ', 1: '4DK', 233: 'Служебные',
                         363: 'Отдел развития'}
-    ignore_names = ['Иван Иванов', 'Максим Карпов', 'Борис Ишкин', 'Отчет Сервисный выезд', 'Робот Задач', 'Александра Семеновых']
+    ignore_names = ['Иван Иванов', 'Максим Карпов', 'Отчет Сервисный выезд', 'Робот Задач', 'Александра Семеновых']
     its_deal_value_field = f'{month} ИТС'
     service_deal_value_field = f'{month} Сервисы'
     for deal_info in file_data:

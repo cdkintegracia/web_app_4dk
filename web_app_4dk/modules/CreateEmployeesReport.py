@@ -1449,7 +1449,7 @@ def create_employees_report(req):
             'entityTypeId': '161',
             'filter': {
                 'assignedById': user_info['ID'],
-                'stageId': 'DT161_53:NEW',
+                'stageId': ['DT161_53:NEW', 'DT161_53:1'],
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
         })

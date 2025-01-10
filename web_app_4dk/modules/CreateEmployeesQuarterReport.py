@@ -83,7 +83,6 @@ def get_quarter_filter(month_number):
     else:
         quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
     #quarter_start_filter = datetime(day=1, month=quarter[0], year=datetime.now().year)
-    print(month_end)
     month_end = quarter[-1] + 1
     print(month_end)
     year_end=datetime.now().year

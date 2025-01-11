@@ -88,7 +88,8 @@ def get_quarter_filter(month_number):
     year_end=datetime.now().year
     if month_end == 13:
         month_end = 1
-        year_end = year_end + 1
+        #ibs 2025-01-11
+        #year_end = year_end + 1
     quarter_end_filter = datetime(day=1, month=month_end, year=year_end)
 
     return {

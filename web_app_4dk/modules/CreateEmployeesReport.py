@@ -1518,7 +1518,7 @@ def create_employees_report(req):
 
         if edo_companies_id:
             edo_companies = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1638093692254'],
+                'select': ['UF_CRM_1638093692254', 'UF_CRM_1638093750742'],
                 'filter': {
                     'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
                 }

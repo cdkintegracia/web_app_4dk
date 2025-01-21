@@ -541,19 +541,6 @@ def create_employees_period_report(req):
         ])
         worksheet.append([])
         
-        #Сверка 2.0
-        all_company = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1735194029'],
-                'filter': {
-                    'ASSIGNED_BY_ID': user_info['ID'],
-                }
-            })
-        company_sverka = list(filter(lambda x: x['UF_CRM_1735194029'] == '1', all_company))
-        
-        worksheet.append(['Сверка 2.0'])
-        worksheet.append(['Подключено', len(company_sverka)])
-        worksheet.append([])
-
         # Охват сервисами
         #Последний месяц
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data)))) #компании из сделок отв на последний месяц
@@ -1020,6 +1007,20 @@ def create_employees_period_report(req):
         worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь год
+        worksheet.append([])
+
+        #Сверка 2.0
+        all_company = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1735194029'],
+                'filter': {
+                    'ASSIGNED_BY_ID': user_info['ID'],
+                }
+            })
+        company_sverka = list(filter(lambda x: x['UF_CRM_1735194029'] == '1', all_company))
+        
+        worksheet.append(['Сверка 2.0'])
+        worksheet.append(['Подключено', len(company_sverka)])
+
         change_sheet_style(worksheet)
    
     workbook.save(report_name)

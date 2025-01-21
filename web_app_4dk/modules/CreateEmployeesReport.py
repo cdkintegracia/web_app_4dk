@@ -1524,6 +1524,41 @@ def create_employees_report(req):
                 }
             })
             edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
+
+            #спецоператоры эдо
+            try: 
+                operator_2ae = list(filter(lambda x: x['UF_CRM_1638093750742'] == '75', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2ae = 0
+            try: 
+                operator_2ae_doki = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1715', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2ae_doki = 0
+            try: 
+                operator_2be = list(filter(lambda x: x['UF_CRM_1638093750742'] == '77', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2be = 0
+            try: 
+                operator_2bm = list(filter(lambda x: x['UF_CRM_1638093750742'] == '73', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2bm = 0
+            try: 
+                operator_2al = list(filter(lambda x: x['UF_CRM_1638093750742'] == '437', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2al = 0
+            try: 
+                operator_2lb = list(filter(lambda x: x['UF_CRM_1638093750742'] == '439', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2lb = 0
+            try: 
+                operator_2bk = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1357', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2bk = 0
+            try: 
+                operator_2lt = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1831', edo_companies_count))
+            except ZeroDivisionError:
+                operator_2lt = 0
+
             edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
@@ -1570,9 +1605,39 @@ def create_employees_report(req):
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage])
+        if len(edo_companies_count) > 0:
+            if len(operator_2ae) > 0:
+                worksheet.append(['', '2AE', len(operator_2ae)])
+            if len(operator_2ae_doki) > 0:
+                worksheet.append(['', '2AE доки', len(operator_2ae_doki)])
+            if len(operator_2be) > 0:
+                worksheet.append(['', '2BE', len(operator_2be)])
+            if len(operator_2bm) > 0:
+                worksheet.append(['', '2BM', len(operator_2bm)])
+            if len(operator_2al) > 0:
+                worksheet.append(['', '2AL', len(operator_2al)])
+            if len(operator_2lb) > 0:
+                worksheet.append(['', '2LB', len(operator_2lb)])
+            if len(operator_2bk) > 0:
+                worksheet.append(['', '2BK', len(operator_2bk)])
+            if len(operator_2lt) > 0:
+                worksheet.append(['', '2LT', len(operator_2lt)])
         worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))])
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic])
+        worksheet.append([])
+
+        #Сверка 2.0
+        all_company = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1735194029'],
+                'filter': {
+                    'ASSIGNED_BY_ID': user_info['ID'],
+                }
+            })
+        company_sverka = list(filter(lambda x: x['UF_CRM_1735194029'] == '1', all_company))
+        
+        worksheet.append(['Сверка 2.0'])
+        worksheet.append(['Подключено', len(company_sverka)])
 
     workbook.save(report_name)
 

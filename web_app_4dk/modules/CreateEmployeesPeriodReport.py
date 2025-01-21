@@ -906,35 +906,35 @@ def create_employees_period_report(req):
 
             #спецоператоры эдо
             try: 
-                operator_2ae = list(filter(lambda x: x['UF_CRM_1638093750742'] == '75', edo_companies))
+                operator_2ae = list(filter(lambda x: x['UF_CRM_1638093750742'] == '75', edo_companies_count))
             except ZeroDivisionError:
                 operator_2ae = 0
             try: 
-                operator_2ae_doki = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1715', edo_companies))
+                operator_2ae_doki = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1715', edo_companies_count))
             except ZeroDivisionError:
                 operator_2ae_doki = 0
             try: 
-                operator_2be = list(filter(lambda x: x['UF_CRM_1638093750742'] == '77', edo_companies))
+                operator_2be = list(filter(lambda x: x['UF_CRM_1638093750742'] == '77', edo_companies_count))
             except ZeroDivisionError:
                 operator_2be = 0
             try: 
-                operator_2bm = list(filter(lambda x: x['UF_CRM_1638093750742'] == '73', edo_companies))
+                operator_2bm = list(filter(lambda x: x['UF_CRM_1638093750742'] == '73', edo_companies_count))
             except ZeroDivisionError:
                 operator_2bm = 0
             try: 
-                operator_2al = list(filter(lambda x: x['UF_CRM_1638093750742'] == '437', edo_companies))
+                operator_2al = list(filter(lambda x: x['UF_CRM_1638093750742'] == '437', edo_companies_count))
             except ZeroDivisionError:
                 operator_2al = 0
             try: 
-                operator_2lb = list(filter(lambda x: x['UF_CRM_1638093750742'] == '439', edo_companies))
+                operator_2lb = list(filter(lambda x: x['UF_CRM_1638093750742'] == '439', edo_companies_count))
             except ZeroDivisionError:
                 operator_2lb = 0
             try: 
-                operator_2bk = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1357', edo_companies))
+                operator_2bk = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1357', edo_companies_count))
             except ZeroDivisionError:
                 operator_2bk = 0
             try: 
-                operator_2lt = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1831', edo_companies))
+                operator_2lt = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1831', edo_companies_count))
             except ZeroDivisionError:
                 operator_2lt = 0
 

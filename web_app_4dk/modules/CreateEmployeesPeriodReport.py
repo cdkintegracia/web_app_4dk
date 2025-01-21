@@ -897,12 +897,47 @@ def create_employees_period_report(req):
 
         if edo_companies_id:
             edo_companies = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1638093692254'],
+                'select': ['UF_CRM_1638093692254', 'UF_CRM_1638093750742'],
                 'filter': {
                     'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
                 }
             })
             edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
+
+            #спецоператоры эдо
+            try: 
+                operator_2ae = list(filter(lambda x: x['UF_CRM_1638093750742'] == '75', edo_companies))
+            except ZeroDivisionError:
+                operator_2ae = 0
+            try: 
+                operator_2ae_doki = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1715', edo_companies))
+            except ZeroDivisionError:
+                operator_2ae_doki = 0
+            try: 
+                operator_2be = list(filter(lambda x: x['UF_CRM_1638093750742'] == '77', edo_companies))
+            except ZeroDivisionError:
+                operator_2be = 0
+            try: 
+                operator_2bm = list(filter(lambda x: x['UF_CRM_1638093750742'] == '73', edo_companies))
+            except ZeroDivisionError:
+                operator_2bm = 0
+            try: 
+                operator_2al = list(filter(lambda x: x['UF_CRM_1638093750742'] == '437', edo_companies))
+            except ZeroDivisionError:
+                operator_2al = 0
+            try: 
+                operator_2lb = list(filter(lambda x: x['UF_CRM_1638093750742'] == '439', edo_companies))
+            except ZeroDivisionError:
+                operator_2lb = 0
+            try: 
+                operator_2bk = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1357', edo_companies))
+            except ZeroDivisionError:
+                operator_2bk = 0
+            try: 
+                operator_2lt = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1831', edo_companies))
+            except ZeroDivisionError:
+                operator_2lt = 0
+
 
         else:
             edo_companies_count = []
@@ -953,6 +988,23 @@ def create_employees_period_report(req):
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
+        if edo_companies_count > 0:
+            if operator_2ae > 0:
+                worksheet.append(['', '2AE', len(operator_2ae)])
+            if operator_2ae_doki > 0:
+                worksheet.append(['', '2AE доки', len(operator_2ae_doki)])
+            if operator_2be > 0:
+                worksheet.append(['', '2BE', len(operator_2be)])
+            if operator_2bm > 0:
+                worksheet.append(['', '2BM', len(operator_2bm)])
+            if operator_2al > 0:
+                worksheet.append(['', '2AL', len(operator_2al)])
+            if operator_2lb > 0:
+                worksheet.append(['', '2LB', len(operator_2lb)])
+            if operator_2bk > 0:
+                worksheet.append(['', '2BK', len(operator_2bk)])
+            if operator_2lt > 0:
+                worksheet.append(['', '2LT', len(operator_2lt)])
         worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь год

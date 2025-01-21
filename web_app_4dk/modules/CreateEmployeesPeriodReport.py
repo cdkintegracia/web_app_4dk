@@ -989,21 +989,21 @@ def create_employees_period_report(req):
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
         if len(edo_companies_count) > 0:
-            if operator_2ae > 0:
+            if len(operator_2ae) > 0:
                 worksheet.append(['', '2AE', len(operator_2ae)])
-            if operator_2ae_doki > 0:
+            if len(operator_2ae_doki) > 0:
                 worksheet.append(['', '2AE доки', len(operator_2ae_doki)])
-            if operator_2be > 0:
+            if len(operator_2be) > 0:
                 worksheet.append(['', '2BE', len(operator_2be)])
-            if operator_2bm > 0:
+            if len(operator_2bm) > 0:
                 worksheet.append(['', '2BM', len(operator_2bm)])
-            if operator_2al > 0:
+            if len(operator_2al) > 0:
                 worksheet.append(['', '2AL', len(operator_2al)])
-            if operator_2lb > 0:
+            if len(operator_2lb) > 0:
                 worksheet.append(['', '2LB', len(operator_2lb)])
-            if operator_2bk > 0:
+            if len(operator_2bk) > 0:
                 worksheet.append(['', '2BK', len(operator_2bk)])
-            if operator_2lt > 0:
+            if len(operator_2lt) > 0:
                 worksheet.append(['', '2LT', len(operator_2lt)])
         worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
         worksheet.append(['% активных ИТС', active_its_coverage])

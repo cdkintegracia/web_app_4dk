@@ -988,7 +988,7 @@ def create_employees_period_report(req):
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
-        if edo_companies_count > 0:
+        if len(edo_companies_count) > 0:
             if operator_2ae > 0:
                 worksheet.append(['', '2AE', len(operator_2ae)])
             if operator_2ae_doki > 0:

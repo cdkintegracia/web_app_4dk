@@ -99,8 +99,11 @@ def create_employees_period_report(req):
     print(start_period)
     print(end_period)
 
-    before_1_month_year = datetime.now().year
-    before_1_month = datetime.now().month - 1
+    #before_1_month_year = datetime.now().year
+    #before_1_month = datetime.now().month - 1
+    before_1_month_year = end_period.year
+    before_1_month = end_period.month - 1
+    print(before_1_month)
     #before_1_month = 12 #для теста, как будто уже янв 2025
 
     if before_1_month == 0:

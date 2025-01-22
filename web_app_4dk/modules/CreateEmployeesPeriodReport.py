@@ -121,7 +121,7 @@ def create_employees_period_report(req):
     deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     workbook = openpyxl.Workbook()
-    report_name = f'Отчет_за_{start_filter}-{end_filter}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    report_name = f'Отчет_за_{start_filter.strftime(ddmmyyyy_pattern)}-{end_filter.strftime(ddmmyyyy_pattern)}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)

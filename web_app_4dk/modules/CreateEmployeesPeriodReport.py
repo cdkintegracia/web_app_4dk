@@ -94,10 +94,10 @@ def create_employees_period_report(req):
 
     deal_fields = b.get_all('crm.deal.fields')
 
-    start_period = datetime.strptime(req['start_date'])
-    end_period = datetime.fromisoformat(req['end_date']).timestamp()
+    start_period = datetime(req['start_date'])
+    #end_period = datetime.fromisoformat(req['end_date']).timestamp()
     print(start_period)
-    print(end_period)
+    #print(end_period)
 
     #before_1_month_year = datetime.now().year
     #before_1_month = datetime.now().month - 1

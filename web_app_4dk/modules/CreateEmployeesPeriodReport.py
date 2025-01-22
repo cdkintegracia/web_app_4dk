@@ -99,12 +99,8 @@ def create_employees_period_report(req):
     print(start_period)
     print(end_period)
 
-    #before_1_month_year = datetime.now().year
-    #before_1_month = datetime.now().month - 1
     before_1_month_year = end_period.year
-    before_1_month = end_period.month - 1
-    print(before_1_month)
-    #before_1_month = 12 #для теста, как будто уже янв 2025
+    before_1_month = end_period.month
 
     if before_1_month == 0:
         before_1_month = 12
@@ -116,17 +112,16 @@ def create_employees_period_report(req):
  
     ddmmyyyy_pattern = '%d.%m.%Y'
 
-    start_filter = datetime(day=1, month=1, year=before_1_month_year)
-    end_filter = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
-    #end_filter = datetime(day=1, month=1, year=datetime.now().year+1) #для теста, как будто уже янв 2025
-    last_day_of_last_year = datetime(day=31, month=12, year=before_1_month_year-1)
+    start_filter = start_period
+    end_filter = end_period + timedelta(days=1)
+    last_day_of_last_year = end_period
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
     deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     workbook = openpyxl.Workbook()
-    report_name = f'Годовой_отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    report_name = f'Отчет_за_{start_filter}-{end_filter}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
@@ -136,8 +131,8 @@ def create_employees_period_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        first_month_deals_data = read_deals_data_file(12, before_1_month_year-1) #конец прошлого года
-        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #последний месяц
+        first_month_deals_data = read_deals_data_file(start_period.month, start_period.year) #начало периода
+        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #конец периода
 
         worksheet.append([user_name, '', f'{start_filter.year} г.'])
         worksheet.append([])
@@ -1037,7 +1032,7 @@ def create_employees_period_report(req):
         return
 
     # Загрузка отчета в Битрикс
-    bitrix_folder_id = '828809'
+    bitrix_folder_id = '1246677'
     with open(report_name, 'rb') as file:
         report_file = file.read()
     report_file_base64 = str(base64.b64encode(report_file))[2:]
@@ -1048,7 +1043,7 @@ def create_employees_period_report(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по пользователям за год сформирован. {upload_report["DETAIL_URL"]}'})
+        'MESSAGE': f'Отчет по пользователям за период сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name) 
 
 

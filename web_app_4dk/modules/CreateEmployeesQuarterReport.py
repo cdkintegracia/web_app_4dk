@@ -1200,12 +1200,46 @@ def create_employees_quarter_report(req):
 
         if edo_companies_id_last_month:
             edo_companies_last_month = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1638093692254'],
+                'select': ['UF_CRM_1638093692254', 'UF_CRM_1638093750742'],
                 'filter': {
                     'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
                 }
             })
             edo_companies_count_last_month = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies_last_month))
+
+            #спецоператоры эдо
+            try: 
+                operator_2ae = list(filter(lambda x: x['UF_CRM_1638093750742'] == '75', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2ae = 0
+            try: 
+                operator_2ae_doki = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1715', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2ae_doki = 0
+            try: 
+                operator_2be = list(filter(lambda x: x['UF_CRM_1638093750742'] == '77', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2be = 0
+            try: 
+                operator_2bm = list(filter(lambda x: x['UF_CRM_1638093750742'] == '73', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2bm = 0
+            try: 
+                operator_2al = list(filter(lambda x: x['UF_CRM_1638093750742'] == '437', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2al = 0
+            try: 
+                operator_2lb = list(filter(lambda x: x['UF_CRM_1638093750742'] == '439', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2lb = 0
+            try: 
+                operator_2bk = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1357', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2bk = 0
+            try: 
+                operator_2lt = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1831', edo_companies_count_last_month))
+            except ZeroDivisionError:
+                operator_2lt = 0
         else:
             edo_companies_count_last_month = []
 
@@ -1275,11 +1309,74 @@ def create_employees_quarter_report(req):
         except ZeroDivisionError:
             active_its_coverage = 0
 
+        try:
+            operator_2ae_coverage = round((len(operator_2ae) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2ae_coverage = 0
+        try:
+            operator_2ae_doki_coverage = round((len(operator_2ae_doki) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2ae_doki_coverage = 0
+        try:
+            operator_2be_coverage = round((len(operator_2be) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2be_coverage = 0
+        try:
+            operator_2bm_coverage = round((len(operator_2bm) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2bm_coverage = 0
+        try:
+            operator_2al_coverage = round((len(operator_2al) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2al_coverage = 0
+        try:
+            operator_2lb_coverage = round((len(operator_2lb) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2lb_coverage = 0
+        try:
+            operator_2bk_coverage = round((len(operator_2bk) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2bk_coverage = 0
+        try:
+            operator_2lt_coverage = round((len(operator_2lt) / len(edo_companies_count_last_month)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2lt_coverage = 0
+
         worksheet.append(['ЭДО', 'Всего ИТС на конец квартала', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
+        if len(edo_companies_count_last_month) > 0:
+            if len(operator_2ae) > 0:
+                worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])
+            if len(operator_2ae_doki) > 0:
+                worksheet.append(['', '2AE доки', len(operator_2ae_doki), operator_2ae_doki_coverage])
+            if len(operator_2be) > 0:
+                worksheet.append(['', '2BE', len(operator_2be), operator_2be_coverage])
+            if len(operator_2bm) > 0:
+                worksheet.append(['', '2BM', len(operator_2bm), operator_2bm_coverage])
+            if len(operator_2al) > 0:
+                worksheet.append(['', '2AL', len(operator_2al), operator_2al_coverage])
+            if len(operator_2lb) > 0:
+                worksheet.append(['', '2LB', len(operator_2lb), operator_2lb_coverage])
+            if len(operator_2bk) > 0:
+                worksheet.append(['', '2BK', len(operator_2bk), operator_2bk_coverage])
+            if len(operator_2lt) > 0:
+                worksheet.append(['', '2LT', len(operator_2lt), operator_2lt_coverage])
         worksheet.append(['Компании с трафиком больше 1', traffic_more_than_1])
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic])
+        worksheet.append([])
+
+        #Сверка 2.0
+        all_company = b.get_all('crm.company.list', {
+                'select': ['UF_CRM_1735194029'],
+                'filter': {
+                    'ASSIGNED_BY_ID': user_info['ID'],
+                }
+            })
+        company_sverka = list(filter(lambda x: x['UF_CRM_1735194029'] == '1', all_company))
+        
+        worksheet.append(['Сверка 2.0'])
+        worksheet.append(['Подключено', len(company_sverka)])
 
         change_sheet_style(worksheet)
        

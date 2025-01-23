@@ -134,7 +134,7 @@ def create_employees_period_report(req):
         first_month_deals_data = read_deals_data_file(start_period.month, start_period.year) #начало периода
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #конец периода
 
-        worksheet.append([user_name, '', f'{start_filter.year} г.'])
+        worksheet.append([user_name, '', f'{start_filter.strftime(ddmmyyyy_pattern)}-{end_filter.strftime(ddmmyyyy_pattern)}'])
         worksheet.append([])
         worksheet.append([])
 
@@ -988,25 +988,58 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             active_its_coverage = 0
 
+        try:
+            operator_2ae_coverage = round((len(operator_2ae) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2ae_coverage = 0
+        try:
+            operator_2ae_doki_coverage = round((len(operator_2ae_doki) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2ae_doki_coverage = 0
+        try:
+            operator_2be_coverage = round((len(operator_2be) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2be_coverage = 0
+        try:
+            operator_2bm_coverage = round((len(operator_2bm) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2bm_coverage = 0
+        try:
+            operator_2al_coverage = round((len(operator_2al) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2al_coverage = 0
+        try:
+            operator_2lb_coverage = round((len(operator_2lb) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2lb_coverage = 0
+        try:
+            operator_2bk_coverage = round((len(operator_2bk) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2bk_coverage = 0
+        try:
+            operator_2lt_coverage = round((len(operator_2lt) / len(edo_companies_count)) * 100, 2)
+        except ZeroDivisionError:
+            operator_2lt_coverage = 0
+
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
         if len(edo_companies_count) > 0:
             if len(operator_2ae) > 0:
-                worksheet.append(['', '2AE', len(operator_2ae)])
+                worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])
             if len(operator_2ae_doki) > 0:
-                worksheet.append(['', '2AE доки', len(operator_2ae_doki)])
+                worksheet.append(['', '2AE доки', len(operator_2ae_doki), operator_2ae_doki_coverage])
             if len(operator_2be) > 0:
-                worksheet.append(['', '2BE', len(operator_2be)])
+                worksheet.append(['', '2BE', len(operator_2be), operator_2be_coverage])
             if len(operator_2bm) > 0:
-                worksheet.append(['', '2BM', len(operator_2bm)])
+                worksheet.append(['', '2BM', len(operator_2bm), operator_2bm_coverage])
             if len(operator_2al) > 0:
-                worksheet.append(['', '2AL', len(operator_2al)])
+                worksheet.append(['', '2AL', len(operator_2al), operator_2al_coverage])
             if len(operator_2lb) > 0:
-                worksheet.append(['', '2LB', len(operator_2lb)])
+                worksheet.append(['', '2LB', len(operator_2lb), operator_2lb_coverage])
             if len(operator_2bk) > 0:
-                worksheet.append(['', '2BK', len(operator_2bk)])
+                worksheet.append(['', '2BK', len(operator_2bk), operator_2bk_coverage])
             if len(operator_2lt) > 0:
-                worksheet.append(['', '2LT', len(operator_2lt)])
+                worksheet.append(['', '2LT', len(operator_2lt), operator_2lt_coverage])
         worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь период
         worksheet.append(['% активных ИТС', active_its_coverage])
         worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь период

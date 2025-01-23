@@ -10,8 +10,8 @@ b = Bitrix(authentication('Bitrix'))
 def send_satisfaction_assessment_message(req):
     #test = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})
     #print(test)
-    task_info = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})['task']
-    #task_info = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})
+    #task_info = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})['task']
+    task_info = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})
     if not task_info:
         return
     contact_id = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
@@ -21,7 +21,7 @@ def send_satisfaction_assessment_message(req):
     contact_info = b.get_all('crm.contact.get', {'ID': contact_id, 'select': ['PHONE']})
     contact_phones = list(map(lambda x: x['VALUE'], contact_info['PHONE']))
     #calls = b.get_all('voximplant.statistic.get', {
-    calls = b.call('voximplant.statistic.get', {
+    calls = b.get_all('voximplant.statistic.get', {
         'filter': {
             'CRM_ENTITY_TYPE': 'CONTACT',
             'PHONE_NUMBER': contact_phones,
@@ -30,13 +30,12 @@ def send_satisfaction_assessment_message(req):
             'PORTAL_USER_ID': task_info['responsibleId'],
             'CALL_TYPE': '1',
 
-        }},
-        raw=True)
+        }})
 
     if not calls:
         return
-    #call_phone_number = calls[0]['PHONE_NUMBER']
-    call_phone_number = calls['result'][0]['PHONE_NUMBER']
+    call_phone_number = calls[0]['PHONE_NUMBER']
+    #call_phone_number = calls['result'][0]['PHONE_NUMBER']
     if '812' in call_phone_number[:6]:
         return
 

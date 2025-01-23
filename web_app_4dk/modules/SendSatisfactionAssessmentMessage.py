@@ -8,6 +8,8 @@ b = Bitrix(authentication('Bitrix'))
 
 
 def send_satisfaction_assessment_message(req):
+    test = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})
+    print(test)
     task_info = b.get_all('tasks.task.get', {'taskId': req['task_id'], 'select': ['*', 'UF_*']})['task']
     if not task_info:
         return

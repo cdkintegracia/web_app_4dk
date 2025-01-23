@@ -114,7 +114,7 @@ def create_employees_period_report(req):
 
     start_filter = start_period
     end_filter = end_period + timedelta(days=1)
-    last_day_of_last_year = end_period
+    last_day_of_last_year = start_period
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
@@ -402,7 +402,7 @@ def create_employees_period_report(req):
                                              x not in its_otrasl_deals_first_month and x not in ofd_deals_first_month and
                                              x not in bitrix24_deals_first_month and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], first_month_deals_data))
         
-        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
+        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -643,7 +643,7 @@ def create_employees_period_report(req):
             coverage_its_without_paid_services_first_month = 0
 
         
-        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
+        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
         worksheet.append([
             'ИТС без сервисов',
             companies_without_services_last_month,
@@ -756,7 +756,7 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             coverage_any_reporting_deals_first_month = 0
 
-        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
+        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
@@ -822,7 +822,7 @@ def create_employees_period_report(req):
         else:
             sold_deals = []
 
-        worksheet.append(['Продажи', f'за {start_filter.year} год, шт.', f'за {start_filter.year} год, руб'])
+        worksheet.append(['Продажи', f'за {start_filter.year} период, шт.', f'за {start_filter.year} период, руб'])
         for field_value in deal_group_field:
             if field_value['VALUE'] == 'Лицензии':
                 grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals)) # тип лицензия с купоном или лицензия
@@ -855,7 +855,7 @@ def create_employees_period_report(req):
                                         datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), non_documents_debts))
 
 
-        worksheet.append(['Долги по документам', 'Всего выписано за год', 'Не сдано за год'])
+        worksheet.append(['Долги по документам', 'Всего выписано за период', 'Не сдано за период'])
         worksheet.append(['Штук', len(period_documents_debts), len(non_period_documents_debts)])
         worksheet.append([])
        
@@ -1007,9 +1007,9 @@ def create_employees_period_report(req):
                 worksheet.append(['', '2BK', len(operator_2bk)])
             if len(operator_2lt) > 0:
                 worksheet.append(['', '2LT', len(operator_2lt)])
-        worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
+        worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь период
         worksheet.append(['% активных ИТС', active_its_coverage])
-        worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь год
+        worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь период
         worksheet.append([])
 
         #Сверка 2.0

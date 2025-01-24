@@ -963,7 +963,7 @@ def create_employees_period_report(req):
             else:
                 current_date = current_date.replace(month=current_date.month + 1)
 
-        edo_elements_info = []
+        edo_elements_info = {}
         for month_year in period:
             part_edo_elements_info = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
@@ -985,7 +985,7 @@ def create_employees_period_report(req):
 
         traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
 
-        edo_elements_paid = []
+        edo_elements_paid = {}
         for month_year in period:
             part_edo_elements_paid = b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',

@@ -134,7 +134,7 @@ def create_employees_period_report(req):
         first_month_deals_data = read_deals_data_file(start_period.month, start_period.year) #начало периода
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #конец периода
 
-        worksheet.append([user_name, '', f'{start_period.strftime(ddmmyyyy_pattern)}-{end_period.strftime(ddmmyyyy_pattern)}'])
+        worksheet.append([user_name, '', f'{start_period.strftime(ddmmyyyy_pattern)} - {end_period.strftime(ddmmyyyy_pattern)}'])
         worksheet.append([])
         worksheet.append([])
 
@@ -882,7 +882,8 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                'PROPERTY_1771': int(start_filter.year),
+                '>=PROPERTY_1767': start_filter,
+                '<PROPERTY_1767': end_filter,
             }
         })
         days_duty_amount = len(days_duty)

@@ -973,10 +973,10 @@ def create_employees_period_report(req):
                 'filter': {
                         'PROPERTY_1579': edo_companies_id,
                         'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
-                        'PROPERTY_1569': month_year['year'],
+                        'PROPERTY_1569': year_codes[str(month_year['year'])],
                     }
             })
-            print(month_codes[month_int_names[month_year['month']]])
+            #print(month_codes[month_int_names[month_year['month']]])
             edo_elements_info += part_edo_elements_info
 
         edo_elements_info = list(map(lambda x: {

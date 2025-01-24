@@ -953,7 +953,7 @@ def create_employees_period_report(req):
         end_date = end_period.replace(day=1)
 
         while current_date <= end_date:
-            month_name = month_name[current_date.month]
+            month_name = current_date.month
             year = current_date.year
             period.append({'month': month_name, 'year': str(year)})
             

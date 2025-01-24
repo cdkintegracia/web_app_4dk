@@ -970,7 +970,7 @@ def create_employees_period_report(req):
                 'IBLOCK_ID': '235',
                 'filter': {
                         'PROPERTY_1579': edo_companies_id,
-                        'PROPERTY_1567': month_year['month'],
+                        'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
                         'PROPERTY_1569': month_year['year'],
                     }
             }))
@@ -991,8 +991,8 @@ def create_employees_period_report(req):
                 'IBLOCK_ID': '235',
                 'filter': {
                         'PROPERTY_1581': user_info['ID'],
-                        'PROPERTY_1567': month_year['month'],
-                        'PROPERTY_1569': month_year['year'],
+                        'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
+                        'PROPERTY_1569': year_codes[str(month_year['year'])],
                 }
             }))
 

@@ -131,7 +131,7 @@ def create_employees_period_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        first_month_deals_data = read_deals_data_file(start_period.month, start_period.year) #начало периода
+        first_month_deals_data = read_deals_data_file(last_day_of_start_period.month, last_day_of_start_period.year) #начало периода
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #конец периода
 
         worksheet.append([user_name, '', f'{start_period.strftime(ddmmyyyy_pattern)} - {end_period.strftime(ddmmyyyy_pattern)}'])

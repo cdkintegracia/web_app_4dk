@@ -963,7 +963,7 @@ def create_employees_period_report(req):
             else:
                 current_date = current_date.replace(month=current_date.month + 1)
 
-        print(period)
+        #print(period)
 
         edo_elements_info = []
         for month_year in period:
@@ -976,6 +976,7 @@ def create_employees_period_report(req):
                         'PROPERTY_1569': month_year['year'],
                     }
             })
+            print(month_codes[month_int_names[month_year['month']]])
             edo_elements_info += part_edo_elements_info
 
         edo_elements_info = list(map(lambda x: {

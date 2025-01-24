@@ -114,14 +114,14 @@ def create_employees_period_report(req):
 
     start_filter = start_period
     end_filter = end_period + timedelta(days=1)
-    last_day_of_last_year = start_period
+    last_day_of_start_period = start_period - timedelta(days=1)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
     deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     workbook = openpyxl.Workbook()
-    report_name = f'Отчет_за_{start_filter.strftime(ddmmyyyy_pattern)}-{end_filter.strftime(ddmmyyyy_pattern)}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    report_name = f'Отчет_за_{start_period.strftime(ddmmyyyy_pattern)}-{end_period.strftime(ddmmyyyy_pattern)}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
@@ -134,7 +134,7 @@ def create_employees_period_report(req):
         first_month_deals_data = read_deals_data_file(start_period.month, start_period.year) #начало периода
         before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #конец периода
 
-        worksheet.append([user_name, '', f'{start_filter.strftime(ddmmyyyy_pattern)}-{end_filter.strftime(ddmmyyyy_pattern)}'])
+        worksheet.append([user_name, '', f'{start_period.strftime(ddmmyyyy_pattern)}-{end_period.strftime(ddmmyyyy_pattern)}'])
         worksheet.append([])
         worksheet.append([])
 
@@ -402,7 +402,7 @@ def create_employees_period_report(req):
                                              x not in its_otrasl_deals_first_month and x not in ofd_deals_first_month and
                                              x not in bitrix24_deals_first_month and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], first_month_deals_data))
         
-        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
+        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_start_period.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -643,7 +643,7 @@ def create_employees_period_report(req):
             coverage_its_without_paid_services_first_month = 0
 
         
-        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
+        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_start_period.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
         worksheet.append([
             'ИТС без сервисов',
             companies_without_services_last_month,
@@ -756,7 +756,7 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             coverage_any_reporting_deals_first_month = 0
 
-        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
+        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_start_period.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
@@ -822,7 +822,7 @@ def create_employees_period_report(req):
         else:
             sold_deals = []
 
-        worksheet.append(['Продажи', f'за {start_filter.year} период, шт.', f'за {start_filter.year} период, руб'])
+        worksheet.append(['Продажи', f'за период, шт.', f'за период, руб'])
         for field_value in deal_group_field:
             if field_value['VALUE'] == 'Лицензии':
                 grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals)) # тип лицензия с купоном или лицензия

@@ -951,13 +951,14 @@ def create_employees_period_report(req):
         period = []
         current_date = start_period
         end_date = end_period.replace(day=1)
+        print(current_date)
+        print(end_date)
 
         while current_date <= end_date:
             month_name = current_date.month
             year = current_date.year
             period.append({'month': month_name, 'year': str(year)})
             
-            # Переходим к следующему месяцу
             if current_date.month == 12:
                 current_date = current_date.replace(year=current_date.year + 1, month=1)
             else:

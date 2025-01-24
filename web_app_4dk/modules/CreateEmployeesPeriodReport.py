@@ -882,8 +882,8 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                '>=PROPERTY_1767': start_filter,
-                '<PROPERTY_1767': end_filter,
+                '>=PROPERTY_1767': start_filter.strftime(ddmmyyyy_pattern),
+                '<PROPERTY_1767': end_filter.strftime(ddmmyyyy_pattern),
             }
         })
         days_duty_amount = len(days_duty)

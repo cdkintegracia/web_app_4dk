@@ -963,6 +963,8 @@ def create_employees_period_report(req):
             else:
                 current_date = current_date.replace(month=current_date.month + 1)
 
+        print(period)
+
         edo_elements_info = []
         for month_year in period:
             part_edo_elements_info = b.get_all('lists.element.get', {

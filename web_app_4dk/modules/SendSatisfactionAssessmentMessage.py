@@ -36,10 +36,18 @@ def send_satisfaction_assessment_message(req):
     if not calls:
         return
     #call_phone_number = calls[0]['PHONE_NUMBER']
+    '''
     call_phone_number = calls['result'][0]['PHONE_NUMBER']
     if '812' in call_phone_number[:6]:
         return
-
+    '''
+    try:
+        call_phone_number = calls['result'][0]['PHONE_NUMBER']
+        if '812' in call_phone_number[:6]:
+            return
+    except:
+        call_phone_number =''
+        
     contact_emails = b.get_all('crm.contact.get', {
         'ID': contact_id,
         'select': ['EMAIL']

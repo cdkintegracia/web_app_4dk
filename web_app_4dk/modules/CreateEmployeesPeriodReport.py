@@ -94,13 +94,9 @@ def create_employees_period_report(req):
 
     deal_fields = b.get_all('crm.deal.fields')
 
-    start_period = datetime.strptime(req['start_date'], "%d.%m.%Y")
-    end_period = datetime.strptime(req['end_date'], "%d.%m.%Y")
-    print(start_period)
-    print(end_period)
-
-    before_1_month_year = end_period.year
-    before_1_month = end_period.month
+    before_1_month_year = datetime.now().year
+    before_1_month = datetime.now().month - 1
+    #before_1_month = 12 #для теста, как будто уже янв 2025
 
     if before_1_month == 0:
         before_1_month = 12
@@ -112,16 +108,17 @@ def create_employees_period_report(req):
  
     ddmmyyyy_pattern = '%d.%m.%Y'
 
-    start_filter = start_period
-    end_filter = end_period + timedelta(days=1)
-    last_day_of_start_period = start_period - timedelta(days=1)
+    start_filter = datetime(day=1, month=1, year=before_1_month_year)
+    end_filter = datetime(day=1, month=datetime.now().month, year=datetime.now().year)
+    #end_filter = datetime(day=1, month=1, year=datetime.now().year+1) #для теста, как будто уже янв 2025
+    last_day_of_last_year = datetime(day=31, month=12, year=before_1_month_year-1)
 
     deal_group_field = deal_fields['UF_CRM_1657878818384']['items']
     deal_group_field.append({'ID': None, 'VALUE': 'Лицензии'})
     deal_group_field.append({'ID': None, 'VALUE': 'Остальные'})
 
     workbook = openpyxl.Workbook()
-    report_name = f'Отчет_за_{start_period.strftime(ddmmyyyy_pattern)}-{end_period.strftime(ddmmyyyy_pattern)}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    report_name = f'Годовой_отчет_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
@@ -131,10 +128,10 @@ def create_employees_period_report(req):
         else:
             worksheet = workbook.create_sheet(user_name)
 
-        first_month_deals_data = read_deals_data_file(last_day_of_start_period.month, last_day_of_start_period.year) #начало периода
-        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #конец периода
+        first_month_deals_data = read_deals_data_file(12, before_1_month_year-1) #конец прошлого года
+        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year) #последний месяц
 
-        worksheet.append([user_name, '', f'{start_period.strftime(ddmmyyyy_pattern)} - {end_period.strftime(ddmmyyyy_pattern)}'])
+        worksheet.append([user_name, '', f'{start_filter.year} г.'])
         worksheet.append([])
         worksheet.append([])
 
@@ -402,7 +399,7 @@ def create_employees_period_report(req):
                                              x not in its_otrasl_deals_first_month and x not in ofd_deals_first_month and
                                              x not in bitrix24_deals_first_month and x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'], first_month_deals_data))
         
-        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_start_period.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
+        worksheet.append(['Сделки', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'ИТС ПРОФ',
             len(its_prof_deals_last_month),
@@ -544,6 +541,7 @@ def create_employees_period_report(req):
         ])
         worksheet.append([])
         
+
         # Охват сервисами
         #Последний месяц
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data)))) #компании из сделок отв на последний месяц
@@ -643,7 +641,7 @@ def create_employees_period_report(req):
             coverage_its_without_paid_services_first_month = 0
 
         
-        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_start_period.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
+        worksheet.append(['Охват сервисами', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'ИТС без сервисов',
             companies_without_services_last_month,
@@ -756,7 +754,7 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             coverage_any_reporting_deals_first_month = 0
 
-        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_start_period.strftime("%d.%m.%Y")}', 'Прирост с начала периода'])
+        worksheet.append(['Отчетность', f'на {before_1_month_last_day_date}', f'на {last_day_of_last_year.strftime("%d.%m.%Y")}', 'Прирост с начала года'])
         worksheet.append([
             'Льготных отчетностей',
             len(free_reporting_deals_last_month),
@@ -822,7 +820,7 @@ def create_employees_period_report(req):
         else:
             sold_deals = []
 
-        worksheet.append(['Продажи', f'за период, шт.', f'за период, руб'])
+        worksheet.append(['Продажи', f'за {start_filter.year} год, шт.', f'за {start_filter.year} год, руб'])
         for field_value in deal_group_field:
             if field_value['VALUE'] == 'Лицензии':
                 grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals)) # тип лицензия с купоном или лицензия
@@ -855,7 +853,7 @@ def create_employees_period_report(req):
                                         datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp(), non_documents_debts))
 
 
-        worksheet.append(['Долги по документам', 'Всего выписано за период', 'Не сдано за период'])
+        worksheet.append(['Долги по документам', 'Всего выписано за год', 'Не сдано за год'])
         worksheet.append(['Штук', len(period_documents_debts), len(non_period_documents_debts)])
         worksheet.append([])
        
@@ -882,8 +880,7 @@ def create_employees_period_report(req):
             'IBLOCK_ID': '301',
             'filter': {
                 'PROPERTY_1753': user_info['ID'],
-                '>=PROPERTY_1767': start_filter.strftime(ddmmyyyy_pattern),
-                '<PROPERTY_1767': end_filter.strftime(ddmmyyyy_pattern),
+                'PROPERTY_1771': int(start_filter.year),
             }
         })
         days_duty_amount = len(days_duty)
@@ -900,47 +897,12 @@ def create_employees_period_report(req):
 
         if edo_companies_id:
             edo_companies = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1638093692254', 'UF_CRM_1638093750742'],
+                'select': ['UF_CRM_1638093692254'],
                 'filter': {
                     'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
                 }
             })
             edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
-
-            #спецоператоры эдо
-            try: 
-                operator_2ae = list(filter(lambda x: x['UF_CRM_1638093750742'] == '75', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2ae = 0
-            try: 
-                operator_2ae_doki = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1715', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2ae_doki = 0
-            try: 
-                operator_2be = list(filter(lambda x: x['UF_CRM_1638093750742'] == '77', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2be = 0
-            try: 
-                operator_2bm = list(filter(lambda x: x['UF_CRM_1638093750742'] == '73', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2bm = 0
-            try: 
-                operator_2al = list(filter(lambda x: x['UF_CRM_1638093750742'] == '437', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2al = 0
-            try: 
-                operator_2lb = list(filter(lambda x: x['UF_CRM_1638093750742'] == '439', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2lb = 0
-            try: 
-                operator_2bk = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1357', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2bk = 0
-            try: 
-                operator_2lt = list(filter(lambda x: x['UF_CRM_1638093750742'] == '1831', edo_companies_count))
-            except ZeroDivisionError:
-                operator_2lt = 0
-
 
         else:
             edo_companies_count = []
@@ -948,37 +910,15 @@ def create_employees_period_report(req):
         traffic_more_than_1 = []
         paid_traffic = 0
         
-        period = []
-        current_date = start_period
-        end_date = end_period.replace(day=1)
-        print(current_date)
-        print(end_date)
-
-        while current_date <= end_date:
-            month_name = current_date.month
-            year = current_date.year
-            period.append({'month': month_name, 'year': str(year)})
-            
-            if current_date.month == 12:
-                current_date = current_date.replace(year=current_date.year + 1, month=1)
-            else:
-                current_date = current_date.replace(month=current_date.month + 1)
-
-        #print(period)
-
-        edo_elements_info = []
-        for month_year in period:
-            part_edo_elements_info = b.get_all('lists.element.get', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '235',
-                'filter': {
-                        'PROPERTY_1579': edo_companies_id,
-                        'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
-                        'PROPERTY_1569': year_codes[str(month_year['year'])],
-                    }
-            })
-            #print(month_codes[month_int_names[month_year['month']]])
-            edo_elements_info += part_edo_elements_info
+        edo_elements_info = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '235',
+            'filter': {
+                'PROPERTY_1581': user_info['ID'],
+                'PROPERTY_1569': year_codes[str(before_1_month_year)],
+                '!PROPERTY_1579': '',
+                }
+        })
 
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
@@ -989,18 +929,14 @@ def create_employees_period_report(req):
 
         traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
 
-        edo_elements_paid = []
-        for month_year in period:
-            part_edo_elements_paid = b.get_all('lists.element.get', {
-                'IBLOCK_TYPE_ID': 'lists',
-                'IBLOCK_ID': '235',
-                'filter': {
-                        'PROPERTY_1581': user_info['ID'],
-                        'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
-                        'PROPERTY_1569': year_codes[str(month_year['year'])],
-                }
-            })
-            edo_elements_paid += part_edo_elements_paid
+        edo_elements_paid = b.get_all('lists.element.get', {
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '235',
+            'filter': {
+                'PROPERTY_1581': user_info['ID'],
+                'PROPERTY_1569': year_codes[str(before_1_month_year)],
+            }
+        })
 
         paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
         paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
@@ -1015,75 +951,11 @@ def create_employees_period_report(req):
         except ZeroDivisionError:
             active_its_coverage = 0
 
-        try:
-            operator_2ae_coverage = round((len(operator_2ae) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2ae_coverage = 0
-        try:
-            operator_2ae_doki_coverage = round((len(operator_2ae_doki) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2ae_doki_coverage = 0
-        try:
-            operator_2be_coverage = round((len(operator_2be) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2be_coverage = 0
-        try:
-            operator_2bm_coverage = round((len(operator_2bm) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2bm_coverage = 0
-        try:
-            operator_2al_coverage = round((len(operator_2al) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2al_coverage = 0
-        try:
-            operator_2lb_coverage = round((len(operator_2lb) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2lb_coverage = 0
-        try:
-            operator_2bk_coverage = round((len(operator_2bk) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2bk_coverage = 0
-        try:
-            operator_2lt_coverage = round((len(operator_2lt) / len(edo_companies_count)) * 100, 2)
-        except ZeroDivisionError:
-            operator_2lt_coverage = 0
-
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
-        if len(edo_companies_count) > 0:
-            if len(operator_2ae) > 0:
-                worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])
-            if len(operator_2ae_doki) > 0:
-                worksheet.append(['', '2AE доки', len(operator_2ae_doki), operator_2ae_doki_coverage])
-            if len(operator_2be) > 0:
-                worksheet.append(['', '2BE', len(operator_2be), operator_2be_coverage])
-            if len(operator_2bm) > 0:
-                worksheet.append(['', '2BM', len(operator_2bm), operator_2bm_coverage])
-            if len(operator_2al) > 0:
-                worksheet.append(['', '2AL', len(operator_2al), operator_2al_coverage])
-            if len(operator_2lb) > 0:
-                worksheet.append(['', '2LB', len(operator_2lb), operator_2lb_coverage])
-            if len(operator_2bk) > 0:
-                worksheet.append(['', '2BK', len(operator_2bk), operator_2bk_coverage])
-            if len(operator_2lt) > 0:
-                worksheet.append(['', '2LT', len(operator_2lt), operator_2lt_coverage])
-        worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь период
+        worksheet.append(['Компании с трафиком больше 1', len(set(map(lambda x: x['Компания'], traffic_more_than_1)))]) #уникальные за весь год
         worksheet.append(['% активных ИТС', active_its_coverage])
-        worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь период
-        worksheet.append([])
-
-        #Сверка 2.0
-        all_company = b.get_all('crm.company.list', {
-                'select': ['UF_CRM_1735194029'],
-                'filter': {
-                    'ASSIGNED_BY_ID': user_info['ID'],
-                }
-            })
-        company_sverka = list(filter(lambda x: x['UF_CRM_1735194029'] == '1', all_company))
-        
-        worksheet.append(['Сверка 2.0'])
-        worksheet.append(['Подключено', len(company_sverka)])
-
+        worksheet.append(['Сумма платного трафика', paid_traffic]) #за весь год
         change_sheet_style(worksheet)
    
     workbook.save(report_name)
@@ -1092,7 +964,7 @@ def create_employees_period_report(req):
         return
 
     # Загрузка отчета в Битрикс
-    bitrix_folder_id = '1246677'
+    bitrix_folder_id = '828809'
     with open(report_name, 'rb') as file:
         report_file = file.read()
     report_file_base64 = str(base64.b64encode(report_file))[2:]
@@ -1103,7 +975,7 @@ def create_employees_period_report(req):
     })
     b.call('im.notify.system.add', {
         'USER_ID': req['user_id'][5:],
-        'MESSAGE': f'Отчет по пользователям за период сформирован. {upload_report["DETAIL_URL"]}'})
+        'MESSAGE': f'Отчет по пользователям за год сформирован. {upload_report["DETAIL_URL"]}'})
     os.remove(report_name) 
 
 

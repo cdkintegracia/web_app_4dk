@@ -965,7 +965,7 @@ def create_employees_period_report(req):
 
         edo_elements_info = []
         for month_year in period:
-            edo_elements_info.append(b.get_all('lists.element.get', {
+            edo_elements_info.append({b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
                 'filter': {
@@ -973,7 +973,7 @@ def create_employees_period_report(req):
                         'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
                         'PROPERTY_1569': month_year['year'],
                     }
-            }))
+            })})
 
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
@@ -986,7 +986,7 @@ def create_employees_period_report(req):
 
         edo_elements_paid = []
         for month_year in period:
-            edo_elements_paid.append(b.get_all('lists.element.get', {
+            edo_elements_paid.append({b.get_all('lists.element.get', {
                 'IBLOCK_TYPE_ID': 'lists',
                 'IBLOCK_ID': '235',
                 'filter': {
@@ -994,7 +994,7 @@ def create_employees_period_report(req):
                         'PROPERTY_1567': month_codes[month_int_names[month_year['month']]],
                         'PROPERTY_1569': year_codes[str(month_year['year'])],
                 }
-            }))
+            })})
 
         paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
         paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))

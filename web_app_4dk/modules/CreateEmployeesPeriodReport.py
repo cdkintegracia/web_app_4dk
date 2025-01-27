@@ -161,7 +161,7 @@ def create_employees_period_report(req):
                                                 'Базовый' in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_1_month_deals_data))
-
+        
         countragent_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                    'Контрагент' in x['Тип'] and
                                                    x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
@@ -286,7 +286,7 @@ def create_employees_period_report(req):
                                              'Базовый' in x['Тип'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              first_month_deals_data))
-
+        '''
         countragent_deals_first_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 'Контрагент' in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
@@ -892,7 +892,7 @@ def create_employees_period_report(req):
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
-        
+        '''
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
@@ -995,7 +995,7 @@ def create_employees_period_report(req):
                     }
             })
             edo_elements_info += part_edo_elements_info
-        print(edo_elements_info['ID'])
+        print(len(edo_elements_info))
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
             'Компания': list(x['PROPERTY_1579'].values())[0],

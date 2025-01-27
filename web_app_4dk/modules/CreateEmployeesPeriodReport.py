@@ -995,7 +995,7 @@ def create_employees_period_report(req):
                     }
             })
             edo_elements_info += part_edo_elements_info
-        print(len(edo_elements_info))
+        
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
             'Компания': list(x['PROPERTY_1579'].values())[0],
@@ -1004,6 +1004,8 @@ def create_employees_period_report(req):
         }, edo_elements_info))
 
         traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
+        print(len(traffic_more_than_1))
+        print(traffic_more_than_1)
 
         edo_elements_paid = []
         for month_year in period:

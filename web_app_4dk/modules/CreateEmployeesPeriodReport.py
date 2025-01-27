@@ -981,7 +981,7 @@ def create_employees_period_report(req):
                         all_its.append(deals)
         
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-
+        print(len(all_its_last_month))
         traffic_more_than_1 = []
         paid_traffic = 0
 
@@ -998,7 +998,7 @@ def create_employees_period_report(req):
             })
             #print(month_codes[month_int_names[month_year['month']]])
             edo_elements_info += part_edo_elements_info
-
+        print(len(all_its_last_month))
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
             'Компания': list(x['PROPERTY_1579'].values())[0],
@@ -1023,7 +1023,7 @@ def create_employees_period_report(req):
 
         paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
         paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
-
+        print(len(all_its_last_month))
         try:
             edo_companies_coverage = round((len(edo_companies_count) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
@@ -1066,7 +1066,7 @@ def create_employees_period_report(req):
             operator_2lt_coverage = round((len(operator_2lt) / len(edo_companies_count)) * 100, 2)
         except ZeroDivisionError:
             operator_2lt_coverage = 0
-
+        print(len(all_its_last_month))
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
         if len(edo_companies_count) > 0:

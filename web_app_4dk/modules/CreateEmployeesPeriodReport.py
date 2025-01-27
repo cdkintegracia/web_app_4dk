@@ -897,13 +897,13 @@ def create_employees_period_report(req):
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
         
-        edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+        edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
 
         if edo_companies_id_last_month:
             edo_companies_last_month = b.get_all('crm.company.list', {
                 'select': ['UF_CRM_1638093692254', 'UF_CRM_1638093750742'],
                 'filter': {
-                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+                    'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
                 }
             })
             edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies_last_month))

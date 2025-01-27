@@ -952,7 +952,7 @@ def create_employees_period_report(req):
         period = []
         current_date = start_period
         end_date = end_period.replace(day=1)
-
+        print(len(all_its_last_month))
         while current_date <= end_date:
             month_name = current_date.month
             year = current_date.year
@@ -962,12 +962,12 @@ def create_employees_period_report(req):
                 current_date = current_date.replace(year=current_date.year + 1, month=1)
             else:
                 current_date = current_date.replace(month=current_date.month + 1)
-
+        print(len(all_its_last_month))
         all_its_first_month = its_prof_deals_first_month + its_base_deals_first_month #первый месяц периода итс без грм
         for deals in all_its_first_month:
                     if deals not in all_its:
                         all_its.append(deals)
-
+        print(len(all_its_last_month))
         if len(period) > 2:
             for month_year in period:
                 current_month_deals_data = read_deals_data_file(month_year['month'], month_year['year'])
@@ -998,7 +998,7 @@ def create_employees_period_report(req):
             })
             #print(month_codes[month_int_names[month_year['month']]])
             edo_elements_info += part_edo_elements_info
-        print(len(all_its_last_month))
+
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
             'Компания': list(x['PROPERTY_1579'].values())[0],
@@ -1023,7 +1023,7 @@ def create_employees_period_report(req):
 
         paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
         paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
-        print(len(all_its_last_month))
+
         try:
             edo_companies_coverage = round((len(edo_companies_count) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
@@ -1066,7 +1066,7 @@ def create_employees_period_report(req):
             operator_2lt_coverage = round((len(operator_2lt) / len(edo_companies_count)) * 100, 2)
         except ZeroDivisionError:
             operator_2lt_coverage = 0
-        print(len(all_its_last_month))
+
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
         worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
         if len(edo_companies_count) > 0:

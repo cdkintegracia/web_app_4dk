@@ -895,42 +895,18 @@ def create_employees_period_report(req):
         
         #НУЖНО СОБРАТЬ ВСЕ СДЕЛКИ ИЗ ФАЙЛОВ ЗА ПЕРИОД, НАЧАЛО И КОНЕЦ ЗАПРОШЕНЫ В НАЧАЛЕ КОДА
         # ЭДО
-        all_its = its_prof_deals_last_month + its_base_deals_last_month
-        all_its_first_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                x['Группа'] == 'ИТС' and
-                                'ГРМ' not in x['Тип'] and
-                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                first_month_deals_data))
-    
-        before_1_month_deals_data = read_deals_data_file(before_1_month, before_1_month_year)
+        all_its = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
+        
+        edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
-        if before_1_month not in [2, 5, 8, 11]:
-            name_month.append(month_codes[month_int_names[before_2_month]])
-            all_its_start_quarter = its_prof_deals_quarter + its_base_deals_quarter
-            for deals_1 in all_its_start_quarter:
-                if deals_1 not in all_its:
-                    all_its.append(deals_1)      
-            if before_1_month not in [1, 4, 7, 10]:
-                name_month.append(month_codes[month_int_names[before_3_month]])
-                all_its_deals_middle_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                x['Группа'] == 'ИТС' and
-                                                'ГРМ' not in x['Тип'] and
-                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
-                                                before_2_month_deals_data))
-                for deals_2 in all_its_deals_middle_month:
-                    if deals_2 not in all_its: 
-                        all_its.append(deals_2)
-
-        edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-
-        if edo_companies_id:
-            edo_companies = b.get_all('crm.company.list', {
+        if edo_companies_id_last_month:
+            edo_companies_last_month = b.get_all('crm.company.list', {
                 'select': ['UF_CRM_1638093692254', 'UF_CRM_1638093750742'],
                 'filter': {
                     'ID': list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
                 }
             })
-            edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies))
+            edo_companies_count = list(filter(lambda x: x['UF_CRM_1638093692254'] == '69', edo_companies_last_month))
 
             #спецоператоры эдо
             try: 
@@ -966,13 +942,10 @@ def create_employees_period_report(req):
             except ZeroDivisionError:
                 operator_2lt = 0
 
-
         else:
             edo_companies_count = []
 
-        traffic_more_than_1 = []
-        paid_traffic = 0
-        
+
         period = []
         current_date = start_period
         end_date = end_period.replace(day=1)
@@ -987,7 +960,27 @@ def create_employees_period_report(req):
             else:
                 current_date = current_date.replace(month=current_date.month + 1)
 
-        #print(period)
+        all_its_first_month = its_prof_deals_first_month + its_base_deals_first_month #первый месяц периода итс без грм
+        for deals in all_its_first_month:
+                    if deals not in all_its:
+                        all_its.append(deals)
+
+        if len(period) > 2:
+            for month_year in period:
+                current_month_deals_data = read_deals_data_file(month_year['month'], month_year['year'])
+                all_its_current_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                        x['Группа'] == 'ИТС' and
+                                        'ГРМ' not in x['Тип'] and
+                                        x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                        current_month_deals_data)) #месяц периода итс без грм
+                for deals in all_its_current_month:
+                    if deals not in all_its:
+                        all_its.append(deals)
+        
+        edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
+
+        traffic_more_than_1 = []
+        paid_traffic = 0
 
         edo_elements_info = []
         for month_year in period:

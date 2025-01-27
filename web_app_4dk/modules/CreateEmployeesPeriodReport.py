@@ -96,8 +96,8 @@ def create_employees_period_report(req):
 
     start_period = datetime.strptime(req['start_date'], "%d.%m.%Y")
     end_period = datetime.strptime(req['end_date'], "%d.%m.%Y")
-    print(start_period)
-    print(end_period)
+    #print(start_period)
+    #print(end_period)
 
     before_1_month_year = end_period.year
     before_1_month = end_period.month
@@ -893,7 +893,6 @@ def create_employees_period_report(req):
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
         
-        #НУЖНО СОБРАТЬ ВСЕ СДЕЛКИ ИЗ ФАЙЛОВ ЗА ПЕРИОД, НАЧАЛО И КОНЕЦ ЗАПРОШЕНЫ В НАЧАЛЕ КОДА
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
@@ -961,12 +960,13 @@ def create_employees_period_report(req):
                 current_date = current_date.replace(month=current_date.month + 1)
 
         all_its_first_month = its_prof_deals_first_month + its_base_deals_first_month #первый месяц периода итс без грм
-        print(len(all_its_last_month))
+
         for deals in all_its_first_month:
                     if deals not in all_its:
                         all_its.append(deals)
-        print(len(all_its_last_month))
+
         if len(period) > 2:
+            print(len(period))
             for month_year in period:
                 current_month_deals_data = read_deals_data_file(month_year['month'], month_year['year'])
                 all_its_current_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -977,9 +977,9 @@ def create_employees_period_report(req):
                 for deals in all_its_current_month:
                     if deals not in all_its:
                         all_its.append(deals)
-        print(len(all_its_last_month))
+
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
-        print(len(all_its_last_month))
+
         traffic_more_than_1 = []
         paid_traffic = 0
 
@@ -994,9 +994,8 @@ def create_employees_period_report(req):
                         'PROPERTY_1569': year_codes[str(month_year['year'])],
                     }
             })
-            #print(month_codes[month_int_names[month_year['month']]])
             edo_elements_info += part_edo_elements_info
-
+        print(edo_elements_info['ID'])
         edo_elements_info = list(map(lambda x: {
             'ID': x['ID'],
             'Компания': list(x['PROPERTY_1579'].values())[0],

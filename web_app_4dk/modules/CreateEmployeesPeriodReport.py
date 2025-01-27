@@ -896,6 +896,7 @@ def create_employees_period_report(req):
         #НУЖНО СОБРАТЬ ВСЕ СДЕЛКИ ИЗ ФАЙЛОВ ЗА ПЕРИОД, НАЧАЛО И КОНЕЦ ЗАПРОШЕНЫ В НАЧАЛЕ КОДА
         # ЭДО
         all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
+        print(len(all_its_last_month))
         
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
 
@@ -946,6 +947,7 @@ def create_employees_period_report(req):
             edo_companies_count = []
 
         all_its = all_its_last_month
+        print(len(all_its_last_month))
 
         period = []
         current_date = start_period

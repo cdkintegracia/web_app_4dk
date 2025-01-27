@@ -1023,12 +1023,12 @@ def create_employees_period_report(req):
         paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
 
         try:
-            edo_companies_coverage = round((len(edo_companies_count) / len(all_its)) * 100, 2)
+            edo_companies_coverage = round((len(edo_companies_count) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
             edo_companies_coverage = 0
 
         try:
-            active_its_coverage = round((len(traffic_more_than_1) / len(all_its)) * 100, 2)
+            active_its_coverage = round((len(traffic_more_than_1) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:
             active_its_coverage = 0
 

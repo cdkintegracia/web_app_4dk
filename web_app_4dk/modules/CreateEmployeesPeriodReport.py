@@ -1005,7 +1005,10 @@ def create_employees_period_report(req):
 
         traffic_more_than_1 = list(filter(lambda x: x['Сумма пакетов по владельцу'] > 1, edo_elements_info))
         print(len(traffic_more_than_1))
-        print(traffic_more_than_1)
+        list_comp = []
+        for element in traffic_more_than_1:
+            list_comp.append(element['ID'])
+        print(list_comp)
 
         edo_elements_paid = []
         for month_year in period:

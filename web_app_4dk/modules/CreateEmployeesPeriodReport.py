@@ -1007,8 +1007,8 @@ def create_employees_period_report(req):
         print(len(traffic_more_than_1))
         list_comp = []
         for element in traffic_more_than_1:
-            if element['ID'] not in list_comp:
-                list_comp.append(element['ID'])
+            if element['Компания'] not in list_comp:
+                list_comp.append(element['Компания'])
         print(list_comp)
 
         edo_elements_paid = []

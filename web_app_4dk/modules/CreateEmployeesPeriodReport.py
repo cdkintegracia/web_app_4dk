@@ -895,7 +895,7 @@ def create_employees_period_report(req):
         
         #НУЖНО СОБРАТЬ ВСЕ СДЕЛКИ ИЗ ФАЙЛОВ ЗА ПЕРИОД, НАЧАЛО И КОНЕЦ ЗАПРОШЕНЫ В НАЧАЛЕ КОДА
         # ЭДО
-        all_its = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
+        all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
         
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
@@ -945,6 +945,7 @@ def create_employees_period_report(req):
         else:
             edo_companies_count = []
 
+        all_its = all_its_last_month
 
         period = []
         current_date = start_period
@@ -1065,7 +1066,7 @@ def create_employees_period_report(req):
             operator_2lt_coverage = 0
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
+        worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
         if len(edo_companies_count) > 0:
             if len(operator_2ae) > 0:
                 worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])

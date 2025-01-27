@@ -947,12 +947,11 @@ def create_employees_period_report(req):
             edo_companies_count = []
 
         all_its = all_its_last_month
-        print(len(all_its_last_month))
 
         period = []
         current_date = start_period
         end_date = end_period.replace(day=1)
-        print(len(all_its_last_month))
+
         while current_date <= end_date:
             month_name = current_date.month
             year = current_date.year
@@ -964,6 +963,7 @@ def create_employees_period_report(req):
                 current_date = current_date.replace(month=current_date.month + 1)
         print(len(all_its_last_month))
         all_its_first_month = its_prof_deals_first_month + its_base_deals_first_month #первый месяц периода итс без грм
+        print(len(all_its_last_month))
         for deals in all_its_first_month:
                     if deals not in all_its:
                         all_its.append(deals)
@@ -979,7 +979,7 @@ def create_employees_period_report(req):
                 for deals in all_its_current_month:
                     if deals not in all_its:
                         all_its.append(deals)
-        
+        print(len(all_its_last_month))
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
         print(len(all_its_last_month))
         traffic_more_than_1 = []

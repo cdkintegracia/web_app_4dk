@@ -966,7 +966,7 @@ def create_employees_period_report(req):
                         all_its.append(deals)
 
         if len(period) > 2:
-            print(len(period))
+            #print(len(period))
             for month_year in period:
                 current_month_deals_data = read_deals_data_file(month_year['month'], month_year['year'])
                 all_its_current_month = list(filter(lambda x: x['Ответственный'] == user_name and

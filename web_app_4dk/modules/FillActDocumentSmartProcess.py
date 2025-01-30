@@ -57,8 +57,11 @@ def fill_act_document_smart_process(req):
             update_fields['assignedById'] = '91'  # задаем
             if element['ufCrm41_1690546413']: #если заполнено название компании в элементе
                 user_b24 = list(filter(lambda x: element['ufCrm41_1690283806'] == x['UF_USR_1690373869887'], users)) #находим инфо о пользователе, по значению поля СОУ в элементе мы ищем пользователя, в профиле есть поле СОУ
+                user_b24_provider = list(filter(lambda x: element['ufCrm41ProviderId'] == x['UF_USR_1690373869887'], users)) #2025-01-29
                 if user_b24:
                     update_fields['assignedById'] = user_b24[0]['ID'] #указываем юзера, если найден
+                if user_b24_provider: #2025-01-29
+                    update_fields['ufCrm41Provider'] = user_b24_provider[0]['ID']
 
             if element_filter == {'assignedById': ['91']} and update_fields['assignedById'] == '91':
                 bad_counter += 1

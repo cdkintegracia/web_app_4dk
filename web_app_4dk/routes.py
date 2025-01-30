@@ -96,8 +96,6 @@ from web_app_4dk.modules.CreateElapsedTimeEmploeeTaskReport import create_eladse
 from web_app_4dk.modules.CreateManagerReport import create_manager_report
 #2024-12-20
 from web_app_4dk.modules.CreateEmployeesPeriodReport import create_employees_period_report
-#test
-from web_app_4dk.modules.test_dolg import test_fill_act_document_smart_process
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -167,9 +165,7 @@ custom_webhooks = {
     #2024-10-14
     'create_manager_report': create_manager_report,
     #2024-12-20
-    'create_employees_period_report': create_employees_period_report,
-    #test
-    'test_fill_act_document_smart_process': test_fill_act_document_smart_process
+    'create_employees_period_report': create_employees_period_report
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

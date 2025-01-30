@@ -25,7 +25,7 @@ def test_fill_act_document_smart_process(req):
         }
     })
     filters = [
-        {'id': '30503'} #ИД элемента'
+        {'id': '30951'} #ИД элемента'
     ]
     for element_filter in filters:
         elements = b.get_all('crm.item.list', {

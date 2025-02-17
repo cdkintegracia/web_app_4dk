@@ -858,6 +858,23 @@ def create_employees_period_report(req):
         worksheet.append(['Долги по документам', 'Всего выписано за период', 'Не сдано за период'])
         worksheet.append(['Штук', len(period_documents_debts), len(non_period_documents_debts)])
         worksheet.append([])
+
+        #Разовые услуги
+        single_services = b.get_all('crm.item.list', {
+            'entityTypeId': '161',
+            'filter': {
+                'ufCrm41_Provider': user_info['ID'],
+                '>=ufCrm41_1689101272': start_filter.strftime(ddmmyyyy_pattern),
+                '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
+            },
+            'select': ['ufCrm41_1689101328']
+        })
+        sum_single_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), single_services)))
+        
+        worksheet.append(['Разовые услуги', 'За период'])
+        worksheet.append(['Кол-во', len(single_services)])
+        worksheet.append(['Стоимость', sum_single_services])
+        worksheet.append([])
        
         # Задачи
         tasks = b.get_all('tasks.task.list', {
@@ -982,6 +999,14 @@ def create_employees_period_report(req):
 
         traffic_more_than_1 = []
         paid_traffic = 0
+        operator_2ae = []
+        operator_2ae_doki = []
+        operator_2be = []
+        operator_2bm = []
+        operator_2al = []
+        operator_2lb = []
+        operator_2bk = []
+        operator_2lt = []
 
         edo_elements_info = []
         for month_year in period:

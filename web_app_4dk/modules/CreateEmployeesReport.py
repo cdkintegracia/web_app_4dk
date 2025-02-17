@@ -1476,6 +1476,7 @@ def create_employees_report(req):
             'select': ['ufCrm41_1689101328']
         })
         sum_single_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), single_services)))
+        
         worksheet.append(['Разовые услуги', 'За месяц'])
         worksheet.append(['Кол-во', len(single_services)])
         worksheet.append(['Стоимость', sum_single_services])

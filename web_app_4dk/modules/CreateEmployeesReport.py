@@ -1608,14 +1608,14 @@ def create_employees_report(req):
             edo_companies_count = []
             traffic_more_than_1 = []
             paid_traffic = 0
-            operator_2ae = 0
-            operator_2ae_doki = 0
-            operator_2be = 0
-            operator_2bm = 0
-            operator_2al = 0
-            operator_2lb = 0
-            operator_2bk = 0
-            operator_2lt = 0
+            operator_2ae = []
+            operator_2ae_doki = []
+            operator_2be = []
+            operator_2bm = []
+            operator_2al = []
+            operator_2lb = []
+            operator_2bk = []
+            operator_2lt = []
 
         try:
             edo_companies_coverage = round((len(edo_companies_count) / len(all_its)) * 100, 2)

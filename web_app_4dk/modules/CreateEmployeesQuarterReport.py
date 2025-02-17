@@ -1147,6 +1147,22 @@ def create_employees_quarter_report(req):
         worksheet.append(['Долги по документам', 'Всего выписано за квартал', 'Не сдано за квартал', 'Не сдано за предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), len(non_quarter_documents_debts), non_last_documents_debts])
         worksheet.append([])
+
+        #Разовые услуги
+        single_services = b.get_all('crm.item.list', {
+            'entityTypeId': '161',
+            'filter': {
+                'ufCrm41_Provider': user_info['ID'],
+                '>=ufCrm41_1689101272': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
+                '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
+            },
+            'select': ['ufCrm41_1689101328']
+        })
+        sum_single_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), single_services)))
+        worksheet.append(['Разовые услуги', 'За квартал'])
+        worksheet.append(['Кол-во', len(single_services)])
+        worksheet.append(['Стоимость', sum_single_services])
+        worksheet.append([])
        
         # Задачи
         tasks = b.get_all('tasks.task.list', {
@@ -1295,10 +1311,18 @@ def create_employees_quarter_report(req):
             })
             paid_traffic = list(filter(lambda x: int(list(x['PROPERTY_1573'].values())[0]) > 0 and int(list(x['PROPERTY_1575'].values())[0]) > 0, edo_elements_paid))
             paid_traffic = sum(list(map(lambda x: int(list(x['PROPERTY_1575'].values())[0]), paid_traffic)))
-
         else:
             traffic_more_than_1 = 0
             paid_traffic = 0
+            operator_2ae = []
+            operator_2ae_doki = []
+            operator_2be = []
+            operator_2bm = []
+            operator_2al = []
+            operator_2lb = []
+            operator_2bk = []
+            operator_2lt = []
+
         try:
             edo_companies_coverage = round((len(edo_companies_count_last_month) / len(all_its_last_month)) * 100, 2)
         except ZeroDivisionError:

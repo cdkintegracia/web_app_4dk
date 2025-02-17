@@ -1465,6 +1465,21 @@ def create_employees_report(req):
         worksheet.append(['Штук', len(quarter_documents_debts), non_quarter_documents_debts])
         worksheet.append([])
 
+        #Разовые услуги
+        single_services = b.get_all('crm.item.list', {
+            'entityTypeId': '161',
+            'filter': {
+                'ufCrm41_Provider': user_info['ID'],
+                '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern)
+            },
+            'select': ['ufCrm41_1689101328']
+        })
+        worksheet.append(['Разовые услуги', 'За месяц'])
+        worksheet.append(['Кол-во', len(single_services)])
+        worksheet.append(['Стоимость', sum(single_services['ufCrm41_1689101328'])])
+        worksheet.append([])
+
         # Задачи
         tasks = b.get_all('tasks.task.list', {
             'filter': {

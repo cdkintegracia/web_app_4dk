@@ -1469,8 +1469,9 @@ def create_employees_report(req):
         #Разовые услуги
         sold_services = list(filter(lambda x: x['ufCrm41_Provider'] is not None and 
                                     month_filter_start.strftime(ddmmyyyy_pattern) <=
-                                    x['ufCrm41_1689101272'])
-                                    < month_filter_end.strftime(ddmmyyyy_pattern), documents)
+                                    x['ufCrm41_1689101272']
+                                    < month_filter_end.strftime(ddmmyyyy_pattern), documents))
+        
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
 
         provide_services = b.get_all('crm.item.list', {

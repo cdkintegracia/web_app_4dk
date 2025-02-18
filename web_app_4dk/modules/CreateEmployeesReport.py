@@ -1452,7 +1452,7 @@ def create_employees_report(req):
                 'assignedById': user_info['ID'],
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             },
-            'select': ['stageId', 'ufCrm41_1689101328']
+            'select': ['stageId', 'ufCrm41_1689101328','ufCrm41_Provider']
         })
         documents_debts = list(filter(lambda x: x['stageId'] in ['DT161_53:NEW', 'DT161_53:1'], documents))
         quarter_documents_debts = list(filter(lambda x:

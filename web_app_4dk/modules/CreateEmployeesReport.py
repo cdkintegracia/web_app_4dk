@@ -1446,14 +1446,15 @@ def create_employees_report(req):
 
 
         # Долги по документам
-        documents_debts = b.get_all('crm.item.list', {
+        documents = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'filter': {
                 'assignedById': user_info['ID'],
-                'stageId': ['DT161_53:NEW', 'DT161_53:1'],
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
-            }
+            },
+            'select': ['ufCrm41_1689101328']
         })
+        documents_debts = list(filter(lambda x: x['stageId'] in ['DT161_53:NEW', 'DT161_53:1'], documents))
         quarter_documents_debts = list(filter(lambda x:
                                               quarter_filters['start_date'].timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
@@ -1466,7 +1467,13 @@ def create_employees_report(req):
         worksheet.append([])
 
         #Разовые услуги
-        single_services = b.get_all('crm.item.list', {
+        sold_services = list(filter(lambda x: x['ufCrm41_Provider'] is not None and 
+                                    month_filter_start.strftime(ddmmyyyy_pattern) <=
+                                    x['ufCrm41_1689101272'])
+                                    < month_filter_end.strftime(ddmmyyyy_pattern), documents)
+        sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
+
+        provide_services = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'filter': {
                 'ufCrm41_Provider': user_info['ID'],
@@ -1475,11 +1482,11 @@ def create_employees_report(req):
             },
             'select': ['ufCrm41_1689101328']
         })
-        sum_single_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), single_services)))
+        sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
         
-        worksheet.append(['Разовые услуги', 'За месяц'])
-        worksheet.append(['Кол-во', len(single_services)])
-        worksheet.append(['Стоимость', sum_single_services])
+        worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])
+        worksheet.append(['Кол-во', len(provide_services), len(sold_services)])
+        worksheet.append(['Сумма', sum_provide_services, sum_sold_services])
         worksheet.append([])
 
         # Задачи

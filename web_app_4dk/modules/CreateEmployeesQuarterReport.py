@@ -1148,7 +1148,7 @@ def create_employees_quarter_report(req):
         worksheet.append([])
 
         #Разовые услуги
-        single_services = b.get_all('crm.item.list', {
+        single_service = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {

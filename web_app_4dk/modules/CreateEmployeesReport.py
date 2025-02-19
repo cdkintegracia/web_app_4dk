@@ -1475,7 +1475,8 @@ def create_employees_report(req):
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern),
             }
         })
-        print(len(single_service))
+        print(user_info['ID'])
+        print(single_service)
 
         sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))

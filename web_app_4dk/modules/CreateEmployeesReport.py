@@ -1448,11 +1448,11 @@ def create_employees_report(req):
         # Долги по документам
         documents = b.get_all('crm.item.list', {
             'entityTypeId': '161',
+            'select': ['stageId', 'ufCrm41_1689101328', 'ufCrm41_1689101272', 'ufCrm41_Provider'],
             'filter': {
                 'assignedById': user_info['ID'],
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
-            },
-            'select': ['stageId', 'ufCrm41_1689101328', 'ufCrm41_1689101272', 'ufCrm41_Provider']
+            }
         })
         documents_debts = list(filter(lambda x: x['stageId'] in ['DT161_53:NEW', 'DT161_53:1'], documents))
         quarter_documents_debts = list(filter(lambda x:
@@ -1476,12 +1476,12 @@ def create_employees_report(req):
 
         provide_services = b.get_all('crm.item.list', {
             'entityTypeId': '161',
+            'select': ['ufCrm41_1689101328'],
             'filter': {
                 'ufCrm41_Provider': user_info['ID'],
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern)
-            },
-            'select': ['ufCrm41_1689101328']
+            }
         })
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
         

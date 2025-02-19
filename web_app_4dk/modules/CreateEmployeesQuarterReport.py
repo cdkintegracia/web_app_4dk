@@ -1130,7 +1130,6 @@ def create_employees_quarter_report(req):
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
         })
-
         non_documents_debts = list(filter(lambda x: x['stageId'] in ['DT161_53:NEW', 'DT161_53:1'], documents_debts)) #все незакрытые долги
 
         quarter_documents_debts = list(filter(lambda x: #все выписанные долги за квартал
@@ -1151,18 +1150,23 @@ def create_employees_quarter_report(req):
         #Разовые услуги
         single_services = b.get_all('crm.item.list', {
             'entityTypeId': '161',
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
-                'ufCrm41_Provider': user_info['ID'],
+                '!ufCrm41_Provider': None,
                 '>=ufCrm41_1689101272': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
-            },
-            'select': ['ufCrm41_1689101328']
+            }
         })
-        sum_single_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), single_services)))
         
-        worksheet.append(['Разовые услуги', 'За квартал'])
-        worksheet.append(['Кол-во', len(single_services)])
-        worksheet.append(['Стоимость', sum_single_services])
+        provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))
+        sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
+
+        sold_services = list(filter(lambda x: x['assignedById'] == float(user_info['ID']), single_service))
+        sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
+        
+        worksheet.append(['Разовые услуги, за квартал', 'Оказано услуг', 'Продано услуг'])
+        worksheet.append(['Кол-во', len(provide_services), len(sold_services)])
+        worksheet.append(['Сумма', sum_provide_services, sum_sold_services])
         worksheet.append([])
        
         # Задачи

@@ -867,8 +867,7 @@ def create_employees_period_report(req):
                 '!ufCrm41_Provider': None,
                 '>=ufCrm41_1689101272': start_filter.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
-            },
-            'select': ['ufCrm41_1689101328']
+            }
         })
 
         provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))

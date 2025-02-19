@@ -1446,15 +1446,14 @@ def create_employees_report(req):
 
 
         # Долги по документам
-        documents = b.get_all('crm.item.list', {
+        documents_debts = b.get_all('crm.item.list', {
             'entityTypeId': '161',
-            'select': ['stageId', 'ufCrm41_1689101328', 'ufCrm41_1689101272', 'ufCrm41_Provider'],
             'filter': {
                 'assignedById': user_info['ID'],
+                'stageId': ['DT161_53:NEW', 'DT161_53:1'],
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
         })
-        documents_debts = list(filter(lambda x: x['stageId'] in ['DT161_53:NEW', 'DT161_53:1'], documents))
         quarter_documents_debts = list(filter(lambda x:
                                               quarter_filters['start_date'].timestamp() <=
                                               datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
@@ -1467,22 +1466,20 @@ def create_employees_report(req):
         worksheet.append([])
 
         #Разовые услуги
-        sold_services = list(filter(lambda x: x['ufCrm41_Provider'] is not None and 
-                                    month_filter_start.timestamp() <=
-                                    datetime.fromisoformat(x['ufCrm41_1689101272']).timestamp()
-                                    < month_filter_end.timestamp(), documents))
-        
-        sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
-
-        provide_services = b.get_all('crm.item.list', {
+        single_service = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'select': ['ufCrm41_1689101328'],
             'filter': {
-                'ufCrm41_Provider': user_info['ID'],
+                '!ufCrm41_Provider': None,
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
-                '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern)
+                '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern),
             }
         })
+
+        sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
+        sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
+
+        provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == user_info['ID'], single_service))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
         
         worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])

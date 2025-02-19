@@ -1702,6 +1702,8 @@ def create_employees_report(req):
                     'ASSIGNED_BY_ID': user_info['ID'],
                 }
             })
+        print(all_company)
+        print(all_company[0]['UF_CRM_1735194029'])
         company_sverka = list(filter(lambda x: x['UF_CRM_1735194029'] == '1', all_company))
         
         worksheet.append(['Сверка 2.0'])

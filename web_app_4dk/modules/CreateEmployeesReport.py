@@ -1468,7 +1468,7 @@ def create_employees_report(req):
         #Разовые услуги
         single_service = b.get_all('crm.item.list', {
             'entityTypeId': '161',
-            'select': ['ufCrm41_1689101328'],
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
                 '!ufCrm41_Provider': None,
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),

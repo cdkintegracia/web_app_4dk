@@ -20,6 +20,11 @@ def send_satisfaction_assessment_message(req):
     contact_id = contact_id[0][2:]
     contact_info = b.get_all('crm.contact.get', {'ID': contact_id, 'select': ['PHONE']})
     contact_phones = list(map(lambda x: x['VALUE'], contact_info['PHONE']))
+
+    company_id = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
+    if company_id:
+        company_id = company_id[0][3:]
+        
     #calls = b.get_all('voximplant.statistic.get', {
     calls = b.call('voximplant.statistic.get', {
         'filter': {
@@ -64,6 +69,7 @@ def send_satisfaction_assessment_message(req):
             'ufCrm39_1687268735735': call_phone_number,
             'ufCrm39_1687176023': req['task_id'],
             'ufCrm39_1687955868': contact_email,
+            'ufCrm39IdCompany': company_id,
             'title': req['task_id'],
             'assigned_by_id': '173',
             'created_by': '173',

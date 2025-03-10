@@ -99,7 +99,7 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
         temp['Ответственный за компанию'] = company_user
         temp['Регномер'] = deal['UF_CRM_1640523562691']
         #temp['Дата проверки оплаты'] = (datetime.fromisoformat(deal['UF_CRM_1638958630625'])).strftime(string_date_format) if deal['UF_CRM_1638958630625'] else ''
-        (datetime.fromisoformat(deal['UF_CRM_1638958630625'])).strftime(string_date_format) + ' 03:00:00' if deal['UF_CRM_1638958630625'] else ''
+        temp['Дата проверки оплаты'] = (datetime.fromisoformat(deal['UF_CRM_1638958630625'])).strftime(string_date_format) + ' 03:00:00' if deal['UF_CRM_1638958630625'] else ''
         formatted_deals_info.append(temp)
 
     workbook = openpyxl.Workbook()

@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/TaskHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/TaskHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/CreateCurrentMonthDealsDataFile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -421,6 +421,18 @@
       <workItem from="1693360419037" duration="2003000" />
       <workItem from="1693913475382" duration="687000" />
       <workItem from="1706197878973" duration="1220000" />
+      <workItem from="1741869564206" duration="1653000" />
+      <workItem from="1742055198251" duration="1662000" />
+      <workItem from="1742121498639" duration="1856000" />
+      <workItem from="1742451221567" duration="448000" />
+      <workItem from="1742545356775" duration="1343000" />
+      <workItem from="1742885039100" duration="1438000" />
+      <workItem from="1742971322444" duration="683000" />
+      <workItem from="1743164208643" duration="1198000" />
+      <workItem from="1743570801188" duration="17000" />
+      <workItem from="1745408908513" duration="605000" />
+      <workItem from="1745749048853" duration="119000" />
+      <workItem from="1745905367835" duration="2239000" />
     </task>
     <servers />
   </component>

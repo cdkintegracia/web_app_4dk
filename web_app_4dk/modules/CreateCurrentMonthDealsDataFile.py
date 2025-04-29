@@ -1,7 +1,6 @@
 import os
 import dateutil.parser
 from datetime import datetime
-import asyncio
 
 from fast_bitrix24 import Bitrix
 import openpyxl
@@ -13,14 +12,6 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 #deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
 deals_info_files_directory = f'/root/web_app_4dk/web_app_4dk/modules/deals_info_files/'
-
-
-def get_companies(companies_id: list):
-    return asyncio.run(b.get_all('crm.company.list', {
-        'filter': {
-            'ID': list(companies_id)
-        }
-    }))
 
 def create_current_month_deals_data_file(user_data=None, user_id='1'):
     if not user_data:
@@ -57,14 +48,11 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
         ],
         'filter': {'CATEGORY_ID': '1'}})
     companies_id = list(set(map(lambda x: x['COMPANY_ID'], list(filter(lambda x: 'COMPANY_ID' in x and x['COMPANY_ID'], deals_info)))))
-    '''
     companies_info = b.get_all('crm.company.list', {
         'filter': {
             'ID': list(companies_id)
         }
     })
-    '''
-    companies_info = get_companies(companies_id)
 
     string_date_format = '%d.%m.%Y'
     formatted_deals_info = []

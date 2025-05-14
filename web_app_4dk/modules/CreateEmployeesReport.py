@@ -1455,11 +1455,11 @@ def create_employees_report(req):
                     #массив с инфой о продажах со сделками
                     for deal_last_month in old_sold_deals:
                         try:
-                            print(deal_last_month['ID'])
+                            #print(deal_last_month['ID'])
                             deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             if deal:
-                                list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': oldsales['ufCrm3_1654248264']})
+                                list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': deal_last_month['ufCrm3_1654248264']})
                         except:
                             #2024-09-10 saa
                             #users_id = ['1391', '1']

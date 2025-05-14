@@ -1446,7 +1446,8 @@ def create_employees_report(req):
 
             #источники внесенные НЕ вовремя
             if oldsales:
-                deal_ids_old = {int(sale['parentId2']) for sale in oldsales}
+                deal_ids_old = {sale['parentId2'] for sale in oldsales}
+                print(deal_ids_old)
                 old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
 
                 #массив с инфой о продажах со сделками

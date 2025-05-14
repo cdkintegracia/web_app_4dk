@@ -1425,22 +1425,23 @@ def create_employees_report(req):
             #источники внесенные вовремя
             if sales:
                 deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
-                sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, deals))
+                if deal_ids_new:
+                    sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, deals))
 
-                #массив с инфой о продажах со сделками
-                for deal_last_month in sold_deals:
-                    try:
-                        deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
-                        title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                        if deal:
-                            list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
-                    except:
-                        #2024-09-10 saa
-                        users_id = ['1391', '1']
-                        for user_id in users_id:
-                            b.call('im.notify.system.add', {
-                                'USER_ID': user_id,
-                                'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+                    #массив с инфой о продажах со сделками
+                    for deal_last_month in sold_deals:
+                        try:
+                            deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
+                            title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                            if deal:
+                                list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                        except:
+                            #2024-09-10 saa
+                            users_id = ['1391', '1']
+                            for user_id in users_id:
+                                b.call('im.notify.system.add', {
+                                    'USER_ID': user_id,
+                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
             else:
                 sold_deals = []
 
@@ -1448,23 +1449,24 @@ def create_employees_report(req):
             if oldsales:
                 deal_ids_old = {int(sale['parentId2']) for sale in oldsales if sale['parentId2'] is not None}
                 print(deal_ids_old)
-                old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
+                if deal_ids_old:
+                    old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
 
-                #массив с инфой о продажах со сделками
-                for deal_last_month in old_sold_deals:
-                    try:
-                        deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
-                        title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                        if deal:
-                            list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': oldsales['ufCrm3_1654248264']})
-                    except:
-                        #2024-09-10 saa
-                        #users_id = ['1391', '1']
-                        users_id = ['1391']
-                        for user_id in users_id:
-                            b.call('im.notify.system.add', {
-                                'USER_ID': user_id,
-                                'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+                    #массив с инфой о продажах со сделками
+                    for deal_last_month in old_sold_deals:
+                        try:
+                            deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
+                            title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                            if deal:
+                                list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': oldsales['ufCrm3_1654248264']})
+                        except:
+                            #2024-09-10 saa
+                            #users_id = ['1391', '1']
+                            users_id = ['1391']
+                            for user_id in users_id:
+                                b.call('im.notify.system.add', {
+                                    'USER_ID': user_id,
+                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
 
         else:
             sold_deals = []

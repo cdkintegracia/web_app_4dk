@@ -1459,7 +1459,7 @@ def create_employees_report(req):
                             #print(deal['ID'])
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             print(oldsales['parentId2'])
-                            print(0)
+                            print('0')
                             date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['ufCrm3_1654248264']
                             print(date_sale)
                             print(str(date_sale))

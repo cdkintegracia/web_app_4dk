@@ -1407,7 +1407,7 @@ def create_employees_report(req):
         list_of_oldsales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'DATE_SALE': 'Дата продажи'}])
 
         all_sales = sales + oldsales
-        print(count(all_sales))
+        print(len(all_sales))
 
         if all_sales:
             deals = b.get_all('crm.deal.list', {

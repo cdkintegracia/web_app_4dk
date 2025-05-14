@@ -1424,7 +1424,7 @@ def create_employees_report(req):
 
             #источники внесенные вовремя
             if sales:
-                deal_ids_new = {int(sale['parentId2']) for sale in sales}
+                deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
                 sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, deals))
 
                 #массив с инфой о продажах со сделками
@@ -1446,7 +1446,7 @@ def create_employees_report(req):
 
             #источники внесенные НЕ вовремя
             if oldsales:
-                deal_ids_old = {sale['parentId2'] for sale in oldsales}
+                deal_ids_old = {int(sale['parentId2']) for sale in oldsales if sale['parentId2'] is not None}
                 print(deal_ids_old)
                 old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
 
@@ -1459,7 +1459,8 @@ def create_employees_report(req):
                             list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': oldsales['ufCrm3_1654248264']})
                     except:
                         #2024-09-10 saa
-                        users_id = ['1391', '1']
+                        #users_id = ['1391', '1']
+                        users_id = ['1391']
                         for user_id in users_id:
                             b.call('im.notify.system.add', {
                                 'USER_ID': user_id,

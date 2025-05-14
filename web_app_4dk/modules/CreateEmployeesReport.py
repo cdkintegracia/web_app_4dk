@@ -1415,7 +1415,6 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['parentId2'], all_sales))
                 }
             })
-            print(len(deals))
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
@@ -1426,7 +1425,7 @@ def create_employees_report(req):
             #источники внесенные вовремя
             if sales:
                 deal_ids_new = {sale['parentId2'] for sale in sales}
-                print(len(deal_ids_new))
+                print(deal_ids_new)
                 sold_deals = list(filter(lambda x: x['ID'] in deal_ids_new, deals))
                 print(len(sold_deals))
 

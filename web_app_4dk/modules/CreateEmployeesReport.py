@@ -1402,6 +1402,7 @@ def create_employees_report(req):
                 '<ufCrm3_1654248264': month_filter_start.strftime(ddmmyyyy_pattern),
             }
         })
+        print(oldsales)
 
         list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
         list_of_oldsales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'DATE_SALE': 'Дата продажи'}])

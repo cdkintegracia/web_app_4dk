@@ -1448,7 +1448,6 @@ def create_employees_report(req):
             #источники внесенные НЕ вовремя
             if oldsales:
                 deal_ids_old = {int(sale['parentId2']) for sale in oldsales if sale['parentId2'] is not None}
-                print(deal_ids_old)
                 if deal_ids_old:
                     old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
 
@@ -1459,6 +1458,7 @@ def create_employees_report(req):
                             deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             date_sale = list(set(map(lambda x: x['ufCrm3_1654248264'], list(filter(lambda x: x['parentId2'] == deal['ID'], oldsales)))))
+                            print(date_sale)
                             if deal:
                                 list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': date_sale})
                         except:

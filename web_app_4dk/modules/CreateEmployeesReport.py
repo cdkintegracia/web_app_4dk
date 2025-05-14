@@ -1455,10 +1455,10 @@ def create_employees_report(req):
                     for deal_last_month in old_sold_deals:
                         try:
                             deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
-                            print(deal['ID'])
+                            #print(deal['ID'])
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                            print(title[0])
-                            date_sale = list(filter(lambda x: int(x['parentId2']) == int(deal['ID']), oldsales))
+                            #print(title[0])
+                            date_sale = list(filter(lambda x: x['parentId2'] == deal['ID'], oldsales))
                             print(date_sale)
                             date_sale = list(set(map(lambda x: x['ufCrm3_1654248264'], date_sale)))
                             print(date_sale)

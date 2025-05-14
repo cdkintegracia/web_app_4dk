@@ -1424,7 +1424,8 @@ def create_employees_report(req):
 
             #источники внесенные вовремя
             if sales:
-                sold_deals = list(filter(lambda x: x['ID'] in sales['parentId2'], deals))
+                deal_ids_new = {sale['parentId2'] for sale in sales}
+                sold_deals = list(filter(lambda x: x['ID'] in deal_ids_new, deals))
 
                 #массив с инфой о продажах со сделками
                 for deal_last_month in sold_deals:
@@ -1445,7 +1446,8 @@ def create_employees_report(req):
 
             #источники внесенные НЕ вовремя
             if oldsales:
-                old_sold_deals = list(filter(lambda x: x['ID'] in oldsales['parentId2'], deals))
+                deal_ids_old = {sale['parentId2'] for sale in oldsales}
+                old_sold_deals = list(filter(lambda x: x['ID'] in deal_ids_old, deals))
 
                 #массив с инфой о продажах со сделками
                 for deal_last_month in old_sold_deals:

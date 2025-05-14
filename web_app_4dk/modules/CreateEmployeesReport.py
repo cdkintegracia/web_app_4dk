@@ -1427,7 +1427,7 @@ def create_employees_report(req):
                 deal_ids_new = {int(sale['parentId2']) for sale in sales}
                 print(deal_ids_new)
                 sold_deals = list(filter(lambda x: x['ID'] in deal_ids_new, deals))
-                print(len(deal_ids_new))
+                print(len(sold_deals))
 
                 #массив с инфой о продажах со сделками
                 for deal_last_month in sold_deals:

@@ -1402,7 +1402,6 @@ def create_employees_report(req):
                 '<ufCrm3_1654248264': month_filter_start.strftime(ddmmyyyy_pattern),
             }
         })
-        print(oldsales)
 
         list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
         list_of_oldsales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'DATE_SALE': 'Дата продажи'}])
@@ -1461,6 +1460,7 @@ def create_employees_report(req):
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             #print(title[0])
                             date_sale = list(filter(lambda x: int(x['parentId2']) == int(deal['ID']), oldsales))
+                            print(date_sale['id'])
                             print(date_sale['ufCrm3_1654248264'])
                             #date_sale = list(set(map(lambda x: x['ufCrm3_1654248264'], date_sale)))
                             print(date_sale)

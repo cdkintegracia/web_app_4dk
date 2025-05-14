@@ -1393,37 +1393,75 @@ def create_employees_report(req):
             }
         })
 
-        list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+        oldsales = b.get_all('crm.item.list', {
+            'entityTypeId': '133',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=createdTime': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<createdTime': month_filter_end.strftime(ddmmyyyy_pattern),
+                '<ufCrm3_1654248264': month_filter_start.strftime(ddmmyyyy_pattern),
+            }
+        })
 
-        if sales:
-            sold_deals = b.get_all('crm.deal.list', {
+        list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+        list_of_oldsales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'DATE_SALE': 'Дата продажи'}])
+
+        all_sales = sales + oldsales
+
+        if all_sales:
+            deals = b.get_all('crm.deal.list', {
                 'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
                 'filter': {
-                    'ID': list(map(lambda x: x['parentId2'], sales))
+                    'ID': list(map(lambda x: x['parentId2'], all_sales))
                 }
             })
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
-                    'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals))
+                    'ID': list(map(lambda x: x['COMPANY_ID'], deals))
                 }
             })
 
-            #массив с инфой о продажах со сделками
-            for deal_last_month in sold_deals:
-                #print (deal_last_month)
-                try:
-                    deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
-                    title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                    if deal:
-                        list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
-                except:
-                    #2024-09-10 saa
-                    users_id = ['1391', '1']
-                    for user_id in users_id:
-                        b.call('im.notify.system.add', {
-                            'USER_ID': user_id,
-                            'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+            #источники внесенные вовремя
+            if sales:
+                sold_deals = list(filter(lambda x: x['ID'] in sales['parentId2'], deals))
+
+                #массив с инфой о продажах со сделками
+                for deal_last_month in sold_deals:
+                    try:
+                        deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
+                        title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                        if deal:
+                            list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                    except:
+                        #2024-09-10 saa
+                        users_id = ['1391', '1']
+                        for user_id in users_id:
+                            b.call('im.notify.system.add', {
+                                'USER_ID': user_id,
+                                'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+            else:
+                sold_deals = []
+
+            #источники внесенные НЕ вовремя
+            if oldsales:
+                old_sold_deals = list(filter(lambda x: x['ID'] in oldsales['parentId2'], deals))
+
+                #массив с инфой о продажах со сделками
+                for deal_last_month in old_sold_deals:
+                    try:
+                        deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
+                        title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
+                        if deal:
+                            list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': oldsales['ufCrm3_1654248264']})
+                    except:
+                        #2024-09-10 saa
+                        users_id = ['1391', '1']
+                        for user_id in users_id:
+                            b.call('im.notify.system.add', {
+                                'USER_ID': user_id,
+                                'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+
         else:
             sold_deals = []
 
@@ -1437,11 +1475,18 @@ def create_employees_report(req):
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
 
-        #детализация про продажам в источниках со сделками
+        #детализация по новым продажам в источниках со сделками
         if len(list_of_sales) > 1:
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
                 worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
+        worksheet.append([])
+
+        #детализация по старым продажам в источниках со сделками
+        if len(list_of_oldsales) > 1:
+            worksheet.append(['', 'Перечень старых продаж', ''])
+            for selling in list_of_oldsales:
+                worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY'], selling['DATE_SALE']])
         worksheet.append([])
 
 

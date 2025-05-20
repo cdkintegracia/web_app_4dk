@@ -91,6 +91,8 @@ def create_company_call_report(req):
                 if str(call_start_time.month) == month_codes[req['month']] and str(call_start_time.year) == req['year']:
                     if activity['AUTHOR_ID'] == '109':  # Ридкобород
                         continue
+                    if activity['AUTHOR_ID'] == '19':  # СЮВ
+                        continue
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]
                     if 231 not in author['UF_DEPARTMENT']:
                         continue
@@ -127,6 +129,8 @@ def create_company_call_report(req):
                 call_start_time = dateutil.parser.isoparse(activity['START_TIME'])
                 if str(call_start_time.month) == month_codes[req['month']] and str(call_start_time.year) == req['year']:
                     if activity['AUTHOR_ID'] == '109':  # Ридкобород
+                        continue
+                    if activity['AUTHOR_ID'] == '19':  # СЮВ
                         continue
                     author = b.get_all('user.get', {'ID': activity['AUTHOR_ID']})[0]
                     if 231 not in author['UF_DEPARTMENT']:

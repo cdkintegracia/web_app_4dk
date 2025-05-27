@@ -1463,7 +1463,8 @@ def create_employees_report(req):
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             
                             print(len(oldsales))
-                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['ufCrm3_1654248264']
+                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['createdBy']
+                            #date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['ufCrm3_1654248264']
                             print(date_sale)
                             print(str(date_sale))
                             #date_sale = list(set(map(lambda x: x['ufCrm3_1654248264'], list(filter(lambda x: int(x['parentId2']) == int(deal['ID']), oldsales)))))

@@ -1458,7 +1458,8 @@ def create_employees_report(req):
                             deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
-                            date_sale = date_sale.datetime.fromisoformat.strftime(ddmmyyyy_pattern)
+                            date_sale = datetime.fromisoformat(date_sale)
+                            date_sale = date_sale.strftime(ddmmyyyy_pattern)
                             print(date_sale)
                             if deal:
                                 list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': date_sale})

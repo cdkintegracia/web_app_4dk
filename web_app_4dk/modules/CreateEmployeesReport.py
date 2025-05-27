@@ -1462,7 +1462,7 @@ def create_employees_report(req):
                             date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
                             date_sale = datetime.fromisoformat(date_sale)
                             date_sale = date_sale.strftime(ddmmyyyy_pattern)
-                            print(date_sale)
+                            
                             if deal:
                                 list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': date_sale})
                         except:

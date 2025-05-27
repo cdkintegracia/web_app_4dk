@@ -1451,7 +1451,7 @@ def create_employees_report(req):
                 #print(deal_ids_old)
                 if deal_ids_old:
                     old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
-                    print(oldsales[1])
+                    #print(oldsales[1])
                     #print(oldsales[2])
                     #print(oldsales[3])
 
@@ -1462,8 +1462,8 @@ def create_employees_report(req):
                             #print(deal['ID'])
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
                             
-                            print(len(oldsales))
-                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['createdBy']
+                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]
+                            date_sale = date_sale['ufCrm3_1654248264']
                             #date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['ufCrm3_1654248264']
                             print(date_sale)
                             print(str(date_sale))

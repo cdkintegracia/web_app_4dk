@@ -1448,26 +1448,18 @@ def create_employees_report(req):
             #источники внесенные НЕ вовремя
             if oldsales:
                 deal_ids_old = {int(sale['parentId2']) for sale in oldsales if sale['parentId2'] is not None}
-                #print(deal_ids_old)
+
                 if deal_ids_old:
                     old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
-                    #print(oldsales[1])
-                    #print(oldsales[2])
-                    #print(oldsales[3])
 
                     #массив с инфой о продажах со сделками
                     for deal_last_month in old_sold_deals:
                         try:
                             deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
-                            #print(deal['ID'])
                             title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                            
-                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]
-                            date_sale = date_sale['ufCrm3_1654248264']
-                            #date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))['ufCrm3_1654248264']
+                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
+                            date_sale = date_sale.strftime(ddmmyyyy_pattern)
                             print(date_sale)
-                            print(str(date_sale))
-                            #date_sale = list(set(map(lambda x: x['ufCrm3_1654248264'], list(filter(lambda x: int(x['parentId2']) == int(deal['ID']), oldsales)))))
                             if deal:
                                 list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': date_sale})
                         except:

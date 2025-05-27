@@ -1406,7 +1406,7 @@ def create_employees_report(req):
         })
 
         list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
-        list_of_oldsales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'DATE_SALE': 'Дата продажи'}])
+        list_of_oldsales = ([{'DATE_SALE': 'Дата продажи', 'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         all_sales = sales + oldsales
 
@@ -1462,9 +1462,9 @@ def create_employees_report(req):
                             date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
                             date_sale = datetime.fromisoformat(date_sale)
                             date_sale = date_sale.strftime(ddmmyyyy_pattern)
-                            
+
                             if deal:
-                                list_of_oldsales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма'], 'DATE_SALE': date_sale})
+                                list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
                         except:
                             #2024-09-10 saa
                             #users_id = ['1391', '1']
@@ -1498,7 +1498,7 @@ def create_employees_report(req):
         if len(list_of_oldsales) > 1:
             worksheet.append(['', 'Перечень старых продаж', ''])
             for selling in list_of_oldsales:
-                worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY'], selling['DATE_SALE']])
+                worksheet.append([selling['DATE_SALE'], selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
 
         

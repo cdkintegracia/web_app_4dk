@@ -1533,10 +1533,13 @@ def create_employees_report(req):
         })
         print(len(single_service))
 
-        provide_services = list(filter(lambda x: int(x['ufCrm41_Provider']) == user_info['ID'], single_service))
+        provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))
+        print(len(provide_services))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
         sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
+        print(len(sold_services))
+        print(sold_services[id])
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
         
         worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])

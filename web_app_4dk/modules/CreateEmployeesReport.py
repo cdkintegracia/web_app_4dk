@@ -1532,8 +1532,8 @@ def create_employees_report(req):
             }
         })
         print(len(single_service))
-        print(user_info['ID'])
-        provide_services = list(filter(lambda x: int(x['ufCrm41_Provider']) == user_info['ID']), single_service)
+
+        provide_services = list(filter(lambda x: int(x['ufCrm41_Provider']) == user_info['ID'], single_service))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
         sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))

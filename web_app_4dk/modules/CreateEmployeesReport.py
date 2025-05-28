@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from calendar import monthrange
-import time
 import base64
 import os
 
@@ -1521,14 +1520,13 @@ def create_employees_report(req):
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), non_quarter_documents_debts])
         worksheet.append([])
-        print(7)
-        time.sleep(1)
+
         #Разовые услуги
         single_service = b.get_all('crm.item.list', {
             'entityTypeId': '161',
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
-                #'!ufCrm41_Provider': False,
+                '!ufCrm41_Provider': NULL,
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern),
             }

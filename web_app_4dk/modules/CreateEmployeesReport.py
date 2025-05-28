@@ -1385,7 +1385,6 @@ def create_employees_report(req):
 
         worksheet.append([])
     
-        print(1)
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -1395,8 +1394,6 @@ def create_employees_report(req):
                 '<ufCrm3_1654248264': month_filter_end.strftime(ddmmyyyy_pattern),
             }
         })
-        print(2)
-        time.sleep(1)
 
         oldsales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -1412,8 +1409,7 @@ def create_employees_report(req):
         list_of_oldsales = ([{'DATE_SALE': 'Дата продажи', 'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         all_sales = sales + oldsales
-        print(3)
-        time.sleep(1)
+
         if all_sales:
             deals = b.get_all('crm.deal.list', {
                 'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
@@ -1421,14 +1417,14 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['parentId2'], all_sales))
                 }
             })
-            print(4)
+
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
                     'ID': list(map(lambda x: x['COMPANY_ID'], deals))
                 }
             })
-            print(5)
+
             #источники внесенные вовремя
             if sales:
                 deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
@@ -1505,7 +1501,6 @@ def create_employees_report(req):
             for selling in list_of_oldsales:
                 worksheet.append([selling['DATE_SALE'], selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
-        print(6)
         
         # Долги по документам
         documents_debts = b.get_all('crm.item.list', {
@@ -1532,7 +1527,7 @@ def create_employees_report(req):
             'entityTypeId': '161',
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
-                '!ufCrm41_Provider': None,
+                '!ufCrm41_Provider': '',
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern),
             }

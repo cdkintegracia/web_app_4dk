@@ -1385,7 +1385,7 @@ def create_employees_report(req):
 
         worksheet.append([])
     
-
+        
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -1412,7 +1412,8 @@ def create_employees_report(req):
         list_of_oldsales = ([{'DATE_SALE': 'Дата продажи', 'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
 
         all_sales = sales + oldsales
-
+        
+        time.sleep(1)
         if all_sales:
             deals = b.get_all('crm.deal.list', {
                 'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],

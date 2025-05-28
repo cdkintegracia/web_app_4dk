@@ -1421,13 +1421,14 @@ def create_employees_report(req):
                     'ID': list(map(lambda x: x['parentId2'], all_sales))
                 }
             })
+            print(4)
             company_titles = b.get_all('crm.company.list', {
                 'select': ['ID', 'TITLE'],
                 'filter': {
                     'ID': list(map(lambda x: x['COMPANY_ID'], deals))
                 }
             })
-
+            print(5)
             #источники внесенные вовремя
             if sales:
                 deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
@@ -1504,7 +1505,7 @@ def create_employees_report(req):
             for selling in list_of_oldsales:
                 worksheet.append([selling['DATE_SALE'], selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
-
+        print(6)
         
         # Долги по документам
         documents_debts = b.get_all('crm.item.list', {
@@ -1525,7 +1526,7 @@ def create_employees_report(req):
         worksheet.append(['Долги по документам', 'За текущий квартал', 'За предыдущие периоды'])
         worksheet.append(['Штук', len(quarter_documents_debts), non_quarter_documents_debts])
         worksheet.append([])
-
+        print(7)
         #Разовые услуги
         single_service = b.get_all('crm.item.list', {
             'entityTypeId': '161',

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import monthrange
+import time
 import base64
 import os
 
@@ -1394,6 +1395,8 @@ def create_employees_report(req):
                 '<ufCrm3_1654248264': month_filter_end.strftime(ddmmyyyy_pattern),
             }
         })
+
+        time.sleep(1)
 
         oldsales = b.get_all('crm.item.list', {
             'entityTypeId': '133',

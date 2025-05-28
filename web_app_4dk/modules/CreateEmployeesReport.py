@@ -1526,7 +1526,7 @@ def create_employees_report(req):
             'entityTypeId': '161',
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
-                '!ufCrm41_Provider': false,
+                '>ufCrm41_Provider': 0,
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern),
             }

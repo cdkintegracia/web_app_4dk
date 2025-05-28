@@ -1539,7 +1539,6 @@ def create_employees_report(req):
 
         sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
         print(len(sold_services))
-        print(sold_services[id])
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
         
         worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])

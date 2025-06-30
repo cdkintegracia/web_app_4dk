@@ -48,12 +48,14 @@ def create_current_month_deals_data_file(user_data=None, user_id='1'):
         ],
         'filter': {'CATEGORY_ID': '1'}})
     companies_id = list(set(map(lambda x: x['COMPANY_ID'], list(filter(lambda x: 'COMPANY_ID' in x and x['COMPANY_ID'], deals_info)))))
+    '''
     companies_info = b.get_all('crm.company.list', {
         'filter': {
             'ID': list(companies_id)
         }
     })
-
+    '''
+    companies_info = b.get_all('crm.company.list')
     string_date_format = '%d.%m.%Y'
     formatted_deals_info = []
     for deal in deals_info:

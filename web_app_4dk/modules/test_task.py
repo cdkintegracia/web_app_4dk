@@ -212,7 +212,7 @@ def fill_task_title2(req, event):
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'] #поля вип в компании и вип
                     })
 
-                print(2)
+                print(contact_crm)
                 q = contact_info['UF_CRM_1752841613']
                 print(q)
                 q = contact_info[0]['UF_CRM_1752841613']

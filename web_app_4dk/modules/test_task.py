@@ -179,9 +179,9 @@ def task_registry2(task_info, event):
 
 
 def fill_task_title2(req, event):
-    task_id = req['ID']
+    #task_id = req['ID']
     task_info = send_bitrix_request('tasks.task.get', { # читаем инфо о задаче
-        'taskId': task_id,
+        'taskId': req['task_id'],
         'select': ['*', 'UF_*']
     })
 

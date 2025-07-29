@@ -208,10 +208,8 @@ def fill_task_title2(req, event):
                     return
             
                 contact_info = send_bitrix_request('crm.contact.get', { 
+                    'id': contact_crm,
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'], #поля вип в компании и вип
-                    'filter': {
-                        'ID': contact_crm
-                    }
                 })
 
                 print(2)

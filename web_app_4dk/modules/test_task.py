@@ -201,11 +201,8 @@ def fill_task_title2(req, event):
     
 
     #2025-07-29 САА начало
-    if task_info['groupId'] == '1' and task_info['stageId'] == '11':
-            print(1)
-            print(task_info['ufAuto324910901949'])
-            if task_info['ufAuto324910901949'] != '1':
-                print(2)
+    if task_info['groupId'] == '1' and task_info['stageId'] == '11' and task_info['ufAuto324910901949'] != '1':
+
                 contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
                 if not contact_crm:
                     return
@@ -219,7 +216,9 @@ def fill_task_title2(req, event):
                     }
                 })
 
-                if contact_info['UF_CRM_1752841613'] == 1 and contact_info['UF_CRM_1750926740'] == 1:
+                print(2)
+
+                if contact_info['UF_CRM_1752841613'] == '1' and contact_info['UF_CRM_1750926740'] == '1':
                     print(4)
                     send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,

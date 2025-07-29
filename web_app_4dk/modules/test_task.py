@@ -206,8 +206,6 @@ def fill_task_title2(req, event):
                 contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
                 if not contact_crm:
                     return
-
-                print(3)
             
                 contact_info = send_bitrix_request('crm.contact.get', { 
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'], #поля вип в компании и вип
@@ -218,14 +216,16 @@ def fill_task_title2(req, event):
 
                 print(2)
 
-                if contact_info['UF_CRM_1752841613'] == '1' and contact_info['UF_CRM_1750926740'] == '1':
-                    print(4)
-                    send_bitrix_request('tasks.task.update', {
-                    'taskId': task_id,
-                    'fields': {
-                        'stageId': '2367',
-                        'ufAuto324910901949': 1
-                        }})
+                if contact_info['UF_CRM_1752841613'] == '1':
+                    print(3)
+                    if contact_info['UF_CRM_1750926740'] == '1':
+                        print(4)
+                        send_bitrix_request('tasks.task.update', {
+                        'taskId': task_id,
+                        'fields': {
+                            'stageId': '2367',
+                            'ufAuto324910901949': 1
+                            }})
     #2025-07-29 САА конец
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

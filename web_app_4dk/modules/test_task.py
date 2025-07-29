@@ -182,7 +182,7 @@ def fill_task_title2(req, event):
     task_id = req['task_id']
     task_info = send_bitrix_request('tasks.task.get', { # читаем инфо о задаче
         'taskId': task_id,
-        'select': ['*', 'UF_*']
+        'select': ['*', 'UF_AUTO_324910901949', 'UF_*']
     })
 
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях

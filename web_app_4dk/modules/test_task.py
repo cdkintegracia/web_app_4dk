@@ -256,6 +256,8 @@ def fill_task_title2(req, event):
 
         #2025-07-29 САА начало
         if task_info['groupId'] in ['1'] and task_info['stageId'] in ['11'] and task_info['UF_AUTO_324910901949'] != 1:
+
+            print('1')
         
             contact_info = send_bitrix_request('crm.contact.get', { 
                 'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'], #поля вип в компании и вип
@@ -265,6 +267,7 @@ def fill_task_title2(req, event):
             })
 
             if contact_info['UF_CRM_1752841613'] == 1 and contact_info['UF_CRM_1750926740'] == 1:
+                print('2')
                 send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {

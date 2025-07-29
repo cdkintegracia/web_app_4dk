@@ -215,6 +215,8 @@ def fill_task_title2(req, event):
                 })
 
                 print(2)
+                print(contact_info['UF_CRM_1752841613'])
+                print(contact_info['UF_CRM_1750926740'])
 
                 if contact_info['UF_CRM_1752841613'] == '1':
                     print(3)

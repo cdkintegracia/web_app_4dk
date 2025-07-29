@@ -182,7 +182,7 @@ def fill_task_title2(req, event):
     task_id = req['task_id']
     task_info = send_bitrix_request('tasks.task.get', { # читаем инфо о задаче
         'taskId': task_id,
-        'select': ['*', 'UF_AUTO_324910901949', 'UF_*']
+        'select': ['*', 'UF_*']
     })
 
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
@@ -203,8 +203,8 @@ def fill_task_title2(req, event):
     #2025-07-29 САА начало
     if task_info['groupId'] == '1' and task_info['stageId'] == '11':
             print(1)
-            print(task_info['UF_AUTO_324910901949'])
-            if task_info['UF_AUTO_324910901949'] != '1':
+            print(task_info['ufAuto324910901949'])
+            if task_info['ufAuto324910901949'] != '1':
                 print(2)
                 contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
                 if not contact_crm:
@@ -225,7 +225,7 @@ def fill_task_title2(req, event):
                     'taskId': task_id,
                     'fields': {
                         'stageId': '2367',
-                        'UF_AUTO_324910901949': 1
+                        'ufAuto324910901949': 1
                         }})
     #2025-07-29 САА конец
 

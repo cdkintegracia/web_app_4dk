@@ -201,10 +201,9 @@ def fill_task_title2(req, event):
     
 
     #2025-07-29 САА начало
-    if task_info['groupId'] == '1': 
-        print(0)
-        if task_info['stageId'] == '11':
+    if task_info['groupId'] == '1' and task_info['stageId'] == '11':
             print(1)
+            print(task_info['UF_AUTO_324910901949'])
             if task_info['UF_AUTO_324910901949'] != '1':
                 print(2)
                 contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))

@@ -213,19 +213,13 @@ def fill_task_title2(req, event):
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'] #поля вип в компании и вип
                     })
 
-                print(contact_crm)
-                print(contact_info['UF_CRM_1752841613'])
-                print(contact_info['UF_CRM_1750926740'])
-
-                if contact_info['UF_CRM_1752841613'] == '1':
-                    print(3)
-                    if contact_info['UF_CRM_1750926740'] == '1':
+                if contact_info['UF_CRM_1752841613'] == '1' and contact_info['UF_CRM_1750926740'] == '1':
                         print(4)
                         send_bitrix_request('tasks.task.update', {
                         'taskId': task_id,
                         'fields': {
-                            'stageId': '2367',
-                            'ufAuto324910901949': 1
+                            'STAGE_ID': '2367',
+                            'UF_AUTO_324910901949': 1
                             }})
     #2025-07-29 САА конец
 

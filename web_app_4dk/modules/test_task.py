@@ -206,6 +206,7 @@ def fill_task_title2(req, event):
                 contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
                 if not contact_crm:
                     return
+                contact_crm = contact_crm[0][2:]
             
                 contact_info = send_bitrix_request('crm.contact.get', { 
                     'ID': contact_crm,
@@ -213,10 +214,7 @@ def fill_task_title2(req, event):
                     })
 
                 print(contact_crm)
-                q = contact_info['UF_CRM_1752841613']
-                print(q)
-                q = contact_info[0]['UF_CRM_1752841613']
-                print(q)
+                print(contact_info[0]['UF_CRM_1752841613'])
                 print(contact_info['UF_CRM_1750926740'])
 
                 if contact_info['UF_CRM_1752841613'] == '1':

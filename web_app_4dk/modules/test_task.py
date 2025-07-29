@@ -201,29 +201,33 @@ def fill_task_title2(req, event):
     
 
     #2025-07-29 САА начало
-    if task_info['groupId'] == '1' and task_info['stageId'] == '11' and task_info['UF_AUTO_324910901949'] != '1':
+    if task_info['groupId'] == '1': 
         print(0)
-        contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-        if not contact_crm:
-            return
+        if task_info['stageId'] == '11':
+            print(1)
+            if task_info['UF_AUTO_324910901949'] != '1':
+                print(2)
+                contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+                if not contact_crm:
+                    return
 
-        print(1)
-    
-        contact_info = send_bitrix_request('crm.contact.get', { 
-            'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'], #поля вип в компании и вип
-            'filter': {
-                'ID': contact_crm
-            }
-        })
+                print(3)
+            
+                contact_info = send_bitrix_request('crm.contact.get', { 
+                    'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740'], #поля вип в компании и вип
+                    'filter': {
+                        'ID': contact_crm
+                    }
+                })
 
-        if contact_info['UF_CRM_1752841613'] == 1 and contact_info['UF_CRM_1750926740'] == 1:
-            print(2)
-            send_bitrix_request('tasks.task.update', {
-            'taskId': task_id,
-            'fields': {
-                'stageId': '2367',
-                'UF_AUTO_324910901949': 1
-                }})
+                if contact_info['UF_CRM_1752841613'] == 1 and contact_info['UF_CRM_1750926740'] == 1:
+                    print(4)
+                    send_bitrix_request('tasks.task.update', {
+                    'taskId': task_id,
+                    'fields': {
+                        'stageId': '2367',
+                        'UF_AUTO_324910901949': 1
+                        }})
     #2025-07-29 САА конец
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

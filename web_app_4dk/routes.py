@@ -96,14 +96,11 @@ from web_app_4dk.modules.CreateElapsedTimeEmploeeTaskReport import create_eladse
 from web_app_4dk.modules.CreateManagerReport import create_manager_report
 #2024-12-20
 from web_app_4dk.modules.CreateEmployeesPeriodReport import create_employees_period_report
-#2025-07-29
-from web_app_4dk.modules.test_task import task_handler2
 
 
 # Словарь функций для вызова из кастомного запроса
 
 custom_webhooks = {
-    'task_handler2': task_handler2, #2025-07-29
     'create_task_service': create_service_tasks,
     'create_service_tasks_report': create_service_tasks_report,
     'check_task_result': check_task_result,

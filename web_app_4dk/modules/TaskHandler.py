@@ -313,6 +313,15 @@ def fill_task_title(req, event):
     })
 
     if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
+#ИБС VIP
+        if vipflag == 1:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'STAGE_ID': '2367',
+                    'UF_AUTO_324910901949': 1
+                }})
+#ИБС ---
         return
 
     if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять

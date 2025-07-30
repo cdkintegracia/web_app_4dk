@@ -333,7 +333,6 @@ def fill_task_title(req, event):
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        'UF_CRM_TASK': uf_crm_task,
                         'STAGE_ID': '2367',
                         'UF_AUTO_324910901949': 1
                     }})
@@ -342,8 +341,7 @@ def fill_task_title(req, event):
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        'UF_CRM_TASK': uf_crm_task,
-                    }})
+                     }})
     #2024-01-21
     elif "Пропущен звонок от клиента" in task_info["title"]:
         instead = task_info['auditors']

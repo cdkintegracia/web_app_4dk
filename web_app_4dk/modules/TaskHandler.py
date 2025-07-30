@@ -199,6 +199,25 @@ def fill_task_title(req, event):
     if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']: # ufCrmTask - связь с сущностью (список)
         return
 
+#2025-07-30 САА VIP
+    #fields_to_update = {}
+    vipflag=0
+    try:
+        if task_info['groupId']=='1' and task_info['stageId']=='11' and task_info['ufAuto324910901949']!='1':
+            contact_crm=list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+            if contact_crm:
+                contact_crm=contact_crm[0][2:]
+                contact_info = send_bitrix_request('crm.contact.get', {
+                    'ID': contact_crm,
+                    'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
+                })
+                if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
+                    vipflag = 1
+
+    except Exception as e:
+        print(f"Error in VIP: {e}")
+#2025-07-30 --
+
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
     uf_crm_task = []
 
@@ -308,10 +327,22 @@ def fill_task_title(req, event):
                     'AUDITORS': audit
                     }})
         else:
-            send_bitrix_request('tasks.task.update', {
-                'taskId': task_id,
-                'fields': {
-                    'TITLE': f"{task_info['title']} {company_info['TITLE']}"
+            if vipflag == 1:
+
+                send_bitrix_request('tasks.task.update', {
+                    'taskId': task_id,
+                    'fields': {
+                        'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                        'UF_CRM_TASK': uf_crm_task,
+                        'STAGE_ID': '2367',
+                        'UF_AUTO_324910901949': 1
+                    }})
+            else:
+                send_bitrix_request('tasks.task.update', {
+                    'taskId': task_id,
+                    'fields': {
+                        'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                        'UF_CRM_TASK': uf_crm_task,
                     }})
     #2024-01-21
     elif "Пропущен звонок от клиента" in task_info["title"]:
@@ -337,12 +368,23 @@ def fill_task_title(req, event):
                 'AUDITORS': audit
             }})
     else:
-        send_bitrix_request('tasks.task.update', {
-            'taskId': task_id,
-            'fields': {
-                'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                'UF_CRM_TASK': uf_crm_task,
-            }})
+        if vipflag == 1:
+
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                    'UF_CRM_TASK': uf_crm_task,
+                    'STAGE_ID': '2367',
+                    'UF_AUTO_324910901949': 1
+                }})
+        else:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                    'UF_CRM_TASK': uf_crm_task,
+                }})
 
     #перенос функций роботов: (1) уведомление Дениса Сулейманова о новых задачах на ТЛП
     #и (2) уведомление о новых задачах на ТЛП и ЛК для клиентов с типом компании "Закончился ИТС"

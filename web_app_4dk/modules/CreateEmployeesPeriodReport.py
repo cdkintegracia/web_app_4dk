@@ -862,16 +862,17 @@ def create_employees_period_report(req):
 
         #Разовые услуги
         single_service = b.get_all('crm.item.list', {
-            'entityTypeId': '161',
+            'entityTypeId': 161,
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
                 '!ufCrm41_ProviderId': False,
                 '>=ufCrm41_1689101272': start_filter.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
-            },
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328']
+            }
         })
         print(len(single_service))
         print(start_filter)
+        print(start_filter.strftime(ddmmyyyy_pattern))
         print(start_period)
 
         provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))

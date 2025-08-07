@@ -861,17 +861,6 @@ def create_employees_period_report(req):
         worksheet.append([])
 
         #Разовые услуги
-        '''
-        single_service = b.get_all('crm.item.list', {
-            'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
-            'filter': {
-                '!ufCrm41_ProviderId': False,
-                '>=ufCrm41_1689101272': start_filter.strftime(ddmmyyyy_pattern),
-                '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
-            }
-        })
-        '''
         provide_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
@@ -895,7 +884,6 @@ def create_employees_period_report(req):
 
         #provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
-
         #sold_services = list(filter(lambda x: x['assignedById'] == float(user_info['ID']), single_service))
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
         

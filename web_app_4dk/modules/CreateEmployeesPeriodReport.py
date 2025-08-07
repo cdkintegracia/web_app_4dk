@@ -811,6 +811,7 @@ def create_employees_period_report(req):
                 '<ufCrm3_1654248264': end_filter.strftime(ddmmyyyy_pattern),
             }
         })
+        print(len(sales))
 
         if sales:
             sold_deals = b.get_all('crm.deal.list', {
@@ -821,6 +822,7 @@ def create_employees_period_report(req):
             })            
         else:
             sold_deals = []
+        print(len(sold_deals))
 
         worksheet.append(['Продажи', f'за период, шт.', f'за период, руб'])
         for field_value in deal_group_field:

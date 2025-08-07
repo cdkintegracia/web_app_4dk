@@ -868,7 +868,8 @@ def create_employees_period_report(req):
                 '!ufCrm41_ProviderId': False,
                 '>=ufCrm41_1689101272': start_filter.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
-            }
+            },
+            'order': {'Id': 'ASC'}
         })
         print(len(single_service))
         print(start_filter)

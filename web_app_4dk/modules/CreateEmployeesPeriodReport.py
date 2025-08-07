@@ -865,11 +865,12 @@ def create_employees_period_report(req):
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
                 '!ufCrm41_ProviderId': False,
-                '>=ufCrm41_1689101272': start_filter.strftime(ddmmyyyy_pattern),
+                '>=ufCrm41_1689101272': start_filter,
                 '<ufCrm41_1689101272': end_filter.strftime(ddmmyyyy_pattern)
             }
         })
         print(len(single_service))
+        print(start_filter.strftime(ddmmyyyy_pattern))
 
         provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))

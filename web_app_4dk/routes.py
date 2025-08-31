@@ -99,7 +99,7 @@ from web_app_4dk.modules.CreateManagerReport import create_manager_report
 #2024-12-20
 from web_app_4dk.modules.CreateEmployeesPeriodReport import create_employees_period_report
 #2025-31-08 ибс
-from web_app_4dk.modules.UpsertCompany import cupsert_company_job
+from web_app_4dk.modules.UpsertCompany import upsert_company_job
 
 
 # Словарь функций для вызова из кастомного запроса

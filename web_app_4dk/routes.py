@@ -1,7 +1,9 @@
 from time import asctime
 import os
+#ибс 31 08 2025
+import sqlite3
 
-from flask import request, render_template, redirect, url_for, session, abort
+from flask import request, render_template, redirect, url_for, session, abort, jsonify
 from flask_login import login_user, login_required, current_user
 
 from web_app_4dk import app
@@ -96,6 +98,8 @@ from web_app_4dk.modules.CreateElapsedTimeEmploeeTaskReport import create_eladse
 from web_app_4dk.modules.CreateManagerReport import create_manager_report
 #2024-12-20
 from web_app_4dk.modules.CreateEmployeesPeriodReport import create_employees_period_report
+#2025-31-08 ибс
+from web_app_4dk.modules.UpsertCompany import cupsert_company_job
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -165,7 +169,9 @@ custom_webhooks = {
     #2024-10-14
     'create_manager_report': create_manager_report,
     #2024-12-20
-    'create_employees_period_report': create_employees_period_report
+    'create_employees_period_report': create_employees_period_report,
+    #2025-08-31
+    'upsert_company': upsert_company_job
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

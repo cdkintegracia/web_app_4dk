@@ -8,7 +8,7 @@ from web_app_4dk.modules.authentication import authentication
 b = Bitrix(authentication('Bitrix'))
 
 
-def create_call_redirection_tasks():
+def create_call_redirection_tasks(req):
     filter_date = (datetime.now() + timedelta(days=1)).strftime('%d.%m.%Y')
     elements = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',

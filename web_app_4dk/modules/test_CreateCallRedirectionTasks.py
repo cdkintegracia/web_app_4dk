@@ -23,7 +23,10 @@ def create_call_redirection_tasks(req):
         user_id = list(element['PROPERTY_1235'].values())[0]
         user_info = b.get_all('user.get', {'id': user_id})[0]
         user_name = f"{user_info['LAST_NAME']} {user_info['NAME']}"
-        work_phone = f"{user_info['WORK_PHONE']}"
+        try:
+            work_phone = f"{user_info['WORK_PHONE']}"
+        except:
+            work_phone = ''
         if user_info['UF_DEPARTMENT'][0] == 363:
             #depart_head = '159'
             depart_head = '1391'
@@ -35,8 +38,8 @@ def create_call_redirection_tasks(req):
         
         b.call('tasks.task.add', {
             'fields': {
-                'TITLE': f"Переадресация с {user_name} {vacation_start} - {vacation_end}",
-                'DESCRIPTION': f"{user_name} ({work_phone}) уходит в отпуск с {vacation_start} по {vacation_end}. В связи с этим необходимо настроить переадресацию звонков с этого сотрудника на другого",
+                'TITLE': f"Переадресация с {user_name} ({work_phone}) {vacation_start} - {vacation_end}",
+                'DESCRIPTION': f"{user_name} уходит в отпуск с {vacation_start} по {vacation_end}. В связи с этим необходимо настроить переадресацию звонков с этого сотрудника на другого",
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': depart_head,
                 #'ACCOMPLICES': ['133', ],

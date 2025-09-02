@@ -14,7 +14,8 @@ def create_call_redirection_tasks(req):
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '159',
         'filter': {
-            'PROPERTY_1233': filter_date,
+            #'PROPERTY_1233': filter_date,
+            'ELEMENT_ID': 1574531,
         }
     })
 
@@ -25,6 +26,7 @@ def create_call_redirection_tasks(req):
         department_info = b.get_all('department.get', {'ID': user_info['UF_DEPARTMENT'][0]})[0]
         vacation_start = list(element['PROPERTY_1233'].values())[0]
         vacation_end = list(element['PROPERTY_1237'].values())[0]
+        print(user_info)
         work_phone = f"{user_info['WORK_PHONE']}"
         b.call('tasks.task.add', {
             'fields': {

@@ -13,10 +13,9 @@ def create_call_redirection_tasks(req):
     elements = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '159',
-        'ELEMENT_ID': '1574531',
-        #'filter': {
-            #'PROPERTY_1233': filter_date,
-        #}
+        'filter': {
+            'PROPERTY_1233': filter_date,
+        }
     })
 
     for element in elements:
@@ -29,11 +28,11 @@ def create_call_redirection_tasks(req):
             work_phone = ''
 
         if user_info['UF_DEPARTMENT'][0] == 363:
-            #depart_head = '159'
-            depart_head = '1391'
+            depart_head = '159'
         else:
             department_info = b.get_all('department.get', {'ID': user_info['UF_DEPARTMENT'][0]})[0]
             depart_head = department_info['UF_HEAD']
+            
         vacation_start = list(element['PROPERTY_1233'].values())[0]
         vacation_end = list(element['PROPERTY_1237'].values())[0]
         
@@ -43,7 +42,7 @@ def create_call_redirection_tasks(req):
                 'DESCRIPTION': f"{user_name} уходит в отпуск с {vacation_start} по {vacation_end}. В связи с этим необходимо настроить переадресацию звонков с этого сотрудника на другого\n{work_phone}",
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': depart_head,
-                #'ACCOMPLICES': ['133', ],
+                'ACCOMPLICES': ['133', ],
                 'DEADLINE': datetime.now().strftime('%Y-%m-%d 19:00:00'),
             }
         })

@@ -27,7 +27,8 @@ def create_call_redirection_tasks(req):
             work_phone = f"{user_info['WORK_PHONE']}"
         except:
             work_phone = ''
-        if user_info['UF_DEPARTMENT'][0] == 363:
+
+        if user_info['UF_DEPARTMENT'][0] == '363':
             #depart_head = '159'
             depart_head = '1391'
         else:
@@ -38,8 +39,8 @@ def create_call_redirection_tasks(req):
         
         b.call('tasks.task.add', {
             'fields': {
-                'TITLE': f"Переадресация с {user_name} ({work_phone}) {vacation_start} - {vacation_end}",
-                'DESCRIPTION': f"{user_name} уходит в отпуск с {vacation_start} по {vacation_end}. В связи с этим необходимо настроить переадресацию звонков с этого сотрудника на другого",
+                'TITLE': f"Переадресация с {user_name} {vacation_start} - {vacation_end}",
+                'DESCRIPTION': f"{user_name} уходит в отпуск с {vacation_start} по {vacation_end}. В связи с этим необходимо настроить переадресацию звонков с этого сотрудника на другого\n{work_phone}",
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': depart_head,
                 #'ACCOMPLICES': ['133', ],

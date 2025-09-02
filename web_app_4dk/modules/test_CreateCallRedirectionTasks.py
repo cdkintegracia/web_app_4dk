@@ -28,7 +28,7 @@ def create_call_redirection_tasks(req):
         except:
             work_phone = ''
 
-        if user_info['UF_DEPARTMENT'][0] == '363':
+        if user_info['UF_DEPARTMENT'][0] == 363:
             #depart_head = '159'
             depart_head = '1391'
         else:

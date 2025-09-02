@@ -13,10 +13,10 @@ def create_call_redirection_tasks(req):
     elements = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '159',
-        'filter': {
+        'ELEMENT_ID': '1574531',
+        #'filter': {
             #'PROPERTY_1233': filter_date,
-            'ELEMENT_ID': 1574531,
-        }
+        #}
     })
 
     for element in elements:

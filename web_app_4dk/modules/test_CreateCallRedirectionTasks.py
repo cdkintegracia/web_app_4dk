@@ -29,6 +29,7 @@ def create_call_redirection_tasks(req):
         department_info = b.get_all('department.get', {'ID': user_info['UF_DEPARTMENT'][0]})[0]
         vacation_start = list(element['PROPERTY_1233'].values())[0]
         vacation_end = list(element['PROPERTY_1237'].values())[0]
+        '''
         b.call('tasks.task.add', {
             'fields': {
                 'TITLE': f"Переадресация с {user_name} {vacation_start} - {vacation_end}",
@@ -39,7 +40,7 @@ def create_call_redirection_tasks(req):
                 'DEADLINE': datetime.now().strftime('%Y-%m-%d 19:00:00'),
             }
         })
-
+        '''
 
 if __name__ == '__main__':
     create_call_redirection_tasks()

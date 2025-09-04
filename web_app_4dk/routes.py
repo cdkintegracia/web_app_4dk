@@ -100,8 +100,6 @@ from web_app_4dk.modules.CreateManagerReport import create_manager_report
 from web_app_4dk.modules.CreateEmployeesPeriodReport import create_employees_period_report
 #2025-31-08 ибс
 from web_app_4dk.modules.upsert_company import upsert_company_job
-# test SAA
-from web_app_4dk.modules.test_TaskHandler import task_handler2
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -173,9 +171,7 @@ custom_webhooks = {
     #2024-12-20
     'create_employees_period_report': create_employees_period_report,
     #2025-08-31
-    'upsert_company': upsert_company_job,
-    #test SAA
-    'task_handler2': task_handler2
+    'upsert_company': upsert_company_job
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

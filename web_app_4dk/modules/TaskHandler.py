@@ -187,7 +187,7 @@ def fill_task_title(req, event):
 
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
         return
-
+    
     task_info = task_info['task']
 
     task_registry(task_info, event)
@@ -198,21 +198,32 @@ def fill_task_title(req, event):
 
     if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']: # ufCrmTask - связь с сущностью (список)
         return
-
+    
 #2025-07-30 САА VIP
     #fields_to_update = {}
     vipflag=0
     try:
         if task_info['groupId']=='1' and task_info['stageId']=='11' and task_info['ufAuto324910901949']!='1':
-            contact_crm=list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+            contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if contact_crm:
-                contact_crm=contact_crm[0][2:]
+                contact_crm = contact_crm[0][2:]
                 contact_info = send_bitrix_request('crm.contact.get', {
                     'ID': contact_crm,
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
                 })
                 if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
                     vipflag = 1
+
+        if task_info['groupId']=='7' and task_info['stageId']=='555' and task_info['ufAuto202422302608']!='1':
+            contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+            if contact_crm:
+                contact_crm = contact_crm[0][2:]
+                contact_info = send_bitrix_request('crm.contact.get', {
+                    'ID': contact_crm,
+                    'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
+                })
+                if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
+                    vipflag = 7
 
     except Exception as e:
         print(f"Error in VIP: {e}")
@@ -321,6 +332,14 @@ def fill_task_title(req, event):
                     'STAGE_ID': '2367',
                     'UF_AUTO_324910901949': 1
                 }})
+            
+        if vipflag == 7:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'STAGE_ID': '2649',
+                    'UF_AUTO_202422302608': 1
+                }})
 #ИБС ---
         return
 
@@ -337,7 +356,6 @@ def fill_task_title(req, event):
                     }})
         else:
             if vipflag == 1:
-
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
                     'fields': {
@@ -345,6 +363,16 @@ def fill_task_title(req, event):
                         'STAGE_ID': '2367',
                         'UF_AUTO_324910901949': 1
                     }})
+                
+            elif vipflag == 7:
+                send_bitrix_request('tasks.task.update', {
+                    'taskId': task_id,
+                    'fields': {
+                        'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                        'STAGE_ID': '2649',
+                        'UF_AUTO_202422302608': 1
+                    }})
+                
             else:
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
@@ -376,7 +404,6 @@ def fill_task_title(req, event):
             }})
     else:
         if vipflag == 1:
-
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
@@ -385,6 +412,17 @@ def fill_task_title(req, event):
                     'STAGE_ID': '2367',
                     'UF_AUTO_324910901949': 1
                 }})
+            
+        elif vipflag == 7:
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_id,
+                'fields': {
+                    'TITLE': f"{task_info['title']} {company_info['TITLE']}",
+                    'UF_CRM_TASK': uf_crm_task,
+                    'STAGE_ID': '2649',
+                    'UF_AUTO_202422302608': 1
+                }})
+            
         else:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,

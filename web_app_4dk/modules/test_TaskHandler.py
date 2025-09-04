@@ -185,10 +185,10 @@ def fill_task_title(req, event):
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
-
+    print('33')
     if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
         return
-
+    print('44')
     task_info = task_info['task']
 
     task_registry(task_info, event)
@@ -456,10 +456,8 @@ def fill_task_title(req, event):
 
 
 def task_handler2(req, event=None):
-    print('111')
     try:
         task_info = fill_task_title(req, event)
-        print('123')
     except:
         return
     '''

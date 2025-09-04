@@ -455,9 +455,10 @@ def fill_task_title(req, event):
 
 
 def task_handler2(req, event=None):
+    print('111')
     try:
         task_info = fill_task_title(req, event)
-        print(123)
+        print('123')
     except:
         return
     '''

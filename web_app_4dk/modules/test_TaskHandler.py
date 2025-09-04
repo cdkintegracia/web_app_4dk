@@ -213,8 +213,9 @@ def fill_task_title(req, event):
                 })
                 if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
                     vipflag = 1
-
+        print(0)
         if task_info['groupId']=='7' and task_info['stageId']=='555' and task_info['ufAuto202422302608']!='1':
+            print(1)
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if contact_crm:
                 contact_crm = contact_crm[0][2:]
@@ -223,6 +224,7 @@ def fill_task_title(req, event):
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
                 })
                 if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
+                    print(2)
                     vipflag = 7
 
     except Exception as e:

@@ -198,10 +198,11 @@ def fill_task_title(req, event):
 
     if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']: # ufCrmTask - связь с сущностью (список)
         return
-
+    print(000)
 #2025-07-30 САА VIP
     #fields_to_update = {}
     vipflag=0
+    print(00)
     try:
         if task_info['groupId']=='1' and task_info['stageId']=='11' and task_info['ufAuto324910901949']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))

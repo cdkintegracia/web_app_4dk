@@ -155,6 +155,17 @@ def recognize_audio_url(req):
         #    f.write(text)
         #print(f"💾 Текст сохранён в файл: {OUTFILE}")
         b.call('task.commentitem.add', [req['task_id'], {'POST_MESSAGE': text, 'AUTHOR_ID': '1'}],raw=True)
+        b.call('tasks.task.update', {
+                'taskId': req['task_id'],
+                'fields': {
+                    'GROUP_ID': '325',
+                }})
     else:
         print("Расшифровка пуста.")
+
+        users_id_notification = ['1391']
+        for user_id in users_id_notification:
+            b.call('im.notify.system.add', {
+                'USER_ID': user_id,
+                'MESSAGE': f'Расшифровка пуста: https://vc4dk.bitrix24.ru/company/personal/user/205/tasks/task/view/{req['task_id']}/'})
     return

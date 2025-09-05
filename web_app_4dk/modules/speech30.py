@@ -158,12 +158,14 @@ def recognize_audio_url(req):
         b.call('tasks.task.update', {
                 'taskId': req['task_id'],
                 'fields': {
+                    'CREATED_BY': '173',
+                    'RESPONSIBLE_ID': '173',
                     'GROUP_ID': '325',
                 }})
     else:
         print("Расшифровка пуста.")
 
-        users_id_notification = ['1391']
+        users_id_notification = ['1','1391']
         for user_id in users_id_notification:
             b.call('im.notify.system.add', {
                 'USER_ID': user_id,

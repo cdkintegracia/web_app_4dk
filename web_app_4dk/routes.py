@@ -100,6 +100,8 @@ from web_app_4dk.modules.CreateManagerReport import create_manager_report
 from web_app_4dk.modules.CreateEmployeesPeriodReport import create_employees_period_report
 #2025-31-08 ибс
 from web_app_4dk.modules.upsert_company import upsert_company_job
+#2025-09-05 ибс
+from web_app_4dk.modules.speech30 import recognize_audio_url
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -171,7 +173,9 @@ custom_webhooks = {
     #2024-12-20
     'create_employees_period_report': create_employees_period_report,
     #2025-08-31
-    'upsert_company': upsert_company_job
+    'upsert_company': upsert_company_job,
+    #2025-09-05
+    'recognize_audio_url': recognize_audio_url
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

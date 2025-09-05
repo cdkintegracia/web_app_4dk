@@ -9,7 +9,7 @@ from web_app_4dk.modules.authentication import authentication
 
 
 b = Bitrix(authentication('Bitrix'))
-
+API_KEY = authentication('SpeechKit')
 FOLDER_ID = "b1gjtfjpbhsk7d6qjfnj"
 OUTFILE = "transcription.txt"
 STT_BASE = "https://stt.api.cloud.yandex.net/stt/v3"

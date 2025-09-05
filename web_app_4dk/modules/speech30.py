@@ -167,5 +167,5 @@ def recognize_audio_url(req):
         for user_id in users_id_notification:
             b.call('im.notify.system.add', {
                 'USER_ID': user_id,
-                'MESSAGE': f'Расшифровка пуста: https://vc4dk.bitrix24.ru/company/personal/user/205/tasks/task/view/{req['task_id']}/'})
+                'MESSAGE': f'Расшифровка пуста: https://vc4dk.bitrix24.ru/company/personal/user/205/tasks/task/view/{req["task_id"]}/'})
     return

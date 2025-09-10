@@ -3,6 +3,7 @@ import time
 import requests
 import json
 import re
+import os
 from difflib import SequenceMatcher
 from fast_bitrix24 import Bitrix
 from web_app_4dk.modules.authentication import authentication
@@ -47,6 +48,10 @@ def download_mp3_to_base64(url: str) -> str:
     r = requests.get(url, timeout=60)
     r.raise_for_status()
     print(f"Размер скачанного файла: {len(r.content)} байт")
+    #2025-09-10 добавляем ограничение для файла в 180 кб
+    if len(r.content) > 180 * 1024:
+        raise ValueError("Файл превышает 250 КБ и не будет отправлен на распознавание")
+    ##
     return base64.b64encode(r.content).decode("ascii")
 
 def start_recognition(audio_b64: str) -> str:
@@ -140,34 +145,46 @@ def extract_full_text_dedup(events: list) -> str:
 
 
 def recognize_audio_url(req):
-    #print("Запускаю распознавание...")
-    audio_b64 = download_mp3_to_base64(req['mp3_url'])
-    operation_id = start_recognition(audio_b64)
-    print(f"ID операции: {operation_id}")
-    wait_for_result(operation_id)
-    events = get_recognition_result(operation_id)
-    text = extract_full_text_dedup(events)
-    if text.strip():
-        #print("\n===== РАСШИФРОВКА =====\n")
-        #print(text)
-        #print("\n=======================")
-        #with open(OUTFILE, "w", encoding="utf-8") as f:
-        #    f.write(text)
-        #print(f"💾 Текст сохранён в файл: {OUTFILE}")
-        b.call('task.commentitem.add', [req['task_id'], {'POST_MESSAGE': text, 'AUTHOR_ID': '1'}],raw=True)
-        b.call('tasks.task.update', {
+    try:
+        audio_b64 = download_mp3_to_base64(req['mp3_url'])
+        operation_id = start_recognition(audio_b64)
+        print(f"ID операции: {operation_id}")
+        wait_for_result(operation_id)
+        events = get_recognition_result(operation_id)
+        text = extract_full_text_dedup(events)
+        if text.strip():
+            #print("\n===== РАСШИФРОВКА =====\n")
+            #print(text)
+            #print("\n=======================")
+            #with open(OUTFILE, "w", encoding="utf-8") as f:
+            #    f.write(text)
+            #print(f"💾 Текст сохранён в файл: {OUTFILE}")
+            b.call('task.commentitem.add', [req['task_id'], {'POST_MESSAGE': text, 'AUTHOR_ID': '1'}],raw=True)
+            b.call('tasks.task.update', {
                 'taskId': req['task_id'],
                 'fields': {
                     'CREATED_BY': '173',
                     'RESPONSIBLE_ID': '173',
                     'GROUP_ID': '325',
                 }})
-    else:
-        print("Расшифровка пуста.")
-
-        users_id_notification = ['1','1391']
-        for user_id in users_id_notification:
-            b.call('im.notify.system.add', {
-                'USER_ID': user_id,
-                'MESSAGE': f'Расшифровка пуста: https://vc4dk.bitrix24.ru/company/personal/user/205/tasks/task/view/{req["task_id"]}/'})
+        else:
+            #print("Расшифровка пуста.")
+            text = "Расшифровка пуста."
+            b.call('task.commentitem.add', [req['task_id'], {'POST_MESSAGE': text, 'AUTHOR_ID': '1'}],raw=True)
+            b.call('tasks.task.update', {
+                'taskId': req['task_id'],
+                'fields': {
+                    'CREATED_BY': '173',
+                    'RESPONSIBLE_ID': '173',
+                    'GROUP_ID': '325',
+                }})
+            '''
+            users_id_notification = ['1','1391']
+            for user_id in users_id_notification:
+                b.call('im.notify.system.add', {
+                    'USER_ID': user_id,
+                    'MESSAGE': f'Расшифровка пуста: https://vc4dk.bitrix24.ru/company/personal/user/205/tasks/task/view/{req["task_id"]}/'})
+            '''
+    except ValueError as e:
+        b.call('task.commentitem.add', [req['task_id'], {'POST_MESSAGE': str(e), 'AUTHOR_ID': '1'}], raw=True)
     return

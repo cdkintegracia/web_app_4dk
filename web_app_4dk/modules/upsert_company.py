@@ -3,7 +3,6 @@ import os
 import sqlite3
 from typing import Mapping, Tuple, Dict, Any
 
-# ВАЖНО: по умолчанию — тот же файл, что использует твое приложение (с ПОДЧЁРКИВАНИЕМ)
 DEFAULT_DB = os.getenv("CONNECT_DB", "/root/web_app_4dk/web_app_4dk/modules/1C_Connect.db")
 
 UPSERT_SQL = """
@@ -19,7 +18,7 @@ def _exec_upsert(db_path: str, author_id: str, connect_id: str, bitrix_id: str, 
     con = sqlite3.connect(db_path, timeout=5, isolation_level=None)
     try:
         con.execute("PRAGMA busy_timeout=3000")
-        con.execute("PRAGMA journal_mode=WAL")
+        #con.execute("PRAGMA journal_mode=WAL")
         try:
             con.execute("BEGIN IMMEDIATE")
             con.execute(UPSERT_SQL, (author_id, connect_id, bitrix_id, author_name))

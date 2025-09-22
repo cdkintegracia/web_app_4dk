@@ -104,6 +104,8 @@ from web_app_4dk.modules.upsert_company import upsert_company_job
 from web_app_4dk.modules.speech30 import recognize_audio_url
 #2025-09-18 saa
 from web_app_4dk.modules.EmployeeActivityReport import employee_activity_report
+#2025-09-22 ибс
+from web_app_4dk.modules.upsert_user import upsert_user_job
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -180,6 +182,8 @@ custom_webhooks = {
     'recognize_audio_url': recognize_audio_url,
     #2025-09-18
     'employee_activity_report': employee_activity_report,
+    #2025-09-22
+    'upsert_user_job': upsert_user_job
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

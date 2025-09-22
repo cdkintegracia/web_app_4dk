@@ -32,12 +32,12 @@ def create_implementation_department_report(req):
         }
     })
 
-    tasks_id = list(map(lambda x: (x['id'], x['title']), tasks))
+    tasks_id = list(map(lambda x: {'id': x['id'], 'title': x['title']}, tasks))
     tasks_results = list()
     for task in tasks_id:
-        i = int(task['id'])
+        #i = int(task['id'])
         results = b.get_all('task.elapseditem.getlist', {
-            'TASKID': i
+            'TASKID': task['id']
         })
         results['TITLE'] = task['title']
         tasks_results.extend(results)

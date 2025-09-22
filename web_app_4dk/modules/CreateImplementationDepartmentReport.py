@@ -32,12 +32,13 @@ def create_implementation_department_report(req):
         }
     })
 
-    tasks_id = list(map(lambda x: x['id'], tasks))
+    tasks_id = list(map(lambda x: (x['id'], x['title']), tasks))
     tasks_results = list()
-    for i in tasks_id:
+    for task in tasks_id:
         results = b.get_all('task.elapseditem.getlist', {
-            'TASKID': i
+            'TASKID': task['id']
         })
+        results['TITLE'] = task['title']
         tasks_results.extend(results)
     tasks_results = list(sorted(tasks_results, key=lambda x: datetime.fromisoformat(x['CREATED_DATE'])))
 
@@ -45,7 +46,7 @@ def create_implementation_department_report(req):
     worksheet = workbook.active
     users_name = dict()
     worksheet.append([
-        'Дата начала', 'Ответственный', 'Затраченное время', 'Работа'
+        'Дата начала', 'Ответственный', 'Затраченное время', 'Задача', 'Работа'
     ])
     for result in tasks_results:
         if result['USER_ID'] in users_id:
@@ -56,6 +57,7 @@ def create_implementation_department_report(req):
             datetime.fromisoformat(result['CREATED_DATE']).strftime('%d.%m.%Y %H:%M'),
             users_name[result['USER_ID']],
             str(timedelta(seconds=int(result['SECONDS']))),
+            result['TITLE'],
             result['COMMENT_TEXT']
             ])
 

@@ -35,11 +35,11 @@ def create_implementation_department_report(req):
     tasks_id = list(map(lambda x: {'id': x['id'], 'title': x['title']}, tasks))
     tasks_results = list()
     for task in tasks_id:
-        #i = int(task['id'])
         results = b.get_all('task.elapseditem.getlist', {
             'TASKID': task['id']
         })
-        results['TITLE'] = task['title']
+        #results['TITLE'] = task['title']
+        results.append(task['title'])
         tasks_results.extend(results)
     tasks_results = list(sorted(tasks_results, key=lambda x: datetime.fromisoformat(x['CREATED_DATE'])))
 

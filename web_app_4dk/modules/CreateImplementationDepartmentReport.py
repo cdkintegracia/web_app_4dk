@@ -39,8 +39,10 @@ def create_implementation_department_report(req):
             'TASKID': task['id']
         })
         #results['TITLE'] = task['title']
-        results.append(task['title'])
-        print(results)
+        for item in results:
+            item['TITLE'] = task['title']
+        #results.append(task['title'])
+        #print(results)
         tasks_results.extend(results)
     tasks_results = list(sorted(tasks_results, key=lambda x: datetime.fromisoformat(x['CREATED_DATE'])))
 

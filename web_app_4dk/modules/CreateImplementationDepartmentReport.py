@@ -35,8 +35,9 @@ def create_implementation_department_report(req):
     tasks_id = list(map(lambda x: (x['id'], x['title']), tasks))
     tasks_results = list()
     for task in tasks_id:
+        i = int(task['id'])
         results = b.get_all('task.elapseditem.getlist', {
-            'TASKID': int(task['id'])
+            'TASKID': i
         })
         results['TITLE'] = task['title']
         tasks_results.extend(results)

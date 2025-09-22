@@ -66,10 +66,11 @@ def create_implementation_department_report(req):
             ])
 
         columns_width = {
-            0: 25,
-            1: 30,
-            2: 25,
-            3: 50
+            0: 20,
+            1: 25,
+            2: 20,
+            3: 35,
+            4: 50
         }
         for index, column_cells in enumerate(worksheet.columns):
             worksheet.column_dimensions[get_column_letter(column_cells[0].column)].width = columns_width[index]

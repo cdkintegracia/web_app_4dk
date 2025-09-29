@@ -327,7 +327,7 @@ def create_quarter_subtasks(task_id, check_list_id, employee, quarter_deals, yea
         sub_checklist = send_bitrix_request('task.checklistitem.add', {
             'taskId': check_list_id,
             'FIELDS': {
-                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/\n\n  "
+                'TITLE': f"{company['TITLE']} {deal['TITLE']} https://vc4dk.bitrix24.ru/crm/deal/details/{deal['ID']}/     \n\n "
                          f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{task_id}/",
             }
         })

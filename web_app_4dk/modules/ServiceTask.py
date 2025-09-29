@@ -537,7 +537,7 @@ def create_service_tasks(dct):
             }
                                        )
             if not is_sub_task_exists and dct['quarter'] != 'Только квартальные':
-
+                '''
                 # Создание подзадачи для основной задачи
                 sub_task = send_bitrix_request('tasks.task.add', {
                     'fields': {
@@ -554,13 +554,13 @@ def create_service_tasks(dct):
                 }
                               )
                 sleep(1)
-
+                '''
                 # Создание пунктов чек-листа для созданной задачи на сотрудника
                 send_bitrix_request('task.checklistitem.add', {
                     'taskId': main_task,
                     'FIELDS': {
                         'TITLE': f"{company[0]['TITLE']} {value[1]} https://vc4dk.bitrix24.ru/crm/deal/details/{value[0]}/     \n\n "
-                                 f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{sub_task['task']['id']}/",
+                                 #f"Задача: https://vc4dk.bitrix24.ru/workgroups/group/71/tasks/task/view/{sub_task['task']['id']}/",
                     }
                 }
                        )

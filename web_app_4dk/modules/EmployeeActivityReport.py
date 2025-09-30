@@ -118,8 +118,8 @@ def employee_activity_report(req):
         #print(text_message)
 
         #рассылка от робота задач
-        notification_users = [user_info['ID'], '1', '1391']
-        #notification_users = ['1']
+        #notification_users = [user_info['ID'], '1', '1391']
+        notification_users = ['chat25605']
         for user in notification_users:
             data = {
                 'DIALOG_ID': user,
@@ -127,13 +127,13 @@ def employee_activity_report(req):
             }
 
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data)
-
+        '''
         #рассылка от службы качества чдк для СНА 157
         data = {
             'DIALOG_ID': '157',
             'MESSAGE': text_message,
         }
         r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data)
-
+        '''
 if __name__ == '__main__':
     employee_activity_report()

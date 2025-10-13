@@ -115,6 +115,26 @@ def employee_activity_report(req):
         time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
         text_message += f'Трудозатрат по задачам: {time_spent} минут\n'
 
+        #сбор инфо по выставленным счетам сегодня
+        account_sp = b.get_all('crm.item.list', {
+            'entityTypeId': '1082',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=ufCrm77_1759836894': report_day
+                }})
+        account = len(account_sp)
+
+        if user_info['ID'] == '1435': #если отчет по ШАА
+            account_st = b.get_all('crm.item.list', {
+                'entityTypeId': '31',
+                'filter': {
+                    'assignedById': user_info['ID'],
+                    '>=begindate': report_day
+                    }})
+            account += len(account_st)
+
+        text_message += f'Выставлено счетов: {account}\n'
+
         #print(text_message)
 
         #рассылка от робота задач

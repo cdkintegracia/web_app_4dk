@@ -187,4 +187,11 @@ def recognize_audio_url(req):
             '''
     except ValueError as e:
         b.call('task.commentitem.add', [req['task_id'], {'POST_MESSAGE': str(e), 'AUTHOR_ID': '1'}], raw=True)
+        b.call('tasks.task.update', {
+            'taskId': req['task_id'],
+            'fields': {
+                'CREATED_BY': '173',
+                'RESPONSIBLE_ID': '173',
+                'GROUP_ID': '325',
+            }})
     return

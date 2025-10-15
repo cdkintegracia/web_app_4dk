@@ -1523,7 +1523,7 @@ def create_employees_report(req):
 
         #Разовые услуги
         single_service = b.get_all('crm.item.list', {
-            'entityTypeId': '161',
+            'entityTypeId': 161,
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
             'filter': {
                 '!=ufCrm41_ProviderId': False,

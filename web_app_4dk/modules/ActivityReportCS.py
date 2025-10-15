@@ -3,8 +3,7 @@ from time import sleep
 import base64
 import requests
 from fast_bitrix24 import Bitrix
-#from web_app_4dk.modules.authentication import authentication
-from authentication import authentication
+from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -48,10 +47,6 @@ def activity_report_cs():
     report_day = datetime.now()
     day_title = datetime.strftime(report_day, '%d.%m.%y')
     report_day = datetime.strftime(report_day, '%Y-%m-%d') + 'T00:00:00+03:00' #начало текущего дня
-
-    start_of_month = datetime.now()
-    start_of_month = f"{datetime.strftime(start_of_month, '%Y-%m')}-01"
-    start_of_month = start_of_month + 'T00:00:00+03:00' #начало текущего месяца
 
     users_info = b.get_all('user.get', {
             'filter': {
@@ -108,6 +103,10 @@ def activity_report_cs():
 
     # ниже кусок кода, оставленный на случай, если мы упремся в лимит 50 записей о трудозатратах в день
     ''' 
+    start_of_month = datetime.now()
+    start_of_month = f"{datetime.strftime(start_of_month, '%Y-%m')}-01"
+    start_of_month = start_of_month + 'T00:00:00+03:00' #начало текущего месяца
+
     #вытаскиваем все задачи за текущий месяц из РаботыИТС
     task_work_its = b.get_all('tasks.task.list', {
     'filter': {

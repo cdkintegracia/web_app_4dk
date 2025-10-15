@@ -1522,18 +1522,6 @@ def create_employees_report(req):
         worksheet.append([])
 
         #Разовые услуги
-        '''
-        single_service = b.get_all('crm.item.list', {
-            'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
-            'filter': {
-                '!=ufCrm41_ProviderId': False,
-                '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
-                '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern),
-            }
-        })
-        '''
-        
         provide_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],

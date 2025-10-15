@@ -42,7 +42,7 @@ def get_fio_from_user_info(user_info: dict) -> str:
     return (f'{user_info["LAST_NAME"] if "LAST_NAME" in user_info else ""}'
             f' {user_info["NAME"] if "NAME" in user_info else ""}').strip()
 
-def activity_report_cs():
+def activity_report_cs(req):
 
     report_day = datetime.now()
     day_title = datetime.strftime(report_day, '%d.%m.%y')

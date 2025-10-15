@@ -116,7 +116,7 @@ def employee_activity_report(req):
         text_message += f'Трудозатрат по задачам: {time_spent} минут\n'
 
         #сбор инфо по выставленным счетам сегодня
-        account_sp = b.get_all('crm.item.list', {
+        account_sp = b.get_all('crm.item.list', { #смарт-процесс Выставленные счета (выгружаются из СОУ)
             'entityTypeId': '1082',
             'filter': {
                 'assignedById': user_info['ID'],
@@ -125,7 +125,7 @@ def employee_activity_report(req):
         account = len(account_sp)
 
         if user_info['ID'] == '1435': #если отчет по ШАА
-            account_st = b.get_all('crm.item.list', {
+            account_st = b.get_all('crm.item.list', { #системные Счета (выгружаются в СОУ)
                 'entityTypeId': '31',
                 'filter': {
                     'assignedById': user_info['ID'],

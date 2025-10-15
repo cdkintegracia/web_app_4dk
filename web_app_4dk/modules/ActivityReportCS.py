@@ -56,11 +56,58 @@ def activity_report_cs():
     users_info = b.get_all('user.get', {
             'filter': {
                 'ACTIVE': 1,
-                'UF_DEPARTMENT': ['5', '27', '29', '231'] #ЦС, ГО3, ГО4, ЛК
+                'UF_DEPARTMENT': ['5', '27', '29'] #ЦС, ГО3, ГО4
             }
         })
     except_user = ['91'] #юзеры-исключения: дежурный админ
     
+    timespent_report = f'[b]Трудозатраты по работам ИТС за {day_title} (Время / Кол-во)[/b]\n\n' #заголовок отчета
+
+    for user_info in users_info:
+        if user_info['ID'] not in except_user:
+
+            user_name = get_fio_from_user_info(user_info)
+
+            #вытаскиваем трудозатраты сотрудника за сегодня
+            sec_timespent = 0
+            results = b.call('task.elapseditem.getlist', {
+                'order': {'ID': 'asc'},
+                'filter': {
+                    'USER_ID': user_info['ID'],
+                    '>=CREATED_DATE': report_day}
+                }, raw=True)['result']
+
+            if len(results) > 49:
+                users_id = ['1391', '1']
+                for user_id in users_id:
+                    b.call('im.notify.system.add', {
+                        'USER_ID': user_id,
+                        'MESSAGE': f'У сотрудника [b]{user_name}[/b] количество трудозатрат за день достигло 50 записей.\n Отчет по трудозатратам в чате ЦС некорректен.'})
+            
+            if results:
+                tasks_id = list(map(lambda x: x['TASK_ID'], results)) #список id задач из списка трудозатрат
+
+                task_work_its = b.get_all('tasks.task.list', { #задачи из группы РаботыИТС по которым были трудозатраты
+                'filter': {
+                    'ID': tasks_id,
+                    'GROUP_ID': '321'
+                    }})
+                id_task_work_its = list(map(lambda x: x['id'], task_work_its)) #id задач из группы РаботыИТС с трудозатратами
+
+                timespent_user = list(filter(lambda x: x['TASK_ID'] in id_task_work_its, results)) #трудозатраты из задач РаботыИТС
+
+                for t in timespent_user:
+                    sec_timespent += int(t['SECONDS'])
+        
+                if sec_timespent > 0:
+                    count_timespent = len(timespent_user) #количество записей о затратах
+                    sum_timespent = str(timedelta(seconds=sec_timespent)) #сумма затрат
+                    timespent_report += f'{user_name} {sum_timespent} / {count_timespent}\n' #строка с показаниями сотрудника
+                    
+    #print(timespent_report)
+
+    # ниже кусок кода, оставленный на случай, если мы упремся в лимит 50 записей о трудозатратах в день
+    ''' 
     #вытаскиваем все задачи за текущий месяц из РаботыИТС
     task_work_its = b.get_all('tasks.task.list', {
     'filter': {
@@ -103,21 +150,10 @@ def activity_report_cs():
                     timespent_report += f'{user_name} {sum_timespent} / {count_timespent}\n' #строка с показаниями сотрудника
     
             sleep(1)
+    '''
 
-    '''
-    #сбор инфо по выставленным счетам сегодня
-    connect = b.get_all('crm.item.list', { #смарт-процесс Подключения 1С-Коннект
-        'entityTypeId': '1090',
-        'filter': {
-            'assignedById': user_info['ID'],
-            '>=ufCrm81_1760192180': report_day
-            }})
-    connect = len(connect)
-    
-    #print(timespent_report)
-    '''
     #рассылка от робота задач
-    #notification_users = [user_info['ID'], '1', '1391']
+    #notification_users = [user_info['ID'], '1', '1391'] chat18303
     notification_users = ['1391']
     for user in notification_users:
         data = {

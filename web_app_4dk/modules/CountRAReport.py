@@ -47,7 +47,7 @@ def count_ra_report(req):
 
     type_report = req['otdel'] #lk, cs
 
-    report_day = datetime.now() - timedelta(days=1)
+    report_day = datetime.now() #- timedelta(days=1)
     day_title = datetime.strftime(report_day, '%d.%m.%y')
     report_day = datetime.strftime(report_day, '%Y-%m-%d') + 'T00:00:00+03:00' #начало текущего дня
 
@@ -103,7 +103,7 @@ def count_ra_report(req):
 
             #отправка отчета по ЦС в чат chat18303
             data_cs = {
-                'DIALOG_ID': '1391',
+                'DIALOG_ID': 'chat18303',
                 'MESSAGE': text_message_cs,
                 }
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_cs)
@@ -131,8 +131,8 @@ def count_ra_report(req):
                 text_message_lk += f'Подключений за текущий день не найдено'
 
             #отправка отчета по ЛК для СЮВ, ИБС и САА 19
-            #notification_users = ['1391', '19', '1']
-            notification_users = ['1391']
+            notification_users = ['1391', '19', '1']
+            #notification_users = ['1391']
             for user in notification_users:
                 data_lk = {
                     'DIALOG_ID': user,
@@ -142,7 +142,7 @@ def count_ra_report(req):
 
             #отправка отчета по ЛК от службы качества чдк для СНА 157
             data = {
-                'DIALOG_ID': '1391',
+                'DIALOG_ID': '157',
                 'MESSAGE': text_message_lk,
             }
             r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data) 
@@ -151,7 +151,7 @@ def count_ra_report(req):
             #print(text_message_lk)       
     
     else:
-        users_id = ['1391'] #, '1'
+        users_id = ['1391', '1'] #, '1'
         for user_id in users_id:
             b.call('im.notify.system.add', {
                 'USER_ID': user_id,

@@ -47,7 +47,7 @@ def count_ra_report(req):
 
     type_report = req['otdel'] #lk, cs
 
-    report_day = datetime.now() #- timedelta(days=1)
+    report_day = datetime.now() - timedelta(days=1)
     day_title = datetime.strftime(report_day, '%d.%m.%y')
     report_day = datetime.strftime(report_day, '%Y-%m-%d') + 'T00:00:00+03:00' #начало текущего дня
 

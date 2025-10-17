@@ -45,27 +45,29 @@ def get_fio_from_user_info(user_info: dict) -> str:
 
 def count_ra_report(req):
 
+    type_report = req['otdel'] #lk, cs
+
     report_day = datetime.now() #- timedelta(days=1)
     day_title = datetime.strftime(report_day, '%d.%m.%y')
     report_day = datetime.strftime(report_day, '%Y-%m-%d') + 'T00:00:00+03:00' #начало текущего дня
 
-    users_info_cs = b.get_all('user.get', {
-            'filter': {
-                'ACTIVE': 1,
-                'UF_DEPARTMENT': ['5', '27', '29'] #ЦС, ГО3, ГО4
-            }
-        })
-    users_id_cs = list(set(map(lambda x: int(x['ID']), users_info_cs)))
-    
-    users_info_lk = b.get_all('user.get', {
-            'filter': {
-                'ACTIVE': 1,
-                'UF_DEPARTMENT': ['231'] #ЛК
-            }
-        })
-    users_id_lk = list(set(map(lambda x: int(x['ID']), users_info_lk)))
+    if type_report == 'cs':
+        users_info_cs = b.get_all('user.get', {
+                'filter': {
+                    'ACTIVE': 1,
+                    'UF_DEPARTMENT': ['5', '27', '29'] #ЦС, ГО3, ГО4
+                }
+            })
+        users_id_cs = list(set(map(lambda x: int(x['ID']), users_info_cs)))
 
-    except_user = ['91'] #юзеры-исключения: дежурный админ
+    if type_report == 'lk':
+        users_info_lk = b.get_all('user.get', {
+                'filter': {
+                    'ACTIVE': 1,
+                    'UF_DEPARTMENT': ['231'] #ЛК
+                }
+            })
+        users_id_lk = list(set(map(lambda x: int(x['ID']), users_info_lk)))
 
     connect = b.get_all('crm.item.list', { #смарт-процесс Подключения 1С-Коннект
                 'entityTypeId': '1090',
@@ -75,13 +77,11 @@ def count_ra_report(req):
 
     if connect:
         users_connect = list(set(map(lambda x: x['ufCrm81_1760192006'], connect))) #собираем всех подключавшихся
-        text_message_lk = f'[b]Подключения по коннекту ЛК за {day_title}[/b]\n\n' #заголовок отчета по лк
-        text_message_cs = f'[b]Подключения по коннекту за {day_title}[/b]\n\n' #заголовок отчета по цс
-        flag_cs = 0
-        flag_lk = 0
 
-        for user_connect in users_connect:
-            if user_connect not in except_user:
+        if type_report == 'cs':
+            text_message_cs = f'[b]Подключения по коннекту за {day_title}[/b]\n\n' #заголовок отчета по цс
+            flag_cs = 0
+            for user_connect in users_connect:
                 if user_connect in users_id_cs:
                     
                     user_info = list(filter(lambda x: int(x['ID']) == user_connect, users_info_cs))[0]
@@ -97,8 +97,22 @@ def count_ra_report(req):
                         duration_connect = round(duration_connect / 60)
                         text_message_cs += f'{user_name} {count_connect} ({duration_connect} мин)\n'
                         flag_cs = 1
-                    
-                elif user_connect in users_id_lk:
+
+            if flag_cs == 0:
+                text_message_cs += f'Подключений за текущий день не найдено'
+
+            #отправка отчета по ЦС в чат chat18303
+            data_cs = {
+                'DIALOG_ID': '1391',
+                'MESSAGE': text_message_cs,
+                }
+            r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_cs)
+
+        if type_report == 'lk':                    
+            text_message_lk = f'[b]Подключения по коннекту ЛК за {day_title}[/b]\n\n' #заголовок отчета по лк
+            flag_lk = 0
+            for user_connect in users_connect:
+                if user_connect in users_id_lk:
                     
                     user_info = list(filter(lambda x: int(x['ID']) == user_connect, users_info_lk))[0]
                     user_name = get_fio_from_user_info(user_info)
@@ -113,40 +127,31 @@ def count_ra_report(req):
                         duration_connect = round(duration_connect / 60)
                         text_message_lk += f'{user_name} {count_connect} ({duration_connect} мин)\n'
                         flag_lk = 1
+            if flag_lk == 0:
+                text_message_lk += f'Подключений за текущий день не найдено'
 
-        #print(text_message_cs)
-        #print(text_message_lk)
+            #отправка отчета по ЛК для СЮВ, ИБС и САА 19
+            #notification_users = ['1391', '19', '1']
+            notification_users = ['1391']
+            for user in notification_users:
+                data_lk = {
+                    'DIALOG_ID': user,
+                    'MESSAGE': text_message_lk,
+                }
+                r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_lk)
 
-        if flag_cs == 0:
-            text_message_cs += f'Подключений за текущий день не найдено'
-        if flag_lk == 0:
-            text_message_lk += f'Подключений за текущий день не найдено'
-
-        #отправка отчета по ЦС в чат chat18303
-        data_cs = {
-            'DIALOG_ID': 'chat18303',
-            'MESSAGE': text_message_cs,
-            }
-        r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_cs)
-        
-        #отправка отчета по ЛК для СЮВ, ИБС и САА 19
-        notification_users = ['1391', '19', '1']
-        for user in notification_users:
-            data_lk = {
-                'DIALOG_ID': user,
+            #отправка отчета по ЛК от службы качества чдк для СНА 157
+            data = {
+                'DIALOG_ID': '1391',
                 'MESSAGE': text_message_lk,
             }
-            r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_lk)
+            r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data) 
 
-        #отправка отчета по ЛК от службы качества чдк для СНА 157
-        data = {
-            'DIALOG_ID': '157',
-            'MESSAGE': text_message_lk,
-        }
-        r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data)        
-
+            #print(text_message_cs)
+            #print(text_message_lk)       
+    
     else:
-        users_id = ['1391', '1']
+        users_id = ['1391'] #, '1'
         for user_id in users_id:
             b.call('im.notify.system.add', {
                 'USER_ID': user_id,

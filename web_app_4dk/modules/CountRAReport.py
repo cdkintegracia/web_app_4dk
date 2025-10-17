@@ -47,7 +47,7 @@ def count_ra_report(req):
 
     type_report = req['otdel'] #lk, cs
 
-    report_day = datetime.now() - timedelta(days=1)
+    report_day = datetime.now() #- timedelta(days=1)
     day_title = datetime.strftime(report_day, '%d.%m.%y')
     report_day = datetime.strftime(report_day, '%Y-%m-%d') + 'T00:00:00+03:00' #начало текущего дня
 
@@ -81,7 +81,6 @@ def count_ra_report(req):
         if type_report == 'cs':
             text_message_cs = f'[b]Подключения по коннекту за {day_title}[/b]\n\n' #заголовок отчета по цс
             flag_cs = 0
-            users_connect = [] #TEST
             for user_connect in users_connect:
                 if user_connect in users_id_cs:
                     
@@ -104,13 +103,12 @@ def count_ra_report(req):
 
             #отправка отчета по ЦС в чат chat18303
             data_cs = {
-                'DIALOG_ID': '1391',
+                'DIALOG_ID': 'chat18303',
                 'MESSAGE': text_message_cs,
                 }
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_cs)
 
-        if type_report == 'lk':
-            return                    
+        if type_report == 'lk':                    
             text_message_lk = f'[b]Подключения по коннекту ЛК за {day_title}[/b]\n\n' #заголовок отчета по лк
             flag_lk = 0
             for user_connect in users_connect:
@@ -149,11 +147,11 @@ def count_ra_report(req):
             }
             r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data) 
 
-            #print(text_message_cs)
-            #print(text_message_lk)       
+        #print(text_message_cs)
+        #print(text_message_lk)       
     
     else:
-        users_id = ['1391'] #, '1'
+        users_id = ['1391', '1'] #, '1'
         for user_id in users_id:
             b.call('im.notify.system.add', {
                 'USER_ID': user_id,

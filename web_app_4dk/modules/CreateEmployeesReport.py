@@ -1395,9 +1395,10 @@ def create_employees_report(req):
         })
 
         if upsale: 
-            print(quarter_filters['start_date'].timestamp())
-            print(upsale[0]['ufCrm83DateUpsale'])
-            print(datetime.fromisoformat(day=1, month=datetime.now().month, year=datetime.now().year, hour=3))
+            print(quarter_filters['start_date'])
+            print(quarter_filters['start_date'])
+            print(datetime.fromisoformat(upsale[0]['ufCrm83DateUpsale']))
+            #print(datetime.fromisoformat(day=1, month=datetime.now().month, year=datetime.now().year, hour=3))
             
             actual_upsale = list(filter(lambda x: datetime.fromisoformat(day=1, month=report_month, year=report_year, hour=3)
                                         <= x['ufCrm83DateUpsale']

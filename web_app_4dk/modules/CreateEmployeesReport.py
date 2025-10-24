@@ -1412,7 +1412,7 @@ def create_employees_report(req):
                 actual_sumup = 0
 
             last_upsale = list(filter(lambda x: last_month_filter.timestamp() + 3 * 3600
-                                        <= x['ufCrm83DateUpsale']
+                                        <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
                                         < month_filter_start.timestamp() + 3 * 3600, upsale))[0]
             last_sumserv = last_upsale['ufCrm83SumServices']
             last_averits = last_upsale['ufCrm83AverageIts']

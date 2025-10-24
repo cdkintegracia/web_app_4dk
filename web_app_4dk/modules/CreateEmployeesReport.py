@@ -189,7 +189,7 @@ def create_employees_report(req):
         last_month_deals_data = read_deals_data_file(report_month, report_year)
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
         start_year_deals_data = read_deals_data_file(12, datetime.now().year-1)
-        '''
+        
         date_quarter = get_quarter_filter(report_month)['start_date'] - timedelta(days=1)
         quarter_deals_data = read_deals_data_file(date_quarter.month, date_quarter.year)
         before_before_last_month_deals_data = read_deals_data_file(before_before_last_month, before_before_last_month_year)
@@ -1186,7 +1186,7 @@ def create_employees_report(req):
             coverage_any_reporting_deals_last_month = 0
         # >ibs 20240330
 
-        
+        '''
         #любая отчетность за прошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_last_month))
         deals_last_month = set(map(lambda x: x['Регномер'] and x['Тип'], other_deals_last_month))
@@ -1203,7 +1203,7 @@ def create_employees_report(req):
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_last_month = 0
-        
+        '''
 
         # Предшествующий отчетному месяц
         free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -1245,7 +1245,7 @@ def create_employees_report(req):
             coverage_any_reporting_deals_before_last_month = 0
         # >ibs  20240330
 
-        
+        '''
         #любая отчетность за позапрошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_before_last_month))
         any_reporting_deals_before_last_month = 0
@@ -1260,7 +1260,7 @@ def create_employees_report(req):
                                                              len(its_deals_before_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_before_last_month = 0
-        
+        '''
 
         # Начало года
         free_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -1309,7 +1309,7 @@ def create_employees_report(req):
             coverage_any_reporting_deals_start_year = 0
         # >ibs 20240330
         
-        
+        '''
         #любая отчетность на начало года 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_start_year))
         any_reporting_deals_start_year = 0
@@ -1324,7 +1324,7 @@ def create_employees_report(req):
                                                             len(its_deals_start_year), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_start_year = 0
-        
+        '''
 
         worksheet.append(['Отчетность', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала года',
                           'Количество на январь'])
@@ -1382,7 +1382,7 @@ def create_employees_report(req):
         ])
 
         worksheet.append([])
-        '''
+        
         #Апсейл
         last_month_filter = datetime(day=1, month=before_last_month, year=before_last_month_year)
         upsale = b.get_all('crm.item.list', {
@@ -1395,10 +1395,6 @@ def create_employees_report(req):
         })
 
         if upsale: 
-            print(month_filter_start.timestamp() + 3 * 3600)
-            print(datetime.fromisoformat(upsale[0]['ufCrm83DateUpsale']).timestamp())
-            print(month_filter_end.timestamp())
-            
             actual_upsale = list(filter(lambda x: month_filter_start.timestamp() + 3 * 3600 # 3 часа разницы с мск
                                         <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
                                         < month_filter_end.timestamp() + 3 * 3600, upsale))[0]
@@ -1435,8 +1431,7 @@ def create_employees_report(req):
         worksheet.append(['Средний ИТС', actual_averits, last_averits])
         worksheet.append(['Апсейл', actual_sumup, last_sumup])
         worksheet.append([])
-
-        '''    
+  
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -1649,7 +1644,7 @@ def create_employees_report(req):
 
         worksheet.append(['', 'Незакрытых (и созд. в этом мес)', 'Всего создано в месяце'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
-        worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
+        #worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
         worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
         worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
@@ -1826,7 +1821,7 @@ def create_employees_report(req):
         
         worksheet.append(['Сверка 2.0'])
         worksheet.append(['Подключено', len(company_sverka)])
-        '''
+        
 
     workbook.save(report_name)
 

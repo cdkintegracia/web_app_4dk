@@ -1448,13 +1448,14 @@ def create_employees_report(req):
                         try:
                             title_deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
-                            list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
+                            if deal:
+                                list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                         except:
                             users_id = ['1391'] # , '1'
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
-                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n'})
+                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{sale}'})
 
 
             else:

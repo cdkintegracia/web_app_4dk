@@ -1448,7 +1448,7 @@ def create_employees_report(req):
                         print(sale['parentId2'])
                         try:
                             title_deal = list(filter(lambda x: x['ID'] == sale['parentId2'], last_month_deals_data))
-                            print(title_deal)
+                            print(last_month_deals_data[0])
                             title_deal = title_deal[0]['Название сделки']
                             print(title_deal)
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == sale['companyId'], company_titles)))))[0]

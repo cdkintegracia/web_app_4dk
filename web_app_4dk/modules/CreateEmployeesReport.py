@@ -1455,7 +1455,7 @@ def create_employees_report(req):
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
-                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{sale}'})
+                                    'MESSAGE': f'Проблемы при поиске сделки {sale["parentId2"]} в файле по источнику продаж\n\n{sale["ID"]}'})
 
 
             else:

@@ -1429,29 +1429,14 @@ def create_employees_report(req):
                 deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
                 if deal_ids_new:
                     sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, deals))
-                    '''
-                    #массив с инфой о продажах со сделками
-                    for deal_last_month in sold_deals:
-                        try:
-                            deal = list(filter(lambda x: x['ID'] == deal_last_month['ID'], last_month_deals_data))[0]
-                            title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                            if deal:
-                                list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
-                        except:
-                            users_id = ['1391', '1']
-                            for user_id in users_id:
-                                b.call('im.notify.system.add', {
-                                    'USER_ID': user_id,
-                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
-                    '''
+
                     for sale in sales:
                         try:
                             title_deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
-                            if deal:
-                                list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
+                            list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                         except:
-                            users_id = ['1391'] # , '1'
+                            users_id = ['1391', '1'] # , '1'
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
@@ -1464,29 +1449,24 @@ def create_employees_report(req):
             #источники внесенные НЕ вовремя
             if oldsales:
                 deal_ids_old = {int(sale['parentId2']) for sale in oldsales if sale['parentId2'] is not None}
-
                 if deal_ids_old:
-                    old_sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_old, deals))
 
-                    #массив с инфой о продажах со сделками
-                    for deal_last_month in old_sold_deals:
+                    for oldsale in oldsales:
                         try:
-                            deal = list(filter(lambda x: int(x['ID']) == int(deal_last_month['ID']), last_month_deals_data))[0]
-                            title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                            date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
-                            date_sale = datetime.fromisoformat(date_sale)
+                            title_deal = list(filter(lambda x: int(x['ID']) == oldsale['parentId2'], last_month_deals_data))[0]['Название сделки']
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == oldsale['companyId'], company_titles)))))[0]
+                            #date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
+                            date_sale = datetime.fromisoformat(oldsale['ufCrm3_1654248264'])
                             date_sale = date_sale.strftime(ddmmyyyy_pattern)
 
-                            if deal:
-                                list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
+                            list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': oldsale['opportunity']})
                         except:
-                            #2024-09-10 saa
                             #users_id = ['1391', '1']
                             users_id = ['1391']
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
-                                    'MESSAGE': f'Проблемы при поиске сделки в файле по старому источнику продаж\n\n{deal_last_month}'})
+                                    'MESSAGE': f'Проблемы при поиске сделки (id = {oldsale["parentId2"]}) в файле по старому источнику продаж (id = {oldsale["id"]})'})
 
         else:
             sold_deals = []

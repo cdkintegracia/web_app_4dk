@@ -1524,7 +1524,7 @@ def create_employees_report(req):
         #Разовые услуги
         provide_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1689101306'],
             'filter': {
                 'ufCrm41_Provider': float(user_info['ID']),
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
@@ -1546,12 +1546,25 @@ def create_employees_report(req):
         #provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
+        if provide_services:
+            list_provide_services = ([{'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'TYPE_PAY': 'Вид расчета'}]) # , 'TYPE_PAY': 'Вид расчета'
+            for pr_service in provide_services:
+                list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], 
+                                              'OPPORTUNITY': pr_service['ufCrm41_1689101328'], 
+                                              'TYPE_PAY': pr_service['ufCrm41_1689101306']}) #'TYPE_PAY': pr_service['']
+
         #sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
         
         worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])
         worksheet.append(['Кол-во', len(provide_services), len(sold_services)])
         worksheet.append(['Сумма', sum_provide_services, sum_sold_services])
+
+        #детализация по оказанным услугам
+        if len(provide_services) > 1:
+            worksheet.append(['', 'Выполненные работы', ''])
+            for service in list_provide_services:
+                worksheet.append([service['COMPANY'], service['OPPORTUNITY'], service['TYPE_PAY']]) # service['TYPE_PAY']
         worksheet.append([])
 
         # Задачи

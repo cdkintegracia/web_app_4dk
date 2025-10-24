@@ -1399,21 +1399,29 @@ def create_employees_report(req):
                                         <= x['ufCrm83DateUpsale'] 
                                         < month_filter_end.strftime(ddmmyyyy_pattern), upsale))[0]
             if not actual_upsale:
-                actual_upsale = []
+                actual_sumserv = 0
+                actual_averits = 0
+                actual_sumup = 0
 
             last_upsale = list(filter(lambda x: last_month_filter.strftime(ddmmyyyy_pattern) 
                                         <= x['ufCrm83DateUpsale'] 
                                         < month_filter_start.strftime(ddmmyyyy_pattern), upsale))[0]
             if not last_upsale:
-                last_upsale = []
+                last_sumserv = 0
+                last_averits = 0
+                last_sumup = 0
         else:
-            actual_upsale = []
-            last_upsale = []
+            actual_sumserv = 0
+            actual_averits = 0
+            actual_sumup = 0
+            last_sumserv = 0
+            last_averits = 0
+            last_sumup = 0
 
         worksheet.append(['Апсейл', f'{month_names[report_month]} {report_year}', f'{month_names[before_last_month]} {report_year}'])
-        worksheet.append(['Сумма сервисов', actual_upsale['ufCrm83_SumServices'], last_upsale['ufCrm83_SumServices']])
-        worksheet.append(['Средний ИТС',  actual_upsale['ufCrm83_AverageIts'], last_upsale['ufCrm83_AverageIts']])
-        worksheet.append(['Апсейл',  actual_upsale['ufCrm83_SumUpsale'], last_upsale['ufCrm83_SumUpsale']])
+        worksheet.append(['Сумма сервисов', actual_sumserv, last_sumserv])
+        worksheet.append(['Средний ИТС', actual_averits, last_averits])
+        worksheet.append(['Апсейл', actual_sumup, last_sumup])
         worksheet.append([])
 
         '''    

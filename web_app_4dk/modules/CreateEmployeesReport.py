@@ -1429,7 +1429,7 @@ def create_employees_report(req):
                 deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
                 if deal_ids_new:
                     sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, deals))
-
+                    '''
                     #массив с инфой о продажах со сделками
                     for deal_last_month in sold_deals:
                         try:
@@ -1438,12 +1438,26 @@ def create_employees_report(req):
                             if deal:
                                 list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
                         except:
-                            #2024-09-10 saa
                             users_id = ['1391', '1']
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
                                     'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+                    '''
+                    for sale in sales:
+                        try:
+                            title_deal = list(filter(lambda x: x['ID'] == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == sale['companyId'], company_titles)))))[0]
+                            if deal:
+                                list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
+                        except:
+                            users_id = ['1391'] # , '1'
+                            for user_id in users_id:
+                                b.call('im.notify.system.add', {
+                                    'USER_ID': user_id,
+                                    'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
+
+
             else:
                 sold_deals = []
 
@@ -1547,11 +1561,10 @@ def create_employees_report(req):
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
         if provide_services:
-            list_provide_services = ([{'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма', 'TYPE_PAY': 'Вид расчета'}]) # , 'TYPE_PAY': 'Вид расчета'
+            list_provide_services = ([{'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}]) # 'TYPE_PAY': 'Вид расчета', 
             for pr_service in provide_services:
-                list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], 
-                                              'OPPORTUNITY': pr_service['ufCrm41_1689101328'], 
-                                              'TYPE_PAY': pr_service['ufCrm41_1689101306']}) #'TYPE_PAY': pr_service['']
+                list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], # 'TYPE_PAY': pr_service[''],
+                                              'OPPORTUNITY': pr_service['ufCrm41_1689101328']}) 
 
         #sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
@@ -1564,7 +1577,7 @@ def create_employees_report(req):
         if len(provide_services) > 1:
             worksheet.append(['', 'Выполненные работы', ''])
             for service in list_provide_services:
-                worksheet.append([service['COMPANY'], service['OPPORTUNITY'], service['TYPE_PAY']]) # service['TYPE_PAY']
+                worksheet.append([service['COMPANY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
         worksheet.append([])
 
         # Задачи

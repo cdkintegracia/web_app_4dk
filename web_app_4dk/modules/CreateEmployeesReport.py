@@ -1396,11 +1396,11 @@ def create_employees_report(req):
 
         if upsale: 
             print(datetime(day=1, month=report_month, year=report_year, hour=3))
-            print(datetime(day=1, month=datetime.now().month, year=datetime.now().year, hours = 3))
+            print(datetime(day=1, month=datetime.now().month, year=datetime.now().year, hour=3))
             print(upsale[0]['ufCrm83DateUpsale'])
             actual_upsale = list(filter(lambda x: datetime(day=1, month=report_month, year=report_year, hour=3)
                                         <= x['ufCrm83DateUpsale']
-                                        < datetime(day=1, month=datetime.now().month, year=datetime.now().year, hours = 3), upsale))[0]
+                                        < datetime(day=1, month=datetime.now().month, year=datetime.now().year, hour=3), upsale))[0]
             actual_sumserv = actual_upsale['ufCrm83_SumServices']
             actual_averits = actual_upsale['ufCrm83_AverageIts']
             actual_sumup = actual_upsale['ufCrm83_SumUpsale']
@@ -1410,7 +1410,7 @@ def create_employees_report(req):
                 actual_averits = 0
                 actual_sumup = 0
 
-            last_upsale = list(filter(lambda x: datetime(day=1, month=before_last_month, year=before_last_month_year)
+            last_upsale = list(filter(lambda x: datetime(day=1, month=before_last_month, year=before_last_month_year, hour=3)
                                         <= x['ufCrm83DateUpsale']
                                         < datetime(day=1, month=report_month, year=report_year, hour=3), upsale))[0]
             last_sumserv = last_upsale['ufCrm83_SumServices']

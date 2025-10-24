@@ -1448,7 +1448,11 @@ def create_employees_report(req):
                         try:
                             title_deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
                             print(title_deal)
-                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
+                            print(company_titles['ID'])
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))
+                            print(title_company)
+                            title_company = title_company[0]
+                            print(title_company)
                             if deal:
                                 list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                         except:
@@ -1539,7 +1543,7 @@ def create_employees_report(req):
         #Разовые услуги
         provide_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1689101306'],
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1761298275'],
             'filter': {
                 'ufCrm41_Provider': float(user_info['ID']),
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
@@ -1562,9 +1566,10 @@ def create_employees_report(req):
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
         if provide_services:
-            list_provide_services = ([{'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}]) # 'TYPE_PAY': 'Вид расчета', 
+            list_provide_services = ([{'COMPANY': 'Компания', 'TYPE_PAY': 'Вид расчета', 'OPPORTUNITY': 'Сумма'}]) # 'TYPE_PAY': 'Вид расчета', 
             for pr_service in provide_services:
-                list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], # 'TYPE_PAY': pr_service[''],
+                list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], 
+                                              'TYPE_PAY': pr_service['ufCrm41_1761298275'], # 'TYPE_PAY': pr_service['ufCrm41_1761298275'],
                                               'OPPORTUNITY': pr_service['ufCrm41_1689101328']}) 
 
         #sold_services = list(filter(lambda x: x['assignedById'] == user_info['ID'], single_service))
@@ -1578,7 +1583,7 @@ def create_employees_report(req):
         if len(provide_services) > 1:
             worksheet.append(['', 'Выполненные работы', ''])
             for service in list_provide_services:
-                worksheet.append([service['COMPANY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
+                worksheet.append([service['COMPANY'], service['TYPE_PAY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
         worksheet.append([])
 
         # Задачи

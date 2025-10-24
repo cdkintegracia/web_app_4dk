@@ -1447,14 +1447,8 @@ def create_employees_report(req):
                     for sale in sales:
                         try:
                             title_deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
-                            print(title_deal)
-                            print(company_titles[0])
-                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))
-                            print(title_company)
-                            title_company = title_company[0]
-                            print(title_company)
-                            if deal:
-                                list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
+                            list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                         except:
                             users_id = ['1391'] # , '1'
                             for user_id in users_id:

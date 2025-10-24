@@ -1398,9 +1398,9 @@ def create_employees_report(req):
             print(month_filter_start)
             print(month_filter_end)
             print(upsale[0]['ufCrm83DateUpsale'])
-            actual_upsale = list(filter(lambda x: month_filter_start.timestamp() 
-                                        <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
-                                        < month_filter_end.timestamp(), upsale))
+            actual_upsale = list(filter(lambda x: month_filter_start 
+                                        <= datetime.fromisoformat(x['ufCrm83DateUpsale'])
+                                        < month_filter_end, upsale))[0]
             actual_sumserv = actual_upsale['ufCrm83_SumServices']
             actual_averits = actual_upsale['ufCrm83_AverageIts']
             actual_sumup = actual_upsale['ufCrm83_SumUpsale']
@@ -1412,7 +1412,7 @@ def create_employees_report(req):
 
             last_upsale = list(filter(lambda x: last_month_filter.timestamp()
                                         <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
-                                        < month_filter_start.timestamp(), upsale))
+                                        < month_filter_start.timestamp(), upsale))[0]
             last_sumserv = last_upsale['ufCrm83_SumServices']
             last_averits = last_upsale['ufCrm83_AverageIts']
             last_sumup = last_upsale['ufCrm83_SumUpsale']

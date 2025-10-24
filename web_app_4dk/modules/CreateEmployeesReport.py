@@ -1446,7 +1446,10 @@ def create_employees_report(req):
                     '''
                     for sale in sales:
                         try:
-                            title_deal = list(filter(lambda x: x['ID'] == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
+                            title_deal = list(filter(lambda x: x['ID'] == sale['parentId2'], last_month_deals_data))[0]
+                            print(title_deal)
+                            title_deal = title_deal['Название сделки']
+                            print(title_deal)
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == sale['companyId'], company_titles)))))[0]
                             if deal:
                                 list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})

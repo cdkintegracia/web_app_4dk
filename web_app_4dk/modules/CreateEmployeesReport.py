@@ -1397,7 +1397,7 @@ def create_employees_report(req):
         if upsale: 
             print(month_filter_start)
             print(month_filter_end)
-            print(datetime(upsale[0]['ufCrm83DateUpsale']))
+            print(upsale[0]['ufCrm83DateUpsale'])
             actual_upsale = list(filter(lambda x: month_filter_start.timestamp() 
                                         <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
                                         < month_filter_end.timestamp(), upsale))

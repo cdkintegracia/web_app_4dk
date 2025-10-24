@@ -1396,11 +1396,19 @@ def create_employees_report(req):
 
         if upsale: 
             actual_upsale = list(filter(lambda x: month_filter_start.strftime(ddmmyyyy_pattern) 
-                                        <= int(x['ufCrm83_DateUpsale']) 
+                                        <= x['ufCrm83DateUpsale'] 
                                         < month_filter_end.strftime(ddmmyyyy_pattern), upsale))[0]
+            if not actual_upsale:
+                actual_upsale = []
+
             last_upsale = list(filter(lambda x: last_month_filter.strftime(ddmmyyyy_pattern) 
-                                        <= int(x['ufCrm83_DateUpsale']) 
+                                        <= x['ufCrm83DateUpsale'] 
                                         < month_filter_start.strftime(ddmmyyyy_pattern), upsale))[0]
+            if not last_upsale:
+                last_upsale = []
+        else:
+            actual_upsale = []
+            last_upsale = []
 
         worksheet.append(['Апсейл', f'{month_names[report_month]} {report_year}', f'{month_names[before_last_month]} {report_year}'])
         worksheet.append(['Сумма сервисов', actual_upsale['ufCrm83_SumServices'], last_upsale['ufCrm83_SumServices']])

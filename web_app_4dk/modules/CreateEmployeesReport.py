@@ -1455,14 +1455,12 @@ def create_employees_report(req):
                         try:
                             title_deal = list(filter(lambda x: int(x['ID']) == oldsale['parentId2'], last_month_deals_data))[0]['Название сделки']
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == oldsale['companyId'], company_titles)))))[0]
-                            #date_sale = list(filter(lambda x: x['parentId2'] is not None and int(x['parentId2']) == int(deal['ID']), oldsales))[0]['ufCrm3_1654248264']
                             date_sale = datetime.fromisoformat(oldsale['ufCrm3_1654248264'])
                             date_sale = date_sale.strftime(ddmmyyyy_pattern)
-
-                            list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': oldsale['opportunity']})
+                            if deal: 
+                                list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': oldsale['opportunity']})
                         except:
-                            #users_id = ['1391', '1']
-                            users_id = ['1391']
+                            users_id = ['1391'] # , '1'
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
@@ -1480,6 +1478,7 @@ def create_employees_report(req):
             worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
         worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
         worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+        worksheet.append([])
 
         #детализация по новым продажам в источниках со сделками
         if len(list_of_sales) > 1:

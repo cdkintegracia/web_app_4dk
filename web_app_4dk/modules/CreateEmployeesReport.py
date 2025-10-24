@@ -1445,6 +1445,7 @@ def create_employees_report(req):
                                     'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_last_month}'})
                     '''
                     for sale in sales:
+                        print(sale)
                         try:
                             title_deal = list(filter(lambda x: x['ID'] == sale['parentId2'], last_month_deals_data))[0]
                             print(title_deal)

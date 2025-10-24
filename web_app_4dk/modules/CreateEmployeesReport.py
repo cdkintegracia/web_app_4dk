@@ -1617,8 +1617,8 @@ def create_employees_report(req):
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
         completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
-        service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
-        completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
+        #service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
+        #completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
         completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
         non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))

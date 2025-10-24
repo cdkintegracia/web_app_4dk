@@ -1398,7 +1398,7 @@ def create_employees_report(req):
         print(month_filter_end.strftime(ddmmyyyy_pattern))
         if upsale: 
             actual_upsale = list(filter(lambda x: month_filter_start.strftime(ddmmyyyy_pattern) 
-                                        <= x['ufCrm83_DateUpsale'] 
+                                        <= x['ufCrm83DateUpsale'] 
                                         < month_filter_end.strftime(ddmmyyyy_pattern), upsale))
             if not actual_upsale:
                 actual_sumserv = 0

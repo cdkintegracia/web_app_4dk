@@ -1399,7 +1399,7 @@ def create_employees_report(req):
             print(month_filter_end)
             print(upsale[0]['ufCrm83DateUpsale'])
             actual_upsale = list(filter(lambda x: month_filter_start 
-                                        <= datetime.fromisoformat(x['ufCrm83DateUpsale'])
+                                        <= datetime(x['ufCrm83DateUpsale'])
                                         < month_filter_end, upsale))[0]
             actual_sumserv = actual_upsale['ufCrm83_SumServices']
             actual_averits = actual_upsale['ufCrm83_AverageIts']

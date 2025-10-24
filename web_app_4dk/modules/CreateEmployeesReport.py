@@ -1383,7 +1383,32 @@ def create_employees_report(req):
 
         worksheet.append([])
         '''
-    
+        #Апсейл
+        last_month_filter = datetime(day=1, month=before_last_month, year=before_last_month_year)
+        upsale = b.get_all('crm.item.list', {
+            'entityTypeId': '1094',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=ufCrm83_DateUpsale': last_month_filter.strftime(ddmmyyyy_pattern),
+                '<ufCrm83_DateUpsale': month_filter_end.strftime(ddmmyyyy_pattern),
+            }
+        })
+
+        if upsale: 
+            actual_upsale = list(filter(lambda x: month_filter_start.strftime(ddmmyyyy_pattern) 
+                                        <= int(x['ufCrm83_DateUpsale']) 
+                                        < month_filter_end.strftime(ddmmyyyy_pattern), upsale))[0]
+            last_upsale = list(filter(lambda x: last_month_filter.strftime(ddmmyyyy_pattern) 
+                                        <= int(x['ufCrm83_DateUpsale']) 
+                                        < month_filter_start.strftime(ddmmyyyy_pattern), upsale))[0]
+
+        worksheet.append(['Апсейл', f'{month_names[report_month]} {report_year}', f'{month_names[before_last_month]} {report_year}'])
+        worksheet.append(['Сумма сервисов', actual_upsale['ufCrm83_SumServices'], last_upsale['ufCrm83_SumServices']])
+        worksheet.append(['Средний ИТС',  actual_upsale['ufCrm83_AverageIts'], last_upsale['ufCrm83_AverageIts']])
+        worksheet.append(['Апсейл',  actual_upsale['ufCrm83_SumUpsale'], last_upsale['ufCrm83_SumUpsale']])
+        worksheet.append([])
+
+        '''    
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -1457,10 +1482,9 @@ def create_employees_report(req):
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == oldsale['companyId'], company_titles)))))[0]
                             date_sale = datetime.fromisoformat(oldsale['ufCrm3_1654248264'])
                             date_sale = date_sale.strftime(ddmmyyyy_pattern)
-                            if deal: 
-                                list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': oldsale['opportunity']})
+                            list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': oldsale['opportunity']})
                         except:
-                            users_id = ['1391'] # , '1'
+                            users_id = ['1391', '1']
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
@@ -1485,14 +1509,14 @@ def create_employees_report(req):
             worksheet.append(['', 'Перечень продаж', ''])
             for selling in list_of_sales:
                 worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
-        worksheet.append([])
+            worksheet.append([])
 
         #детализация по старым продажам в источниках со сделками
         if len(list_of_oldsales) > 1:
             worksheet.append(['', 'Перечень старых продаж', ''])
             for selling in list_of_oldsales:
                 worksheet.append([selling['DATE_SALE'], selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
-        worksheet.append([])
+            worksheet.append([])
         
         # Долги по документам
         documents_debts = b.get_all('crm.item.list', {
@@ -1606,7 +1630,7 @@ def create_employees_report(req):
         worksheet.append([])
 
         change_sheet_style(worksheet)
-        '''
+        
         # ЭДО
         all_its = its_prof_deals_last_month + its_base_deals_last_month
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))

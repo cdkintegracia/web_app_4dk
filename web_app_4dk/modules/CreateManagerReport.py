@@ -162,6 +162,7 @@ def create_manager_report(req):
         last_month_deals_data = read_deals_data_file(report_month, report_year)
 
         # Продажи
+        '''
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
             'filter': {
@@ -222,6 +223,114 @@ def create_manager_report(req):
             for selling in list_of_sales:
                 worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
         worksheet.append([])
+        '''
+        sales = b.get_all('crm.item.list', {
+            'entityTypeId': '133',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=ufCrm3_1654248264': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<ufCrm3_1654248264': month_filter_end.strftime(ddmmyyyy_pattern),
+            }
+        })
+
+        oldsales = b.get_all('crm.item.list', {
+            'entityTypeId': '133',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=createdTime': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<createdTime': month_filter_end.strftime(ddmmyyyy_pattern),
+                '<ufCrm3_1654248264': month_filter_start.strftime(ddmmyyyy_pattern),
+            }
+        })
+
+        list_of_sales = ([{'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+        list_of_oldsales = ([{'DATE_SALE': 'Дата продажи', 'NAME_DEAL': 'Название сделки', 'COMPANY': 'Компания', 'OPPORTUNITY': 'Сумма'}])
+
+        all_sales = sales + oldsales
+
+        if all_sales:
+            deals = b.get_all('crm.deal.list', {
+                'select': ['ID', 'COMPANY_ID', 'UF_CRM_1657878818384', 'OPPORTUNITY', 'TYPE_ID'],
+                'filter': {
+                    'ID': list(map(lambda x: x['parentId2'], all_sales))
+                }
+            })
+
+            company_titles = b.get_all('crm.company.list', {
+                'select': ['ID', 'TITLE'],
+                'filter': {
+                    'ID': list(map(lambda x: x['COMPANY_ID'], deals))
+                }
+            })
+
+            #источники внесенные вовремя
+            if sales:
+                deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
+                if deal_ids_new:
+                    sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, deals))
+
+                    for sale in sales:
+                        try:
+                            title_deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], last_month_deals_data))[0]['Название сделки']
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
+                            list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
+                        except:
+                            users_id = ['1391', '1'] # , '1'
+                            for user_id in users_id:
+                                b.call('im.notify.system.add', {
+                                    'USER_ID': user_id,
+                                    'MESSAGE': f'Проблемы при поиске сделки (id = {sale["parentId2"]}) в файле по источнику продаж (id = {sale["id"]})'})
+
+
+            else:
+                sold_deals = []
+
+            #источники внесенные НЕ вовремя
+            if oldsales:
+                deal_ids_old = {int(sale['parentId2']) for sale in oldsales if sale['parentId2'] is not None}
+                if deal_ids_old:
+
+                    for oldsale in oldsales:
+                        try:
+                            title_deal = list(filter(lambda x: int(x['ID']) == oldsale['parentId2'], last_month_deals_data))[0]['Название сделки']
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == oldsale['companyId'], company_titles)))))[0]
+                            date_sale = datetime.fromisoformat(oldsale['ufCrm3_1654248264'])
+                            date_sale = date_sale.strftime(ddmmyyyy_pattern)
+                            list_of_oldsales.append({'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': oldsale['opportunity']})
+                        except:
+                            users_id = ['1391', '1']
+                            for user_id in users_id:
+                                b.call('im.notify.system.add', {
+                                    'USER_ID': user_id,
+                                    'MESSAGE': f'Проблемы при поиске сделки (id = {oldsale["parentId2"]}) в файле по старому источнику продаж (id = {oldsale["id"]})'})
+
+        else:
+            sold_deals = []
+
+        worksheet.append(['Продажи', f'{month_names[report_month]} {report_year} шт.', f'{month_names[report_month]} {report_year} руб'])
+        for field_value in deal_group_field:
+            if field_value['VALUE'] == 'Лицензии':
+                grouped_deals = list(filter(lambda x: x['TYPE_ID'] in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals))
+            else:
+                grouped_deals = list(filter(lambda x: x['UF_CRM_1657878818384'] == field_value['ID'] and x['TYPE_ID'] not in ['UC_YIAJC8', 'UC_QQPYF0'], sold_deals))
+            worksheet.append([field_value['VALUE'], len(grouped_deals), sum(list(map(lambda x: float(x['OPPORTUNITY'] if x['OPPORTUNITY'] else 0.0), grouped_deals)))])
+        worksheet.append(['Всего по источникам', len(sales), sum(list(map(lambda x: x['opportunity'], sales)))])
+        worksheet.append(['Всего по сделкам', len(sold_deals), sum(list(map(lambda x: float(x['OPPORTUNITY']), sold_deals)))])
+        worksheet.append([])
+
+        #детализация по новым продажам в источниках со сделками
+        if len(list_of_sales) > 1:
+            worksheet.append(['', 'Перечень продаж', ''])
+            for selling in list_of_sales:
+                worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
+            worksheet.append([])
+
+        #детализация по старым продажам в источниках со сделками
+        if len(list_of_oldsales) > 1:
+            worksheet.append(['', 'Перечень старых продаж', ''])
+            for selling in list_of_oldsales:
+                worksheet.append([selling['DATE_SALE'], selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
+            worksheet.append([])
 
         change_sheet_style(worksheet)
 

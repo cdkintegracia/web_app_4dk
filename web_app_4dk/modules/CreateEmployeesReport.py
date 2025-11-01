@@ -1394,30 +1394,31 @@ def create_employees_report(req):
             }
         })
 
-        if upsale: 
-            actual_upsale = list(filter(lambda x: month_filter_start.timestamp() + 3 * 3600 # 3 часа разницы с мск
-                                        <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
-                                        < month_filter_end.timestamp() + 3 * 3600, upsale))[0]
-            actual_sumserv = actual_upsale['ufCrm83SumServices']
-            actual_averits = actual_upsale['ufCrm83AverageIts']
-            actual_sumup = actual_upsale['ufCrm83SumUpsale']
-
-            if not actual_upsale:
+        if upsale:
+            try:
+                actual_upsale = list(filter(lambda x: month_filter_start.timestamp() + 3 * 3600 # 3 часа разницы с мск
+                                            <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
+                                            < month_filter_end.timestamp() + 3 * 3600, upsale))[0]
+                actual_sumserv = actual_upsale['ufCrm83SumServices']
+                actual_averits = actual_upsale['ufCrm83AverageIts']
+                actual_sumup = actual_upsale['ufCrm83SumUpsale']
+            except:
                 actual_sumserv = 0
                 actual_averits = 0
                 actual_sumup = 0
 
-            last_upsale = list(filter(lambda x: last_month_filter.timestamp() + 3 * 3600
-                                        <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
-                                        < month_filter_start.timestamp() + 3 * 3600, upsale))[0]
-            last_sumserv = last_upsale['ufCrm83SumServices']
-            last_averits = last_upsale['ufCrm83AverageIts']
-            last_sumup = last_upsale['ufCrm83SumUpsale']
-
-            if not last_upsale:
+            try:
+                last_upsale = list(filter(lambda x: last_month_filter.timestamp() + 3 * 3600
+                                            <= datetime.fromisoformat(x['ufCrm83DateUpsale']).timestamp()
+                                            < month_filter_start.timestamp() + 3 * 3600, upsale))[0]
+                last_sumserv = last_upsale['ufCrm83SumServices']
+                last_averits = last_upsale['ufCrm83AverageIts']
+                last_sumup = last_upsale['ufCrm83SumUpsale']
+            except:
                 last_sumserv = 0
                 last_averits = 0
                 last_sumup = 0
+                
         else:
             actual_sumserv = 0
             actual_averits = 0

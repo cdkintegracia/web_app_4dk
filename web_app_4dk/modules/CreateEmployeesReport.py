@@ -1182,7 +1182,7 @@ def create_employees_report(req):
 
         try:
             coverage_free_reporting_deals_last_month = round(len(free_reporting_deals_last_month) /
-                                                             len(its_prof_deals_last_month), 2) * 100
+                                                             (len(its_prof_deals_last_month) + len(its_bizstart_deals_last_month)), 2) * 100
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
@@ -1240,7 +1240,7 @@ def create_employees_report(req):
 
         try:
             coverage_free_reporting_deals_before_last_month = round(round(len(free_reporting_deals_before_last_month) /
-                                                                    len(its_prof_deals_before_last_month), 2) * 100, 2)
+                                                                    (len(its_prof_deals_before_last_month) + len(its_bizstart_deals_before_last_month)), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_before_last_month = 0
 
@@ -1294,16 +1294,17 @@ def create_employees_report(req):
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)' and
                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       start_year_deals_data))
-
+        ''' # SAA 20251114
         prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                             x['Группа'] == 'ИТС' and
                                             'Базовый' not in x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             start_year_deals_data))
+        '''
 
         try:
             coverage_free_reporting_deals_start_year = round(round(len(free_reporting_deals_start_year) /
-                                                             len(prof_deals_start_year), 2) * 100, 2)
+                                                             (len(its_prof_deals_start_year) + len(its_bizstart_deals_start_year)), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_start_year = 0
 
@@ -1683,7 +1684,9 @@ def create_employees_report(req):
         change_sheet_style(worksheet)
         
         # ЭДО
-        all_its = its_prof_deals_last_month + its_base_deals_last_month
+        all_its = list(filter(lambda x: 'ГРМ' not in x['Тип'], its_deals_last_month))
+        count_its_unigue = len(set(x['Компания'] for x in all_its))
+
         edo_companies_id = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its))))
 
         if edo_companies_id:
@@ -1815,7 +1818,7 @@ def create_employees_report(req):
             operator_2lt_coverage = 0
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО', len(all_its), len(edo_companies_count), edo_companies_coverage])
+        worksheet.append(['Охват ЭДО', count_its_unigue, len(edo_companies_count), edo_companies_coverage])
         if len(edo_companies_count) > 0:
             if len(operator_2ae) > 0:
                 worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])

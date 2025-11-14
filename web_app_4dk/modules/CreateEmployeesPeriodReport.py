@@ -150,15 +150,19 @@ def create_employees_period_report(req):
 
         # Сделки
         # Последний месяц
-        its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                x['Группа'] == 'ИТС' and
-                                                'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+        its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                                'Базовый' not in x['Тип'] and 'БизнесСтарт' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+                                                'Медицина' not in x['Тип'] and 'Индивидуальный' not in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_1_month_deals_data))
 
-        its_base_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                x['Группа'] == 'ИТС' and
-                                                'Базовый' in x['Тип'] and
+        its_base_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                                ('Базовый' in x['Тип'] or 'Индивидуальный' in x['Тип']) and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                before_1_month_deals_data))
+        
+        its_bizstart_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and 'БизнесСтарт' in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_1_month_deals_data))
         
@@ -267,7 +271,7 @@ def create_employees_period_report(req):
                                              x not in countragent_deals_last_month and x not in spark_in_contract_deals_last_month and
                                              x not in spark_deals_last_month and x not in spark_plus_deals_last_month and
                                              x not in rpd_deals_last_month and x not in grm_deals_last_month and
-                                             x not in doki_deals_last_month and
+                                             x not in doki_deals_last_month and x not in its_bizstart_deals_last_month and
                                              x not in report_deals_last_month and x not in signature_deals_last_month and
                                              x not in dop_oblako_deals_last_month and x not in link_deals_last_month and
                                              x not in unics_deals_last_month and x not in cab_sotrudnik_deals_last_month and
@@ -278,14 +282,20 @@ def create_employees_period_report(req):
         
         # Первый месяц
         its_prof_deals_first_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
-                                             'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+                                             'Базовый' not in x['Тип'] and 'БизнесСтарт' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+                                             'Медицина' not in x['Тип'] and 'Индивидуальный' not in x['Тип'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              first_month_deals_data))
 
         its_base_deals_first_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
-                                             'Базовый' in x['Тип'] and
+                                             ('Базовый' in x['Тип'] or 'Индивидуальный' in x['Тип']) and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              first_month_deals_data))
+        
+        its_bizstart_deals_first_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and 'БизнесСтарт' in x['Тип'] and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                first_month_deals_data))
         
         countragent_deals_first_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 'Контрагент' in x['Тип'] and
@@ -393,7 +403,7 @@ def create_employees_period_report(req):
                                              x not in countragent_deals_first_month and x not in spark_in_contract_deals_first_month and
                                              x not in spark_deals_first_month and x not in spark_plus_deals_first_month and
                                              x not in rpd_deals_first_month and x not in grm_deals_first_month and
-                                             x not in doki_deals_first_month and
+                                             x not in doki_deals_first_month and x not in its_bizstart_deals_first_month and
                                              x not in report_deals_first_month and x not in signature_deals_first_month and
                                              x not in dop_oblako_deals_first_month and x not in link_deals_first_month and
                                              x not in unics_deals_first_month and x not in cab_sotrudnik_deals_first_month and
@@ -414,6 +424,12 @@ def create_employees_period_report(req):
             len(its_base_deals_last_month),
             len(its_base_deals_first_month),
             len(its_base_deals_last_month) - len(its_base_deals_first_month)
+        ])
+        worksheet.append([
+            'БизнесСтарт',
+            len(its_bizstart_deals_last_month),
+            len(its_bizstart_deals_first_month),
+            len(its_bizstart_deals_last_month) - len(its_bizstart_deals_first_month)
         ])
         worksheet.append([
             'Контрагент',
@@ -680,7 +696,7 @@ def create_employees_period_report(req):
 
         try:
             coverage_free_reporting_deals_last_month = round(len(free_reporting_deals_last_month) /
-                                                             len(its_prof_deals_last_month) * 100, 2)
+                                                             (len(its_prof_deals_last_month) + len(its_bizstart_deals_last_month)) * 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
@@ -715,16 +731,17 @@ def create_employees_period_report(req):
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)' and
                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       first_month_deals_data))
-
+        ''' # SAA 20251114
         prof_deals_first_month = list(filter(lambda x: x['Ответственный'] == user_name and
                                             x['Группа'] == 'ИТС' and
                                             'Базовый' not in x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             first_month_deals_data))
+        '''
 
         try:
             coverage_free_reporting_deals_first_month = round(len(free_reporting_deals_first_month) /
-                                                             len(prof_deals_first_month) * 100, 2)
+                                                             (len(its_prof_deals_first_month) + len(its_bizstart_deals_first_month)) * 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_first_month = 0
 
@@ -927,7 +944,9 @@ def create_employees_period_report(req):
         worksheet.append([])
         
         # ЭДО
-        all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month #последний месяц периода итс без грм
+        all_its_last_month = list(filter(lambda x: 'ГРМ' not in x['Тип'], its_deals_before_1_month)) #последний месяц периода итс без грм
+        count_its_unigue = len(set(x['Компания'] for x in all_its_last_month))
+
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
 
         if edo_companies_id_last_month:
@@ -1114,7 +1133,7 @@ def create_employees_period_report(req):
             operator_2lt_coverage = 0
 
         worksheet.append(['ЭДО', 'Всего ИТС', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count), edo_companies_coverage]) #на последний месяц
+        worksheet.append(['Охват ЭДО', count_its_unigue, len(edo_companies_count), edo_companies_coverage]) #на последний месяц
         if len(edo_companies_count) > 0:
             if len(operator_2ae) > 0:
                 worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])

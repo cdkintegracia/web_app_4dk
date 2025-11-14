@@ -219,15 +219,19 @@ def create_employees_quarter_report(req):
 
         # Сделки
         # Последний месяц квартала
-        its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                x['Группа'] == 'ИТС' and
-                                                'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+        its_prof_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                                'Базовый' not in x['Тип'] and 'БизнесСтарт' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+                                                'Медицина' not in x['Тип'] and 'Индивидуальный' not in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_1_month_deals_data))
 
-        its_base_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
-                                                x['Группа'] == 'ИТС' and
-                                                'Базовый' in x['Тип'] and
+        its_base_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
+                                                ('Базовый' in x['Тип'] or 'Индивидуальный' in x['Тип']) and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                before_1_month_deals_data))
+        
+        its_bizstart_deals_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and 'БизнесСтарт' in x['Тип'] and
                                                 x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                 before_1_month_deals_data))
 
@@ -337,7 +341,7 @@ def create_employees_quarter_report(req):
                                              x not in countragent_deals_last_month and x not in spark_in_contract_deals_last_month and
                                              x not in spark_deals_last_month and x not in spark_plus_deals_last_month and
                                              x not in rpd_deals_last_month and x not in grm_deals_last_month and
-                                             x not in doki_deals_last_month and
+                                             x not in doki_deals_last_month and x not in its_bizstart_deals_last_month and
                                              x not in report_deals_last_month and x not in signature_deals_last_month and
                                              x not in dop_oblako_deals_last_month and x not in link_deals_last_month and
                                              x not in unics_deals_last_month and x not in cab_sotrudnik_deals_last_month and
@@ -348,14 +352,20 @@ def create_employees_quarter_report(req):
         
         # Начало квартала
         its_prof_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
-                                             'Базовый' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+                                             'Базовый' not in x['Тип'] and 'БизнесСтарт' not in x['Тип'] and 'ГРМ' not in x['Тип'] and
+                                             'Медицина' not in x['Тип'] and 'Индивидуальный' not in x['Тип'] and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              quarter_deals_data))
 
         its_base_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Группа'] == 'ИТС' and
-                                             'Базовый' in x['Тип'] and
+                                             ('Базовый' in x['Тип'] or 'Индивидуальный' in x['Тип']) and
                                              x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                              quarter_deals_data))
+        
+        its_bizstart_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and
+                                                x['Группа'] == 'ИТС' and 'БизнесСтарт' in x['Тип'] and
+                                                x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
+                                                quarter_deals_data))
 
         countragent_deals_quarter = list(filter(lambda x: x['Ответственный'] == user_name and x['Тип'] and
                                                 'Контрагент' in x['Тип'] and
@@ -463,7 +473,7 @@ def create_employees_quarter_report(req):
                                              x not in countragent_deals_quarter and x not in spark_in_contract_deals_quarter and
                                              x not in spark_deals_quarter and x not in spark_plus_deals_quarter and
                                              x not in rpd_deals_quarter and x not in grm_deals_quarter and
-                                             x not in doki_deals_quarter and
+                                             x not in doki_deals_quarter and x not in its_bizstart_deals_quarter and
                                              x not in report_deals_quarter and x not in signature_deals_quarter and
                                              x not in dop_oblako_deals_quarter and x not in link_deals_quarter and
                                              x not in unics_deals_quarter and x not in cab_sotrudnik_deals_quarter and
@@ -484,6 +494,12 @@ def create_employees_quarter_report(req):
             len(its_base_deals_last_month),
             len(its_base_deals_quarter),
             len(its_base_deals_last_month) - len(its_base_deals_quarter)
+        ])
+        worksheet.append([
+            'БизнесСтарт',
+            len(its_bizstart_deals_last_month),
+            len(its_bizstart_deals_quarter),
+            len(its_bizstart_deals_last_month) - len(its_bizstart_deals_quarter)
         ])
         worksheet.append([
             'Контрагент',
@@ -801,8 +817,7 @@ def create_employees_quarter_report(req):
         worksheet.append(table_other)
         
         worksheet.append([])
-        ''' 
-        '''
+
         # Охват сервисами
         #Последний месяц квартала
         companies = set(map(lambda x: x['Компания'], list(filter(lambda x: x['Ответственный за компанию'] == user_name, before_1_month_deals_data))))
@@ -936,7 +951,7 @@ def create_employees_quarter_report(req):
 
         try:
             coverage_free_reporting_deals_last_month = round(len(free_reporting_deals_last_month) /
-                                                             len(its_prof_deals_last_month) * 100, 2)
+                                                             (len(its_prof_deals_last_month) + len(its_bizstart_deals_last_month)) * 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_last_month = 0
 
@@ -972,15 +987,17 @@ def create_employees_quarter_report(req):
                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       quarter_deals_data))
 
+        ''' # SAA 20251114
         prof_deals_start_quarter = list(filter(lambda x: x['Ответственный'] == user_name and
                                             x['Группа'] == 'ИТС' and
                                             'Базовый' not in x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             quarter_deals_data))
+        '''
 
         try:
             coverage_free_reporting_deals_start_quarter = round(len(free_reporting_deals_start_quarter) /
-                                                             len(prof_deals_start_quarter) * 100, 2)
+                                                             (len(its_prof_deals_quarter) + len(its_bizstart_deals_quarter))* 100, 2)
         except ZeroDivisionError:
             coverage_free_reporting_deals_start_quarter = 0
 
@@ -1190,10 +1207,10 @@ def create_employees_quarter_report(req):
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
         completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
-        service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
-        completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
-        completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
-        non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
+        #service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
+        #completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
+        #completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
+        #non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
@@ -1217,8 +1234,8 @@ def create_employees_quarter_report(req):
 
         worksheet.append(['', 'Незакрытых (и созд. в этом кварт)', 'Всего создано в квартале'])
         worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
-        worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
-        worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
+        #worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
+        #worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
         worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
@@ -1227,7 +1244,9 @@ def create_employees_quarter_report(req):
         
 
         # ЭДО
-        all_its_last_month = its_prof_deals_last_month + its_base_deals_last_month
+        all_its_last_month = list(filter(lambda x: 'ГРМ' not in x['Тип'], its_deals_before_1_month))
+        count_its_unigue = len(set(x['Компания'] for x in all_its_last_month))
+
         edo_companies_id_last_month = list(map(lambda x: x['Компания'], list(filter(lambda y: 'Компания' in y and y['Компания'], all_its_last_month))))
 
         if edo_companies_id_last_month:
@@ -1383,7 +1402,7 @@ def create_employees_quarter_report(req):
             operator_2lt_coverage = 0
 
         worksheet.append(['ЭДО', 'Всего ИТС на конец квартала', 'С ЭДО', '%'])
-        worksheet.append(['Охват ЭДО', len(all_its_last_month), len(edo_companies_count_last_month), edo_companies_coverage])
+        worksheet.append(['Охват ЭДО', count_its_unigue, len(edo_companies_count_last_month), edo_companies_coverage])
         if len(edo_companies_count_last_month) > 0:
             if len(operator_2ae) > 0:
                 worksheet.append(['', '2AE', len(operator_2ae), operator_2ae_coverage])

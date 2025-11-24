@@ -149,9 +149,9 @@ def employee_activity_report(req):
         #print(text_message)
 
         #рассылка от робота задач
-        notification_users = ['1391']
+        #notification_users = ['1391']
         #notification_users = [user_info['ID'], '1', '1391']
-        #notification_users = ['chat25605']
+        notification_users = ['chat25605']
         for user in notification_users:
             data = {
                 'DIALOG_ID': user,

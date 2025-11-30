@@ -51,7 +51,9 @@ def add_calls_amount_to_task(req):
     company_id = req['company_id']
     deals = b.get_all('crm.deal.list', {
         'select': ['COMPANY_ID', 'CLOSEDATE', 'TYPE_ID', 'UF_CRM_1638100416'],
-        'filter': {'UF_CRM_1657878818384': '859', 'COMPANY_ID': company_id, '!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
+        #2025-11-30 ИБС
+        'filter': {'UF_CRM_1657878818384': '859', 'COMPANY_ID': company_id, 'CATEGORY_ID': '1','!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
+        #'filter': {'UF_CRM_1657878818384': '859', 'COMPANY_ID': company_id, '!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
     deal_info = find_top_deal_type(deals)
 
     if not deal_info:

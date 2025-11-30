@@ -67,6 +67,7 @@ def find_top_deal(company_id: str) -> str:
                'GOODS',                             # ГРМ
                'UC_J426ZW',                         # Садовод
                'UC_DBLSP5',                         # Садовод+Помощник
+               '9',                                 # БизнесСтарт
                ]
     level_3 = ['UC_IUJR81',                         # Допы Облако
                'UC_USDKKM',                         # Медицина
@@ -153,6 +154,7 @@ def find_top_deal(company_id: str) -> str:
         '1': '2501',
         'UC_6TCS2E': '2505',
         '2': '2727',
+        '9': '75371',
     }
     for type in level_1:
         if type in types:

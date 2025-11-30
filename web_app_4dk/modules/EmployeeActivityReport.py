@@ -63,7 +63,7 @@ def employee_activity_report(req):
         text_message = f'[b]Отчет по активности {user_name} за {day_title}[/b]\n\n'
 
         # сбор инфо по исходящим более 10 секунд за день
-        calls = b.get_all('voximplant.statistic.get', {
+        outcalls = b.get_all('voximplant.statistic.get', {
             'filter': {
                 'CALL_TYPE': 1,
                 'PORTAL_USER_ID': user_info['ID'],
@@ -71,7 +71,18 @@ def employee_activity_report(req):
                 '>=CALL_START_DATE': report_day,
                 'CALL_FAILED_CODE': '200',
             }})
-        text_message += f'Исходящих звонков свыше 10 сек.: {len(calls)}\n'
+        text_message += f'Исходящих звонков свыше 10 сек.: {len(outcalls)}\n'
+
+        # сбор инфо по входящим более 10 секунд за день
+        incalls = b.get_all('voximplant.statistic.get', {
+            'filter': {
+                'CALL_TYPE': 2,
+                'PORTAL_USER_ID': user_info['ID'],
+                '>CALL_DURATION': 10,
+                '>=CALL_START_DATE': report_day,
+                'CALL_FAILED_CODE': '200',
+            }})
+        text_message += f'Входящих звонков свыше 10 сек.: {len(incalls)}\n'
         
         #сбор инфо по исходящим письмам с привязкой к сущностям
         emails = b.get_all('crm.activity.list', {
@@ -138,6 +149,7 @@ def employee_activity_report(req):
         #print(text_message)
 
         #рассылка от робота задач
+        #notification_users = ['1391']
         #notification_users = [user_info['ID'], '1', '1391']
         notification_users = ['chat25605']
         for user in notification_users:

@@ -86,6 +86,7 @@ def sort_types(company_id):
                'GOODS',                             # ГРМ
                'UC_J426ZW',                         # Садовод
                'UC_DBLSP5',                         # Садовод+Помощник
+               '9',                                 # БизнесСтарт
                ]
     level_3 = ['UC_IUJR81',                         # Допы Облако
                'UC_USDKKM',                         # Медицина
@@ -171,7 +172,8 @@ def sort_types(company_id):
         'UC_YIAJC8': '2351',
         '1': '2353',
         'UC_6TCS2E': '2357',
-        '2': '2729'
+        '2': '2729',
+        '9': '75373',
     }
     for type in level_1:
         if type in types:

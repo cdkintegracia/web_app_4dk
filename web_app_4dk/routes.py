@@ -110,6 +110,8 @@ from web_app_4dk.modules.upsert_user import upsert_user_job
 from web_app_4dk.modules.ActivityReportCS import activity_report_cs
 #2025-10-16 saa
 from web_app_4dk.modules.CountRAReport import count_ra_report
+#2025-12-10 saa
+from web_app_4dk.modules.CA_DownOverTimeReport import ca_downovertime_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -191,7 +193,9 @@ custom_webhooks = {
     #2025-10-15 saa
     'activity_report_cs': activity_report_cs,
     #2025-10-16 saa
-    'count_ra_report': count_ra_report
+    'count_ra_report': count_ra_report,
+    #2025-12-10 saa
+    'ca_downovertime_report': ca_downovertime_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

@@ -56,14 +56,13 @@ def ca_downovertime_report(req):
 
     report_day = datetime.today()
     year, week, weekday = report_day.isocalendar()
-    
+
     start_week = datetime.fromisocalendar(year, week, 1) - timedelta(days=7)
-    start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
-
     end_week = start_week + timedelta(days=7)
-    end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
-
     start_month = report_day.replace(day=1)
+    
+    start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
+    end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
 
 

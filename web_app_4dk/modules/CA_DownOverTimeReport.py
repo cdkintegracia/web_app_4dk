@@ -97,52 +97,36 @@ def ca_downovertime_report(req):
     for user_info in users_info:
 
         user_name = get_fio_from_user_info(user_info)
-        text_message = f'[b]{user_name}[/b]\n\n'
-
-        
+        text_message = f'[b]{user_name}[/b]\n\n'     
 
         print(text_message)
-        '''
+        
         sleep(1)
 
-        #сбор инфо по кол-ву закрытых задач с тегом презентация
-        presentation = b.get_all('tasks.task.list', {
-            'filter': {
-                '%TAG': 'презентация',
-                'RESPONSIBLE_ID': user_info['ID'],
-                '>=CLOSED_DATE': report_day
-                }})
-        text_message += f'Проведено презентаций: {len(presentation)}\n'
-
-        #сбор инфо по трудозатратам внесенным сегодня - архив
-        
-        time_spent = b.get_all('tasks.task.list', {
-            'filter': {
-                'RESPONSIBLE_ID': user_info['ID'],
-                '>=CLOSED_DATE': report_day
-                }})
-
-        time_spent = int(sum(list(map(lambda x: int(x['timeSpentInLogs']), time_spent))) / 60)
-        
         time_spent = b.call('task.elapseditem.getlist', {
             'order': {
                 'ID': 'asc'
                 },
             'filter': {
                 'USER_ID': user_info['ID'],
-                '>=CREATED_DATE': report_day}
-            }, raw=True)['result']
+                '>=CREATED_DATE': start_month,
+                '<CREATED_DATE': end_week
+                },
+            'select': {
+                'MINUTES'
+                },
+            'nav_params': {
+                'nPageSize': 50,  # по 50 элементов на странице
+                'iNumPage': 1  # страница номер 1        
+                },
+        }, raw=True)['result']
+        
+        print(time_spent)
+
+        '''
         time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
         text_message += f'Трудозатрат по задачам: {time_spent} минут\n'
-
-        #сбор инфо по выставленным счетам сегодня
-        account_sp = b.get_all('crm.item.list', { #смарт-процесс Выставленные счета (выгружаются из СОУ)
-            'entityTypeId': '1082',
-            'filter': {
-                'assignedById': user_info['ID'],
-                '>=ufCrm77_1759836894': report_day
-                }})
-        account = len(account_sp)
+        print(text_message)
 
         
         text_message += f'Выставлено счетов: {account}\n'

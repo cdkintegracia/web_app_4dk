@@ -114,9 +114,10 @@ def ca_downovertime_report(req):
                 },
             'select': ['*'],
             'params': {
-                'nPageSize': 50,  # по 50 элементов на странице
-                'iNumPage': 1  # страница номер 1        
-                }
+                'nav_params': {
+                    'nPageSize': 50,  # по 50 элементов на странице
+                    'iNumPage': 1  # страница номер 1
+                }}
         }, raw=True)
         #['result']
         

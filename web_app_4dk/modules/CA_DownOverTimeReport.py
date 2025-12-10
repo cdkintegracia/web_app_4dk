@@ -62,7 +62,7 @@ def ca_downovertime_report(req):
     print(start_week)
     print(end_week)
     print(start_month)
-
+    '''
 
     #собираем общие данные по рабочим часам за неделю и месяц
     week_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
@@ -94,7 +94,7 @@ def ca_downovertime_report(req):
         
 
         print(text_message)
-        '''
+        
         sleep(1)
 
         #сбор инфо по кол-ву закрытых задач с тегом презентация

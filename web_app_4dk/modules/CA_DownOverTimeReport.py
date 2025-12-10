@@ -113,14 +113,14 @@ def ca_downovertime_report(req):
                 '<CREATED_DATE': end_week,
                 },
             'select': ['*'],
-            'nav_params': {
+            'params': {
                 'nPageSize': 50,  # по 50 элементов на странице
                 'iNumPage': 1  # страница номер 1        
                 }
         }, raw=True)
         #['result']
         
-        print(time_spent)
+        #print(time_spent)
 
         '''
         time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))

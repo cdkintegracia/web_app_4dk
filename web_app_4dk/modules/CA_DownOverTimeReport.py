@@ -110,7 +110,7 @@ def ca_downovertime_report(req):
             'filter': {
                 'USER_ID': user_info['ID'],
                 '>=CREATED_DATE': start_month,
-                '<CREATED_DATE': end_week
+                '<CREATED_DATE': end_week,
                 },
             'select': {
                 'MINUTES'
@@ -118,8 +118,9 @@ def ca_downovertime_report(req):
             'nav_params': {
                 'nPageSize': 50,  # по 50 элементов на странице
                 'iNumPage': 1  # страница номер 1        
-                },
-        }, raw=True)['result']
+                }
+        }, raw=True)
+        #['result']
         
         print(time_spent)
 

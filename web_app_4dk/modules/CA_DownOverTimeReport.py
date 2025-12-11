@@ -113,10 +113,10 @@ def ca_downovertime_report(req):
                 '<CREATED_DATE': end_week
                 },
             'select': ['*'],
-            'nav_params': {
+            'NAV_PARAMS': {
                 'nPageSize': 50,
-                'iNumPage': 1
-                },
+                'iNumPage': 2
+                }
         }, raw=True)
         #['result']
         

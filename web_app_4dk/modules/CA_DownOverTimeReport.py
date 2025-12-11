@@ -112,17 +112,30 @@ def ca_downovertime_report(req):
                 '>=CREATED_DATE': start_month,
                 '<CREATED_DATE': end_week
                 },
-            'select': ['*'],
-            'params': {
-                'nPageSize': '50',  # по 50 элементов на странице
-                'iNumPage': '1',  # страница номер 1
-                }
+            'select': ['*']
         }, raw=True)
         #['result']
         
         #print(time_spent)
 
         '''
+        time_spent = b.call('task.elapseditem.getlist', {
+            'order': {
+                'ID': 'asc'
+                },
+            'filter': {
+                'USER_ID': user_info['ID'],
+                '>=CREATED_DATE': start_month,
+                '<CREATED_DATE': end_week
+                },
+            'select': ['*'],
+            'params': {
+                'nPageSize': '50',  # по 50 элементов на странице
+                'iNumPage': '1',  # страница номер 1
+                }
+        }, raw=True)
+
+
         time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
         text_message += f'Трудозатрат по задачам: {time_spent} минут\n'
         print(text_message)

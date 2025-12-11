@@ -64,8 +64,8 @@ def ca_downovertime_report(req):
     #start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
-    start_week = '2025-11-17T00:00:00+03:00'
-    end_week = '2025-11-24T00:00:00+03:00'
+    start_week = '2025-11-24T00:00:00+03:00'
+    end_week = '2025-12-01T00:00:00+03:00'
     start_month = '2025-11-01T00:00:00+03:00'
 
 

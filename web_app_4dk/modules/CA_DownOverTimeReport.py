@@ -113,10 +113,11 @@ def ca_downovertime_report(req):
                 '<CREATED_DATE': end_week
                 },
             'select': ['*']
-        }, raw=True)
-        #['result']
+        }, raw=True)['result']
+
+        time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
         
-        #print(time_spent)
+        print(time_spent)
 
         '''
         time_spent = b.call('task.elapseditem.getlist', {

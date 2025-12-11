@@ -112,7 +112,11 @@ def ca_downovertime_report(req):
                 '>=CREATED_DATE': start_month,
                 '<CREATED_DATE': end_week
                 },
-            'select': ['*']
+            'select': ['*'],
+            'params': {
+                'nPageSize': 50,
+                'iNumPage': 1
+                },
         }, raw=True)
         #['result']
         

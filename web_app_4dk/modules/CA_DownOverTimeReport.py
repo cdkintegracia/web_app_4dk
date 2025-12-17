@@ -121,7 +121,7 @@ def ca_downovertime_report(req):
 
         time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
         
-        print(time_spent)
+        print(len(time_spent))
 
         '''
         time_spent = b.call('task.elapseditem.getlist', {

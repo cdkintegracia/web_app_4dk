@@ -134,8 +134,6 @@ def ca_downovertime_report(req):
     else:
         last_day_month = end_month
 
-    print(last_day_month)
-
     #start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
@@ -184,7 +182,7 @@ def ca_downovertime_report(req):
         user_name = get_fio_from_user_info(user_info)
         text_message = f'[b]{user_name}[/b]\n\n'     
 
-        print(text_message)
+        #print(text_message)
         
         sleep(1)
         '''
@@ -253,6 +251,7 @@ def ca_downovertime_report(req):
         print(time_spent_month)
         '''
         
+        # делаем запрос трудозатрат
         time_spent_month_list = get_time_spent_for_period(
             b=b,
             user_id=user_info['ID'],
@@ -264,6 +263,42 @@ def ca_downovertime_report(req):
 
         print('Записей за месяц:', len(time_spent_month_list))
         print('Минут за месяц:', time_spent_month)
+
+        # собираем словарь, где по каждому task_id сумма трудозатрат
+        task_month = {}
+        for item in time_spent_month_list:
+            task_id = item.get('TASK_ID')
+            minutes = int(item.get('MINUTES', 0))
+
+            if task_id in task_month:
+                task_month[task_id] += minutes
+            else:
+                task_month[task_id] = minutes
+
+        # запрашиваем по получившимся task_id названия задач
+        task_ids_month = list(task_month.keys())
+        tasks = b.get_all('tasks.task.list', {
+            'filter': {
+                'ID': task_ids_month
+            },
+            'select': ['ID', 'TITLE']
+        })
+
+        # собираем строки, где по каждому task_id есть название и сумма трудозатрат в часах
+        task_titles = {}
+        for task in tasks:
+            task_titles[int(task['id'])] = task['title']
+
+        time_spent_month = []
+        for task_id, minutes in task_month.items():
+            title = task_titles[task_id]
+            hours = round(minutes / 60, 2)  # Переводим минуты в часы и округляем до 2 знаков
+            time_spent_month.append(f'({task_id}) {title}: {hours} ч')
+
+        text_message += f'2. За период с {datetime.fromisoformat(start_month)} по {datetime.fromisoformat(last_day_month)}'
+        text_message += f'Вами отработаны задачи:\n{time_spent_month}'
+        print(text_message)
+
 
         time_spent_week_list = get_time_spent_for_period(
             b=b,

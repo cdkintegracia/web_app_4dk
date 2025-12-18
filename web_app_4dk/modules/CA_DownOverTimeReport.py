@@ -333,6 +333,7 @@ def ca_downovertime_report(req):
         else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_month)} ч'
 
         #print(text_message)
+        sleep(1)
 
         #рассылка от робота задач
         notification_users = ['1391']

@@ -263,12 +263,12 @@ def ca_downovertime_report(req):
             text_message += f'{task_id}\n'
 
         hours_week = round(sum(task_week.values()) / 60, 2)
-        text_message += f'Итого отработано: {hours_week} ч'
+        text_message += f'Итого отработано: {hours_week} ч\n'
 
         downovertime_week = total_hours_week - hours_week
         if downovertime_week >= 0:
-            text_message += f'Простой: {downovertime_week} ч'
-        else: text_message += f'Переработка: {downovertime_week} ч'
+            text_message += f'Простой: {abs(downovertime_week)} ч'
+        else: text_message += f'Переработка: {abs(downovertime_week)} ч'
         
                 
         # делаем запрос трудозатрат за месяц
@@ -322,12 +322,12 @@ def ca_downovertime_report(req):
             text_message += f'{task_id}\n'
 
         hours_month = round(sum(task_month.values()) / 60, 2)
-        text_message += f'Итого отработано: {hours_month} ч'
+        text_message += f'Итого отработано: {hours_month} ч\n'
 
-        downovertime_month = total_hours_week - hours_week
+        downovertime_month = total_hours_month - hours_month
         if downovertime_month >= 0:
-            text_message += f'Простой: {downovertime_month} ч'
-        else: text_message += f'Переработка: {downovertime_month} ч'
+            text_message += f'Простой: {abs(downovertime_month)} ч'
+        else: text_message += f'Переработка: {abs(downovertime_month)} ч'
 
         print(text_message)
 
@@ -345,7 +345,7 @@ def ca_downovertime_report(req):
             }
 
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data)
-            
+
         '''
         #рассылка от службы качества чдк для СНА 157
         data = {

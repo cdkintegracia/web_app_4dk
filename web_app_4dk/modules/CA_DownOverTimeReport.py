@@ -219,7 +219,7 @@ def ca_downovertime_report(req):
             task_titles[int(task['id'])] = task['title']
 
         time_spent_week = []
-        for task_id, minutes in task_month.items():
+        for task_id, minutes in task_week.items():
             title = task_titles[int(task_id)]
             hours = round(minutes / 60, 2)  # Переводим минуты в часы и округляем до 2 знаков
             time_spent_week.append(f'({task_id}) {title}: {hours} ч')

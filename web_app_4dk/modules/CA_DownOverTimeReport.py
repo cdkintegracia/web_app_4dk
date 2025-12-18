@@ -76,18 +76,20 @@ def ca_downovertime_report(req):
     #end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
     #end_month = datetime.strftime(end_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    #last_day_month = datetime.strftime(last_day_month, '%Y-%m-%d') + 'T00:00:00+03:00'
     start_week = '2025-11-24T00:00:00+03:00'
     end_week = '2025-12-01T00:00:00+03:00'
     start_month = '2025-11-01T00:00:00+03:00'
     end_month = '2025-11-30T00:00:00+03:00'
-    last_day_month = datetime.strftime(last_day_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    last_day_month = '2025-11-30T00:00:00+03:00'
+    
 
     print(start_week)
     print(end_week)
     print(start_month)
     print(end_month)
     print(last_day_month)
-    
+
 
     #собираем общие данные по рабочим часам за неделю и месяц
     week_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь

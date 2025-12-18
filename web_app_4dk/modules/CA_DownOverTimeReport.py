@@ -43,6 +43,70 @@ def get_fio_from_user_info(user_info: dict) -> str:
             f' {user_info["NAME"] if "NAME" in user_info else ""}'
             f' {user_info["SECOND_NAME"] if "SECOND_NAME" in user_info else ""}').strip()
 
+def get_time_spent_for_period(b, user_id, start_iso, end_iso):
+    """
+    Возвращает список трудозатрат за период [start_iso, end_iso),
+    автоматически дробит период на 3 части при >50 записей
+    """
+
+    # первый запрос — проверочный
+    result = b.call('task.elapseditem.getlist', {
+        'order': {'ID': 'asc'},
+        'filter': {
+            'USER_ID': user_id,
+            '>=CREATED_DATE': start_iso,
+            '<CREATED_DATE': end_iso
+        },
+        'select': ['*']
+    }, raw=True)['result']
+
+    if len(result) <= 49:
+        return result
+
+    # если записей много — дробим период на 3 части
+    start_dt = datetime.fromisoformat(start_iso)
+    end_dt = datetime.fromisoformat(end_iso)
+
+    start_day = start_dt.date()
+    end_day = end_dt.date()
+
+    total_days = (end_day - start_day).days
+    if total_days < 1:
+        total_days = 1
+
+    segment_days = total_days // 3
+    remainder = total_days % 3
+
+    segments = []
+    current_start = start_day
+
+    for i in range(3):
+        extra_day = 1 if i < remainder else 0
+        seg_end = current_start + timedelta(days=segment_days + extra_day)
+
+        seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat()
+        seg_end_str = datetime.combine(seg_end, start_dt.time()).isoformat()
+
+        segments.append((seg_start_str, seg_end_str))
+        current_start = seg_end
+
+    all_results = []
+    for seg_start, seg_end in segments:
+        part = b.call('task.elapseditem.getlist', {
+            'order': {'ID': 'asc'},
+            'filter': {
+                'USER_ID': user_id,
+                '>=CREATED_DATE': seg_start,
+                '<CREATED_DATE': seg_end
+            },
+            'select': ['*']
+        }, raw=True)['result']
+
+        all_results.extend(part)
+
+    return all_results
+
+
 def ca_downovertime_report(req):
 
     users_id = get_employee_id(req['users'])
@@ -82,7 +146,6 @@ def ca_downovertime_report(req):
     start_month = '2025-11-01T00:00:00+03:00'
     end_month = '2025-11-30T00:00:00+03:00'
     last_day_month = '2025-11-30T00:00:00+03:00'
-    
 
     print(start_week)
     print(end_week)
@@ -124,7 +187,8 @@ def ca_downovertime_report(req):
         print(text_message)
         
         sleep(1)
-
+        '''
+    # ПОДСЧЕТ ТРУДОЗАТРАТ С НАЧАЛА МЕСЯЦА
         #подсчет затраченного времени с начала месяца по сегодня
         time_spent = b.call('task.elapseditem.getlist', {
             'order': {
@@ -133,48 +197,43 @@ def ca_downovertime_report(req):
             'filter': {
                 'USER_ID': user_info['ID'],
                 '>=CREATED_DATE': start_month,
-                '<CREATED_DATE': end_week
+                '<CREATED_DATE': last_day_month
                 },
             'select': ['*']
         }, raw=True)['result']
 
         print(len(time_spent))
 
+        #если трузатрат больше 50, делим период с начала месяца по последний день месяца той недели на 3 промежутка
         if len(time_spent) > 49:
-            # Парсим даты с учётом временной зоны
-            start_dt = datetime.fromisoformat(start_month)
-            end_dt = datetime.fromisoformat(end_week)
+        
+            start_dt = datetime.fromisoformat(start_month) # Парсим даты с учётом временной зоны
+            end_dt = datetime.fromisoformat(last_day_month)
             
-            # Приводим к началу дня (обрезаем время), чтобы делить по дням
-            start_day = start_dt.date()
+            start_day = start_dt.date() # Приводим к началу дня (обрезаем время), чтобы делить по дням
             end_day = end_dt.date()
             
-            # Вычисляем количество полных дней в интервале
-            total_days = (end_day - start_day).days
+            total_days = (end_day - start_day).days             # Вычисляем количество полных дней в интервале
             if total_days < 1:
                 total_days = 1 # Минимум один день, чтобы избежать деления на ноль
             
             segment_days = total_days // 3
             remainder = total_days % 3 # Остаток дней, которые добавим к первым отрезкам
 
-            # Разбиваем на три отрезка по дням
-            segments = []
+            segments = [] # Разбиваем на три отрезка по дням
             current_start = start_day
             for i in range(3):
-                # К первым остаточным дням добавляем по одному дню
                 extra_day = 1 if i < remainder else 0
-                seg_end = current_start + timedelta(days=segment_days + extra_day)
+                seg_end = current_start + timedelta(days=segment_days + extra_day) # К первым остаточным дням добавляем по одному дню
                 
-                # Форматируем в ISO-строку
-                seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat()
+                seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat() # Форматируем в ISO-строку
                 seg_end_str = datetime.combine(seg_end, start_dt.time()).isoformat()
                 
                 segments.append((seg_start_str, seg_end_str))
                 current_start = seg_end
 
-            # Выполняем запрос для каждого отрезка
             all_results = []
-            for seg_start, seg_end in segments:
+            for seg_start, seg_end in segments: # Выполняем запрос для каждого отрезка
                 result = b.call('task.elapseditem.getlist', {
                     'order': {'ID': 'asc'},
                     'filter': {
@@ -191,10 +250,34 @@ def ca_downovertime_report(req):
 
 
         time_spent_month = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
-
         print(time_spent_month)
+        '''
         
-        
+        time_spent_month_list = get_time_spent_for_period(
+            b=b,
+            user_id=user_info['ID'],
+            start_iso=start_month,
+            end_iso=last_day_month
+        )
+
+        time_spent_month = sum(int(x['MINUTES']) for x in time_spent_month_list)
+
+        print('Записей за месяц:', len(time_spent_month_list))
+        print('Минут за месяц:', time_spent_month)
+
+        time_spent_week_list = get_time_spent_for_period(
+            b=b,
+            user_id=user_info['ID'],
+            start_iso=start_week,
+            end_iso=end_week
+        )
+
+        time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
+
+        print('Записей за неделю:', len(time_spent_week_list))
+        print('Минут за неделю:', time_spent_week)
+
+
 
         '''
         time_spent = b.call('task.elapseditem.getlist', {

@@ -329,7 +329,7 @@ def ca_downovertime_report(req):
             text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_month)} ч'
         else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_month)} ч'
 
-        print(text_message)
+        #print(text_message)
 
         #рассылка от робота задач
         notification_users = ['1391']

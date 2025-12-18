@@ -258,17 +258,17 @@ def ca_downovertime_report(req):
         month_1 = datetime.fromisoformat(start_week).strftime("%d.%m.%y")
         month_2 = datetime.fromisoformat(end_week).strftime("%d.%m.%y")
 
-        text_message += f'1. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
+        text_message += f'[i]1. За период с {month_1} по {month_2} Вами отработаны задачи:[/i]\n'
         for task_id in time_spent_week:
             text_message += f'{task_id}\n'
 
         hours_week = round(sum(task_week.values()) / 60, 2)
-        text_message += f'Итого отработано: {hours_week} ч\n'
+        text_message += f'[i][b]Итого отработано:[/b][/i] {hours_week} ч\n'
 
         downovertime_week = total_hours_week - hours_week
         if downovertime_week >= 0:
-            text_message += f'Простой: {abs(downovertime_week)} ч'
-        else: text_message += f'Переработка: {abs(downovertime_week)} ч'
+            text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_week)} ч'
+        else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_week)} ч'
         
                 
         # делаем запрос трудозатрат за месяц
@@ -317,17 +317,17 @@ def ca_downovertime_report(req):
         month_1 = datetime.fromisoformat(start_month).strftime("%d.%m.%y")
         month_2 = datetime.fromisoformat(last_day_month).strftime("%d.%m.%y")
 
-        text_message += f'\n\n2. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
+        text_message += f'\n\n[i]2. За период с {month_1} по {month_2} Вами отработаны задачи:[/i]\n'
         for task_id in time_spent_month:
             text_message += f'{task_id}\n'
 
         hours_month = round(sum(task_month.values()) / 60, 2)
-        text_message += f'Итого отработано: {hours_month} ч\n'
+        text_message += f'[i][b]Итого отработано:[/b][/i] {hours_month} ч\n'
 
         downovertime_month = total_hours_month - hours_month
         if downovertime_month >= 0:
-            text_message += f'Простой: {abs(downovertime_month)} ч'
-        else: text_message += f'Переработка: {abs(downovertime_month)} ч'
+            text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_month)} ч'
+        else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_month)} ч'
 
         print(text_message)
 

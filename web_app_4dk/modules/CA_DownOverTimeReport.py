@@ -181,6 +181,37 @@ def ca_downovertime_report(req):
         user_name = get_fio_from_user_info(user_info)
         text_message = f'[b]{user_name}[/b]\n\n'
 
+
+        #собираем персональные данные по рабочим часам за неделю и месяц
+        week_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за неделю
+            'entityTypeId': '1102',
+            'select': ['ufCrm87_Hours'],
+            'filter': {
+                'categoryId': 119,
+                'ufCrm87_Person': user_info['ID'],
+                '>=ufCrm87_Day': start_week,
+                '<ufCrm87_Day': end_week
+                }})
+        week_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), week_absent)))
+        print(week_absent)
+
+        month_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за месяц
+            'entityTypeId': '1102',
+            'select': ['ufCrm87_Hours'],
+            'filter': {
+                'categoryId': 119,
+                'ufCrm87_Person': user_info['ID'],
+                '>=ufCrm87_Day': start_month,
+                '<ufCrm87_Day': last_day_month
+                }})
+        month_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), month_absent)))
+        print(month_absent)
+
+
+        total_hours_week = week_calendar - week_absent # всего рабочих часов за неделю
+        total_hours_month = month_calendar - month_absent # всего рабочих часов за месяц
+
+
         # делаем запрос трудозатрат за неделю
         time_spent_week_list = get_time_spent_for_period(
             b=b,
@@ -232,7 +263,12 @@ def ca_downovertime_report(req):
             text_message += f'{task_id}\n'
 
         hours_week = round(sum(task_week.values()) / 60, 2)
-        text_message += f'Всего отработано: {hours_week} ч'
+        text_message += f'Итого отработано: {hours_week} ч'
+
+        downovertime_week = total_hours_week - hours_week
+        if downovertime_week >= 0:
+            text_message += f'Простой: {downovertime_week} ч'
+        else: text_message += f'Переработка: {downovertime_week} ч'
         
                 
         # делаем запрос трудозатрат за месяц
@@ -281,20 +317,22 @@ def ca_downovertime_report(req):
         month_1 = datetime.fromisoformat(start_month).strftime("%d.%m.%y")
         month_2 = datetime.fromisoformat(last_day_month).strftime("%d.%m.%y")
 
-        text_message += f'\n2. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
+        text_message += f'\n\n2. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
         for task_id in time_spent_month:
             text_message += f'{task_id}\n'
 
         hours_month = round(sum(task_month.values()) / 60, 2)
-        text_message += f'Всего отработано: {hours_month} ч'
+        text_message += f'Итого отработано: {hours_month} ч'
+
+        downovertime_month = total_hours_week - hours_week
+        if downovertime_month >= 0:
+            text_message += f'Простой: {downovertime_month} ч'
+        else: text_message += f'Переработка: {downovertime_month} ч'
 
         print(text_message)
 
 
         sleep(1)
-
-        '''
-        #print(text_message)
 
         #рассылка от робота задач
         notification_users = ['1391']
@@ -307,7 +345,8 @@ def ca_downovertime_report(req):
             }
 
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data)
-        
+            
+        '''
         #рассылка от службы качества чдк для СНА 157
         data = {
             'DIALOG_ID': '1391',

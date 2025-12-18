@@ -91,6 +91,7 @@ def get_time_spent_for_period(b, user_id, start_iso, end_iso):
 
     all_results = []
     for seg_start, seg_end in segments:
+        sleep(1)
         part = b.call('task.elapseditem.getlist', {
             'order': {'ID': 'asc'},
             'filter': {
@@ -133,11 +134,12 @@ def ca_downovertime_report(req):
     else:
         last_day_month = end_month
 
-    #start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
-    #end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
-    #start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
-    #end_month = datetime.strftime(end_month, '%Y-%m-%d') + 'T00:00:00+03:00'
-    #last_day_month = datetime.strftime(last_day_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
+    end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
+    start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    end_month = datetime.strftime(end_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    last_day_month = datetime.strftime(last_day_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    '''
     start_week = '2025-11-24T00:00:00+03:00'
     end_week = '2025-12-01T00:00:00+03:00'
     start_month = '2025-11-01T00:00:00+03:00'
@@ -149,6 +151,7 @@ def ca_downovertime_report(req):
     print(start_month)
     print(end_month)
     print(last_day_month)
+    '''
 
 
     #собираем общие данные по рабочим часам за неделю и месяц
@@ -207,11 +210,10 @@ def ca_downovertime_report(req):
         month_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), month_absent)))
         print(month_absent)
 
-
         total_hours_week = week_calendar - week_absent # всего рабочих часов за неделю
         total_hours_month = month_calendar - month_absent # всего рабочих часов за месяц
 
-
+        sleep(1)
         # делаем запрос трудозатрат за неделю
         time_spent_week_list = get_time_spent_for_period(
             b=b,
@@ -270,6 +272,7 @@ def ca_downovertime_report(req):
             text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_week)} ч'
         else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_week)} ч'
         
+        sleep(1)
                 
         # делаем запрос трудозатрат за месяц
         time_spent_month_list = get_time_spent_for_period(

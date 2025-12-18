@@ -59,20 +59,32 @@ def ca_downovertime_report(req):
 
     start_week = datetime.fromisocalendar(year, week, 1) - timedelta(days=7)
     end_week = start_week + timedelta(days=7)
-    start_month = report_day.replace(day=1)
+    start_month = start_week.replace(day=1)
+    if start_week.month == 12:
+        end_month = start_week.replace(year=start_week.year + 1, month=1, day=1) - timedelta(days=1)
+    else:
+        end_month = start_week.replace(month=start_week.month + 1, day=1) - timedelta(days=1)
 
     #start_week = datetime.strftime(start_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #end_week = datetime.strftime(end_week, '%Y-%m-%d') + 'T00:00:00+03:00'
     #start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
+    #end_month = datetime.strftime(end_month, '%Y-%m-%d') + 'T00:00:00+03:00'
     start_week = '2025-11-24T00:00:00+03:00'
     end_week = '2025-12-01T00:00:00+03:00'
     start_month = '2025-11-01T00:00:00+03:00'
-
+    end_month = '2025-11-30T00:00:00+03:00'
 
     print(start_week)
     print(end_week)
     print(start_month)
-    
+    print(end_month)
+
+    if start_month.month == end_week.month:
+        last_day_month = end_week
+    else:
+        last_day_month = end_month
+
+    print(last_day_month)
 
     #собираем общие данные по рабочим часам за неделю и месяц
     week_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
@@ -92,7 +104,7 @@ def ca_downovertime_report(req):
         'filter': {
             'categoryId': 115,
             '>=ufCrm85_Day': start_month,
-            '<ufCrm85_Day': end_week
+            '<ufCrm85_Day': last_day_month
             }})
     month_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), month_calendar)))
     print(month_calendar)
@@ -100,6 +112,7 @@ def ca_downovertime_report(req):
 
     for user_info in users_info:
 
+        # получаем имя сотрудника
         user_name = get_fio_from_user_info(user_info)
         text_message = f'[b]{user_name}[/b]\n\n'     
 
@@ -107,6 +120,7 @@ def ca_downovertime_report(req):
         
         sleep(1)
 
+        #подсчет затраченного времени с начала месяца по сегодня
         time_spent = b.call('task.elapseditem.getlist', {
             'order': {
                 'ID': 'asc'
@@ -121,7 +135,59 @@ def ca_downovertime_report(req):
 
         print(len(time_spent))
 
-        time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
+        if len(time_spent) > 49:
+            # Парсим даты с учётом временной зоны
+            start_dt = datetime.fromisoformat(start_month)
+            end_dt = datetime.fromisoformat(end_week)
+            
+            # Приводим к началу дня (обрезаем время), чтобы делить по дням
+            start_day = start_dt.date()
+            end_day = end_dt.date()
+            
+            # Вычисляем количество полных дней в интервале
+            total_days = (end_day - start_day).days
+            if total_days < 1:
+                total_days = 1 # Минимум один день, чтобы избежать деления на ноль
+            
+            segment_days = total_days // 3
+            remainder = total_days % 3 # Остаток дней, которые добавим к первым отрезкам
+
+            # Разбиваем на три отрезка по дням
+            segments = []
+            current_start = start_day
+            for i in range(3):
+                # К первым остаточным дням добавляем по одному дню
+                extra_day = 1 if i < remainder else 0
+                seg_end = current_start + timedelta(days=segment_days + extra_day)
+                
+                # Форматируем в ISO-строку
+                seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat()
+                seg_end_str = datetime.combine(seg_end, start_dt.time()).isoformat()
+                
+                segments.append((seg_start_str, seg_end_str))
+                current_start = seg_end
+
+            # Выполняем запрос для каждого отрезка
+            all_results = []
+            for seg_start, seg_end in segments:
+                result = b.call('task.elapseditem.getlist', {
+                    'order': {'ID': 'asc'},
+                    'filter': {
+                        'USER_ID': user_info['ID'],
+                        '>=CREATED_DATE': seg_start,
+                        '<CREATED_DATE': seg_end
+                    },
+                    'select': ['*']
+                }, raw=True)['result']
+                all_results.extend(result)
+            
+            time_spent = all_results
+            print(len(time_spent))
+
+
+        time_spent_month = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
+
+        print(time_spent_month)
         
         
 

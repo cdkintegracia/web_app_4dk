@@ -64,12 +64,10 @@ def get_time_spent_for_period(b, user_id, start_iso, end_iso):
         return result
 
     # если записей много — дробим период на 3 части
-
-    #start_dt = datetime.fromisoformat(start_iso)
-    #end_dt = datetime.fromisoformat(end_iso)
-
-    start_day = start_iso.date()
-    end_day = end_iso.date()
+    start_dt = datetime.fromisoformat(start_iso)
+    end_dt = datetime.fromisoformat(end_iso)
+    start_day = start_dt.date()
+    end_day = end_dt.date()
 
     total_days = (end_day - start_day).days
     if total_days < 1:
@@ -85,8 +83,8 @@ def get_time_spent_for_period(b, user_id, start_iso, end_iso):
         extra_day = 1 if i < remainder else 0
         seg_end = current_start + timedelta(days=segment_days + extra_day)
 
-        seg_start_str = datetime.combine(current_start, start_day.time()).isoformat()
-        seg_end_str = datetime.combine(seg_end, start_day.time()).isoformat()
+        seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat()
+        seg_end_str = datetime.combine(seg_end, start_dt.time()).isoformat()
 
         segments.append((seg_start_str, seg_end_str))
         current_start = seg_end

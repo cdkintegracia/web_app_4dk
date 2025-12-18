@@ -179,91 +179,72 @@ def ca_downovertime_report(req):
 
         # получаем имя сотрудника
         user_name = get_fio_from_user_info(user_info)
-        text_message = f'[b]{user_name}[/b]\n\n'     
+        text_message = f'[b]{user_name}[/b]\n\n'
 
-        #print(text_message)
-        
-        sleep(1)
-        '''
-    # ПОДСЧЕТ ТРУДОЗАТРАТ С НАЧАЛА МЕСЯЦА
-        #подсчет затраченного времени с начала месяца по сегодня
-        time_spent = b.call('task.elapseditem.getlist', {
-            'order': {
-                'ID': 'asc'
-                },
+        # делаем запрос трудозатрат за неделю
+        time_spent_week_list = get_time_spent_for_period(
+            b=b,
+            user_id=user_info['ID'],
+            start_iso=start_week,
+            end_iso=end_week
+        )
+        time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
+
+        print('Записей за неделю:', len(time_spent_week_list))
+        print('Минут за неделю:', time_spent_week)
+
+        # собираем словарь, где по каждому task_id сумма трудозатрат за неделю
+        task_week = {}
+        for item in time_spent_week_list:
+            task_id = item.get('TASK_ID')
+            minutes = int(item.get('MINUTES', 0))
+
+            if task_id in task_week:
+                task_week[task_id] += minutes
+            else:
+                task_week[task_id] = minutes
+
+        # запрашиваем по получившимся task_id названия задач
+        task_ids_week = list(task_week.keys())
+        tasks = b.get_all('tasks.task.list', {
             'filter': {
-                'USER_ID': user_info['ID'],
-                '>=CREATED_DATE': start_month,
-                '<CREATED_DATE': last_day_month
-                },
-            'select': ['*']
-        }, raw=True)['result']
+                'ID': task_ids_week
+            },
+            'select': ['ID', 'TITLE']
+        })
 
-        print(len(time_spent))
+        # собираем строки, где по каждому task_id есть название и сумма трудозатрат в часах
+        task_titles = {}
+        for task in tasks:
+            task_titles[int(task['id'])] = task['title']
 
-        #если трузатрат больше 50, делим период с начала месяца по последний день месяца той недели на 3 промежутка
-        if len(time_spent) > 49:
+        time_spent_week = []
+        for task_id, minutes in task_month.items():
+            title = task_titles[int(task_id)]
+            hours = round(minutes / 60, 2)  # Переводим минуты в часы и округляем до 2 знаков
+            time_spent_week.append(f'({task_id}) {title}: {hours} ч')
         
-            start_dt = datetime.fromisoformat(start_month) # Парсим даты с учётом временной зоны
-            end_dt = datetime.fromisoformat(last_day_month)
-            
-            start_day = start_dt.date() # Приводим к началу дня (обрезаем время), чтобы делить по дням
-            end_day = end_dt.date()
-            
-            total_days = (end_day - start_day).days             # Вычисляем количество полных дней в интервале
-            if total_days < 1:
-                total_days = 1 # Минимум один день, чтобы избежать деления на ноль
-            
-            segment_days = total_days // 3
-            remainder = total_days % 3 # Остаток дней, которые добавим к первым отрезкам
+        month_1 = datetime.fromisoformat(start_week).strftime("%d.%m.%y")
+        month_2 = datetime.fromisoformat(end_week).strftime("%d.%m.%y")
 
-            segments = [] # Разбиваем на три отрезка по дням
-            current_start = start_day
-            for i in range(3):
-                extra_day = 1 if i < remainder else 0
-                seg_end = current_start + timedelta(days=segment_days + extra_day) # К первым остаточным дням добавляем по одному дню
-                
-                seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat() # Форматируем в ISO-строку
-                seg_end_str = datetime.combine(seg_end, start_dt.time()).isoformat()
-                
-                segments.append((seg_start_str, seg_end_str))
-                current_start = seg_end
-
-            all_results = []
-            for seg_start, seg_end in segments: # Выполняем запрос для каждого отрезка
-                result = b.call('task.elapseditem.getlist', {
-                    'order': {'ID': 'asc'},
-                    'filter': {
-                        'USER_ID': user_info['ID'],
-                        '>=CREATED_DATE': seg_start,
-                        '<CREATED_DATE': seg_end
-                    },
-                    'select': ['*']
-                }, raw=True)['result']
-                all_results.extend(result)
-            
-            time_spent = all_results
-            print(len(time_spent))
-
-
-        time_spent_month = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
-        print(time_spent_month)
-        '''
+        text_message += f'1. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
+        for task_id in time_spent_week:
+            text_message += f'{task_id}\n'
         
-        # делаем запрос трудозатрат
+                
+        # делаем запрос трудозатрат за месяц
         time_spent_month_list = get_time_spent_for_period(
             b=b,
             user_id=user_info['ID'],
             start_iso=start_month,
             end_iso=last_day_month
         )
-
         time_spent_month = sum(int(x['MINUTES']) for x in time_spent_month_list)
 
         print('Записей за месяц:', len(time_spent_month_list))
         print('Минут за месяц:', time_spent_month)
 
-        # собираем словарь, где по каждому task_id сумма трудозатрат
+        # собираем словарь, где по каждому task_id сумма трудозатрат за месяц
         task_month = {}
         for item in time_spent_month_list:
             task_id = item.get('TASK_ID')
@@ -297,51 +278,18 @@ def ca_downovertime_report(req):
         month_1 = datetime.fromisoformat(start_month).strftime("%d.%m.%y")
         month_2 = datetime.fromisoformat(last_day_month).strftime("%d.%m.%y")
 
-        text_message += f'2. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
+        text_message += f'\n2. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
         for task_id in time_spent_month:
             text_message += f'{task_id}\n'
+
+        hours_month = round(sum(task_month[minutes]) / 60, 2)
+        text_message += f'Всего отработано: {hours_month} ч'
         print(text_message)
 
 
-        time_spent_week_list = get_time_spent_for_period(
-            b=b,
-            user_id=user_info['ID'],
-            start_iso=start_week,
-            end_iso=end_week
-        )
-
-        time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
-
-        print('Записей за неделю:', len(time_spent_week_list))
-        print('Минут за неделю:', time_spent_week)
-
-
+        sleep(1)
 
         '''
-        time_spent = b.call('task.elapseditem.getlist', {
-            'order': {
-                'ID': 'asc'
-                },
-            'filter': {
-                'USER_ID': user_info['ID'],
-                '>=CREATED_DATE': start_month,
-                '<CREATED_DATE': end_week
-                },
-            'select': ['*'],
-            'NAV_PARAMS': {
-                'nPageSize': 50,
-                'iNumPage': 2
-                }
-        }, raw=True)
-
-
-        time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
-        text_message += f'Трудозатрат по задачам: {time_spent} минут\n'
-        print(text_message)
-
-        
-        text_message += f'Выставлено счетов: {account}\n'
-
         #print(text_message)
 
         #рассылка от робота задач
@@ -362,6 +310,9 @@ def ca_downovertime_report(req):
             'MESSAGE': text_message,
         }
         r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data)
+    
         '''
+
 if __name__ == '__main__':
+
     ca_downovertime_report()

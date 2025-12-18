@@ -230,6 +230,9 @@ def ca_downovertime_report(req):
         text_message += f'1. За период с {month_1} по {month_2} Вами отработаны задачи:\n'
         for task_id in time_spent_week:
             text_message += f'{task_id}\n'
+
+        hours_week = round(sum(task_week.values()) / 60, 2)
+        text_message += f'Всего отработано: {hours_week} ч'
         
                 
         # делаем запрос трудозатрат за месяц
@@ -282,8 +285,9 @@ def ca_downovertime_report(req):
         for task_id in time_spent_month:
             text_message += f'{task_id}\n'
 
-        hours_month = round(sum(task_month[minutes]) / 60, 2)
+        hours_month = round(sum(task_month.values()) / 60, 2)
         text_message += f'Всего отработано: {hours_month} ч'
+
         print(text_message)
 
 

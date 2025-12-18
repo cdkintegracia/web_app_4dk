@@ -291,13 +291,13 @@ def ca_downovertime_report(req):
 
         time_spent_month = []
         for task_id, minutes in task_month.items():
-            print(task_titles)
             title = task_titles[int(task_id)]
             hours = round(minutes / 60, 2)  # Переводим минуты в часы и округляем до 2 знаков
             time_spent_month.append(f'({task_id}) {title}: {hours} ч')
 
-        text_message += f'2. За период с {datetime.fromisoformat(start_month)} по {datetime.fromisoformat(last_day_month)}'
-        text_message += f'Вами отработаны задачи:\n{time_spent_month}'
+        text_message += f'2. За период с {datetime.fromisoformat(start_month)} по {datetime.fromisoformat(last_day_month)} Вами отработаны задачи:\n'
+        for task_id in time_spent_month:
+            text_message += f'{task_id}'
         print(text_message)
 
 

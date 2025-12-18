@@ -331,9 +331,6 @@ def ca_downovertime_report(req):
 
         print(text_message)
 
-
-        sleep(1)
-
         #рассылка от робота задач
         notification_users = ['1391']
         #notification_users = [user_info['ID'], '1', '1391']
@@ -345,6 +342,8 @@ def ca_downovertime_report(req):
             }
 
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data)
+
+        sleep(1)
 
         '''
         #рассылка от службы качества чдк для СНА 157

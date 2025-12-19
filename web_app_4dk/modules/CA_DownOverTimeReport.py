@@ -153,7 +153,6 @@ def ca_downovertime_report(req):
     print(last_day_month)
     '''
 
-
     #собираем общие данные по рабочим часам за неделю и месяц
     week_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
         'entityTypeId': '1098',
@@ -164,7 +163,11 @@ def ca_downovertime_report(req):
             '<ufCrm85_Day': end_week
             }})
     week_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), week_calendar)))
-    print(week_calendar)
+
+    calendar_by_day_week = {
+        item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
+        for item in week_calendar
+    }
 
     month_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
         'entityTypeId': '1098',
@@ -175,7 +178,11 @@ def ca_downovertime_report(req):
             '<ufCrm85_Day': last_day_month
             }})
     month_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), month_calendar)))
-    print(month_calendar)
+
+    calendar_by_day_month = {
+        item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
+        for item in month_calendar
+    }
 
 
     for user_info in users_info:
@@ -196,7 +203,11 @@ def ca_downovertime_report(req):
                 '<ufCrm87_Day': end_week
                 }})
         week_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), week_absent)))
-        print(week_absent)
+
+        absent_by_day_week = {
+            item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
+            for item in week_absent
+        }
 
         month_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за месяц
             'entityTypeId': '1102',
@@ -208,10 +219,30 @@ def ca_downovertime_report(req):
                 '<ufCrm87_Day': last_day_month
                 }})
         month_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), month_absent)))
-        print(month_absent)
 
-        total_hours_week = week_calendar - week_absent # всего рабочих часов за неделю
-        total_hours_month = month_calendar - month_absent # всего рабочих часов за месяц
+        absent_by_day_month = {
+            item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
+            for item in month_absent
+        }
+
+        # Подсчёт итоговых часов за неделю
+        total_hours_month = 0
+        for day, calendar_hours in calendar_by_day_week.items():
+            if calendar_hours == 0:
+                continue  # выходной — отсутствие не учитываем
+            absent_hours = absent_by_day_week.get(day, 0)
+            total_hours_week += max(calendar_hours - absent_hours, 0)
+
+        # Подсчёт итоговых часов за месяц
+        total_hours_month = 0
+        for day, calendar_hours in calendar_by_day_month.items():
+            if calendar_hours == 0:
+                continue  # выходной — отсутствие не учитываем
+            absent_hours = absent_by_day_month.get(day, 0)
+            total_hours_month += max(calendar_hours - absent_hours, 0)
+
+        #total_hours_week = week_calendar - week_absent # всего рабочих часов за неделю
+        #total_hours_month = month_calendar - month_absent # всего рабочих часов за месяц
 
         sleep(1)
         # делаем запрос трудозатрат за неделю
@@ -223,8 +254,8 @@ def ca_downovertime_report(req):
         )
         time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
 
-        print('Записей за неделю:', len(time_spent_week_list))
-        print('Минут за неделю:', time_spent_week)
+        #print('Записей за неделю:', len(time_spent_week_list))
+        #print('Минут за неделю:', time_spent_week)
 
         # собираем словарь, где по каждому task_id сумма трудозатрат за неделю
         task_week = {}
@@ -284,8 +315,8 @@ def ca_downovertime_report(req):
         )
         time_spent_month = sum(int(x['MINUTES']) for x in time_spent_month_list)
 
-        print('Записей за месяц:', len(time_spent_month_list))
-        print('Минут за месяц:', time_spent_month)
+        #print('Записей за месяц:', len(time_spent_month_list))
+        #print('Минут за месяц:', time_spent_month)
 
         # собираем словарь, где по каждому task_id сумма трудозатрат за месяц
         task_month = {}
@@ -339,7 +370,7 @@ def ca_downovertime_report(req):
 
         #рассылка от робота задач
         notification_users = ['1391']
-        #notification_users = [user_info['ID'], '1', '1391']
+        #notification_users = [user_info['ID'], '159', '1391']
 
         for user in notification_users:
             data = {

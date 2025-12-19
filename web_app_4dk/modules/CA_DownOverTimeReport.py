@@ -226,7 +226,7 @@ def ca_downovertime_report(req):
         }
 
         # Подсчёт итоговых часов за неделю
-        total_hours_month = 0
+        total_hours_week = 0
         for day, calendar_hours in calendar_by_day_week.items():
             if calendar_hours == 0:
                 continue  # выходной — отсутствие не учитываем

@@ -162,12 +162,13 @@ def ca_downovertime_report(req):
             '>=ufCrm85_Day': start_week,
             '<ufCrm85_Day': end_week
             }})
-    week_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), week_calendar)))
-
+    
     calendar_by_day_week = {
         item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
         for item in week_calendar
     }
+
+    week_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), week_calendar)))
 
     month_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
         'entityTypeId': '1098',
@@ -177,12 +178,13 @@ def ca_downovertime_report(req):
             '>=ufCrm85_Day': start_month,
             '<ufCrm85_Day': last_day_month
             }})
-    month_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), month_calendar)))
-
+    
     calendar_by_day_month = {
         item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
         for item in month_calendar
     }
+
+    month_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), month_calendar)))
 
 
     for user_info in users_info:

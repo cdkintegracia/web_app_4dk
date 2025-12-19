@@ -156,7 +156,7 @@ def ca_downovertime_report(req):
     #собираем общие данные по рабочим часам за неделю и месяц
     week_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
         'entityTypeId': '1098',
-        'select': ['ufCrm85_Hours'],
+        'select': ['ufCrm85_Day', 'ufCrm85_Hours'],
         'filter': {
             'categoryId': 115,
             '>=ufCrm85_Day': start_week,
@@ -172,7 +172,7 @@ def ca_downovertime_report(req):
 
     month_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
         'entityTypeId': '1098',
-        'select': ['ufCrm85_Hours'],
+        'select': ['ufCrm85_Day', 'ufCrm85_Hours'],
         'filter': {
             'categoryId': 115,
             '>=ufCrm85_Day': start_month,
@@ -197,7 +197,7 @@ def ca_downovertime_report(req):
         #собираем персональные данные по рабочим часам за неделю и месяц
         week_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за неделю
             'entityTypeId': '1102',
-            'select': ['ufCrm87_Hours'],
+            'select': ['ufCrm87_Day', 'ufCrm87_Hours'],
             'filter': {
                 'categoryId': 119,
                 'ufCrm87_Person': user_info['ID'],
@@ -213,7 +213,7 @@ def ca_downovertime_report(req):
 
         month_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за месяц
             'entityTypeId': '1102',
-            'select': ['ufCrm87_Hours'],
+            'select': ['ufCrm87_Day', 'ufCrm87_Hours'],
             'filter': {
                 'categoryId': 119,
                 'ufCrm87_Person': user_info['ID'],

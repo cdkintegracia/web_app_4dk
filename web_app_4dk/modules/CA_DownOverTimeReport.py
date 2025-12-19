@@ -204,12 +204,13 @@ def ca_downovertime_report(req):
                 '>=ufCrm87_Day': start_week,
                 '<ufCrm87_Day': end_week
                 }})
-        week_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), week_absent)))
-
+        
         absent_by_day_week = {
             item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
             for item in week_absent
         }
+
+        week_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), week_absent)))
 
         month_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за месяц
             'entityTypeId': '1102',
@@ -220,12 +221,13 @@ def ca_downovertime_report(req):
                 '>=ufCrm87_Day': start_month,
                 '<ufCrm87_Day': last_day_month
                 }})
-        month_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), month_absent)))
-
+        
         absent_by_day_month = {
             item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
             for item in month_absent
         }
+
+        month_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), month_absent)))
 
         # Подсчёт итоговых часов за неделю
         total_hours_week = 0

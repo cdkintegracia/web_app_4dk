@@ -268,7 +268,7 @@ def ca_downovertime_report(req):
         hours_week = round(sum(task_week.values()) / 60, 2)
         text_message += f'[i][b]Итого отработано:[/b][/i] {hours_week} ч\n'
 
-        downovertime_week = total_hours_week - hours_week
+        downovertime_week = round(total_hours_week - hours_week, 2)
         if downovertime_week >= 0:
             text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_week)} ч'
         else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_week)} ч'
@@ -329,7 +329,7 @@ def ca_downovertime_report(req):
         hours_month = round(sum(task_month.values()) / 60, 2)
         text_message += f'[i][b]Итого отработано:[/b][/i] {hours_month} ч\n'
 
-        downovertime_month = total_hours_month - hours_month
+        downovertime_month = round(total_hours_month - hours_month, 2)
         if downovertime_month >= 0:
             text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_month)} ч'
         else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_month)} ч'

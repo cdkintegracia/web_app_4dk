@@ -329,16 +329,18 @@ def fill_task_title(req, event):
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
-                    'STAGE_ID': '2367',
-                    'UF_AUTO_324910901949': 1
+                    'UF_AUTO_324910901949': 1,
+                    'STAGE_ID': '2367'
+
                 }})
             
         if vipflag == 7:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
-                    'STAGE_ID': '2649',
-                    'UF_AUTO_202422302608': 1
+                    'UF_AUTO_202422302608': 1,
+                    'STAGE_ID': '2649'
+
                 }})
 #ИБС ---
         return
@@ -360,8 +362,9 @@ def fill_task_title(req, event):
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        'STAGE_ID': '2367',
-                        'UF_AUTO_324910901949': 1
+                        'UF_AUTO_324910901949': 1,
+                        'STAGE_ID': '2367'
+
                     }})
                 
             elif vipflag == 7:
@@ -369,8 +372,9 @@ def fill_task_title(req, event):
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        'STAGE_ID': '2649',
-                        'UF_AUTO_202422302608': 1
+                        'UF_AUTO_202422302608': 1,
+                        'STAGE_ID': '2649'
+
                     }})
                 
             else:

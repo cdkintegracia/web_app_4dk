@@ -239,12 +239,13 @@ def ca_downovertime_report(req):
 
         # запрашиваем по получившимся task_id названия задач
         task_ids_week = list(task_week.keys())
-        tasks = b.get_all('tasks.task.list', {
-            'filter': {
-                'ID': task_ids_week
-            },
-            'select': ['ID', 'TITLE']
-        })
+        if task_ids_week:
+            tasks = b.get_all('tasks.task.list', {
+                'filter': {
+                    'ID': task_ids_week
+                },
+                'select': ['ID', 'TITLE']
+            })
 
         # собираем строки, где по каждому task_id есть название и сумма трудозатрат в часах
         task_titles = {}
@@ -299,12 +300,13 @@ def ca_downovertime_report(req):
 
         # запрашиваем по получившимся task_id названия задач
         task_ids_month = list(task_month.keys())
-        tasks = b.get_all('tasks.task.list', {
-            'filter': {
-                'ID': task_ids_month
-            },
-            'select': ['ID', 'TITLE']
-        })
+        if task_ids_month:
+            tasks = b.get_all('tasks.task.list', {
+                'filter': {
+                    'ID': task_ids_month
+                },
+                'select': ['ID', 'TITLE']
+            })
 
         # собираем строки, где по каждому task_id есть название и сумма трудозатрат в часах
         task_titles = {}

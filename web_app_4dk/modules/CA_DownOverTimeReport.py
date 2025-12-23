@@ -256,7 +256,7 @@ def ca_downovertime_report(req):
             start_iso=start_week,
             end_iso=end_week
         )
-        time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
+        #time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
 
         #print('Записей за неделю:', len(time_spent_week_list))
         #print('Минут за неделю:', time_spent_week)
@@ -267,13 +267,14 @@ def ca_downovertime_report(req):
             task_id = item.get('TASK_ID')
             minutes = int(item.get('MINUTES', 0))
 
-            if task_id in task_week:
-                task_week[task_id] += minutes
-            else:
-                task_week[task_id] = minutes
+            if not task_id:
+                continue
+            task_week[task_id] = task_week.get(task_id, 0) + minutes
 
         # запрашиваем по получившимся task_id названия задач
         task_ids_week = list(task_week.keys())
+        task_titles = {}
+
         if task_ids_week:
             tasks = b.get_all('tasks.task.list', {
                 'filter': {
@@ -282,25 +283,36 @@ def ca_downovertime_report(req):
                 'select': ['ID', 'TITLE']
             })
 
-        # собираем строки, где по каждому task_id есть название и сумма трудозатрат в часах
-        task_titles = {}
-        for task in tasks:
-            task_titles[int(task['id'])] = task['title']
+            # собираем только реально существующие задачи
+            for task in tasks:
+                if task.get('title'):
+                    task_titles[int(task['id'])] = task['title']
 
+        # формируем строки и считаем сумму только по валидным задачам
         time_spent_week = []
+        valid_minutes_week = 0
+
         for task_id, minutes in task_week.items():
-            title = task_titles[int(task_id)]
-            hours = round(minutes / 60, 2)  # Переводим минуты в часы и округляем до 2 знаков
+            task_id_int = int(task_id)
+
+            # если TITLE не найден — задача удалена, пропускаем
+            if task_id_int not in task_titles:
+                continue
+
+            title = task_titles[task_id_int]
+            hours = round(minutes / 60, 2)
+            valid_minutes_week += minutes
             time_spent_week.append(f'({task_id}) {title}: {hours} ч')
-        
+
         month_1 = datetime.fromisoformat(start_week).strftime("%d.%m.%y")
         month_2 = (datetime.fromisoformat(end_week) - timedelta(days=1)).strftime("%d.%m.%y")
 
         text_message += f'[i]1. За период с {month_1} по {month_2} Вами отработаны задачи:[/i]\n'
-        for task_id in time_spent_week:
-            text_message += f'{task_id}\n'
+        for task in time_spent_week:
+            text_message += f'{task}\n'
 
-        hours_week = round(sum(task_week.values()) / 60, 2)
+        # итог считаем только по существующим задачам
+        hours_week = round(valid_minutes_week / 60, 2)
         text_message += f'[i][b]Итого отработано:[/b][/i] {hours_week} ч\n'
 
         downovertime_week = round(total_hours_week - hours_week, 2)
@@ -328,13 +340,15 @@ def ca_downovertime_report(req):
             task_id = item.get('TASK_ID')
             minutes = int(item.get('MINUTES', 0))
 
-            if task_id in task_month:
-                task_month[task_id] += minutes
-            else:
-                task_month[task_id] = minutes
+            if not task_id:
+                continue
+
+            task_month[task_id] = task_month.get(task_id, 0) + minutes
 
         # запрашиваем по получившимся task_id названия задач
         task_ids_month = list(task_month.keys())
+        task_titles = {}
+
         if task_ids_month:
             tasks = b.get_all('tasks.task.list', {
                 'filter': {
@@ -343,25 +357,37 @@ def ca_downovertime_report(req):
                 'select': ['ID', 'TITLE']
             })
 
-        # собираем строки, где по каждому task_id есть название и сумма трудозатрат в часах
-        task_titles = {}
-        for task in tasks:
-            task_titles[int(task['id'])] = task['title']
+            # собираем только реально существующие задачи
+            for task in tasks:
+                if task.get('title'):
+                    task_titles[int(task['id'])] = task['title']
 
+        # формируем строки и считаем сумму только по валидным задачам
         time_spent_month = []
+        valid_minutes_month = 0
+
         for task_id, minutes in task_month.items():
-            title = task_titles[int(task_id)]
-            hours = round(minutes / 60, 2)  # Переводим минуты в часы и округляем до 2 знаков
+            task_id_int = int(task_id)
+
+            # если TITLE не найден — задача удалена, пропускаем
+            if task_id_int not in task_titles:
+                continue
+
+            title = task_titles[task_id_int]
+            hours = round(minutes / 60, 2)
+
+            valid_minutes_month += minutes
             time_spent_month.append(f'({task_id}) {title}: {hours} ч')
-        
+
         month_1 = datetime.fromisoformat(start_month).strftime("%d.%m.%y")
         month_2 = (datetime.fromisoformat(last_day_month) - timedelta(days=1)).strftime("%d.%m.%y")
 
         text_message += f'\n\n[i]2. За период с {month_1} по {month_2} Вами отработаны задачи:[/i]\n'
-        for task_id in time_spent_month:
-            text_message += f'{task_id}\n'
+        for task in time_spent_month:
+            text_message += f'{task}\n'
 
-        hours_month = round(sum(task_month.values()) / 60, 2)
+        # итог считаем только по существующим задачам
+        hours_month = round(valid_minutes_month / 60, 2)
         text_message += f'[i][b]Итого отработано:[/b][/i] {hours_month} ч\n'
 
         downovertime_month = round(total_hours_month - hours_month, 2)

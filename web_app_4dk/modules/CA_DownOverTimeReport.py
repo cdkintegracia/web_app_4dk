@@ -399,7 +399,7 @@ def ca_downovertime_report(req):
         sleep(1)
 
         #рассылка от робота задач
-        notification_users = ['1391']
+        notification_users = ['1391', '1', '205']
         #notification_users = [user_info['ID'], '159', '1391']
 
         for user in notification_users:

@@ -842,7 +842,7 @@ def create_employees_period_report(req):
                 start_period_begin = start_filter
                 start_period_end = datetime(year=start_filter.year, month=start_filter.month + 1 if start_filter.month < 12 else 1, day=1)
 
-                start_upsale = list(filter(lambda x: start_period_begin.isoformat() <= x['ufCrm83DateUpsale'] < start_period_end, upsale))[0]
+                start_upsale = list(filter(lambda x: start_period_begin.isoformat() <= x['ufCrm83DateUpsale'] < start_period_end.isoformat(), upsale))[0]
                 start_sumserv = start_upsale['ufCrm83SumServices']
                 start_averits = start_upsale['ufCrm83AverageIts']
                 start_sumup = start_upsale['ufCrm83SumUpsale']
@@ -851,8 +851,7 @@ def create_employees_period_report(req):
             try:
                 end_period_begin = datetime(year=end_filter.year, month=end_filter.month - 1 if end_filter.month > 1 else 12, day=1)
                 end_period_end = end_filter
-                print(end_period_begin)
-                print(end_period_end)
+                
                 end_upsale = list(filter(lambda x: end_period_begin.isoformat() <= x['ufCrm83DateUpsale'] < end_period_end.isoformat(), upsale))[0]
                 end_sumserv = end_upsale['ufCrm83SumServices']
                 end_averits = end_upsale['ufCrm83AverageIts']

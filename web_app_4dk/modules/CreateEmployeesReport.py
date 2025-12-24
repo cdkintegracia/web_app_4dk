@@ -1664,7 +1664,7 @@ def create_employees_report(req):
             limit = 50
 
             while True:
-                response = b.call(
+                tlp_response = b.call(
                     'task.elapseditem.getlist',
                     {
                         'order': {'ID': 'asc'},
@@ -1679,7 +1679,7 @@ def create_employees_report(req):
                     raw=True
                 )
 
-                tlp_result = response.get('result', [])
+                tlp_result = tlp_response.get('result', [])
                 tlp_timespent.extend(tlp_result)
                 # если вернулось меньше лимита — дальше записей нет
                 if len(tlp_result) < limit:
@@ -1711,7 +1711,7 @@ def create_employees_report(req):
             limit = 50
 
             while True:
-                response = b.call(
+                wi_response = b.call(
                     'task.elapseditem.getlist',
                     {
                         'order': {'ID': 'asc'},
@@ -1726,10 +1726,10 @@ def create_employees_report(req):
                     raw=True
                 )
 
-                result = response.get('result', [])
-                worksits_timespent.extend(result)
+                wi_result = wi_response.get('result', [])
+                worksits_timespent.extend(wi_result)
                 # если вернулось меньше лимита — дальше записей нет
-                if len(result) < limit:
+                if len(wi_result) < limit:
                     break
                 start += limit
 

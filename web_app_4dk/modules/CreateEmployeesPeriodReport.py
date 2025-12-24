@@ -122,6 +122,10 @@ def create_employees_period_report(req):
 
     workbook = openpyxl.Workbook()
     report_name = f'Отчет_за_{start_period.strftime(ddmmyyyy_pattern)}-{end_period.strftime(ddmmyyyy_pattern)}_по_сотрудникам_{datetime.now().strftime("%d_%m_%Y_%H_%M_%S")}.xlsx'
+    month_names = {
+        1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август', 9: 'Сентябрь',
+        10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
+    }
 
     for index, user_info in enumerate(users_info):
         user_name = get_fio_from_user_info(user_info)
@@ -818,6 +822,48 @@ def create_employees_period_report(req):
         ])
 
         worksheet.append([])
+
+
+        #Апсейл
+        upsale = b.get_all('crm.item.list', {
+            'entityTypeId': '1094',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=ufCrm83_DateUpsale': start_filter.strftime(ddmmyyyy_pattern),
+                '<ufCrm83_DateUpsale': end_filter.strftime(ddmmyyyy_pattern),
+            }
+        })
+
+        start_sumserv = start_averits = start_sumup = 0
+        end_sumserv = end_averits = end_sumup = 0
+
+        if upsale:
+            try:
+                start_period_begin = start_filter
+                start_period_end = datetime(year=start_filter.year, month=start_filter.month + 1 if start_filter.month < 12 else 1, day=1)
+
+                start_upsale = list(filter(lambda x: start_period_begin.isoformat() <= x['ufCrm83DateUpsale'] < start_period_end, upsale))[0]
+                start_sumserv = start_upsale['ufCrm83SumServices']
+                start_averits = start_upsale['ufCrm83AverageIts']
+                start_sumup = start_upsale['ufCrm83SumUpsale']
+            except:
+                start_sumserv = start_averits = start_sumup = 0
+            try:
+                end_period_begin = datetime(year=end_filter.year, month=end_filter.month - 1 if end_filter.month > 1 else 12, day=1)
+                end_period_end = end_filter
+                end_upsale = list(filter(lambda x: end_period_begin.isoformat() <= x['ufCrm83DateUpsale'] < end_period_end.isoformat(), upsale))[0]
+                end_sumserv = end_upsale['ufCrm83SumServices']
+                end_averits = end_upsale['ufCrm83AverageIts']
+                end_sumup = end_upsale['ufCrm83SumUpsale']
+            except:
+                end_sumserv = end_averits = end_sumup = 0
+
+        worksheet.append(['Апсейл', f'{month_names[start_period_begin.month]} {start_period_begin.year}', f'{month_names[end_period_begin.month]} {end_period_begin.month}'])
+        worksheet.append(['Сумма сервисов', start_sumserv, end_sumserv])
+        worksheet.append(['Средний ИТС', start_averits, end_averits])
+        worksheet.append(['Апсейл', start_sumup, end_sumup])
+        worksheet.append([])
+
    
         # Продажи
         sales = b.get_all('crm.item.list', {
@@ -918,7 +964,11 @@ def create_employees_period_report(req):
             },
             'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
-        completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
+        
+        completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks)) # кол-во задач тлп
+        worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks)) # кол-во задач работы итс
+    
+        #средняя оценка
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
         try:
@@ -941,6 +991,8 @@ def create_employees_period_report(req):
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
+        worksheet.append([])
+        worksheet.append(['Всего задач РаботыИТС', len(worksits_tasks)])
         worksheet.append([])
         
         # ЭДО

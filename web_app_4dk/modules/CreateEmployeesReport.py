@@ -1703,7 +1703,9 @@ def create_employees_report(req):
 
         # кол-во и затраты по работам итс
         worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks))
+        print(len(worksits_tasks))
         worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) 
+        print(len(worksits_ids))
     
         if worksits_ids:
             worksits_timespent = []

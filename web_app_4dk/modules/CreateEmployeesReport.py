@@ -1653,7 +1653,44 @@ def create_employees_report(req):
         #completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
         #completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
         #non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
+
+        # кол-во и затраты по задачам тлп
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
+        tlp_ids = list(set(map(lambda x: x['id'], completed_tlp_tasks)))
+    
+        tlp_timespent = []
+        if tlp_ids:
+            start = 0
+            limit = 50
+
+            while True:
+                response = b.call(
+                    'task.elapseditem.getlist',
+                    {
+                        'order': {'ID': 'asc'},
+                        'filter': {
+                            'USER_ID': user_info['ID'],
+                            'TASK_ID': tlp_ids, 
+                            '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                            '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+                        },
+                        'start': start
+                    },
+                    raw=True
+                )
+
+                tlp_result = response.get('result', [])
+                tlp_timespent.extend(tlp_result)
+                # если вернулось меньше лимита — дальше записей нет
+                if len(tlp_result) < limit:
+                    break
+                start += limit
+
+        tlp_total_seconds = sum(int(item.get('SECONDS', 0)) for item in tlp_timespent)
+        tlp_hours = tlp_total_seconds // 3600
+        tlp_minutes = (tlp_total_seconds % 3600) // 60
+
+        #средняя оценка
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
         try:
@@ -1716,7 +1753,7 @@ def create_employees_report(req):
         #worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
         #worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
-        worksheet.append(['Трудозатраты ТЛП'])#, f'{tlp_hours} ч {tlp_minutes} мин'])
+        worksheet.append(['Трудозатраты ТЛП', f'{tlp_hours} ч {tlp_minutes} мин'])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])

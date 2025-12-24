@@ -1075,6 +1075,64 @@ def create_employees_quarter_report(req):
 
         worksheet.append([])
 
+
+        #Апсейл
+        upsale = b.get_all('crm.item.list', {
+            'entityTypeId': '1094',
+            'filter': {
+                'assignedById': user_info['ID'],
+                '>=ufCrm83_DateUpsale': datetime(day=1, month=before_4_month, year=before_4_month_year).strftime(ddmmyyyy_pattern),
+                '<ufCrm83_DateUpsale': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+            }
+        })
+
+        before_1_sumserv = 0, before_1_averits = 0, before_1_sumup = 0,
+        before_2_sumserv = 0, before_2_averits = 0, before_2_sumup = 0,
+        before_3_sumserv = 0, before_3_averits = 0, before_3_sumup = 0,
+        before_4_sumserv = 0, before_4_averits = 0, before_4_sumup = 0
+
+        if upsale:
+            try:
+                before_1_upsale = list(filter(lambda x: datetime(day=1, month=before_1_month, year=before_1_month_year) <= x['ufCrm83DateUpsale'] 
+                                            < quarter_filters['end_date'], upsale))[0]
+                before_1_sumserv = before_1_upsale['ufCrm83SumServices']
+                before_1_averits = before_1_upsale['ufCrm83AverageIts']
+                before_1_sumup = before_1_upsale['ufCrm83SumUpsale']
+            except:
+                continue
+            try:
+                before_2_upsale = list(filter(lambda x: datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['ufCrm83DateUpsale'] 
+                                          < datetime(day=1, month=before_1_month, year=before_1_month_year), upsale))[0]
+                before_2_sumserv = before_2_upsale['ufCrm83SumServices']
+                before_2_averits = before_2_upsale['ufCrm83AverageIts']
+                before_2_sumup = before_2_upsale['ufCrm83SumUpsale']
+            except:
+                continue
+            try:
+                before_3_upsale = list(filter(lambda x: datetime(day=1, month=before_3_month, year=before_3_month_year) <= x['ufCrm83DateUpsale'] 
+                                          < datetime(day=1, month=before_4_month, year=before_4_month_year), upsale))[0]
+                before_3_sumserv = before_3_upsale['ufCrm83SumServices']
+                before_3_averits = before_3_upsale['ufCrm83AverageIts']
+                before_3_sumup = before_3_upsale['ufCrm83SumUpsale']
+            except:
+                continue
+            try:
+                before_4_upsale = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['ufCrm83DateUpsale'] 
+                                          < datetime(day=1, month=before_5_month, year=before_5_month_year), upsale))[0]
+                before_4_sumserv = before_4_upsale['ufCrm83SumServices']
+                before_4_averits = before_4_upsale['ufCrm83AverageIts']
+                before_4_sumup = before_4_upsale['ufCrm83SumUpsale']
+            except:
+                continue
+
+        worksheet.append(['Апсейл', f'{month_names[before_1_month]} {before_1_month_year}', f'{month_names[before_2_month]} {before_2_month_year}',
+                          f'{month_names[before_3_month]} {before_3_month_year}', f'{month_names[before_4_month]} {before_4_month_year}'])
+        worksheet.append(['Сумма сервисов', before_1_sumserv, before_2_sumserv, before_3_sumserv, before_4_sumserv])
+        worksheet.append(['Средний ИТС', before_1_averits, before_2_averits, before_3_averits, before_4_averits])
+        worksheet.append(['Апсейл', before_1_sumup, before_2_sumup, before_3_sumup, before_4_sumup])
+        worksheet.append([])
+
+
         # Продажи
         sales = b.get_all('crm.item.list', {
             'entityTypeId': '133',
@@ -1100,25 +1158,29 @@ def create_employees_quarter_report(req):
                     'ID': list(map(lambda x: x['COMPANY_ID'], sold_deals))
                 }
             })
-            for deal_quarter in sold_deals:
-                #print (deal_quarter)
-                try:
-                    deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_1_month_deals_data))
-                    if not deal:
-                        deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_2_month_deals_data))
-                    if not deal:
-                        deal = list(filter(lambda x: x['ID'] == deal_quarter['ID'], before_3_month_deals_data))
-                    if deal:
-                        deal = deal[0]
-                        title = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: x['ID'] == deal['Компания'], company_titles)))))
-                        list_of_sales.append({'NAME_DEAL': deal['Название сделки'], 'COMPANY': title[0], 'OPPORTUNITY': deal['Сумма']})
-                except:
-                    #2024-09-10 saa
-                    users_id = ['1391', '1']
-                    for user_id in users_id:
-                        b.call('im.notify.system.add', {
-                            'USER_ID': user_id,
-                            'MESSAGE': f'Проблемы при поиске сделки в файле по источнику продаж\n\n{deal_quarter}'})
+
+            deal_ids_new = {int(sale['parentId2']) for sale in sales if sale['parentId2'] is not None}
+            
+            if deal_ids_new:
+                sold_deals = list(filter(lambda x: int(x['ID']) in deal_ids_new, sold_deals))
+
+                for sale in sales:
+                    try:
+                        deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], before_1_month_deals_data))
+                        if not deal:
+                            deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], before_2_month_deals_data))
+                        if not deal:
+                            deal = list(filter(lambda x: int(x['ID']) == sale['parentId2'], before_3_month_deals_data))
+                        if deal:
+                            title_deal = deal[0]['Название сделки']
+                            title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
+                            list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
+                    except:
+                        users_id = ['1391', '1']
+                        for user_id in users_id:
+                            b.call('im.notify.system.add', {
+                                'USER_ID': user_id,
+                                'MESSAGE': f'Проблемы при поиске сделки (id = {sale["parentId2"]}) в файле по источнику продаж (id = {sale["id"]})'})
         else:
             sold_deals = []
 
@@ -1167,7 +1229,7 @@ def create_employees_quarter_report(req):
         #Разовые услуги
         provide_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1761298275'],
             'filter': {
                 'ufCrm41_Provider': float(user_info['ID']),
                 '>=ufCrm41_1689101272': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
@@ -1186,16 +1248,28 @@ def create_employees_quarter_report(req):
             }
         })
         
-        #provide_services = list(filter(lambda x: x['ufCrm41_Provider'] == float(user_info['ID']), single_service))
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
-        #sold_services = list(filter(lambda x: x['assignedById'] == float(user_info['ID']), single_service))
+        if provide_services:
+            list_provide_services = ([{'COMPANY': 'Компания', 'TYPE_PAY': 'Вид расчета', 'OPPORTUNITY': 'Сумма'}]) # 'TYPE_PAY': 'Вид расчета', 
+            for pr_service in provide_services:
+                list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], 
+                                              'TYPE_PAY': pr_service['ufCrm41_1761298275'], # 'TYPE_PAY': pr_service['ufCrm41_1761298275'],
+                                              'OPPORTUNITY': pr_service['ufCrm41_1689101328']}) 
+
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
         
-        worksheet.append(['Разовые услуги, за квартал', 'Оказано услуг', 'Продано услуг'])
+        worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])
         worksheet.append(['Кол-во', len(provide_services), len(sold_services)])
         worksheet.append(['Сумма', sum_provide_services, sum_sold_services])
+
+        #детализация по оказанным услугам
+        if len(provide_services) > 1:
+            worksheet.append(['', 'Выполненные работы', ''])
+            for service in list_provide_services:
+                worksheet.append([service['TYPE_PAY'], service['COMPANY'], service['OPPORTUNITY']])
         worksheet.append([])
+
        
         # Задачи
         tasks = b.get_all('tasks.task.list', {
@@ -1204,20 +1278,106 @@ def create_employees_quarter_report(req):
                 '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
                 '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
             },
-            'select': ['GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
+            'select': ['ID', 'GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
-        completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
-        #service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
-        #completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
-        #completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
-        #non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
+
+        # кол-во и затраты по задачам тлп
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
+        tlp_ids = list(set(map(lambda x: x['id'], completed_tlp_tasks)))
+    
+        if tlp_ids:
+            tlp_timespent = []
+            start = 0
+            seen_starts = set()
+
+            while True:
+                tlp_response = b.call(
+                    'task.elapseditem.getlist',
+                    {
+                        'order': {'ID': 'asc'},
+                        'filter': {
+                            'USER_ID': user_info['ID'],
+                            'TASK_ID': tlp_ids, 
+                            '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
+                            '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+                        },
+                        'start': start
+                    },
+                    raw=True
+                )
+
+                tlp_result = tlp_response.get('result', [])
+                tlp_timespent.extend(tlp_result)
+
+                next_start = tlp_response.get('next')
+                # нет next — конец
+                if next_start is None:
+                    break
+                # next не двигается — защита от вечного цикла
+                if next_start == start or next_start in seen_starts:
+                    break
+                seen_starts.add(start)
+                start = next_start
+
+            tlp_total_seconds = sum(int(item.get('SECONDS', 0)) for item in tlp_timespent)
+            tlp_hours = tlp_total_seconds // 3600
+            tlp_minutes = (tlp_total_seconds % 3600) // 60
+        else:
+            tlp_hours = 0
+            tlp_minutes = 0
+
+        #средняя оценка
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
         try:
             average_tasks_ratings = round(sum(tasks_ratings) / len(tasks_ratings), 2)
         except ZeroDivisionError:
             average_tasks_ratings = '-'
+
+        # кол-во и затраты по работам итс
+        worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks))
+        worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) 
+    
+        if worksits_ids:
+            worksits_timespent = []
+            start = 0
+            seen_starts = set()
+
+            while True:
+                wi_response = b.call(
+                    'task.elapseditem.getlist',
+                    {
+                        'order': {'ID': 'asc'},
+                        'filter': {
+                            'USER_ID': user_info['ID'],
+                            'TASK_ID': worksits_ids, 
+                            '>=CREATED_DATE': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
+                            '<CREATED_DATE': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
+                        },
+                        'start': start
+                    },
+                    raw=True
+                )
+
+                wi_result = wi_response.get('result', [])
+                worksits_timespent.extend(wi_result)
+
+                next_start = wi_response.get('next')
+                # нет next — конец
+                if next_start is None:
+                    break
+                # next не двигается — защита от вечного цикла
+                if next_start == start or next_start in seen_starts:
+                    break
+                seen_starts.add(start)
+                start = next_start
+
+            wi_total_seconds = sum(int(item.get('SECONDS', 0)) for item in worksits_timespent)
+            wi_hours = wi_total_seconds // 3600
+            wi_minutes = (wi_total_seconds % 3600) // 60
+        else:
+            wi_hours = 0
+            wi_minutes = 0
 
         #Дежурства
         days_duty = b.get_all('lists.element.get', {
@@ -1232,14 +1392,13 @@ def create_employees_quarter_report(req):
         })
         days_duty_amount = len(days_duty)
 
-        worksheet.append(['', 'Незакрытых (и созд. в этом кварт)', 'Всего создано в квартале'])
-        worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
-        #worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
-        #worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
-        worksheet.append([])
         worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
+        worksheet.append(['Трудозатраты ТЛП', f'{tlp_hours} ч {tlp_minutes} мин'])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
+        worksheet.append([])
+        worksheet.append(['Всего задач РаботыИТС', len(worksits_tasks)])
+        worksheet.append(['Трудозатраты РаботыИТС', f'{wi_hours} ч {wi_minutes} мин'])
         worksheet.append([])
         
 

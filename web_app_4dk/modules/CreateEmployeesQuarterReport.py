@@ -1109,6 +1109,8 @@ def create_employees_quarter_report(req):
             except:
                 before_2_sumserv = before_2_averits = before_2_sumup = 0
             try:
+                print(datetime(day=1, month=before_3_month, year=before_3_month_year).isoformat())
+                print(datetime(day=1, month=before_4_month, year=before_4_month_year).isoformat())
                 before_3_upsale = list(filter(lambda x: datetime(day=1, month=before_3_month, year=before_3_month_year).isoformat() <= x['ufCrm83DateUpsale'] 
                                           < datetime(day=1, month=before_4_month, year=before_4_month_year).isoformat(), upsale))[0]
                 before_3_sumserv = before_3_upsale['ufCrm83SumServices']
@@ -1117,6 +1119,8 @@ def create_employees_quarter_report(req):
             except:
                 before_3_sumserv = before_3_averits = before_3_sumup = 0
             try:
+                print(datetime(day=1, month=before_4_month, year=before_4_month_year).isoformat())
+                print(datetime(day=1, month=before_5_month, year=before_5_month_year).isoformat())
                 before_4_upsale = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year).isoformat() <= x['ufCrm83DateUpsale'] 
                                           < datetime(day=1, month=before_5_month, year=before_5_month_year).isoformat(), upsale))[0]
                 before_4_sumserv = before_4_upsale['ufCrm83SumServices']

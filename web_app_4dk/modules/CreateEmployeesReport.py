@@ -1708,7 +1708,6 @@ def create_employees_report(req):
         if worksits_ids:
             worksits_timespent = []
             start = 0
-            limit = 50
 
             while True:
                 wi_response = b.call(
@@ -1729,9 +1728,9 @@ def create_employees_report(req):
                 wi_result = wi_response.get('result', [])
                 worksits_timespent.extend(wi_result)
                 # если вернулось меньше лимита — дальше записей нет
-                if len(wi_result) < limit:
+                if 'next' not in wi_response:
                     break
-                start += limit
+                start = wi_response['next']
 
             wi_total_seconds = sum(int(item.get('SECONDS', 0)) for item in worksits_timespent)
             wi_hours = wi_total_seconds // 3600

@@ -851,6 +851,8 @@ def create_employees_period_report(req):
             try:
                 end_period_begin = datetime(year=end_filter.year, month=end_filter.month - 1 if end_filter.month > 1 else 12, day=1)
                 end_period_end = end_filter
+                print(end_period_begin)
+                print(end_period_end)
                 end_upsale = list(filter(lambda x: end_period_begin.isoformat() <= x['ufCrm83DateUpsale'] < end_period_end.isoformat(), upsale))[0]
                 end_sumserv = end_upsale['ufCrm83SumServices']
                 end_averits = end_upsale['ufCrm83AverageIts']
@@ -858,7 +860,7 @@ def create_employees_period_report(req):
             except:
                 end_sumserv = end_averits = end_sumup = 0
 
-        worksheet.append(['Апсейл', f'{month_names[start_period_begin.month]} {start_period_begin.year}', f'{month_names[end_period_begin.month]} {end_period_begin.month}'])
+        worksheet.append(['Апсейл', f'{month_names[start_period_begin.month]} {start_period_begin.year}', f'{month_names[end_period_begin.month]} {end_period_begin.year}'])
         worksheet.append(['Сумма сервисов', start_sumserv, end_sumserv])
         worksheet.append(['Средний ИТС', start_averits, end_averits])
         worksheet.append(['Апсейл', start_sumup, end_sumup])

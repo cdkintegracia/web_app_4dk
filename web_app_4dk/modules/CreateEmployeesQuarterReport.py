@@ -1099,7 +1099,7 @@ def create_employees_quarter_report(req):
                 before_1_averits = before_1_upsale['ufCrm83AverageIts']
                 before_1_sumup = before_1_upsale['ufCrm83SumUpsale']
             except:
-                continue
+                before_1_sumserv = before_1_averits = before_1_sumup = 0
             try:
                 before_2_upsale = list(filter(lambda x: datetime(day=1, month=before_2_month, year=before_2_month_year) <= x['ufCrm83DateUpsale'] 
                                           < datetime(day=1, month=before_1_month, year=before_1_month_year), upsale))[0]
@@ -1107,7 +1107,7 @@ def create_employees_quarter_report(req):
                 before_2_averits = before_2_upsale['ufCrm83AverageIts']
                 before_2_sumup = before_2_upsale['ufCrm83SumUpsale']
             except:
-                continue
+                before_2_sumserv = before_2_averits = before_2_sumup = 0
             try:
                 before_3_upsale = list(filter(lambda x: datetime(day=1, month=before_3_month, year=before_3_month_year) <= x['ufCrm83DateUpsale'] 
                                           < datetime(day=1, month=before_4_month, year=before_4_month_year), upsale))[0]
@@ -1115,7 +1115,7 @@ def create_employees_quarter_report(req):
                 before_3_averits = before_3_upsale['ufCrm83AverageIts']
                 before_3_sumup = before_3_upsale['ufCrm83SumUpsale']
             except:
-                continue
+                before_3_sumserv = before_3_averits = before_3_sumup = 0
             try:
                 before_4_upsale = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['ufCrm83DateUpsale'] 
                                           < datetime(day=1, month=before_5_month, year=before_5_month_year), upsale))[0]
@@ -1123,7 +1123,7 @@ def create_employees_quarter_report(req):
                 before_4_averits = before_4_upsale['ufCrm83AverageIts']
                 before_4_sumup = before_4_upsale['ufCrm83SumUpsale']
             except:
-                continue
+                before_4_sumserv = before_4_averits = before_4_sumup = 0
 
         worksheet.append(['Апсейл', f'{month_names[before_1_month]} {before_1_month_year}', f'{month_names[before_2_month]} {before_2_month_year}',
                           f'{month_names[before_3_month]} {before_3_month_year}', f'{month_names[before_4_month]} {before_4_month_year}'])

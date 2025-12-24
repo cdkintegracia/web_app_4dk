@@ -1708,6 +1708,7 @@ def create_employees_report(req):
         if worksits_ids:
             worksits_timespent = []
             start = 0
+            seen_starts = set()
 
             while True:
                 wi_response = b.call(
@@ -1727,10 +1728,16 @@ def create_employees_report(req):
 
                 wi_result = wi_response.get('result', [])
                 worksits_timespent.extend(wi_result)
-                # если вернулось меньше лимита — дальше записей нет
-                if 'next' not in wi_response:
+
+                next_start = wi_response.get('next')
+                # нет next — конец
+                if next_start is None:
                     break
-                start = wi_response['next']
+                # next не двигается — защита от вечного цикла
+                if next_start == start or next_start in seen_starts:
+                    break
+                seen_starts.add(start)
+                start = next_start
 
             wi_total_seconds = sum(int(item.get('SECONDS', 0)) for item in worksits_timespent)
             wi_hours = wi_total_seconds // 3600

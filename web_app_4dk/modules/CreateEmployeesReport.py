@@ -1681,6 +1681,9 @@ def create_employees_report(req):
                     raw=True
                 )
 
+                tlp_result = tlp_response.get('result', [])
+                tlp_timespent.extend(tlp_result)
+
                 next_start = tlp_response.get('next')
                 # нет next — конец
                 if next_start is None:

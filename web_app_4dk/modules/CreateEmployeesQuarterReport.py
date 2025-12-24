@@ -1085,7 +1085,6 @@ def create_employees_quarter_report(req):
                 '<ufCrm83_DateUpsale': quarter_filters['end_date'].strftime(ddmmyyyy_pattern),
             }
         })
-        print(len(upsale))
 
         before_1_sumserv = before_1_averits = before_1_sumup = 0
         before_2_sumserv = before_2_averits = before_2_sumup = 0
@@ -1094,12 +1093,8 @@ def create_employees_quarter_report(req):
 
         if upsale:
             try:
-                print(datetime(day=1, month=before_1_month, year=before_1_month_year).isoformat())
-                print(upsale[0]['ufCrm83DateUpsale'])
-                print(quarter_filters['end_date'])
                 before_1_upsale = list(filter(lambda x: datetime(day=1, month=before_1_month, year=before_1_month_year).isoformat() <= x['ufCrm83DateUpsale'] 
                                             < quarter_filters['end_date'].isoformat(), upsale))[0]
-                print(before_1_upsale)
                 before_1_sumserv = before_1_upsale['ufCrm83SumServices']
                 before_1_averits = before_1_upsale['ufCrm83AverageIts']
                 before_1_sumup = before_1_upsale['ufCrm83SumUpsale']
@@ -1114,16 +1109,16 @@ def create_employees_quarter_report(req):
             except:
                 before_2_sumserv = before_2_averits = before_2_sumup = 0
             try:
-                before_3_upsale = list(filter(lambda x: datetime(day=1, month=before_3_month, year=before_3_month_year) <= x['ufCrm83DateUpsale'] 
-                                          < datetime(day=1, month=before_4_month, year=before_4_month_year), upsale))[0]
+                before_3_upsale = list(filter(lambda x: datetime(day=1, month=before_3_month, year=before_3_month_year).isoformat() <= x['ufCrm83DateUpsale'] 
+                                          < datetime(day=1, month=before_4_month, year=before_4_month_year).isoformat(), upsale))[0]
                 before_3_sumserv = before_3_upsale['ufCrm83SumServices']
                 before_3_averits = before_3_upsale['ufCrm83AverageIts']
                 before_3_sumup = before_3_upsale['ufCrm83SumUpsale']
             except:
                 before_3_sumserv = before_3_averits = before_3_sumup = 0
             try:
-                before_4_upsale = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year) <= x['ufCrm83DateUpsale'] 
-                                          < datetime(day=1, month=before_5_month, year=before_5_month_year), upsale))[0]
+                before_4_upsale = list(filter(lambda x: datetime(day=1, month=before_4_month, year=before_4_month_year).isoformat() <= x['ufCrm83DateUpsale'] 
+                                          < datetime(day=1, month=before_5_month, year=before_5_month_year).isoformat(), upsale))[0]
                 before_4_sumserv = before_4_upsale['ufCrm83SumServices']
                 before_4_averits = before_4_upsale['ufCrm83AverageIts']
                 before_4_sumup = before_4_upsale['ufCrm83SumUpsale']

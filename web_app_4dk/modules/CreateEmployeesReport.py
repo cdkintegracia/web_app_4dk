@@ -1568,7 +1568,7 @@ def create_employees_report(req):
         if len(list_of_oldsales) > 1:
             worksheet.append(['', 'Перечень старых продаж', ''])
             for selling in list_of_oldsales:
-                worksheet.append([selling['DATE_SALE'], selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY']])
+                worksheet.append([selling['NAME_DEAL'], selling['COMPANY'], selling['OPPORTUNITY'], selling['DATE_SALE']])
             worksheet.append([])
         
         # Долги по документам
@@ -1634,7 +1634,7 @@ def create_employees_report(req):
         if len(provide_services) > 1:
             worksheet.append(['', 'Выполненные работы', ''])
             for service in list_provide_services:
-                worksheet.append([service['COMPANY'], service['TYPE_PAY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
+                worksheet.append([service['TYPE_PAY'], service['COMPANY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
         worksheet.append([])
         
 

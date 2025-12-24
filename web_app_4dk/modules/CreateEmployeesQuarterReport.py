@@ -1086,10 +1086,10 @@ def create_employees_quarter_report(req):
             }
         })
 
-        before_1_sumserv = 0, before_1_averits = 0, before_1_sumup = 0,
-        before_2_sumserv = 0, before_2_averits = 0, before_2_sumup = 0,
-        before_3_sumserv = 0, before_3_averits = 0, before_3_sumup = 0,
-        before_4_sumserv = 0, before_4_averits = 0, before_4_sumup = 0
+        before_1_sumserv = before_1_averits = before_1_sumup = 0
+        before_2_sumserv = before_2_averits = before_2_sumup = 0
+        before_3_sumserv = before_3_averits = before_3_sumup = 0
+        before_4_sumserv = before_4_averits = before_4_sumup = 0
 
         if upsale:
             try:

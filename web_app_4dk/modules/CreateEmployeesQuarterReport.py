@@ -1095,6 +1095,7 @@ def create_employees_quarter_report(req):
         if upsale:
             try:
                 print(datetime(day=1, month=before_1_month, year=before_1_month_year))
+                print(upsale[0]['ufCrm83DateUpsale'])
                 print(quarter_filters['end_date'])
                 before_1_upsale = list(filter(lambda x: datetime(day=1, month=before_1_month, year=before_1_month_year) <= x['ufCrm83DateUpsale'] 
                                             < quarter_filters['end_date'], upsale))[0]

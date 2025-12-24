@@ -185,7 +185,7 @@ def create_employees_report(req):
         worksheet.append([user_name, '', f'{month_names[report_month]} {report_year}'])
         worksheet.append([])
         worksheet.append([])
-        '''
+        
 
         last_month_deals_data = read_deals_data_file(report_month, report_year)
         before_last_month_deals_data = read_deals_data_file(before_last_month, before_last_month_year)
@@ -1214,7 +1214,7 @@ def create_employees_report(req):
             coverage_any_reporting_deals_last_month = 0
         # >ibs 20240330
 
-        
+        '''
         #любая отчетность за прошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_last_month))
         deals_last_month = set(map(lambda x: x['Регномер'] and x['Тип'], other_deals_last_month))
@@ -1231,7 +1231,7 @@ def create_employees_report(req):
                                                              len(its_deals_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_last_month = 0
-        
+        '''
 
         # Предшествующий отчетному месяц
         free_reporting_deals_before_last_month = list(filter(lambda x: x['Ответственный'] == user_name and
@@ -1273,7 +1273,7 @@ def create_employees_report(req):
             coverage_any_reporting_deals_before_last_month = 0
         # >ibs  20240330
 
-        
+        '''
         #любая отчетность за позапрошлый месяц 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_before_last_month))
         any_reporting_deals_before_last_month = 0
@@ -1288,20 +1288,20 @@ def create_employees_report(req):
                                                              len(its_deals_before_last_month), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_before_last_month = 0
-        
+        '''
 
         # Начало года
         free_reporting_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                                       x['Тип'] == 'Отчетность (в рамках ИТС)' and
                                                       x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                                       start_year_deals_data))
-         # SAA 20251114
+        ''' # SAA 20251114
         prof_deals_start_year = list(filter(lambda x: x['Ответственный'] == user_name and
                                             x['Группа'] == 'ИТС' and
                                             'Базовый' not in x['Тип'] and
                                             x['Стадия сделки'] in ['Услуга активна', 'Счет сформирован', 'Счет отправлен клиенту'],
                                             start_year_deals_data))
-        
+        '''
 
         try:
             coverage_free_reporting_deals_start_year = round(round(len(free_reporting_deals_start_year) /
@@ -1338,7 +1338,7 @@ def create_employees_report(req):
             coverage_any_reporting_deals_start_year = 0
         # >ibs 20240330
         
-        
+        '''
         #любая отчетность на начало года 28-03-2024
         regnumbers = set(map(lambda x: x['Регномер'], its_deals_start_year))
         any_reporting_deals_start_year = 0
@@ -1353,7 +1353,7 @@ def create_employees_report(req):
                                                             len(its_deals_start_year), 2) * 100, 2)
         except ZeroDivisionError:
             coverage_any_reporting_deals_start_year = 0
-        
+        '''
 
         worksheet.append(['Отчетность', f'на {report_month_last_day_date}', 'Прирост за месяц', 'Прирост с начала года',
                           'Количество на январь'])
@@ -1636,7 +1636,7 @@ def create_employees_report(req):
             for service in list_provide_services:
                 worksheet.append([service['COMPANY'], service['TYPE_PAY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
         worksheet.append([])
-        '''
+        
 
         # Задачи
         tasks = b.get_all('tasks.task.list', {
@@ -1656,9 +1656,7 @@ def create_employees_report(req):
 
         # кол-во и затраты по задачам тлп
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
-        print(len(completed_tlp_tasks))
         tlp_ids = list(set(map(lambda x: x['id'], completed_tlp_tasks)))
-        print(len(tlp_ids))
     
         if tlp_ids:
             tlp_timespent = []
@@ -1711,9 +1709,7 @@ def create_employees_report(req):
 
         # кол-во и затраты по работам итс
         worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks))
-        print(len(worksits_tasks))
         worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) 
-        print(len(worksits_ids))
     
         if worksits_ids:
             worksits_timespent = []
@@ -1783,8 +1779,7 @@ def create_employees_report(req):
         worksheet.append(['Трудозатраты РаботыИТС', f'{wi_hours} ч {wi_minutes} мин'])
         worksheet.append([])
 
-        #change_sheet_style(worksheet)
-        '''
+        
         # ЭДО
         all_its = list(filter(lambda x: 'ГРМ' not in x['Тип'], its_deals_last_month))
         count_its_unigue = len(set(x['Компания'] for x in all_its))
@@ -1954,7 +1949,7 @@ def create_employees_report(req):
         
         worksheet.append(['Сверка 2.0'])
         worksheet.append(['Подключено', len(company_sverka)])
-        '''
+
         change_sheet_style(worksheet)
         
 

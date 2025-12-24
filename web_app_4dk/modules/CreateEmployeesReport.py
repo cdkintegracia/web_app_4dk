@@ -1658,8 +1658,8 @@ def create_employees_report(req):
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
         tlp_ids = list(set(map(lambda x: x['id'], completed_tlp_tasks)))
     
-        tlp_timespent = []
         if tlp_ids:
+            tlp_timespent = []
             start = 0
             limit = 50
 
@@ -1705,8 +1705,8 @@ def create_employees_report(req):
         worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks))
         worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) 
     
-        worksits_timespent = []
         if worksits_ids:
+            worksits_timespent = []
             start = 0
             limit = 50
 

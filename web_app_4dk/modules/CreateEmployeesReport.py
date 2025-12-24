@@ -1656,12 +1656,14 @@ def create_employees_report(req):
 
         # кол-во и затраты по задачам тлп
         completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
+        print(len(completed_tlp_tasks))
         tlp_ids = list(set(map(lambda x: x['id'], completed_tlp_tasks)))
+        print(len(tlp_ids))
     
         if tlp_ids:
             tlp_timespent = []
             start = 0
-            limit = 50
+            seen_starts = set()
 
             while True:
                 tlp_response = b.call(
@@ -1679,12 +1681,15 @@ def create_employees_report(req):
                     raw=True
                 )
 
-                tlp_result = tlp_response.get('result', [])
-                tlp_timespent.extend(tlp_result)
-                # если вернулось меньше лимита — дальше записей нет
-                if len(tlp_result) < limit:
+                next_start = tlp_response.get('next')
+                # нет next — конец
+                if next_start is None:
                     break
-                start += limit
+                # next не двигается — защита от вечного цикла
+                if next_start == start or next_start in seen_starts:
+                    break
+                seen_starts.add(start)
+                start = next_start
 
             tlp_total_seconds = sum(int(item.get('SECONDS', 0)) for item in tlp_timespent)
             tlp_hours = tlp_total_seconds // 3600

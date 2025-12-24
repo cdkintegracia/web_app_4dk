@@ -1634,7 +1634,7 @@ def create_employees_report(req):
         if len(provide_services) > 1:
             worksheet.append(['', 'Выполненные работы', ''])
             for service in list_provide_services:
-                worksheet.append([service['TYPE_PAY'], service['COMPANY'], service['OPPORTUNITY']]) # service['TYPE_PAY'], 
+                worksheet.append([service['TYPE_PAY'], service['COMPANY'], service['OPPORTUNITY']])
         worksheet.append([])
         
 

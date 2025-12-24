@@ -1686,9 +1686,12 @@ def create_employees_report(req):
                     break
                 start += limit
 
-        tlp_total_seconds = sum(int(item.get('SECONDS', 0)) for item in tlp_timespent)
-        tlp_hours = tlp_total_seconds // 3600
-        tlp_minutes = (tlp_total_seconds % 3600) // 60
+            tlp_total_seconds = sum(int(item.get('SECONDS', 0)) for item in tlp_timespent)
+            tlp_hours = tlp_total_seconds // 3600
+            tlp_minutes = (tlp_total_seconds % 3600) // 60
+        else:
+            tlp_hours = 0
+            tlp_minutes = 0
 
         #средняя оценка
         tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
@@ -1700,7 +1703,7 @@ def create_employees_report(req):
 
         # кол-во и затраты по работам итс
         worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks))
-        worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) #[0]
+        worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) 
     
         worksits_timespent = []
         if worksits_ids:
@@ -1730,9 +1733,12 @@ def create_employees_report(req):
                     break
                 start += limit
 
-        wi_total_seconds = sum(int(item.get('SECONDS', 0)) for item in worksits_timespent)
-        wi_hours = wi_total_seconds // 3600
-        wi_minutes = (wi_total_seconds % 3600) // 60
+            wi_total_seconds = sum(int(item.get('SECONDS', 0)) for item in worksits_timespent)
+            wi_hours = wi_total_seconds // 3600
+            wi_minutes = (wi_total_seconds % 3600) // 60
+        else:
+            wi_hours = 0
+            wi_minutes = 0
 
         #Попытка Дежурства
         days_duty = b.get_all('lists.element.get', {

@@ -179,7 +179,7 @@ def ca_downovertime_report(req):
 
         # получаем имя сотрудника
         user_name = get_fio_from_user_info(user_info)
-        text_message = f'[b]{user_name}[/b]\n\nСобачка ищейка по кличке "Загрузка" обнаружил ваши трудозатраты:n\n'
+        text_message = f'[b]{user_name}[/b]\n\nСобачка ищейка по кличке "Загрузка" обнаружил ваши трудозатраты:\n\n'
 
 
         #собираем персональные данные по рабочим часам за неделю и месяц
@@ -303,10 +303,14 @@ def ca_downovertime_report(req):
         hours_week = round(valid_minutes_week / 60, 2)
         text_message += f'[i][b]Итого обнаружено:[/b][/i] {hours_week} ч\n'
 
+        ratio_week = hours_week / total_hours_week if total_hours_week else 1.1
         downovertime_week = round(total_hours_week - hours_week, 2)
+
         if downovertime_week >= 0:
-            text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_week)} ч'
-        else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_week)} ч'
+            if ratio_week < 0.75:
+                text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_week)} ч, Загрузка грустит :('
+            else: text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_week)} ч, Загрузка доволен :)'
+        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_week)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой :0 ;)'
         
         sleep(1)
                 
@@ -378,14 +382,14 @@ def ca_downovertime_report(req):
         hours_month = round(valid_minutes_month / 60, 2)
         text_message += f'[i][b]Итого обнаружено:[/b][/i] {hours_month} ч\n'
 
-        ratio = hours_month / total_hours_month if total_hours_month else 1.1
+        ratio_month = hours_month / total_hours_month if total_hours_month else 1.1
         downovertime_month = round(total_hours_month - hours_month, 2)
 
         if downovertime_month >= 0:
-            if ratio < 0.75:
-                text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка грустит'
-            else: text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка доволен'
-        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_month)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой'
+            if ratio_month < 0.75:
+                text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка грустит :('
+            else: text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка доволен :)'
+        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_month)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой :0 ;)'
 
         #print(text_message)
         sleep(1)

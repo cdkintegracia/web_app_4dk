@@ -179,7 +179,7 @@ def ca_downovertime_report(req):
 
         # получаем имя сотрудника
         user_name = get_fio_from_user_info(user_info)
-        text_message = f'[b]{user_name}[/b]\n\nСобачка-ищейка по кличке Загрузка обнаружил ваши трудозатраты:\n\n'
+        text_message = f'[b]{user_name}[/b]\n\nСобачка-ищейка по кличке Загрузка обнаружила ваши трудозатраты:\n\n'
 
 
         #собираем персональные данные по рабочим часам за неделю и месяц

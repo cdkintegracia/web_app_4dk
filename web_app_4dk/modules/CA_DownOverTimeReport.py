@@ -179,7 +179,7 @@ def ca_downovertime_report(req):
 
         # получаем имя сотрудника
         user_name = get_fio_from_user_info(user_info)
-        text_message = f'[b]{user_name}[/b]\n\nСобачка ищейка по кличке "Загрузка" обнаружил ваши трудозатраты:\n\n'
+        text_message = f'[b]{user_name}[/b]\n\nСобачка-ищейка по кличке Загрузка обнаружил ваши трудозатраты:\n\n'
 
 
         #собираем персональные данные по рабочим часам за неделю и месяц
@@ -389,7 +389,7 @@ def ca_downovertime_report(req):
             if ratio_month < 0.75:
                 text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка грустит :('
             else: text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка доволен :)'
-        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_month)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой :0 ;)'
+        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_month)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой :o ;)'
 
         #print(text_message)
         sleep(1)

@@ -295,7 +295,7 @@ def ca_downovertime_report(req):
         month_1 = datetime.fromisoformat(start_week).strftime("%d.%m.%y")
         month_2 = (datetime.fromisoformat(end_week) - timedelta(days=1)).strftime("%d.%m.%y")
 
-        text_message += f'[i]1. За период с {month_1} по {month_2} Вами отработаны задачи:[/i]\n'
+        text_message += f'[i]1. За период с {month_1} по {month_2} вами отработаны задачи:[/i]\n'
         for task in time_spent_week:
             text_message += f'{task}\n'
 
@@ -374,7 +374,7 @@ def ca_downovertime_report(req):
         month_1 = datetime.fromisoformat(start_month).strftime("%d.%m.%y")
         month_2 = (datetime.fromisoformat(last_day_month) - timedelta(days=1)).strftime("%d.%m.%y")
 
-        text_message += f'\n\n[i]2. За период с {month_1} по {month_2} Вами отработаны задачи:[/i]\n'
+        text_message += f'\n\n[i]2. За период с {month_1} по {month_2} вами отработаны задачи:[/i]\n'
         for task in time_spent_month:
             text_message += f'{task}\n'
 

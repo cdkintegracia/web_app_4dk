@@ -310,7 +310,7 @@ def ca_downovertime_report(req):
             if ratio_week < 0.75:
                 text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_week)} ч, Загрузка грустит :('
             else: text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_week)} ч, Загрузка доволен :)'
-        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_week)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой :0 ;)'
+        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_week)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой :o ;)'
         
         sleep(1)
                 

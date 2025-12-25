@@ -45,64 +45,52 @@ def get_fio_from_user_info(user_info: dict) -> str:
 
 def get_time_spent_for_period(b, user_id, start_iso, end_iso):
     """
-    Возвращает список трудозатрат за период [start_iso, end_iso),
-    автоматически дробит период на 3 части при >50 записей
+    Возвращает список трудозатрат за период [start_iso, end_iso)
+    с использованием пагинации (start)
+    и защитой от вечного цикла при залипшем next
     """
 
-    # первый запрос — проверочный
-    result = b.call('task.elapseditem.getlist', {
-        'order': {'ID': 'asc'},
-        'filter': {
-            'USER_ID': user_id,
-            '>=CREATED_DATE': start_iso,
-            '<CREATED_DATE': end_iso
-        },
-        'select': ['*']
-    }, raw=True)['result']
-
-    if len(result) <= 49:
-        return result
-
-    # если записей много — дробим период на 3 части
-    start_dt = datetime.fromisoformat(start_iso)
-    end_dt = datetime.fromisoformat(end_iso)
-    start_day = start_dt.date()
-    end_day = end_dt.date()
-
-    total_days = (end_day - start_day).days
-    if total_days < 1:
-        total_days = 1
-
-    segment_days = total_days // 3
-    remainder = total_days % 3
-
-    segments = []
-    current_start = start_day
-
-    for i in range(3):
-        extra_day = 1 if i < remainder else 0
-        seg_end = current_start + timedelta(days=segment_days + extra_day)
-
-        seg_start_str = datetime.combine(current_start, start_dt.time()).isoformat()
-        seg_end_str = datetime.combine(seg_end, start_dt.time()).isoformat()
-
-        segments.append((seg_start_str, seg_end_str))
-        current_start = seg_end
-
     all_results = []
-    for seg_start, seg_end in segments:
-        sleep(1)
-        part = b.call('task.elapseditem.getlist', {
-            'order': {'ID': 'asc'},
-            'filter': {
-                'USER_ID': user_id,
-                '>=CREATED_DATE': seg_start,
-                '<CREATED_DATE': seg_end
-            },
-            'select': ['*']
-        }, raw=True)['result']
+    start = 0
+    prev_start = None
 
-        all_results.extend(part)
+    while True:
+        response = b.call(
+            'task.elapseditem.getlist',
+            {
+                'order': {'ID': 'asc'},
+                'filter': {
+                    'USER_ID': user_id,
+                    '>=CREATED_DATE': start_iso,
+                    '<CREATED_DATE': end_iso
+                },
+                'select': ['*'],
+                'start': start
+            },
+            raw=True
+        )
+
+        result = response.get('result', [])
+        all_results.extend(result)
+
+        next_start = response.get('next')
+
+        # нормальное завершение
+        if next_start is None:
+            break
+
+        # защита от вечного цикла: next не двигается
+        if next_start == start or next_start == prev_start:
+            print(
+                f'Прерывание пагинации: next не изменился '
+                f'(user_id={user_id}, start={start}, next={next_start})'
+            )
+            break
+
+        prev_start = start
+        start = next_start
+
+        sleep(1)
 
     return all_results
 
@@ -191,7 +179,7 @@ def ca_downovertime_report(req):
 
         # получаем имя сотрудника
         user_name = get_fio_from_user_info(user_info)
-        text_message = f'[b]{user_name}[/b]\n\n'
+        text_message = f'[b]{user_name}[/b]\n\nСобачка ищейка по кличке "Загрузка" обнаружил ваши трудозатраты:n\n'
 
 
         #собираем персональные данные по рабочим часам за неделю и месяц
@@ -313,7 +301,7 @@ def ca_downovertime_report(req):
 
         # итог считаем только по существующим задачам
         hours_week = round(valid_minutes_week / 60, 2)
-        text_message += f'[i][b]Итого отработано:[/b][/i] {hours_week} ч\n'
+        text_message += f'[i][b]Итого обнаружено:[/b][/i] {hours_week} ч\n'
 
         downovertime_week = round(total_hours_week - hours_week, 2)
         if downovertime_week >= 0:
@@ -388,18 +376,22 @@ def ca_downovertime_report(req):
 
         # итог считаем только по существующим задачам
         hours_month = round(valid_minutes_month / 60, 2)
-        text_message += f'[i][b]Итого отработано:[/b][/i] {hours_month} ч\n'
+        text_message += f'[i][b]Итого обнаружено:[/b][/i] {hours_month} ч\n'
 
+        ratio = hours_month / total_hours_month if total_hours_month else 1.1
         downovertime_month = round(total_hours_month - hours_month, 2)
+
         if downovertime_month >= 0:
-            text_message += f'[i][b]Простой:[/b][/i] {abs(downovertime_month)} ч'
-        else: text_message += f'[i][b]Переработка:[/b][/i] {abs(downovertime_month)} ч'
+            if ratio < 0.75:
+                text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка грустит'
+            else: text_message += f'[i][b]Не обнаружено:[/b][/i] {abs(downovertime_month)} ч, Загрузка доволен'
+        else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_month)} ч, Загрузка обеспокоен вашей переработкой и хочет поделиться вкусняшкой'
 
         #print(text_message)
         sleep(1)
 
         #рассылка от робота задач
-        notification_users = ['1391', '1', '205']
+        notification_users = ['1391']
         #notification_users = [user_info['ID'], '159', '1391']
 
         for user in notification_users:

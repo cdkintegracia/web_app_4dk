@@ -396,7 +396,7 @@ def ca_downovertime_report(req):
 
         #рассылка от робота задач
         #notification_users = ['1391', '173', '205']
-        notification_users = [user_info['ID'], '159', '1391']
+        notification_users = [user_info['ID'], '159', '1391', '1']
 
         for user in notification_users:
             data = {

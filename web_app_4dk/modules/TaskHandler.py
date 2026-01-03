@@ -325,29 +325,29 @@ def fill_task_title(req, event):
 
     if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
 #ИБС VIP
-        if vipflag == 1:
-            tags_massive = send_bitrix_request('task.item.gettags',{
-                'taskId': task_id
-            })
+        if vipflag == 1:  #ИБС 2026-01-03
+            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
+                'taskId': task_id #ИБС 2026-01-03
+            }) #ИБС 2026-01-03
             tags_massive.append('VIP') #ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
-                    #'UF_AUTO_324910901949': 1,
+                    #'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
                     'STAGE_ID': '2367',
                     'TAGS':tags_massive  #ИБС 2026-01-03
 
                 }})
             
         if vipflag == 7:
-            tags_massive = send_bitrix_request('task.item.gettags',{
-                'taskId': task_id
-            })
+            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
+                'taskId': task_id #ИБС 2026-01-03
+            }) #ИБС 2026-01-03
             tags_massive.append('VIP') #ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
-                    #'UF_AUTO_202422302608': 1,
+                    #'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
                     'STAGE_ID': '2649',
                     'TAGS': tags_massive #ИБС 2026-01-03
 
@@ -368,30 +368,30 @@ def fill_task_title(req, event):
                     }})
         else:
             if vipflag == 1:
-                tags_massive = send_bitrix_request('task.item.gettags', {
-                    'taskId': task_id
-                })
+                tags_massive = send_bitrix_request('task.item.gettags', { #ИБС 2026-01-03
+                    'taskId': task_id #ИБС 2026-01-03
+                }) #ИБС 2026-01-03
                 tags_massive.append('VIP')  # ИБС 2026-01-03
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        #'UF_AUTO_324910901949': 1,
+                        #'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
                         'STAGE_ID': '2367',
                         'TAGS': tags_massive  # ИБС 2026-01-03
 
                     }})
                 
             elif vipflag == 7:
-                tags_massive = send_bitrix_request('task.item.gettags', {
-                    'taskId': task_id
-                })
+                tags_massive = send_bitrix_request('task.item.gettags', { #ИБС 2026-01-03
+                    'taskId': task_id #ИБС 2026-01-03
+                }) #ИБС 2026-01-03
                 tags_massive.append('VIP')  # ИБС 2026-01-03
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        #'UF_AUTO_202422302608': 1,
+                        #'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
                         'STAGE_ID': '2649',
                         'TAGS': tags_massive  # ИБС 2026-01-03
 
@@ -428,9 +428,9 @@ def fill_task_title(req, event):
             }})
     else:
         if vipflag == 1:
-            tags_massive = send_bitrix_request('task.item.gettags',{
-                'taskId': task_id
-            })
+            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
+                'taskId': task_id #ИБС 2026-01-03
+            }) #ИБС 2026-01-03
             tags_massive.append('VIP')  # ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
@@ -438,14 +438,14 @@ def fill_task_title(req, event):
                     'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                     'UF_CRM_TASK': uf_crm_task,
                     'STAGE_ID': '2367',
-                    #'UF_AUTO_324910901949': 1,
+                    #'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
                     'TAGS': tags_massive  # ИБС 2026-01-03
                 }})
             
         elif vipflag == 7:
-            tags_massive = send_bitrix_request('task.item.gettags',{
-                'taskId': task_id
-            })
+            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
+                'taskId': task_id #ИБС 2026-01-03
+            }) #ИБС 2026-01-03
             tags_massive.append('VIP')  # ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
@@ -453,7 +453,7 @@ def fill_task_title(req, event):
                     'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                     'UF_CRM_TASK': uf_crm_task,
                     'STAGE_ID': '2649',
-                    #'UF_AUTO_202422302608': 1,
+                    #'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
                     'TAGS': tags_massive  # ИБС 2026-01-03
                 }})
             

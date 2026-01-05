@@ -5,10 +5,13 @@ from datetime import datetime
 
 from fast_bitrix24 import Bitrix
 import openpyxl
+import asyncio
+from fast_bitrix24 import BitrixAsync
+
 
 from web_app_4dk.modules.authentication import authentication
 
-
+b_async = BitrixAsync(authentication('Bitrix'))
 b = Bitrix(authentication('Bitrix'))
 
 month_codes = {
@@ -66,12 +69,16 @@ def read_xlsx(filename: str) -> list:
 
     return data
 
-
+'''
 def get_service_list_elements() -> list:
     elements = b.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '169'})
     elements = list(map(lambda x: {'COMPANY_ID':  list(x['PROPERTY_1283'].values())[0], 'SUBSCRIBER_CODE': list(x['PROPERTY_1289'].values())[0]}, elements))
     return elements
-
+'''
+async def get_service_list_elements() -> list:
+    elements = await b_async.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '169'})
+    elements = list(map(lambda x: {'COMPANY_ID':  list(x['PROPERTY_1283'].values())[0], 'SUBSCRIBER_CODE': list(x['PROPERTY_1289'].values())[0]}, elements))
+    return elements
 
 def create_edo_list_element(month:str, year:str, data:dict):
     sleep(1)
@@ -104,7 +111,8 @@ def upload_file_to_b24(report_name):
 def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
     not_found = []
     file_data = read_xlsx(filename)
-    service_list_elements = get_service_list_elements()
+    #service_list_elements = get_service_list_elements()
+    service_list_elements = asyncio.run(get_service_list_elements())
     companies = b.get_all('crm.company.list', {'select': ['*', 'UF_*']})
     deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'CATEGORY_ID': '1'}})
     for data in file_data:

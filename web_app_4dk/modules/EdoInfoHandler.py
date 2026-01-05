@@ -11,8 +11,20 @@ from fast_bitrix24 import BitrixAsync
 
 from web_app_4dk.modules.authentication import authentication
 
-b_async = BitrixAsync(authentication('Bitrix'))
-b = Bitrix(authentication('Bitrix'))
+
+def run_async(coro):
+    """Run async coroutine from sync (WSGI/Flask-safe) without reusing global loop."""
+    loop = asyncio.new_event_loop()
+    try:
+        asyncio.set_event_loop(loop)
+        return loop.run_until_complete(coro)
+    finally:
+        try:
+            loop.run_until_complete(loop.shutdown_asyncgens())
+        except Exception:
+            pass
+        loop.close()
+        asyncio.set_event_loop(None)
 
 month_codes = {
     'Январь': '2371',
@@ -76,11 +88,22 @@ def get_service_list_elements() -> list:
     return elements
 '''
 async def get_service_list_elements() -> list:
-    elements = await b_async.get_all('lists.element.get', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '169'})
-    elements = list(map(lambda x: {'COMPANY_ID':  list(x['PROPERTY_1283'].values())[0], 'SUBSCRIBER_CODE': list(x['PROPERTY_1289'].values())[0]}, elements))
+    """Получить элементы списка 'Отчет по сервисам' (IBLOCK 169) в том же event loop, где выполняется корутина."""
+    b_async = BitrixAsync(authentication('Bitrix'))
+    elements = await b_async.get_all(
+        'lists.element.get',
+        {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '169'}
+    )
+    elements = list(map(lambda x: {
+        'COMPANY_ID': list(x['PROPERTY_1291'].values())[0],
+        'SUBSCRIBER_CODE': list(x['PROPERTY_1289'].values())[0]
+    }, elements))
     return elements
 
 def create_edo_list_element(month:str, year:str, data:dict):
+
+
+    b = Bitrix(authentication('Bitrix'))
     sleep(1)
     b.call('lists.element.add', {'IBLOCK_TYPE_ID': 'lists', 'IBLOCK_ID': '235', 'ELEMENT_CODE': time(), 'FIELDS': {
         'NAME': f"{month} {year}",
@@ -96,6 +119,8 @@ def create_edo_list_element(month:str, year:str, data:dict):
 
 
 def upload_file_to_b24(report_name):
+
+    b = Bitrix(authentication('Bitrix'))
     bitrix_folder_id = '268033'
     with open(report_name, 'rb') as file:
         report_file = file.read()
@@ -109,10 +134,12 @@ def upload_file_to_b24(report_name):
 
 
 def edo_info_handler(month: str, year: str, filename: str, b24_user_id):
+
+    b = Bitrix(authentication('Bitrix'))
     not_found = []
     file_data = read_xlsx(filename)
     #service_list_elements = get_service_list_elements()
-    service_list_elements = asyncio.run(get_service_list_elements())
+    service_list_elements = run_async(get_service_list_elements())
     companies = b.get_all('crm.company.list', {'select': ['*', 'UF_*']})
     deals = b.get_all('crm.deal.list', {'select': ['*', 'UF_*'], 'filter': {'CATEGORY_ID': '1'}})
     for data in file_data:

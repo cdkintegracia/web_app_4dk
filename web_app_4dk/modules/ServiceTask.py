@@ -485,7 +485,9 @@ def create_service_tasks(dct):
                 if dct['quarter'] != 'Только квартальные':
                     main_check_list = b.call('task.checklistitem.add', [
                         main_task, {
-                            'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                            #'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
+                            #ИБС 2026-01-19
+                            'TITLE': 'Ежемесячные',
                         }
                     ], raw=True
                                                 )['result']

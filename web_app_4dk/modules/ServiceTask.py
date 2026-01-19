@@ -487,7 +487,7 @@ def create_service_tasks(dct):
                         main_task, {
                             #'TITLE': 'Ежемесячные', 'PARENT_ID': main_task,
                             #ИБС 2026-01-19
-                            'TITLE': 'Ежемесячные',
+                            'TITLE': 'Ежемесячные','PARENT_ID':main_task
                         }
                     ], raw=True
                                                 )['result']
@@ -505,7 +505,7 @@ def create_service_tasks(dct):
             if quarter_check_list_flag is False and dct['quarter'] in ['Да', 'Только квартальные']:
                 quarter_check_list = b.call('task.checklistitem.add', [
                     main_task, {
-                        'TITLE': 'Квартальные', 'PARENT_ID': main_task,
+                        'TITLE': 'Квартальные', 'PARENT_ID': 0,
                     }
                 ], raw=True
                                             )['result']

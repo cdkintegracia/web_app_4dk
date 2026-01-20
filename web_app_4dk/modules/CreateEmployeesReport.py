@@ -1054,7 +1054,7 @@ def create_employees_report(req):
                                                     'РПД' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
                                                     'Коннект' in x['Тип'] or 'mag1c' in x['Тип'] or 
                                                     'Облачный архив' in x['Тип'] or 'Сканер чехов' in x['Тип']),
-                                                    before_last_month_deals_data))
+                                                    before_last_month_deals_data)) #все сервисы
 
                 if not company_its_services:
                     companies_without_services_before_last_month += 1

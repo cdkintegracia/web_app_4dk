@@ -1047,27 +1047,26 @@ def create_employees_report(req):
                 'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], before_last_month_deals_data))
             if non_prof_its:
 
-                company_its_services = list(
-                    filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                     ('Контрагент' in x['Тип'] or
-                                      'Спарк' in x['Тип'] or
-                                      'РПД' in x['Тип'] or
-                                      'Отчетность' in x['Тип'] or
-                                      'Допы Облако' in x['Тип'] or
-                                      'Кабинет сотрудника' in x['Тип']),
-                           before_last_month_deals_data))
+                company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
+                                                    ('Спарк' in x['Тип'] or 'Контрагент' in x['Тип'] or
+                                                    'Отчетность' in x['Тип'] or 'Подпись' in x['Тип'] or 
+                                                    'Допы Облако' in x['Тип'] or
+                                                    'РПД' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                    'Коннект' in x['Тип'] or 'mag1c' in x['Тип'] or 
+                                                    'Облачный архив' in x['Тип'] or 'Сканер чехов' in x['Тип']),
+                                                    before_last_month_deals_data))
 
                 if not company_its_services:
                     companies_without_services_before_last_month += 1
 
-            company_its_paid_services = list(
-                filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                 ('Контрагент' in x['Тип'] or
-                                  'Спарк' in x['Тип'] or
-                                  'РПД' in x['Тип'] or
-                                  'Отчетность' == x['Тип'] or
-                                  'Допы Облако' in x['Тип'] or
-                                  'Кабинет сотрудника' in x['Тип']), before_last_month_deals_data))
+            company_its_paid_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and 
+                                                    ('Спарк' in x['Тип'] or 'Контрагент' == x['Тип'] or
+                                                    'Отчетность' == x['Тип'] or 'Допы Облако' in x['Тип'] or
+                                                    ('Подпись' in x['Тип'] and 'Подпись' != x['Тип']) or
+                                                    'РПД' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                    'Коннект' in x['Тип'] or 'mag1c' in x['Тип'] or 
+                                                    'Облачный архив' in x['Тип'] or 'Сканер чехов' in x['Тип']),
+                                                    before_last_month_deals_data))
 
             if not company_its_paid_services:
                 companies_without_paid_services_before_last_month += 1
@@ -1102,27 +1101,25 @@ def create_employees_report(req):
                 'Тип'] and 'Облако' not in x['Тип'] and 'ГРМ' not in x['Тип'], start_year_deals_data))
 
             if non_prof_its:
-                company_its_services = list(
-                    filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                     ('Контрагент' in x['Тип'] or
-                                      'Спарк' in x['Тип'] or
-                                      'РПД' in x['Тип'] or
-                                      'Отчетность' in x['Тип'] or
-                                      'Допы Облако' in x['Тип'] or
-                                      'Кабинет сотрудника' in x['Тип']),
-                           start_year_deals_data))
+                company_its_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and 
+                                                    ('Спарк' in x['Тип'] or 'Контрагент' in x['Тип'] or
+                                                    'Отчетность' in x['Тип'] or 'Подпись' in x['Тип'] or 
+                                                    'Допы Облако' in x['Тип'] or
+                                                    'РПД' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                    'Коннект' in x['Тип'] or 'mag1c' in x['Тип'] or 
+                                                    'Облачный архив' in x['Тип'] or 'Сканер чехов' in x['Тип']), start_year_deals_data))
 
                 if not company_its_services:
                     companies_without_services_start_year += 1
 
-            company_its_paid_services = list(
-                filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and
-                                 ('Контрагент' in x['Тип'] or
-                                  'Спарк' in x['Тип'] or
-                                  'РПД' in x['Тип'] or
-                                  'Отчетность' == x['Тип'] or
-                                  'Допы Облако' in x['Тип'] or
-                                  'Кабинет сотрудника' in x['Тип']), start_year_deals_data))
+            company_its_paid_services = list(filter(lambda x: (company == x['Компания'] or x['Регномер'] in company_regnumbers) and 
+                                                    ('Спарк' in x['Тип'] or 'Контрагент' == x['Тип'] or
+                                                    'Отчетность' == x['Тип'] or 'Допы Облако' in x['Тип'] or
+                                                    ('Подпись' in x['Тип'] and 'Подпись' != x['Тип']) or
+                                                    'РПД' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
+                                                    'Коннект' in x['Тип'] or 'mag1c' in x['Тип'] or 
+                                                    'Облачный архив' in x['Тип'] or 'Сканер чехов' in x['Тип']),
+                                                    start_year_deals_data))
 
             if not company_its_paid_services:
                 companies_without_paid_services_start_year += 1

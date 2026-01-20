@@ -1013,10 +1013,12 @@ def create_employees_report(req):
                                                    'РПД' in x['Тип'] or 'Кабинет сотрудника' in x['Тип'] or
                                                    'Коннект' in x['Тип'] or 'mag1c' in x['Тип'] or 
                                                    'Облачный архив' in x['Тип'] or 'Сканер чехов' in x['Тип']),
-                                                    last_month_deals_data)) #если сделки итс только профы, то считаем сервисы без бесплатных
+                                                    last_month_deals_data)) #если сделки итс есть профы, то считаем сервисы без бесплатных
 
             if not company_its_paid_services:
                 companies_without_paid_services_last_month += 1
+            else:
+                print(f'{company} rn {company_regnumbers}')
 
         try:
             coverage_its_without_services_last_month = round(round(companies_without_services_last_month /

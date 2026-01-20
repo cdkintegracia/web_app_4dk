@@ -1017,7 +1017,6 @@ def create_employees_report(req):
 
             if not company_its_paid_services:
                 companies_without_paid_services_last_month += 1
-                print(f'{company} rn {company_regnumbers}')
 
         try:
             coverage_its_without_services_last_month = round(round(companies_without_services_last_month /

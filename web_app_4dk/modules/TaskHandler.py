@@ -203,7 +203,7 @@ def fill_task_title(req, event):
     #fields_to_update = {}
     vipflag=0
     try:
-        if task_info['groupId']=='1' and task_info['stageId']=='11' and task_info['ufAuto324910901949']!='1':
+        if task_info['groupId']=='1' and task_info['stageId']=='11': #and task_info['ufAuto324910901949']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if contact_crm:
                 contact_crm = contact_crm[0][2:]
@@ -214,7 +214,7 @@ def fill_task_title(req, event):
                 if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
                     vipflag = 1
 
-        if task_info['groupId']=='7' and task_info['stageId']=='555' and task_info['ufAuto202422302608']!='1':
+        if task_info['groupId']=='7' and task_info['stageId']=='555': #and task_info['ufAuto202422302608']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if contact_crm:
                 contact_crm = contact_crm[0][2:]

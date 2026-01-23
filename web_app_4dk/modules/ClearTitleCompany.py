@@ -33,7 +33,7 @@ def clear_title_company(req):
 
     for company in companies:
         if company['UF_CRM_1769005163'] != None:
-            if company['ID'] != 17009 and company['ID'] != 4151:
+            if company['ID'] != '17009' and company['ID'] != '4151':
                 print('очищена компания', {company['ID']})
                 '''b.call('crm.company.update',
                     {'id': company['ID'],

@@ -35,7 +35,7 @@ def clear_title_company(req):
         if company['UF_CRM_1769005163'] != None:
             if company['ID'] != '17009' and company['ID'] != '4151':
                 print('очищена компания', {company['ID']})
-                '''b.call('crm.company.update',
+                b.call('crm.company.update',
                     {'id': company['ID'],
                     'fields': {
                         'UF_CRM_1769005130': '', # Доп инфо в названии
@@ -43,7 +43,6 @@ def clear_title_company(req):
                         'TITLE': company['UF_CRM_1769005163'] # Чистое название (служ)
                     }}
                 )
-                '''
 
         else:
             #users_id = ['1391', '1']

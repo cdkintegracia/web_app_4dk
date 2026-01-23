@@ -20,6 +20,8 @@ def clear_title_company():
                    'UF_CRM_1769005163' # Чистое название (служ)
                    ]
         })
+    
+    print(len(company))
 
     for company in companies:
         if company['UF_CRM_1769005163'] != False:

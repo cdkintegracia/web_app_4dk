@@ -6,7 +6,7 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
-def clear_title_company():
+def clear_title_company(req):
 
     if datetime.now().day != 1:
             return False

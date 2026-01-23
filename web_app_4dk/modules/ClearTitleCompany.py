@@ -42,7 +42,8 @@ def clear_title_company():
             for user_id in users_id:
                 b.call('im.notify.system.add', {
                     'USER_ID': user_id,
-                    'MESSAGE': f'В компании https://vc4dk.bitrix24.ru/crm/company/details/{company['ID']}/ не заполнено "чистое" название.'})
+                    'MESSAGE': f'В компании https://vc4dk.bitrix24.ru/crm/company/details/{company["ID"]}/ не заполнено "чистое" название.'
+                    })
 
         
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ b = Bitrix(authentication('Bitrix'))
 
 def clear_title_company(req):
 
+    '''
     if datetime.now().day != 1:
             #users_id = ['1391', '1']
             users_id = ['1391']
@@ -16,6 +17,7 @@ def clear_title_company(req):
                     'MESSAGE': f'Процесс на очистку названий компаний от доп. инфо был прерван, т.к. сегодня не первое число.'
                     })
             return False
+    '''
 
     companies = b.get_all('crm.company.list', { 
         'filter': {'!UF_CRM_1769005130': False}, # Доп инфо в названии

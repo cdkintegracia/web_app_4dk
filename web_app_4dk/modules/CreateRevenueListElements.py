@@ -196,14 +196,57 @@ def get_result_values(result: dict) -> dict:
 
 def get_info_from_checko(req):
     year = req['year']
+    ranges = [
+        ('1622759', '1627759'),
+        ('1627760', '1632759'),
+        ('1632760', '1637759'),
+        ('1637760', '1642759'),
+        ('1642760', '1647759'),
+        ('1785254', '1785852'),
+        #нужно добавить сюда новые чанки по мере разрастания списка, причем ложатся они не подряд, а участками
+    ]
     errors = []
+    b24_list_elements = []
+    for lo, hi in ranges:
+        print(f"[i] Loading range {lo}..{hi}")
+        try:
+            chunk = b.get_all('lists.element.get', {
+                'IBLOCK_TYPE_ID': 'lists',
+                'IBLOCK_ID': '257',
+                'select': [
+                    'ID',
+                    'PROPERTY_1631'
+                ],
+                'filter': {
+                    'PROPERTY_1643': year,
+                    '>=ID': lo,
+                    '<=ID': hi,
+                }
+            })
+
+            print(f"[i] Loaded {len(chunk)} elements")
+            b24_list_elements.extend(chunk)
+
+        except Exception as e:
+            print(f"[!] ERROR range {lo}-{hi}: {e}")
+            errors.append((lo, hi, str(e)))
+
+    print(f"[TOTAL] {len(b24_list_elements)} elements loaded")
+    '''
+    #это перестало работать в янв 2026 из-за ограничения Б24 по размеру списка элементов, которые возвращает запрос
     b24_list_elements = b.get_all('lists.element.get', {
                     'IBLOCK_TYPE_ID': 'lists',
                     'IBLOCK_ID': '257',
+                    'select': [
+                        'ID',
+                        'PROPERTY_1631'
+                    ],
                     'filter': {
                         'PROPERTY_1643': year,
                     }
     })
+    '''
+
     b24_list_elements = list(map(lambda x: list(x['PROPERTY_1631'].values())[0], b24_list_elements))
     companies = b.get_all('crm.company.list', {
         'select': [
@@ -211,12 +254,13 @@ def get_info_from_checko(req):
             'TITLE',
             'ASSIGNED_BY_ID',
             'UF_CRM_1656070716',     # СлужИНН
-        ]})
+        ],})
     companies = list(filter(lambda x: x['ID'] not in b24_list_elements and x['UF_CRM_1656070716'], companies))
     count = 0
     for company_info in companies:
         print(count)
-        if count == 1500:
+
+        if count == 300:
             break
         revenue = -1
         for method in api_methods:
@@ -310,5 +354,5 @@ def create_revenue_list_elements(req: dict):
         get_info_from_checko(req)
 
 if __name__ == '__main__':
-    get_info_from_checko({'year': '2021'})
+    get_info_from_checko({'year': '2024'})
 

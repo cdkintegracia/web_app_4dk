@@ -43,52 +43,48 @@ def get_fio_from_user_info(user_info: dict) -> str:
             f' {user_info["NAME"] if "NAME" in user_info else ""}'
             f' {user_info["SECOND_NAME"] if "SECOND_NAME" in user_info else ""}').strip()
 
-def get_time_spent_for_period(b, user_id, start_iso, end_iso):
+def get_time_spent_for_period(b, user_id, start_iso, end_iso, page_size=50):
     """
     Возвращает список трудозатрат за период [start_iso, end_iso)
-    с использованием пагинации (start)
-    и защитой от вечного цикла при залипшем next
+    с использованием постраничной навигации через NAV_PARAMS
+    согласно документации Bitrix24 REST API (task.elapseditem.getlist).
     """
 
     all_results = []
-    start = 0
-    prev_start = None
+    page = 1
 
     while True:
         response = b.call(
             'task.elapseditem.getlist',
             {
-                'order': {'ID': 'asc'},
-                'filter': {
-                    'USER_ID': user_id,
-                    '>=CREATED_DATE': start_iso,
-                    '<CREATED_DATE': end_iso
+                "order": {"ID": "asc"},
+                "filter": {
+                    "USER_ID": user_id,
+                    ">=CREATED_DATE": start_iso,
+                    "<CREATED_DATE": end_iso,
                 },
-                'select': ['*'],
-                'start': start
+                "select": ["*"],
+                "params": {
+                    "NAV_PARAMS": {
+                        "nPageSize": page_size,
+                        "iNumPage": page,
+                    }
+                },
             },
             raw=True
         )
 
-        result = response.get('result', [])
+        result = response.get("result", [])
+        if not result:
+            break # если страницы закончились — прерываем
+
         all_results.extend(result)
 
-        next_start = response.get('next')
+        page += 1 # двигаем страницу
 
-        # нормальное завершение
-        if next_start is None:
+        if page > 100: # защита от возможной бесконечной петли
+            print(f"Прерывание: превышено максимальное число страниц (user_id={user_id})")
             break
-
-        # защита от вечного цикла: next не двигается
-        if next_start == start or next_start == prev_start:
-            print(
-                f'Прерывание пагинации: next не изменился '
-                f'(user_id={user_id}, start={start}, next={next_start})'
-            )
-            break
-
-        prev_start = start
-        start = next_start
 
         sleep(1)
 
@@ -395,8 +391,8 @@ def ca_downovertime_report(req):
         sleep(1)
 
         #рассылка от робота задач
-        #notification_users = ['1391', '173', '205']
-        notification_users = [user_info['ID'], '159', '1391', '1']
+        notification_users = ['1391']
+        #notification_users = [user_info['ID'], '159', '1391', '1']
 
         for user in notification_users:
             data = {
@@ -407,16 +403,6 @@ def ca_downovertime_report(req):
             r = requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data)
 
         sleep(1)
-
-        '''
-        #рассылка от службы качества чдк для СНА 157
-        data = {
-            'DIALOG_ID': '1391',
-            'MESSAGE': text_message,
-        }
-        r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data)
-    
-        '''
 
 if __name__ == '__main__':
 

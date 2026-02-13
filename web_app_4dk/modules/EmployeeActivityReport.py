@@ -72,7 +72,7 @@ def employee_activity_report(req):
                 '>=CALL_START_DATE': report_day,
                 'CALL_FAILED_CODE': '200',
             }})
-        duration_out = sum(list(map(lambda x: int(x['CALL_DURATION']), outcalls))) // 60
+        duration_out = round(sum(list(map(lambda x: int(x['CALL_DURATION']), outcalls))) / 60)
         text_message += f'Исходящих звонков свыше 10 сек.: {len(outcalls)} ({duration_out} мин)\n'
 
         # сбор инфо по входящим более 10 секунд за день
@@ -84,7 +84,7 @@ def employee_activity_report(req):
                 '>=CALL_START_DATE': report_day,
                 'CALL_FAILED_CODE': '200',
             }})
-        duration_in = sum(list(map(lambda x: int(x['CALL_DURATION']), incalls))) // 60
+        duration_in = round(sum(list(map(lambda x: int(x['CALL_DURATION']), incalls))) / 60)
         text_message += f'Входящих звонков свыше 10 сек.: {len(incalls)} ({duration_in} мин)\n'
         
         #сбор инфо по исходящим письмам с привязкой к сущностям

@@ -29,6 +29,7 @@ def find_top_deal_type(deals):
         'UC_HT9G9H',  # ПРОФ Земля
     ]
     sort_3 = [
+        'UC_2R01AE', # Пакет услуг Базовый
         'UC_1UPOTU',  # ИТС Бесплатный
     ]
 

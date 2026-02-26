@@ -44,8 +44,7 @@ def get_last_processed_id(b):
     Получает ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492).
     """
 
-    response = b.get_all(
-        "lists.element.get",
+    response = b.get_all('lists.element.get',
         {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '380',

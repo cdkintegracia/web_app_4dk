@@ -53,11 +53,11 @@ def get_last_processed_id(b):
         }, 
     )
 
-    result = response["result"]
+    result = response['result'][0]
     if not result:
         return None
 
-    value = result[0].get("PROPERTY_2102", {}).get("VALUE")
+    value = result['PROPERTY_2102']
 
     if not value:
         return None

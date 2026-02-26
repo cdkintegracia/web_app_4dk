@@ -49,7 +49,7 @@ def get_last_processed_id(b):
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '380',
             'ELEMENT_ID': '1831492',
-            'select': ['PROPERTY_2102']
+            'SELECT': ['PROPERTY_2102']
         })[0]
 
     print(response)

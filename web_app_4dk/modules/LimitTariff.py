@@ -48,18 +48,14 @@ def get_last_processed_id(b):
         {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '380',
-            'ELEMENT_ID': '1831492',
-            'SELECT': ['PROPERTY_2102']
-        }, 
-    )
+            'ELEMENT_ID': '1831492'
+        })[0]
 
     print(response)
-    result = response[0]
-    print(result)
-    if not result:
+    if not response:
         return None
 
-    value = result['PROPERTY_2102']
+    value = response['PROPERTY_2102']
 
     if not value:
         return None

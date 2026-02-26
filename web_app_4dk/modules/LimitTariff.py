@@ -47,9 +47,10 @@ def get_last_processed_id(b):
     response = b.get_all(
         "lists.element.get",
         {
-            "IBLOCK_TYPE_ID": "lists",
-            "IBLOCK_ID": "380",
-            "ELEMENT_ID": "1831492",
+            'IBLOCK_TYPE_ID': 'lists',
+            'IBLOCK_ID': '380',
+            'ELEMENT_ID': '1831492',
+            'SELECT': ['PROPERTY_2102']
         }, 
     )
 

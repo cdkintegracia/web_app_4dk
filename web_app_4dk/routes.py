@@ -112,8 +112,8 @@ from web_app_4dk.modules.ActivityReportCS import activity_report_cs
 from web_app_4dk.modules.CountRAReport import count_ra_report
 #2025-12-10 saa
 from web_app_4dk.modules.CA_DownOverTimeReport import ca_downovertime_report
-#2026-01-23 saa
-#from web_app_4dk.modules.ClearTitleCompany import clear_title_company
+#2026-02-26 saa
+from web_app_4dk.modules.LimitTariff import sync_elapsed_items
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -198,8 +198,8 @@ custom_webhooks = {
     'count_ra_report': count_ra_report,
     #2025-12-10 saa
     'ca_downovertime_report': ca_downovertime_report,
-    #2026-01-23 saa
-    #'clear_title_company': clear_title_company,
+    #2026-02-26 saa
+    'sync_elapsed_items': sync_elapsed_items,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

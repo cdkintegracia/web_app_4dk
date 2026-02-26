@@ -54,6 +54,7 @@ def get_last_processed_id(b):
     )
 
     result = response[0]
+    print(result)
     if not result:
         return None
 

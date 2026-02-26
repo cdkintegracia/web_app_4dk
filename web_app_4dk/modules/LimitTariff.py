@@ -281,7 +281,7 @@ def process_elapsed_item(b, item, group_division):
 
     return True
 
-def sync_elapsed_items(b):
+def sync_elapsed_items(req):
 
     group_division = { # соответствие айди группы задачи и айди подразделения в списании
         1: 2236,

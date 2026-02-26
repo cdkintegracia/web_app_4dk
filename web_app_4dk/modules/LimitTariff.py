@@ -47,15 +47,17 @@ def get_last_processed_id(b):
     response = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '380',
-        'ELEMENT_ID': '1831492',
-        #'SELECT': ['PROPERTY_2102']
+        'ELEMENT_ID': '1831492'
     })[0]
 
-    print(response)
     if not response:
         return None
 
-    value = response['PROPERTY_2102']
+    if 'PROPERTY_2102' not in response:
+        value = ''
+    else:
+        value = response['PROPERTY_1311']
+    print(value)
 
     if not value:
         return None

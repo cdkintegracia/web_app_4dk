@@ -53,6 +53,7 @@ def get_last_processed_id(b):
         }, 
     )
 
+    print(response)
     result = response[0]
     print(result)
     if not result:

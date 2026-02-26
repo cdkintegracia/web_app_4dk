@@ -53,7 +53,7 @@ def get_last_processed_id(b):
         }, 
     )
 
-    result = response['result'][0]
+    result = response[0]
     if not result:
         return None
 

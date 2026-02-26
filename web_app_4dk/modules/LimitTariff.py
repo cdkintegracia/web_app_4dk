@@ -50,7 +50,8 @@ def get_last_processed_id(b):
             "IBLOCK_TYPE_ID": "lists",
             "IBLOCK_ID": "380",
             "ELEMENT_ID": "1831492",
-        },
+        }, 
+    raw=True,
     )
 
     result = response.get("result", [])
@@ -82,6 +83,7 @@ def update_last_processed_id(b, max_id):
                 "PROPERTY_2102": max_id
             },
         },
+        raw=True,
     )
 
 def get_active_user_ids(b):
@@ -99,6 +101,7 @@ def get_active_user_ids(b):
                 "filter": {"ACTIVE": True, "UF_DEPARTMENT": departments,},
                 "start": start,
             },
+        raw=True,
         )
 
         users = resp.get("result", [])
@@ -198,6 +201,7 @@ def process_elapsed_item(b, item, group_division):
                 "UF_AUTO_499889542776", # id обращения из коннекта
             ],
         },
+    raw=True,
     )
 
     task = task_resp.get("result", {}).get("task")
@@ -231,6 +235,7 @@ def process_elapsed_item(b, item, group_division):
             "filter": {"UF_CRM_96_ID_ELAPSEDTIME": item["ID"]},
             "select": ["id", "UF_CRM_96_TIMECOST_SECONDS"],
         },
+    raw=True,
     )
     existing_items = existing.get("result", {}).get("items", [])
 
@@ -255,6 +260,7 @@ def process_elapsed_item(b, item, group_division):
                         "UF_CRM_96_TIMECOST_SECONDS": seconds,
                     },
                 },
+            raw=True,
             )
             return True
 
@@ -277,6 +283,7 @@ def process_elapsed_item(b, item, group_division):
                 "UF_CRM_96_ID_ELAPSEDTIME": item["ID"],
             },
         },
+    raw=True,
     )
 
     return True

@@ -44,7 +44,7 @@ def get_last_processed_id(b):
     Получает ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492).
     """
 
-    response = b.call(
+    response = b.get_all(
         "lists.element.get",
         {
             "IBLOCK_TYPE_ID": "lists",
@@ -84,7 +84,6 @@ def update_last_processed_id(b, max_id):
         },
     )
 
-
 def get_active_user_ids(b):
     """
     Возвращает список ID активных пользователей ЦС, исключая пользователя 91.
@@ -94,7 +93,7 @@ def get_active_user_ids(b):
     start = 0
 
     while True:
-        resp = b.call(
+        resp = b.get_all(
             "user.get",
             {
                 "filter": {"ACTIVE": True, "UF_DEPARTMENT": departments,},
@@ -187,7 +186,7 @@ def process_elapsed_item(b, item, group_division):
     if not task_id:
         return False
 
-    task_resp = b.call(  # получаем задачу
+    task_resp = b.get_all(  # получаем задачу
         "tasks.task.get",
         {
             "taskId": task_id,
@@ -225,7 +224,7 @@ def process_elapsed_item(b, item, group_division):
     if not company_id: # если в задаче нет компании, то пропускаем эту трудозатрату
         return False
 
-    existing = b.call( # проверяем дубли трудозатрат по айди
+    existing = b.get_all( # проверяем дубли трудозатрат по айди
         "crm.item.list",
         {
             "entityTypeId": 1118,

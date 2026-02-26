@@ -51,10 +51,9 @@ def get_last_processed_id(b):
             "IBLOCK_ID": "380",
             "ELEMENT_ID": "1831492",
         }, 
-    raw=True,
     )
 
-    result = response.get("result", [])
+    result = response["result"]
     if not result:
         return None
 

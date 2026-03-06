@@ -294,6 +294,7 @@ def process_elapsed_item(b, item, group_division):
                         'ufCrm96_TimeCost': time_str,
                         'ufCrm96_TimecostSeconds': seconds,
                         'ufCrm96_IdLimit': limit_id, #нет
+                        'parentId1114': limit_id,
                     },
                 },
             raw=True,
@@ -316,6 +317,7 @@ def process_elapsed_item(b, item, group_division):
                 'ufCrm96_TimecostSeconds': seconds,
                 'ufCrm96_Company': company_id,
                 'ufCrm96_Contact': contact_id,
+                'parentId1114': limit_id,
                 'ufCrm96_IdLimit': limit_id, #нет
                 'ufCrm96_IdElapsedtime': item['ID'],
             },

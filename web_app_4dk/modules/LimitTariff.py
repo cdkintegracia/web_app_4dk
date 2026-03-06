@@ -191,18 +191,18 @@ def process_elapsed_item(b, item, group_division):
         return False
 
     task_resp = b.get_all(  # получаем задачу
-        "tasks.task.get",
+        'tasks.task.get',
         {
-            "taskId": task_id,
-            "select": [
-                "ID",
-                "GROUP_ID",
-                "UF_CRM_TASK",
-                "TAGS",
-                "UF_AUTO_499889542776", # id обращения из коннекта
+            'taskId': task_id,
+            'select': [
+                'ID',
+                'GROUP_ID',
+                'UF_CRM_TASK',
+                'TAGS',
+                'UF_AUTO_499889542776', # id обращения из коннекта
             ],
         },
-    )
+    )['task']
 
     task = task_resp.get("result", {}).get("task")
     if not task:

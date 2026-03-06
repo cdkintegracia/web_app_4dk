@@ -289,8 +289,12 @@ def process_elapsed_item(b, item, group_division):
                     'entityTypeId': '1118',
                     'id': existing_item['id'],
                     'fields': {
-                        'ufCrm96_Timecost': time_str,
-                        'ufCrm96_Timecostseconds': seconds,
+                        'ufCrm96_TimeCost': time_str,
+                        'ufCrm96_TimecostSeconds': seconds,
+
+                        'ufCrm96_DateComplete': date_complete, #нет
+                        'ufCrm96_IdTask': task['id'], #нет
+                        'ufCrm96_IdLimit': limit_id, #нет
                     },
                 },
             raw=True,

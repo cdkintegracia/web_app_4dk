@@ -79,6 +79,7 @@ def update_last_processed_id(b, max_id):
             "IBLOCK_ID": "380",
             "ELEMENT_ID": "1831492",
             "FIELDS": {
+                "NAME": 'Id последней трудозатраты',
                 "PROPERTY_2102": max_id
             },
         },
@@ -226,8 +227,40 @@ def process_elapsed_item(b, item, group_division):
 
     if not company_id: # если в задаче нет компании, то пропускаем эту трудозатрату
         return False
+    
+    company_resp = b.get_all(
+        "crm.company.get",
+        {
+            "id": company_id,
+            "select": ["ID", "UF_CRM_1770898836"],
+        },
+        raw=True,
+    )
 
-    existing = b.get_all( # проверяем дубли трудозатрат по айди
+    company = company_resp.get("result")
+    if not company:
+        return False
+
+    limit_id = company.get("UF_CRM_1770898836")
+
+    if limit_id: # если в компании указан лимит — проверяем его
+        limit_resp = b.get_all(
+            "crm.item.get",
+            {
+                "entityTypeId": 1114,
+                "id": limit_id,
+                "select": ["id", "stageId"],
+            },
+            raw=True,
+        )
+
+        limit_item = limit_resp.get("result", {}).get("item")
+
+        # если лимита нет или он не в нужной стадии — не создаем списание
+        if not limit_item or limit_item.get("stageId") != "DT1114_128:2":
+            return False
+
+    existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
         "crm.item.list",
         {
             "entityTypeId": 1118,
@@ -264,9 +297,8 @@ def process_elapsed_item(b, item, group_division):
             return True
 
         return False
-
     
-    b.call( # создаем новое списание
+    b.call( # создаем новое списание, если еще не создано
         "crm.item.add",
         {
             "entityTypeId": 1118,
@@ -279,6 +311,7 @@ def process_elapsed_item(b, item, group_division):
                 "UF_CRM_96_TIMECOST_SECONDS": seconds,
                 "UF_CRM_96_COMPANY": company_id,
                 "UF_CRM_96_CONTACT": contact_id,
+                "UF_CRM_96_ID_LIMIT": limit_id,
                 "UF_CRM_96_ID_ELAPSEDTIME": item["ID"],
             },
         },

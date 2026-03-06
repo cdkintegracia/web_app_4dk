@@ -204,7 +204,6 @@ def process_elapsed_item(b, item, group_division):
         },
     )['task']
 
-    #task = task_resp.get("result", {}).get("task")
     if not task:
         print(f"Не получили задачу {item['ID']}")
         return False
@@ -231,15 +230,15 @@ def process_elapsed_item(b, item, group_division):
         print(f"В задаче нет компании {item['ID']}")
         return False
     
-    company_resp = b.get_all(
-        "crm.company.get",
+    company = b.get_all(
+        'crm.company.get',
         {
-            "id": company_id,
-            "select": ["ID", "UF_CRM_1770898836"],
+            'id': company_id,
+            'select': ['ID', 'UF_CRM_1770898836'],
         },
     )
 
-    company = company_resp.get("result")
+    #company = company_resp.get("result")
     if not company:
         print(f"Не получили компанию {item['ID']}")
         return False
@@ -260,6 +259,7 @@ def process_elapsed_item(b, item, group_division):
 
         # если лимита нет или он не в нужной стадии — не создаем списание
         if not limit_item or limit_item.get("stageId") != "DT1114_128:2":
+            print(f"Нет подх лимита в компании {item['ID']}")
             return False
 
     existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях

@@ -182,10 +182,12 @@ def process_elapsed_item(b, item, group_division):
 
     seconds = int(item.get("SECONDS", 0)) # забираем время из трудозатраты, если оно есть
     if seconds <= 0:
+        print(f"Не указано время {item["ID"]}")
         return False
 
     task_id = item.get("TASK_ID") # id задачи из трудозатраты
     if not task_id:
+        print(f"Нет айди задачи {item["ID"]}")
         return False
 
     task_resp = b.get_all(  # получаем задачу
@@ -204,10 +206,12 @@ def process_elapsed_item(b, item, group_division):
 
     task = task_resp.get("result", {}).get("task")
     if not task:
+        print(f"Не получили задачу {item["ID"]}")
         return False
 
     division = resolve_task_division(task, group_division) # выясненяем подходящее подразделение в списании
     if not division:
+        print(f"Не получили подразделение {item["ID"]}")
         return False
 
     uf_crm = task.get("ufCrmTask", []) # достаем привязанные crm сущности из задачи

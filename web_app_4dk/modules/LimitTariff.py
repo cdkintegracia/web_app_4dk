@@ -292,7 +292,7 @@ def process_elapsed_item(b, item, group_division):
                         'ufCrm96_TimeCost': time_str,
                         'ufCrm96_TimecostSeconds': seconds,
 
-                        'ufCrm96_DateComplete': date_complete, #нет
+                        'ufCrm96_DateComplete': item['CREATED_DATE'], #нет
                         'ufCrm96_IdTask': task['id'], #нет
                         'ufCrm96_IdLimit': limit_id, #нет
                     },

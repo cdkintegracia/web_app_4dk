@@ -270,7 +270,7 @@ def process_elapsed_item(b, item, group_division):
             'select': ['id', 'ufCrm96_Timecostseconds'],
         },
     )
-    existing_items = existing.get("result", {}).get("items", [])
+    #existing_items = existing.get("result", {}).get("items", [])
 
     # Конвертация времени
     hours = seconds // 3600
@@ -278,19 +278,19 @@ def process_elapsed_item(b, item, group_division):
     secs = seconds % 60
     time_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
-    if existing_items: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
-        existing_item = existing_items[0]
+    if existing: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
+        existing_item = existing[0]
         existing_seconds = int(existing_item.get('ufCrm96_Timecostseconds', 0))
 
         if existing_seconds != seconds:
             b.call(
-                "crm.item.update",
+                'crm.item.update',
                 {
-                    "entityTypeId": 1118,
-                    "id": existing_item["id"],
-                    "fields": {
-                        "UF_CRM_96_TIME_COST": time_str,
-                        "UF_CRM_96_TIMECOST_SECONDS": seconds,
+                    'entityTypeId': 1118,
+                    'id': existing_item['id'],
+                    'fields': {
+                        'UF_CRM_96_TIME_COST': time_str,
+                        'UF_CRM_96_TIMECOST_SECONDS': seconds,
                     },
                 },
             raw=True,
@@ -300,20 +300,20 @@ def process_elapsed_item(b, item, group_division):
         return False
     
     b.call( # создаем новое списание, если еще не создано
-        "crm.item.add",
+        'crm.item.add',
         {
-            "entityTypeId": 1118,
-            "fields": {
-                "UF_CRM_96_RESPONSIBLE": item["USER_ID"],
-                "UF_CRM_96_DATE_COMPLETE": item["CREATED_DATE"],
-                "UF_CRM_96_TIME_COST": time_str,
-                "UF_CRM_96_DIVISION": division,
-                "UF_CRM_96_ID_TASK": task["id"],
-                "UF_CRM_96_TIMECOST_SECONDS": seconds,
-                "UF_CRM_96_COMPANY": company_id,
-                "UF_CRM_96_CONTACT": contact_id,
-                "UF_CRM_96_ID_LIMIT": limit_id,
-                "UF_CRM_96_ID_ELAPSEDTIME": item["ID"],
+            'entityTypeId': 1118,
+            'fields': {
+                'UF_CRM_96_RESPONSIBLE': item['USER_ID'],
+                'UF_CRM_96_DATE_COMPLETE': item['CREATED_DATE'],
+                'UF_CRM_96_TIME_COST': time_str,
+                'UF_CRM_96_DIVISION': division,
+                'UF_CRM_96_ID_TASK': task['id'],
+                'UF_CRM_96_TIMECOST_SECONDS': seconds,
+                'UF_CRM_96_COMPANY': company_id,
+                'UF_CRM_96_CONTACT': contact_id,
+                'UF_CRM_96_ID_LIMIT': limit_id,
+                'UF_CRM_96_ID_ELAPSEDTIME': item['ID'],
             },
         },
     raw=True,

@@ -299,7 +299,7 @@ def process_elapsed_item(b, item, group_division):
 
         return False
     
-    #date_complete = datetime.fromisoformat(item['CREATED_DATE']).strftime('%Y-%m-%d %H:%M:%S')
+    date_complete = datetime.fromisoformat(item['CREATED_DATE']).strftime('%Y-%m-%d %H:%M:%S')
 
     b.call( # создаем новое списание, если еще не создано
         'crm.item.add',
@@ -307,14 +307,14 @@ def process_elapsed_item(b, item, group_division):
             'entityTypeId': '1118',
             'fields': {
                 'ufCrm96_Responsible': item['USER_ID'],
-                'ufCrm96_Datecomplete': datetime.fromisoformat(item['CREATED_DATE']).strftime('%Y-%m-%d %H:%M:%S'),
-                'ufCrm96_Timecost': time_str,
-                'ufCrm96_Division': division,
-                'ufCrm96_Idtask': task['id'],
-                'ufCrm96_Timecostseconds': seconds,
+                'ufCrm96_DateComplete': date_complete, #нет
+                'ufCrm96_TimeCost': time_str, #нет
+                'ufCrm96_Division': division, 
+                'ufCrm96_IdTask': task['id'], #нет
+                'ufCrm96_TimecostSeconds': seconds, #нет
                 'ufCrm96_Company': company_id,
                 'ufCrm96_Contact': contact_id,
-                'ufCrm96_Idlimit': limit_id,
+                'ufCrm96_IdLimit': limit_id, #нет
                 'ufCrm96_IdElapsedtime': item['ID'],
             },
         },
@@ -348,6 +348,7 @@ def sync_elapsed_items(req):
 
     for item in elapsed_items:
         if process_elapsed_item(b, item, group_division):
+            #print(item)
             processed.append(item)
 
     # Обновляем last_id по любому последнему элементу

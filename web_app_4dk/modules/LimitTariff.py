@@ -246,16 +246,16 @@ def process_elapsed_item(b, item, group_division):
     limit_id = company.get("UF_CRM_1770898836")
 
     if limit_id: # если в компании указан лимит — проверяем его
-        limit_resp = b.get_all(
-            "crm.item.get",
+        limit_item = b.get_all(
+            'crm.item.get',
             {
-                "entityTypeId": 1114,
-                "id": limit_id,
-                "select": ["id", "stageId"],
+                'entityTypeId': 1114,
+                'id': limit_id,
+                'select': ['id', 'stageId'],
             },
         )
 
-        limit_item = limit_resp.get("result", {}).get("item")
+        #limit_item = limit_resp.get("result", {}).get("item")
 
         # если лимита нет или он не в нужной стадии — не создаем списание
         if not limit_item or limit_item.get("stageId") != "DT1114_128:2":

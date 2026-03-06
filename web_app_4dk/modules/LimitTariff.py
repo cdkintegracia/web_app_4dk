@@ -253,21 +253,21 @@ def process_elapsed_item(b, item, group_division):
                 'id': limit_id,
                 'select': ['id', 'stageId'],
             },
-        )
+        )['item']
 
         #limit_item = limit_resp.get("result", {}).get("item")
 
         # если лимита нет или он не в нужной стадии — не создаем списание
-        if not limit_item or limit_item.get("stageId") != "DT1114_128:2":
+        if not limit_item or limit_item.get('stageId') != "DT1114_128:2":
             print(f"Нет подх лимита в компании {item['ID']}")
             return False
 
     existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
-        "crm.item.list",
+        'crm.item.list',
         {
-            "entityTypeId": 1118,
-            "filter": {"UF_CRM_96_ID_ELAPSEDTIME": item["ID"]},
-            "select": ["id", "UF_CRM_96_TIMECOST_SECONDS"],
+            'entityTypeId': 1118,
+            'filter': {'UF_CRM_96_ID_ELAPSEDTIME': item['ID']},
+            'select': ['id', 'UF_CRM_96_TIMECOST_SECONDS'],
         },
     )
     existing_items = existing.get("result", {}).get("items", [])

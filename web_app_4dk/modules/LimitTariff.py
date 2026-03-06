@@ -265,9 +265,9 @@ def process_elapsed_item(b, item, group_division):
     existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
         'crm.item.list',
         {
-            'entityTypeId': 1118,
-            'filter': {'UF_CRM_96_ID_ELAPSEDTIME': item['ID']},
-            'select': ['id', 'UF_CRM_96_TIMECOST_SECONDS'],
+            'entityTypeId': '1118',
+            'filter': {'ufCrm96_IdElapsedtime': item['ID']},
+            'select': ['id', 'ufCrm96_Timecostseconds'],
         },
     )
     existing_items = existing.get("result", {}).get("items", [])
@@ -280,7 +280,7 @@ def process_elapsed_item(b, item, group_division):
 
     if existing_items: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
         existing_item = existing_items[0]
-        existing_seconds = int(existing_item.get("UF_CRM_96_TIMECOST_SECONDS", 0))
+        existing_seconds = int(existing_item.get('ufCrm96_Timecostseconds', 0))
 
         if existing_seconds != seconds:
             b.call(

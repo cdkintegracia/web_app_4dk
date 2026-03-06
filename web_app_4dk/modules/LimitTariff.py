@@ -228,6 +228,7 @@ def process_elapsed_item(b, item, group_division):
             contact_id = int(link.replace("C_", ""))
 
     if not company_id: # если в задаче нет компании, то пропускаем эту трудозатрату
+        print(f"В задаче нет компании {item['ID']}")
         return False
     
     company_resp = b.get_all(
@@ -236,11 +237,11 @@ def process_elapsed_item(b, item, group_division):
             "id": company_id,
             "select": ["ID", "UF_CRM_1770898836"],
         },
-        raw=True,
     )
 
     company = company_resp.get("result")
     if not company:
+        print(f"Не получили компанию {item['ID']}")
         return False
 
     limit_id = company.get("UF_CRM_1770898836")
@@ -253,7 +254,6 @@ def process_elapsed_item(b, item, group_division):
                 "id": limit_id,
                 "select": ["id", "stageId"],
             },
-            raw=True,
         )
 
         limit_item = limit_resp.get("result", {}).get("item")
@@ -269,7 +269,6 @@ def process_elapsed_item(b, item, group_division):
             "filter": {"UF_CRM_96_ID_ELAPSEDTIME": item["ID"]},
             "select": ["id", "UF_CRM_96_TIMECOST_SECONDS"],
         },
-    raw=True,
     )
     existing_items = existing.get("result", {}).get("items", [])
 

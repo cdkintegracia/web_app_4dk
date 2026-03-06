@@ -101,7 +101,6 @@ def get_active_user_ids(b):
                 "filter": {"ACTIVE": True, "UF_DEPARTMENT": departments,},
                 "start": start,
             },
-        raw=True,
         )
 
         users = resp.get("result", [])
@@ -201,7 +200,6 @@ def process_elapsed_item(b, item, group_division):
                 "UF_AUTO_499889542776", # id обращения из коннекта
             ],
         },
-    raw=True,
     )
 
     task = task_resp.get("result", {}).get("task")

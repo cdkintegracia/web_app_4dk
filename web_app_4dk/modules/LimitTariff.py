@@ -190,7 +190,7 @@ def process_elapsed_item(b, item, group_division):
         print(f"Нет айди задачи {item['ID']}")
         return False
 
-    task_resp = b.get_all(  # получаем задачу
+    task = b.get_all(  # получаем задачу
         'tasks.task.get',
         {
             'taskId': task_id,
@@ -204,7 +204,7 @@ def process_elapsed_item(b, item, group_division):
         },
     )['task']
 
-    task = task_resp.get("result", {}).get("task")
+    #task = task_resp.get("result", {}).get("task")
     if not task:
         print(f"Не получили задачу {item['ID']}")
         return False

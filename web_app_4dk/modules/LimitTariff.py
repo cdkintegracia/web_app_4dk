@@ -244,7 +244,6 @@ def process_elapsed_item(b, item, group_division):
         return False
 
     limit_id = company.get("UF_CRM_1770898836")
-    print (limit_id)
 
     if limit_id: # если в компании указан лимит — проверяем его
         limit_item = b.get_all(
@@ -255,7 +254,6 @@ def process_elapsed_item(b, item, group_division):
                 'select': ['id', 'stageId'],
             },
         )['item']
-        print (limit_item)
 
         #limit_item = limit_resp.get("result", {}).get("item")
 
@@ -280,6 +278,8 @@ def process_elapsed_item(b, item, group_division):
     secs = seconds % 60
     time_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
+    print (limit_id)
+
     if existing: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
         existing_item = existing[0]
         existing_seconds = int(existing_item.get('ufCrm96_Timecostseconds', 0))
@@ -293,7 +293,6 @@ def process_elapsed_item(b, item, group_division):
                     'fields': {
                         'ufCrm96_TimeCost': time_str,
                         'ufCrm96_TimecostSeconds': seconds,
-
                         'ufCrm96_IdLimit': limit_id, #нет
                     },
                 },
@@ -302,8 +301,7 @@ def process_elapsed_item(b, item, group_division):
             return True
 
         return False
-    
-    date_complete = datetime.fromisoformat(item['CREATED_DATE']).strftime('%Y-%m-%d %H:%M:%S')
+
 
     b.call( # создаем новое списание, если еще не создано
         'crm.item.add',
@@ -311,7 +309,7 @@ def process_elapsed_item(b, item, group_division):
             'entityTypeId': '1118',
             'fields': {
                 'ufCrm96_Responsible': item['USER_ID'],
-                'ufCrm96_DateComplete': date_complete,
+                'ufCrm96_DateComplete': item['CREATED_DATE'],
                 'ufCrm96_TimeCost': time_str,
                 'ufCrm96_Division': division, 
                 'ufCrm96_IdTask': task['id'],
@@ -324,7 +322,7 @@ def process_elapsed_item(b, item, group_division):
         },
     raw=True,
     )
-    print(task['id'])
+
     return True
 
 def sync_elapsed_items(req):

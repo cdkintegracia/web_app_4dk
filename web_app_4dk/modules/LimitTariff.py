@@ -244,6 +244,7 @@ def process_elapsed_item(b, item, group_division):
         return False
 
     limit_id = company.get("UF_CRM_1770898836")
+    print (limit_id)
 
     if limit_id: # если в компании указан лимит — проверяем его
         limit_item = b.get_all(
@@ -254,6 +255,7 @@ def process_elapsed_item(b, item, group_division):
                 'select': ['id', 'stageId'],
             },
         )['item']
+        print (limit_item)
 
         #limit_item = limit_resp.get("result", {}).get("item")
 
@@ -292,8 +294,6 @@ def process_elapsed_item(b, item, group_division):
                         'ufCrm96_TimeCost': time_str,
                         'ufCrm96_TimecostSeconds': seconds,
 
-                        'ufCrm96_DateComplete': item['CREATED_DATE'], #нет
-                        'ufCrm96_IdTask': task['id'], #нет
                         'ufCrm96_IdLimit': limit_id, #нет
                     },
                 },
@@ -311,11 +311,11 @@ def process_elapsed_item(b, item, group_division):
             'entityTypeId': '1118',
             'fields': {
                 'ufCrm96_Responsible': item['USER_ID'],
-                'ufCrm96_DateComplete': date_complete, #нет
-                'ufCrm96_TimeCost': time_str, #нет
+                'ufCrm96_DateComplete': date_complete,
+                'ufCrm96_TimeCost': time_str,
                 'ufCrm96_Division': division, 
-                'ufCrm96_IdTask': task['id'], #нет
-                'ufCrm96_TimecostSeconds': seconds, #нет
+                'ufCrm96_IdTask': task['id'],
+                'ufCrm96_TimecostSeconds': seconds,
                 'ufCrm96_Company': company_id,
                 'ufCrm96_Contact': contact_id,
                 'ufCrm96_IdLimit': limit_id, #нет

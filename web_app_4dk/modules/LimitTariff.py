@@ -310,7 +310,7 @@ def process_elapsed_item(b, item, group_division):
                 'ufCrm96_Datecomplete': datetime.fromisoformat(item['CREATED_DATE']).strftime('%Y-%m-%d %H:%M:%S'),
                 'ufCrm96_Timecost': time_str,
                 'ufCrm96_Division': division,
-                'ufCrm96_Idtask': task['ID'],
+                'ufCrm96_Idtask': task['id'],
                 'ufCrm96_Timecostseconds': seconds,
                 'ufCrm96_Company': company_id,
                 'ufCrm96_Contact': contact_id,
@@ -320,7 +320,7 @@ def process_elapsed_item(b, item, group_division):
         },
     raw=True,
     )
-    print(task['ID'])
+    print(task['id'])
     return True
 
 def sync_elapsed_items(req):

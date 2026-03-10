@@ -360,6 +360,8 @@ def sync_elapsed_items(req):
     if not processed:
         print("Подходящих трудозатрат не найдено")
 
+    calls_lk_limit()
+
 def calls_lk_limit():
 
     users = b.get_all( # все сотрудники ЛК
@@ -522,5 +524,5 @@ def calls_lk_limit():
     
 if __name__ == '__main__':
 
-    #sync_elapsed_items()
+    sync_elapsed_items()
     calls_lk_limit()

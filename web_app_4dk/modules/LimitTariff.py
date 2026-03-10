@@ -9,7 +9,7 @@ b = Bitrix(authentication('Bitrix'))
 
 def resolve_task_division(task, group_division):
     """
-    Возвращает division если задача подходит, иначе None.
+    Возвращает Id подразделения в списании если задача подходит, иначе None.
     """
 
     try:
@@ -56,8 +56,7 @@ def get_last_processed_id(b):
     if 'PROPERTY_2102' not in response:
         value = ''
     else:
-        value = response['PROPERTY_1311']
-    print(value)
+        value = response['PROPERTY_2102']
 
     if not value:
         return None
@@ -69,7 +68,7 @@ def get_last_processed_id(b):
 
 def update_last_processed_id(b, max_id):
     """
-    Обновляет last_id после успешной обработки.
+    Обновляет ID последней обработанной трудозатраты после успешной обработки.
     """
 
     b.call(
@@ -127,7 +126,7 @@ def get_active_user_ids(b):
 
 def get_new_elapsed_items(b, user_ids, last_id=None):
     """
-    Возвращает список новых трудозатрат.
+    Возвращает список всех новых трудозатрат ЦС.
     """
 
     if last_id: # есть есть айди последней обработанной трудозатраты, то фильтруем по айди
@@ -293,8 +292,6 @@ def process_elapsed_item(b, item, group_division):
                     'fields': {
                         'ufCrm96_TimeCost': time_str,
                         'ufCrm96_TimecostSeconds': seconds,
-                        'ufCrm96_IdLimit': limit_id, #нет
-                        'parentId1114': limit_id,
                     },
                 },
             raw=True,
@@ -318,7 +315,7 @@ def process_elapsed_item(b, item, group_division):
                 'ufCrm96_Company': company_id,
                 'ufCrm96_Contact': contact_id,
                 'parentId1114': limit_id,
-                'ufCrm96_IdLimit': limit_id, #нет
+                'ufCrm96_IdLimit': limit_id,
                 'ufCrm96_IdElapsedtime': item['ID'],
             },
         },
@@ -363,6 +360,167 @@ def sync_elapsed_items(req):
     if not processed:
         print("Подходящих трудозатрат не найдено")
 
+def calls_lk_limit():
+
+    users = b.get_all( # все сотрудники ЛК
+        'user.get',
+        {'filter': {'UF_DEPARTMENT': 231}, 'select': ['ID']}
+    )
+
+    user_ids_lk = []
+    for u in users:
+        uid = int(u["ID"])
+        if uid != 19: # исключаем СЮВ
+            user_ids_lk.append(uid)
+
+    date_from = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S") # последние 2 часа
+
+    calls = b.get_all(
+        'voximplant.statistic.get',
+        {
+            'filter': {
+                'CALL_TYPE': 1,
+                'PORTAL_USER_ID': user_ids_lk,
+                'CALL_START_DATE': date_from,
+                'CALL_FAILED_CODE': '200',
+            }
+        }
+    )
+
+    print("Найдено звонков:", len(calls))
+
+    # сначала собираем все компании из звонков
+    call_companies = {}
+    all_company_ids = set()
+
+    for item in calls:
+
+        crm_id = item.get("CRM_ENTITY_ID")
+        crm_type = item.get("CRM_ENTITY_TYPE")
+
+        if not crm_id:
+            continue
+
+        contact_id = None
+        company_ids = []
+
+        if crm_type == "CONTACT":
+
+            contact_id = crm_id
+
+            companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
+
+            if companies:
+                for c in companies:
+                    cid = c.get("COMPANY_ID")
+                    if cid:
+                        cid = int(cid)
+                        company_ids.append(cid)
+                        all_company_ids.add(cid)
+
+        elif crm_type == "COMPANY":
+            cid = int(crm_id)
+            company_ids = [cid]
+            all_company_ids.add(cid)
+
+        call_companies[item["ID"]] = {
+            "company_ids": company_ids,
+            "contact_id": contact_id
+        }
+
+
+    # получаем все компании сразу
+    companies = b.get_all(
+        'crm.company.list',
+        {
+            'filter': {'ID': list(all_company_ids)},
+            'select': ['ID', 'UF_CRM_1770898836']
+        }
+    )
+
+    company_limits = {
+        int(c["ID"]): c.get("UF_CRM_1770898836")
+        for c in companies
+        if c.get("UF_CRM_1770898836")
+    }
+
+    limit_ids = list(set(company_limits.values()))
+
+
+    # получаем все лимиты сразу
+    limits = b.get_all(
+        'crm.item.list',
+        {
+            'entityTypeId': 1114,
+            'filter': {'id': limit_ids},
+            'select': ['id', 'stageId']
+        }
+    )
+
+    valid_limits = {
+        int(l['id'])
+        for l in limits
+        if l.get('stageId') == "DT1114_128:2"
+    }
+
+
+    # основной цикл обработки звонков
+    for item in calls:
+
+        data = call_companies.get(item["ID"])
+
+        if not data:
+            continue
+
+        contact_id = data["contact_id"]
+        company_ids = data["company_ids"]
+
+        for company_id in company_ids:
+
+            limit_id = company_limits.get(company_id)
+
+            if not limit_id or int(limit_id) not in valid_limits:
+                continue
+
+            existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
+                'crm.item.list',
+                {
+                    'entityTypeId': 1118,
+                    'filter': {
+                        'ufCrm96_IdElapsedtime': item['ID'],
+                        'ufCrm96_Division': 2234
+                    },
+                },
+            )
+
+            if existing:
+                continue
+
+            duration = int(item['CALL_DURATION'])
+            time_str = str(timedelta(seconds=duration))
+
+            b.call(
+                'crm.item.add',
+                {
+                    'entityTypeId': 1118,
+                    'fields': {
+                        'ufCrm96_Responsible': item['PORTAL_USER_ID'],
+                        'ufCrm96_DateComplete': item['CALL_START_DATE'],
+                        'ufCrm96_TimeCost': time_str,
+                        'ufCrm96_Division': 2234,
+                        'ufCrm96_TimecostSeconds': duration,
+                        'ufCrm96_Company': company_id,
+                        'ufCrm96_Contact': contact_id,
+                        'parentId1114': limit_id,
+                        'ufCrm96_IdLimit': limit_id,
+                        'ufCrm96_IdElapsedtime': item['ID'],
+                    },
+                },
+                raw=True,
+            )
+        
+    
 if __name__ == '__main__':
 
-    sync_elapsed_items()
+    #sync_elapsed_items()
+    calls_lk_limit()

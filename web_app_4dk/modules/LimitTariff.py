@@ -20,7 +20,7 @@ def calls_lk_limit():
         if uid != 19: # исключаем СЮВ
             user_ids_lk.append(uid)
 
-    date_from = (datetime.now() - timedelta(hours=4)).strftime("%Y-%m-%d %H:%M:%S") # последние 4 часа для того, чтобы учесть длительные звонки
+    date_from = (datetime.now() - timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S") # последние 5 часов для того, чтобы учесть длительные звонки
 
     calls = b.get_all(
         'voximplant.statistic.get',
@@ -158,7 +158,6 @@ def calls_lk_limit():
                         'ufCrm96_Company': company_id,
                         'ufCrm96_Contact': contact_id,
                         'parentId1114': limit_id,
-                        #'ufCrm96_IdLimit': limit_id,
                         'ufCrm96_IdElapsedtime': item['ID'],
                     },
                 },
@@ -197,10 +196,10 @@ def resolve_task_division(task, group_division):
 
     return division
 
-def get_active_user_ids(b):
+def get_active_user_ids():
     """
     Возвращает список ID активных пользователей ЦС, исключая пользователя 91.
-    
+    """
     departments = [458, 5, 27, 29, 231]  # ГР, ЦС, ГО3, ГО4, ЛК
     all_users = []
     start = 0
@@ -230,13 +229,11 @@ def get_active_user_ids(b):
         uid = int(u["ID"])
         if uid != 91: # исключаем дежурного админа
             user_ids.append(uid)
-
-    return user_ids
-    """
-    user_ids = 1391
+    
+    #user_ids = 1391
     return user_ids
 
-def get_new_elapsed_items(b, user_ids, last_id=None):
+def get_new_elapsed_items(user_ids, last_id=None):
     """
     Возвращает список всех новых трудозатрат ЦС.
     """
@@ -247,8 +244,8 @@ def get_new_elapsed_items(b, user_ids, last_id=None):
             "USER_ID": user_ids,
         }
 
-    else: # есть нет айди последней обработанной трудозатраты, то фильтруем за последние 2 часа и 10 минут
-        two_hours_ago = (datetime.now() - timedelta(hours=2, minutes=10)).strftime("%Y-%m-%dT%H:%M:%S")
+    else: # есть нет айди последней обработанной трудозатраты, то фильтруем за последние 3 часа и 15 минут
+        two_hours_ago = (datetime.now() - timedelta(hours=3, minutes=15)).strftime("%Y-%m-%dT%H:%M:%S")
         filter_block = {
             ">=CREATED_DATE": two_hours_ago,
             "USER_ID": user_ids,
@@ -432,7 +429,6 @@ def process_elapsed_item(b, item, group_division):
                 'ufCrm96_Company': company_id,
                 'ufCrm96_Contact': contact_id,
                 'parentId1114': limit_id,
-                #'ufCrm96_IdLimit': limit_id,
                 'ufCrm96_IdElapsedtime': item['ID'],
             },
         },
@@ -464,7 +460,7 @@ def elapsed_times_lines(req):
     else:
         last_id = None # если нет последнего id то оставляем пустой, будем брать за последние 2 часа затраты
 
-    user_ids = get_active_user_ids(b) # достаем список активных сотрудников ЦС
+    user_ids = get_active_user_ids() # достаем список активных сотрудников ЦС
 
     if not user_ids:
         notification_users = ['1391'] #, '1']
@@ -474,7 +470,7 @@ def elapsed_times_lines(req):
                                 'MESSAGE': f'Сотрудники в ЦС не найдены. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
         return
 
-    elapsed_items = get_new_elapsed_items(b, user_ids, last_id) # возвращаем список новых трудозатрат
+    elapsed_items = get_new_elapsed_items(user_ids, last_id) # возвращаем список новых трудозатрат
 
     if not elapsed_items:
         notification_users = ['1391'] #, '1']

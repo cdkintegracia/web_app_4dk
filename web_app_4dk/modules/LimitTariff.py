@@ -246,14 +246,13 @@ def get_new_elapsed_items(b, user_ids, last_id=None):
             ">ID": last_id,
             "USER_ID": user_ids,
         }
-        print('есть последняя затрата')
+
     else: # есть нет айди последней обработанной трудозатраты, то фильтруем за последние 2 часа и 10 минут
         two_hours_ago = (datetime.now() - timedelta(hours=2, minutes=10)).strftime("%Y-%m-%dT%H:%M:%S")
         filter_block = {
             ">=CREATED_DATE": two_hours_ago,
             "USER_ID": user_ids,
         }
-        print('нет посл затраты')
 
     items = []
     page = 1

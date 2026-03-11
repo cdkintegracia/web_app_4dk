@@ -298,7 +298,7 @@ def process_elapsed_item(b, item, group_division):
 
     seconds = int(item.get("SECONDS", 0)) # забираем время из трудозатраты, если оно есть
     if seconds <= 0:
-        print(f"Не указано время {item['ID']}")
+        #print(f"Не указано время {item['ID']}")
         return False
 
     task_id = item.get("TASK_ID") # id задачи из трудозатраты
@@ -306,21 +306,22 @@ def process_elapsed_item(b, item, group_division):
         print(f"Нет айди задачи {item['ID']}")
         return False
 
-    task = b.get_all(  # получаем задачу
-        'tasks.task.get',
-        {
-            'taskId': task_id,
-            'select': [
-                'ID',
-                'GROUP_ID',
-                'UF_CRM_TASK',
-                'TAGS',
-                'UF_AUTO_499889542776', # id обращения из коннекта
-            ],
-        },
-    )['task']
+    try:
+        task = b.get_all(  # получаем задачу
+            'tasks.task.get',
+            {
+                'taskId': task_id,
+                'select': [
+                    'ID',
+                    'GROUP_ID',
+                    'UF_CRM_TASK',
+                    'TAGS',
+                    'UF_AUTO_499889542776', # id обращения из коннекта
+                ],
+            },
+        )['task']
 
-    if not task:
+    except:
         print(f"Не получили задачу {item['ID']}")
         return False
 

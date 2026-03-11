@@ -487,6 +487,8 @@ def process_elapsed_item(b, item, group_division):
 
 def sync_elapsed_items(req):
 
+    calls_lk_limit()
+
     group_division = { # соответствие айди группы задачи и айди подразделения в списании
         1: 2236,
         7: 2234,
@@ -519,9 +521,7 @@ def sync_elapsed_items(req):
     print(f"Синхронизация завершена. Новый last_id = {max_id}")
 
     if not processed:
-        print("Подходящих трудозатрат не найдено")
-
-    calls_lk_limit()     
+        print("Подходящих трудозатрат не найдено")    
     
 if __name__ == '__main__':
 

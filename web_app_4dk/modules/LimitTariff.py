@@ -202,28 +202,21 @@ def get_last_processed_id(b):
     Получает ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492).
     """
 
-    response = b.get_all('lists.element.get', {
+    last_spent_time = b.get_all('lists.element.get', {
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '380',
         'ELEMENT_ID': '1831492'
     })[0]
-    print(response)
+    print(last_spent_time)
 
-    if not response:
-        return None
+    last_spent_time = last_spent_time.get('PROPERTY_2102')
 
-    if 'PROPERTY_2102' not in response:
-        value = ''
+    if last_spent_time:
+        id_last_st = list(last_spent_time.values())[0]
     else:
-        value = response['PROPERTY_2102']
+        id_last_st = None
 
-    if not value:
-        return None
-
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
+    print(id_last_st)
 
 def update_last_processed_id(b, max_id):
     """
@@ -332,7 +325,7 @@ def get_new_elapsed_items(b, user_ids, last_id=None):
             for user in notification_users:
                 b.call('im.notify.system.add', {
                                     'USER_ID': user,
-                                    'MESSAGE': f'Кол-во трудозатрат превысило 5000 шт за один раз. \nВыгрузка по процессу Лимиты тарифов'})
+                                    'MESSAGE': f'Кол-во трудозатрат превысило 5000 шт за один раз. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
             break
 
     return items    
@@ -503,7 +496,7 @@ def elapsed_times_lines(req):
         for user in notification_users:
             b.call('im.notify.system.add', {
                                 'USER_ID': user,
-                                'MESSAGE': f'Сотрудники в ЦС не найдены. \nВыгрузка по процессу Лимиты тарифов'})
+                                'MESSAGE': f'Сотрудники в ЦС не найдены. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
         return
 
     elapsed_items = get_new_elapsed_items(b, user_ids, last_id) # возвращаем список новых трудозатрат
@@ -513,7 +506,7 @@ def elapsed_times_lines(req):
         for user in notification_users:
             b.call('im.notify.system.add', {
                                 'USER_ID': user,
-                                'MESSAGE': f'Новых трудозатрат на портале не найдено. \nВыгрузка по процессу Лимиты тарифов'})
+                                'MESSAGE': f'Новых трудозатрат на портале не найдено. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
         return
 
     processed = []
@@ -530,7 +523,7 @@ def elapsed_times_lines(req):
     for user in notification_users:
         b.call('im.notify.system.add', {
                             'USER_ID': user,
-                            'MESSAGE': f'Звонки и трудоозатраты выгружены. Новый last_id = {max_id}. \nВыгрузка по процессу Лимиты тарифов'})
+                            'MESSAGE': f'Звонки и трудоозатраты выгружены. Новый last_id = {max_id}. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
 
     if not processed:
         #print("Подходящих трудозатрат не найдено")

@@ -13,7 +13,6 @@ def calls_lk_limit():
         'user.get',
         {'filter': {'ACTIVE': True, 'UF_DEPARTMENT': 231}, 'select': ['ID']}
     )
-    print(users)
 
     user_ids_lk = []
     for u in users:
@@ -23,6 +22,7 @@ def calls_lk_limit():
     print(user_ids_lk)
 
     date_from = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S") # последние 2 часа
+    print(date_from)
 
     calls = b.get_all(
         'voximplant.statistic.get',

@@ -197,47 +197,6 @@ def resolve_task_division(task, group_division):
 
     return division
 
-def get_last_processed_id():
-    """
-    Получает ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492).
-    """
-
-    last_spent_time = b.get_all('lists.element.get', {
-        'IBLOCK_TYPE_ID': 'lists',
-        'IBLOCK_ID': '380',
-        'ELEMENT_ID': '1831492'
-    })[0]
-    #print(last_spent_time)
-
-    last_spent_time = last_spent_time.get('PROPERTY_2102')
-
-    if last_spent_time:
-        id_last_st = list(last_spent_time.values())[0]
-    else:
-        id_last_st = None
-
-    print(f'конец ф {id_last_st}')
-    return id_last_st
-
-def update_last_processed_id(b, max_id):
-    """
-    Обновляет ID последней обработанной трудозатраты после успешной обработки.
-    """
-
-    b.call(
-        "lists.element.update",
-        {
-            "IBLOCK_TYPE_ID": "lists",
-            "IBLOCK_ID": "380",
-            "ELEMENT_ID": "1831492",
-            "FIELDS": {
-                "NAME": 'Id последней трудозатраты',
-                "PROPERTY_2102": max_id
-            },
-        },
-        raw=True,
-    )
-
 def get_active_user_ids(b):
     """
     Возвращает список ID активных пользователей ЦС, исключая пользователя 91.
@@ -482,14 +441,11 @@ def elapsed_times_lines(req):
 
     calls_lk_limit() # выгрузка звонков ЛК
 
-    group_division = { # соответствие айди группы задачи и айди подразделения в списании
-        1: 2236,
-        7: 2234,
-        321: 2248,
+    group_division = { # соответствие айди группы задачи и айди значения поля Подразделение в СП Списания
+        1: 2236, # тлп
+        7: 2234, # лк
+        321: 2248, # работыитс
     }
-
-    #last_id = get_last_processed_id(b) # достаем айди последней обработанной трудозатраты
-    #print(last_id)
 
     # получаем ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492)
     last_spent_time = b.get_all('lists.element.get', {
@@ -497,14 +453,12 @@ def elapsed_times_lines(req):
         'IBLOCK_ID': '380',
         'ELEMENT_ID': '1831492'
     })[0]
-
     last_spent_time = last_spent_time.get('PROPERTY_2102')
 
     if last_spent_time:
         last_id = list(last_spent_time.values())[0]
     else:
         last_id = None # если нет последнего id то оставляем пустой, будем брать за последние 2 часа затраты
-    print(last_id)
 
     user_ids = get_active_user_ids(b) # достаем список активных сотрудников ЦС
 
@@ -523,30 +477,40 @@ def elapsed_times_lines(req):
         for user in notification_users:
             b.call('im.notify.system.add', {
                                 'USER_ID': user,
-                                'MESSAGE': f'Новых трудозатрат на портале не найдено. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
+                                'MESSAGE': f'Звонки выгружены. Новых трудозатрат на портале не найдено. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
         return
 
     processed = []
-
     for item in elapsed_items:
-        if process_elapsed_item(b, item, group_division):
+        if process_elapsed_item(b, item, group_division): # проверяем и обрабатываем полученные трудозатраты
             processed.append(item)
 
-    # Обновляем last_id по любому последнему элементу
+    # обновляем ID последней обработанной трудозатраты
     max_id = max(int(i["ID"]) for i in elapsed_items)
-    update_last_processed_id(b, max_id)
+    b.call(
+        "lists.element.update",
+        {
+            "IBLOCK_TYPE_ID": "lists",
+            "IBLOCK_ID": "380",
+            "ELEMENT_ID": "1831492",
+            "FIELDS": {
+                "NAME": 'Id последней трудозатраты',
+                "PROPERTY_2102": max_id
+            },
+        },
+        raw=True,
+    )
 
     notification_users = ['1391'] #, '1']
     for user in notification_users:
         b.call('im.notify.system.add', {
                             'USER_ID': user,
-                            'MESSAGE': f'Звонки и трудоозатраты выгружены. Новый last_id = {max_id}. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
+                            'MESSAGE': f'Звонки и трудозатраты выгружены. Новый last_id = {max_id}. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
 
     if not processed:
         #print("Подходящих трудозатрат не найдено")
         return
-    
-    
+       
 if __name__ == '__main__':
 
     elapsed_times_lines()

@@ -303,7 +303,7 @@ def process_elapsed_item(b, item, group_division):
 
     task_id = item.get("TASK_ID") # id задачи из трудозатраты
     if not task_id:
-        print(f"Нет айди задачи {item['ID']}")
+        #print(f"Нет айди задачи {item['ID']}")
         return False
 
     try:
@@ -322,12 +322,12 @@ def process_elapsed_item(b, item, group_division):
         )['task']
 
     except:
-        print(f"Не получили задачу {item['ID']}")
+        #print(f"Не получили задачу {item['ID']}")
         return False
 
     division = resolve_task_division(task, group_division) # выясненяем подходящее подразделение в списании
     if not division:
-        print(f"Не получили подразделение {item['ID']}")
+        #print(f"Не получили подразделение {item['ID']}")
         return False
 
     uf_crm = task.get("ufCrmTask", []) # достаем привязанные crm сущности из задачи
@@ -344,38 +344,40 @@ def process_elapsed_item(b, item, group_division):
             contact_id = int(link.replace("C_", ""))
 
     if not company_id: # если в задаче нет компании, то пропускаем эту трудозатрату
-        print(f"В задаче нет компании {item['ID']}")
+        #print(f"В задаче нет компании {item['ID']}")
         return False
     
-    company = b.get_all(
-        'crm.company.get',
-        {
-            'id': company_id,
-            'select': ['ID', 'UF_CRM_1770898836'],
-        },
-    )
-
-    if not company:
-        print(f"Не смогли получить компанию {item['ID']}")
-        return False
+    try:
+        company = b.get_all(
+            'crm.company.get',
+            {
+                'id': company_id,
+                'select': ['ID', 'UF_CRM_1770898836'],
+            },
+        )
+    except:
+        if not company:
+            #print(f"Не смогли получить компанию {item['ID']}")
+            return False
 
     limit_id = company.get("UF_CRM_1770898836")
 
     if limit_id: # если в компании указан лимит — проверяем его
-        limit_item = b.get_all(
-            'crm.item.get',
-            {
-                'entityTypeId': 1114,
-                'id': limit_id,
-                'select': ['id', 'stageId'],
-            },
-        )['item']
-
-        #limit_item = limit_resp.get("result", {}).get("item")
+        try:
+            limit_item = b.get_all(
+                'crm.item.get',
+                {
+                    'entityTypeId': 1114,
+                    'id': limit_id,
+                    'select': ['id', 'stageId'],
+                },
+            )['item']
+        except:
+            return False
 
         # если лимита нет или он не в нужной стадии — не создаем списание
         if not limit_item or limit_item.get('stageId') != "DT1114_128:2":
-            print(f"Нет подх лимита в компании {item['ID']}")
+            #print(f"Нет подх лимита в компании {item['ID']}")
             return False
 
     existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях

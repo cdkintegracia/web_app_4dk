@@ -30,13 +30,14 @@ def calls_lk_limit():
             'filter': {
                 'CALL_TYPE': 1,
                 'PORTAL_USER_ID': user_ids_lk,
-                'CALL_START_DATE': date_from,
+                #'CALL_START_DATE': date_from,
                 'CALL_FAILED_CODE': '200',
             }
         }
     )
 
     print("Найдено звонков:", len(calls))
+    return
 
     # сначала собираем все компании из звонков
     call_companies = {}

@@ -19,10 +19,8 @@ def calls_lk_limit():
         uid = int(u['ID'])
         if uid != 19: # исключаем СЮВ
             user_ids_lk.append(uid)
-    print(user_ids_lk)
 
     date_from = (datetime.now() - timedelta(hours=4)).strftime("%Y-%m-%d %H:%M:%S") # последние 4 часа для того, чтобы учесть длительные звонки
-    print(date_from)
 
     calls = b.get_all(
         'voximplant.statistic.get',
@@ -37,7 +35,6 @@ def calls_lk_limit():
     )
 
     print("Найдено звонков:", len(calls))
-    return
 
     # сначала собираем все компании из звонков
     call_companies = {}

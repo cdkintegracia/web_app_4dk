@@ -288,6 +288,7 @@ def get_new_elapsed_items(b, user_ids, last_id=None):
                                     'MESSAGE': f'Кол-во трудозатрат превысило 5000 шт за один раз. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
             break
 
+    print(len(items))
     return items    
 
 def process_elapsed_item(b, item, group_division):

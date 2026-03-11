@@ -21,7 +21,7 @@ def calls_lk_limit():
             user_ids_lk.append(uid)
     print(user_ids_lk)
 
-    date_from = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S") # последние 2 часа
+    date_from = (datetime.now() - timedelta(hours=4)).strftime("%Y-%m-%d %H:%M:%S") # последние 4 часа для того, чтобы учесть длительные звонки
     print(date_from)
 
     calls = b.get_all(
@@ -30,7 +30,7 @@ def calls_lk_limit():
             'filter': {
                 'CALL_TYPE': 1,
                 'PORTAL_USER_ID': user_ids_lk,
-                #'CALL_START_DATE': date_from,
+                '>CALL_START_DATE': date_from,
                 'CALL_FAILED_CODE': '200',
             }
         }

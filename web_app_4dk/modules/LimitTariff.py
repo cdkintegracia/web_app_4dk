@@ -368,12 +368,14 @@ def calls_lk_limit():
         'user.get',
         {'filter': {'ACTIVE': True, 'UF_DEPARTMENT': 231}, 'select': ['ID']}
     )
+    print(users)
 
     user_ids_lk = []
     for u in users:
         uid = int(u['ID'])
         if uid != 19: # исключаем СЮВ
             user_ids_lk.append(uid)
+    print(user_ids_lk)
 
     date_from = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S") # последние 2 часа
 

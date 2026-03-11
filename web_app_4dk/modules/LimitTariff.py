@@ -246,8 +246,8 @@ def get_new_elapsed_items(b, user_ids, last_id=None):
             ">ID": last_id,
             "USER_ID": user_ids,
         }
-    else: # есть нет айди последней обработанной трудозатраты, то фильтруем за последние два часа
-        two_hours_ago = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%S")
+    else: # есть нет айди последней обработанной трудозатраты, то фильтруем за последние 2 часа и 10 минут
+        two_hours_ago = (datetime.now() - timedelta(hours=2, minutes=10)).strftime("%Y-%m-%dT%H:%M:%S")
         filter_block = {
             ">=CREATED_DATE": two_hours_ago,
             "USER_ID": user_ids,
@@ -477,7 +477,7 @@ def elapsed_times_lines(req):
         for user in notification_users:
             b.call('im.notify.system.add', {
                                 'USER_ID': user,
-                                'MESSAGE': f'Звонки выгружены. Новых трудозатрат на портале не найдено. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
+                                'MESSAGE': f'Звонки выгружены. Новых трудозатрат ЦС на портале не было. \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
         return
 
     processed = []

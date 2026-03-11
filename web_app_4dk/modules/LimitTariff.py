@@ -197,7 +197,7 @@ def resolve_task_division(task, group_division):
 
     return division
 
-def get_last_processed_id(b):
+def get_last_processed_id():
     """
     Получает ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492).
     """
@@ -217,6 +217,7 @@ def get_last_processed_id(b):
         id_last_st = None
 
     print(f'конец ф {id_last_st}')
+    return id_last_st
 
 def update_last_processed_id(b, max_id):
     """
@@ -487,8 +488,24 @@ def elapsed_times_lines(req):
         321: 2248,
     }
 
-    last_id = get_last_processed_id(b) # достаем айди последней обработанной трудозатраты
+    #last_id = get_last_processed_id(b) # достаем айди последней обработанной трудозатраты
+    #print(last_id)
+
+    # получаем ID последней обработанной трудозатраты из УС 'Хранилище по лимитам тарифов' (id УС = 380, элемент 1831492)
+    last_spent_time = b.get_all('lists.element.get', {
+        'IBLOCK_TYPE_ID': 'lists',
+        'IBLOCK_ID': '380',
+        'ELEMENT_ID': '1831492'
+    })[0]
+
+    last_spent_time = last_spent_time.get('PROPERTY_2102')
+
+    if last_spent_time:
+        last_id = list(last_spent_time.values())[0]
+    else:
+        last_id = None # если нет последнего id то оставляем пустой, будем брать за последние 2 часа затраты
     print(last_id)
+
     user_ids = get_active_user_ids(b) # достаем список активных сотрудников ЦС
 
     if not user_ids:

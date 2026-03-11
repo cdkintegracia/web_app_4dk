@@ -207,7 +207,7 @@ def get_last_processed_id(b):
         'IBLOCK_ID': '380',
         'ELEMENT_ID': '1831492'
     })[0]
-    print(last_spent_time)
+    #print(last_spent_time)
 
     last_spent_time = last_spent_time.get('PROPERTY_2102')
 
@@ -216,7 +216,7 @@ def get_last_processed_id(b):
     else:
         id_last_st = None
 
-    print(id_last_st)
+    print(f'конец ф {id_last_st}')
 
 def update_last_processed_id(b, max_id):
     """

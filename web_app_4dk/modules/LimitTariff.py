@@ -366,12 +366,12 @@ def calls_lk_limit():
 
     users = b.get_all( # все сотрудники ЛК
         'user.get',
-        {'filter': {'UF_DEPARTMENT': 231}, 'select': ['ID']}
+        {'filter': {'ACTIVE': True, 'UF_DEPARTMENT': 231}, 'select': ['ID']}
     )
 
     user_ids_lk = []
     for u in users:
-        uid = int(u["ID"])
+        uid = int(u['ID'])
         if uid != 19: # исключаем СЮВ
             user_ids_lk.append(uid)
 

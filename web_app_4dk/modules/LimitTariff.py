@@ -33,8 +33,7 @@ def calls_lk_limit():
             }
         }
     )
-
-    print("Найдено звонков:", len(calls))
+    #print("Найдено звонков:", len(calls))
 
     # сначала собираем все компании из звонков
     call_companies = {}
@@ -208,6 +207,7 @@ def get_last_processed_id(b):
         'IBLOCK_ID': '380',
         'ELEMENT_ID': '1831492'
     })[0]
+    print(response)
 
     if not response:
         return None
@@ -328,7 +328,11 @@ def get_new_elapsed_items(b, user_ids, last_id=None):
         page += 1
 
         if page > 100: # ограничение по кол-ву забираемых трудозатрат в 5000 штук
-            print("Превышен лимит страниц")
+            notification_users = ['1391'] #, '1']
+            for user in notification_users:
+                b.call('im.notify.system.add', {
+                                    'USER_ID': user,
+                                    'MESSAGE': f'Кол-во трудозатрат превысило 5000 шт за один раз. \nВыгрузка по процессу Лимиты тарифов'})
             break
 
     return items    
@@ -396,9 +400,8 @@ def process_elapsed_item(b, item, group_division):
         },
     )
 
-    #company = company_resp.get("result")
     if not company:
-        print(f"Не получили компанию {item['ID']}")
+        print(f"Не смогли получить компанию {item['ID']}")
         return False
 
     limit_id = company.get("UF_CRM_1770898836")
@@ -435,8 +438,6 @@ def process_elapsed_item(b, item, group_division):
     minutes = (seconds % 3600) // 60
     secs = seconds % 60
     time_str = f"{hours:02}:{minutes:02}:{secs:02}"
-
-    print (limit_id)
 
     if existing: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
         existing_item = existing[0]
@@ -483,9 +484,9 @@ def process_elapsed_item(b, item, group_division):
 
     return True
 
-def sync_elapsed_items(req):
+def elapsed_times_lines(req):
 
-    calls_lk_limit()
+    calls_lk_limit() # выгрузка звонков ЛК
 
     group_division = { # соответствие айди группы задачи и айди подразделения в списании
         1: 2236,
@@ -494,34 +495,48 @@ def sync_elapsed_items(req):
     }
 
     last_id = get_last_processed_id(b) # достаем айди последней обработанной трудозатраты
+    print(last_id)
     user_ids = get_active_user_ids(b) # достаем список активных сотрудников ЦС
 
     if not user_ids:
-        print("Нет активных пользователей")
+        notification_users = ['1391'] #, '1']
+        for user in notification_users:
+            b.call('im.notify.system.add', {
+                                'USER_ID': user,
+                                'MESSAGE': f'Сотрудники в ЦС не найдены. \nВыгрузка по процессу Лимиты тарифов'})
         return
 
     elapsed_items = get_new_elapsed_items(b, user_ids, last_id) # возвращаем список новых трудозатрат
 
     if not elapsed_items:
-        print("Новых трудозатрат нет")
+        notification_users = ['1391'] #, '1']
+        for user in notification_users:
+            b.call('im.notify.system.add', {
+                                'USER_ID': user,
+                                'MESSAGE': f'Новых трудозатрат на портале не найдено. \nВыгрузка по процессу Лимиты тарифов'})
         return
 
     processed = []
 
     for item in elapsed_items:
         if process_elapsed_item(b, item, group_division):
-            #print(item)
             processed.append(item)
 
     # Обновляем last_id по любому последнему элементу
     max_id = max(int(i["ID"]) for i in elapsed_items)
     update_last_processed_id(b, max_id)
-    print(f"Синхронизация завершена. Новый last_id = {max_id}")
+
+    notification_users = ['1391'] #, '1']
+    for user in notification_users:
+        b.call('im.notify.system.add', {
+                            'USER_ID': user,
+                            'MESSAGE': f'Звонки и трудоозатраты выгружены. Новый last_id = {max_id}. \nВыгрузка по процессу Лимиты тарифов'})
 
     if not processed:
-        print("Подходящих трудозатрат не найдено")    
+        #print("Подходящих трудозатрат не найдено")
+        return
+    
     
 if __name__ == '__main__':
 
-    sync_elapsed_items()
-    calls_lk_limit()
+    elapsed_times_lines()

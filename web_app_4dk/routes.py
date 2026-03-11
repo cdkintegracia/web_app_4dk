@@ -113,7 +113,7 @@ from web_app_4dk.modules.CountRAReport import count_ra_report
 #2025-12-10 saa
 from web_app_4dk.modules.CA_DownOverTimeReport import ca_downovertime_report
 #2026-02-26 saa
-from web_app_4dk.modules.LimitTariff import sync_elapsed_items
+from web_app_4dk.modules.LimitTariff import elapsed_times_lines
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -199,7 +199,7 @@ custom_webhooks = {
     #2025-12-10 saa
     'ca_downovertime_report': ca_downovertime_report,
     #2026-02-26 saa
-    'sync_elapsed_items': sync_elapsed_items,
+    'elapsed_times_lines': elapsed_times_lines,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

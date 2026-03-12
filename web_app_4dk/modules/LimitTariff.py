@@ -326,6 +326,7 @@ def process_elapsed_item(item, group_division):
     if not company_id: # если в задаче нет компании, то пропускаем эту трудозатрату
         #print(f"В задаче нет компании {item['ID']}")
         return False
+    print('старт')
     
     try:
         company = b.get_all(
@@ -341,6 +342,7 @@ def process_elapsed_item(item, group_division):
             return False
 
     limit_id = company.get("UF_CRM_1770898836")
+    print(limit_id)
 
     if limit_id: # если в компании указан лимит — проверяем его
         try:
@@ -360,70 +362,70 @@ def process_elapsed_item(item, group_division):
             #print(f"Нет подх лимита в компании {item['ID']}")
             return False
 
-    existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
-        'crm.item.list',
-        {
-            'entityTypeId': '1118',
-            'filter': {'ufCrm96_IdElapsedtime': item['ID']},
-            'select': ['id', 'ufCrm96_Timecostseconds'],
-        },
-    )
-    #existing_items = existing.get("result", {}).get("items", [])
-
-    # Конвертация времени
-    hours = seconds // 3600
-    minutes = (seconds % 3600) // 60
-    secs = seconds % 60
-    time_str = f"{hours:02}:{minutes:02}:{secs:02}"
-
-    if existing: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
-        existing_item = existing[0]
-        existing_seconds = int(existing_item.get('ufCrm96_Timecostseconds', 0))
-
-        if existing_seconds != seconds:
-            b.call(
-                'crm.item.update',
-                {
-                    'entityTypeId': '1118',
-                    'id': existing_item['id'],
-                    'fields': {
-                        'ufCrm96_TimeCost': time_str,
-                        'ufCrm96_TimecostSeconds': seconds,
-                    },
-                },
-            raw=True,
-            )
-            return True
-
-        return False
-
-
-    b.call( # создаем новое списание, если еще не создано
-        'crm.item.add',
-        {
-            'entityTypeId': '1118',
-            'fields': {
-                'ufCrm96_Responsible': item['USER_ID'],
-                'ufCrm96_DateComplete': item['CREATED_DATE'],
-                'ufCrm96_TimeCost': time_str,
-                'ufCrm96_Division': division, 
-                'ufCrm96_IdTask': task['id'],
-                'ufCrm96_TimecostSeconds': seconds,
-                'ufCrm96_Company': company_id,
-                'ufCrm96_Contact': contact_id,
-                'parentId1114': limit_id,
-                'ufCrm96_IdElapsedtime': item['ID'],
+        existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
+            'crm.item.list',
+            {
+                'entityTypeId': '1118',
+                'filter': {'ufCrm96_IdElapsedtime': item['ID']},
+                'select': ['id', 'ufCrm96_Timecostseconds'],
             },
-        },
-    raw=True,
-    )
+        )
+        #existing_items = existing.get("result", {}).get("items", [])
+        print(len(existing))
 
-    return True
+        # Конвертация времени
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        secs = seconds % 60
+        time_str = f"{hours:02}:{minutes:02}:{secs:02}"
+
+        if existing: # если на трудозатрату уже создано списание, то обновляем время трудозатраты при изменениях
+            existing_item = existing[0]
+            existing_seconds = int(existing_item.get('ufCrm96_Timecostseconds', 0))
+
+            if existing_seconds != seconds:
+                b.call(
+                    'crm.item.update',
+                    {
+                        'entityTypeId': '1118',
+                        'id': existing_item['id'],
+                        'fields': {
+                            'ufCrm96_TimeCost': time_str,
+                            'ufCrm96_TimecostSeconds': seconds,
+                        },
+                    },
+                raw=True,
+                )
+                return True
+
+            return False
+
+
+        b.call( # создаем новое списание, если еще не создано
+            'crm.item.add',
+            {
+                'entityTypeId': '1118',
+                'fields': {
+                    'ufCrm96_Responsible': item['USER_ID'],
+                    'ufCrm96_DateComplete': item['CREATED_DATE'],
+                    'ufCrm96_TimeCost': time_str,
+                    'ufCrm96_Division': division, 
+                    'ufCrm96_IdTask': task['id'],
+                    'ufCrm96_TimecostSeconds': seconds,
+                    'ufCrm96_Company': company_id,
+                    'ufCrm96_Contact': contact_id,
+                    'parentId1114': limit_id,
+                    'ufCrm96_IdElapsedtime': item['ID'],
+                },
+            },
+        raw=True,
+        )
+
+        return True
 
 def elapsed_times_lines(req):
 
     calls_lk_limit() # выгрузка звонков ЛК
-    print('звонки есть')
 
     group_division = { # соответствие айди группы задачи и айди значения поля Подразделение в СП Списания
         1: 2236, # тлп

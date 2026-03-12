@@ -205,7 +205,7 @@ def get_active_user_ids():
     start = 0
 
     while True:
-        resp = b.call(
+        resp = b.get_all(
             'user.get',
             {
                 'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments,},

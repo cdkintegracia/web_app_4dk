@@ -214,7 +214,7 @@ def get_active_user_ids():
             },
         )
         print(len(resp))
-        print(len(resp['total']))
+        print(resp['total'])
 
         users = resp.get('result', [])
         if not users:

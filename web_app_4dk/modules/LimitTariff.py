@@ -200,7 +200,8 @@ def get_active_user_ids():
     """
     Возвращает список ID активных пользователей ЦС, исключая пользователя 91.
     """
-    departments = [458, 5, 27, 29, 231]  # ГР, ЦС, ГО3, ГО4, ЛК
+    #departments = [458, 5, 27, 29, 231]  # ГР, ЦС, ГО3, ГО4, ЛК
+    departments = [458, 5, 27, 29, 231, 225]  # ГР, ЦС, ГО3, ГО4, ЛК
     all_users = []
     start = 0
 
@@ -472,6 +473,7 @@ def elapsed_times_lines(req):
         return
 
     elapsed_items = get_new_elapsed_items(user_ids, last_id) # возвращаем список новых трудозатрат
+    return
 
     if not elapsed_items:
         notification_users = ['1391'] #, '1']

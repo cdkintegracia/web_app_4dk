@@ -213,7 +213,8 @@ def get_active_user_ids():
                 #'start': start,
             },
         )
-        print(resp)
+        print(len(resp))
+        print(len(resp['total']))
 
         users = resp.get('result', [])
         if not users:

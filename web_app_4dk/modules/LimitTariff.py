@@ -200,40 +200,15 @@ def get_active_user_ids():
     """
     Возвращает список ID активных пользователей ЦС, исключая пользователя 91.
     """
-    #departments = [458, 5, 27, 29, 231]  # ГР, ЦС, ГО3, ГО4, ЛК
-    departments = [458, 5, 27, 29, 231, 225]  # ГР, ЦС, ГО3, ГО4, ЛК
-    all_users = []
-    start = 0
+    departments = [458, 5, 27, 29, 231]  # ГР, ЦС, ГО3, ГО4, ЛК
 
-    while True:
-        resp = b.get_all(
-            'user.get',
-            {
-                'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments}, 'select': ['ID'],
-                #'start': start,
-            },
-        )
-        print(len(resp))
-        #print(resp['total'])
-        notification_users = ['1391'] #, '1']
-        for user in notification_users:
-            b.call('im.notify.system.add', {
-                                'USER_ID': user,
-                                'MESSAGE': f'{resp} \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
-
-        users = resp.get('result', [])
-        if not users:
-            break
-
-        all_users.extend(users)
-
-        if 'next' not in resp:
-            break
-
-        start = resp['next']
+    users_cs = b.get_all(
+        'user.get',
+        {'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments}, 'select': ['ID']},
+    )
 
     user_ids = []
-    for u in all_users:
+    for u in users_cs:
         uid = int(u['ID'])
         if uid != 91: # исключаем дежурного админа
             user_ids.append(uid)

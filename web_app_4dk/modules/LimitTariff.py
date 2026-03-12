@@ -208,7 +208,7 @@ def get_active_user_ids():
         resp = b.get_all(
             'user.get',
             {
-                'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments,},
+                'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments}, 'select': ['ID'],
                 #'start': start,
             },
         )

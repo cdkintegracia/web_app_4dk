@@ -214,7 +214,12 @@ def get_active_user_ids():
             },
         )
         print(len(resp))
-        print(resp['total'])
+        #print(resp['total'])
+        notification_users = ['1391'] #, '1']
+        for user in notification_users:
+            b.call('im.notify.system.add', {
+                                'USER_ID': user,
+                                'MESSAGE': f'{resp} \n[b]Выгрузка по процессу Лимиты тарифов (LimitTariff)[/b]'})
 
         users = resp.get('result', [])
         if not users:

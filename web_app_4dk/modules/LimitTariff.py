@@ -142,8 +142,12 @@ def calls_lk_limit():
             if existing:
                 continue
 
-            duration = int(item['CALL_DURATION'])
-            time_str = str(timedelta(seconds=duration))
+            # Конвертация времени
+            duration = int(item['CALL_DURATION']) # длительность в сек
+            hours = duration // 3600
+            minutes = (duration % 3600) // 60
+            secs = duration % 60
+            time_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
             b.call(
                 'crm.item.add',

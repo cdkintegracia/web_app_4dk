@@ -423,6 +423,7 @@ def process_elapsed_item(item, group_division):
 def elapsed_times_lines(req):
 
     calls_lk_limit() # выгрузка звонков ЛК
+    print('звонки есть')
 
     group_division = { # соответствие айди группы задачи и айди значения поля Подразделение в СП Списания
         1: 2236, # тлп

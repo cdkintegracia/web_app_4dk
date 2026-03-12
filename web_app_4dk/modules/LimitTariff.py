@@ -326,7 +326,6 @@ def process_elapsed_item(item, group_division):
     if not company_id: # если в задаче нет компании, то пропускаем эту трудозатрату
         #print(f"В задаче нет компании {item['ID']}")
         return False
-    print('старт')
     
     try:
         company = b.get_all(
@@ -342,9 +341,9 @@ def process_elapsed_item(item, group_division):
             return False
 
     limit_id = company.get("UF_CRM_1770898836")
-    print(limit_id)
 
     if limit_id: # если в компании указан лимит — проверяем его
+        print(limit_id)
         try:
             limit_item = b.get_all(
                 'crm.item.get',

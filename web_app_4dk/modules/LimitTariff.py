@@ -454,7 +454,6 @@ def elapsed_times_lines(req):
         return
 
     elapsed_items = get_new_elapsed_items(user_ids, last_id) # возвращаем список новых трудозатрат
-    return
 
     if not elapsed_items:
         notification_users = ['1391'] #, '1']

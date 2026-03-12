@@ -209,7 +209,7 @@ def get_active_user_ids():
             'user.get',
             {
                 'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments,},
-                'start': start,
+                #'start': start,
             },
         )
         print(resp)

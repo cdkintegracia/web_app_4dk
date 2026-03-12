@@ -437,7 +437,7 @@ def process_elapsed_item(item, group_division):
 
     return True
 
-def elapsed_times_lines(req):
+def elapsed_times_lines():
 
     calls_lk_limit() # выгрузка звонков ЛК
 

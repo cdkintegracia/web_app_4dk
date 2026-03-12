@@ -288,7 +288,7 @@ def get_new_elapsed_items(user_ids, last_id=None):
 
     return items    
 
-def process_elapsed_item(b, item, group_division):
+def process_elapsed_item(item, group_division):
     """
     Обрабатывает одну трудозатрату. Возвращает True если создана/обновлена запись.
     """
@@ -482,7 +482,7 @@ def elapsed_times_lines(req):
 
     processed = []
     for item in elapsed_items:
-        if process_elapsed_item(b, item, group_division): # проверяем и обрабатываем полученные трудозатраты
+        if process_elapsed_item(item, group_division): # проверяем и обрабатываем полученные трудозатраты
             processed.append(item)
 
     # обновляем ID последней обработанной трудозатраты

@@ -206,27 +206,28 @@ def get_active_user_ids():
 
     while True:
         resp = b.call(
-            "user.get",
+            'user.get',
             {
-                "filter": {"ACTIVE": True, "UF_DEPARTMENT": departments,},
-                "start": start,
+                'filter': {'ACTIVE': True, 'UF_DEPARTMENT': departments,},
+                'start': start,
             },
         )
+        print(resp)
 
-        users = resp.get("result", [])
+        users = resp.get('result', [])
         if not users:
             break
 
         all_users.extend(users)
 
-        if "next" not in resp:
+        if 'next' not in resp:
             break
 
-        start = resp["next"]
+        start = resp['next']
 
     user_ids = []
     for u in all_users:
-        uid = int(u["ID"])
+        uid = int(u['ID'])
         if uid != 91: # исключаем дежурного админа
             user_ids.append(uid)
     

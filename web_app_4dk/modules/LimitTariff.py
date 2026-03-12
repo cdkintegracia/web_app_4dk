@@ -17,7 +17,7 @@ def calls_lk_limit():
     user_ids_lk = []
     for u in users:
         uid = int(u['ID'])
-        if uid != 19: # исключаем СЮВ
+        if uid != 19 and uid != 117: # исключаем СЮВ и РЕВ
             user_ids_lk.append(uid)
 
     date_from = (datetime.now() - timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S") # последние 5 часов для того, чтобы учесть длительные звонки
@@ -343,7 +343,6 @@ def process_elapsed_item(item, group_division):
     limit_id = company.get("UF_CRM_1770898836")
 
     if limit_id: # если в компании указан лимит — проверяем его
-        print(limit_id)
         try:
             limit_item = b.get_all(
                 'crm.item.get',
@@ -369,8 +368,6 @@ def process_elapsed_item(item, group_division):
                 'select': ['id', 'ufCrm96_Timecostseconds'],
             },
         )
-        #existing_items = existing.get("result", {}).get("items", [])
-        print(len(existing))
 
         # Конвертация времени
         hours = seconds // 3600

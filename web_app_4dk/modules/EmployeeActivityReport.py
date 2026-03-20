@@ -90,7 +90,7 @@ def employee_activity_report(req):
         #сбор инфо по исходящим письмам с привязкой к сущностям
         emails = b.get_all('crm.activity.list', {
             'filter': {
-                'PROVIDER_TYPE_ID': 'EMAIL',
+                'PROVIDER_TYPE_ID': 'EMAIL_COMPRESSED',
                 'AUTHOR_ID': user_info['ID'],
                 '>=CREATED': report_day,
                 'DIRECTION': '2'

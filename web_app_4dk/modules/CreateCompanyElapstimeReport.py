@@ -136,7 +136,7 @@ def create_company_elapstime_report(req):
 
         tags_str = ', '.join(task_info.get('TAGS', [])) if task_info.get('TAGS') else ''
 
-        user_info = list(filter(lambda x: x['ID'] == eltime['USER_ID'], users_info))
+        user_info = list(filter(lambda x: x['ID'] == eltime['USER_ID'], users_info))[0]
         user_name = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'
 
         seconds = int(eltime.get("SECONDS", 0))

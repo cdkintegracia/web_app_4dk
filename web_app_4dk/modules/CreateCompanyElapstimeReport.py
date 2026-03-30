@@ -165,7 +165,7 @@ def create_company_elapstime_report(req):
     # Добавляем итоговую строку
     report_data_sorted.append(['Итого', '', '', '', '', '', total_duration, ''])
 
-    report_data = titles + report_data_sorted
+    #report_data = titles + report_data_sorted
 
     # Создание xlsx файла отчета
     report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
@@ -173,7 +173,10 @@ def create_company_elapstime_report(req):
     workbook = openpyxl.Workbook()
     worklist = workbook.active
 
-    for data in report_data:
+    for data in titles:
+        worklist.append(data)
+
+    for data in report_data_sorted:
         worklist.append([data[1]] + data[2:])
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True

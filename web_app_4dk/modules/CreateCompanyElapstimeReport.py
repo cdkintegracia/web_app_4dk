@@ -61,7 +61,7 @@ def create_company_elapstime_report(req):
     else:
         end_iso = datetime.now().isoformat()
 
-    all_results = []
+    all_times = []
     page = 1
 
     while True:
@@ -90,7 +90,7 @@ def create_company_elapstime_report(req):
         if not result:
             break # если страницы закончились — прерываем
 
-        all_results.extend(result)
+        all_times.extend(result)
 
         page += 1 # двигаем страницу
 
@@ -121,12 +121,13 @@ def create_company_elapstime_report(req):
 
     tasks_map = {t['id']: t for t in tasks}
 
-    for item in all_results:
+    for eltime in all_times:
 
-        task_id = item.get("TASK_ID")
+        task_id = eltime.get("TASK_ID")
         task_info = tasks_map.get(task_id, {})
         
-        created_dt = datetime.fromisoformat(item["CREATED_DATE"]).replace(tzinfo=None)
+        created_dt = datetime.fromisoformat(eltime["CREATED_DATE"]).replace(tzinfo=None)
+        created_str = created_dt.strftime("%d.%m.%y %H:%M")
 
         try:
             group_name = task_info['task']['group']['name']
@@ -135,7 +136,9 @@ def create_company_elapstime_report(req):
 
         tags_str = ', '.join(task_info.get('TAGS', [])) if task_info.get('TAGS') else ''
 
-        seconds = int(item.get("SECONDS", 0))
+        user_name = list(filter(lambda x: x['ID'] == eltime['USER_ID'], users_info))
+
+        seconds = int(eltime.get("SECONDS", 0))
         duration = timedelta(seconds=seconds)
         total_duration += duration
 
@@ -147,25 +150,22 @@ def create_company_elapstime_report(req):
 
         report_data.append([
             created_dt,
+            created_str,
             task_id,
             group_name,
             tags_str,
-            item.get("USER_ID"),
+            user_name,
             duration_str,
-            item.get("COMMENT_TEXT", "")
+            eltime.get("COMMENT_TEXT", "")
         ])
 
-    '''основная логика процесса'''
 
-
-    #titles_count = 3  # строки с заголовками
-    data_only = report_data  # здесь пока только данные без заголовков
-    data_only_sorted = sorted(data_only, key=lambda x: x[0])  # сортировка по datetime
+    report_data_sorted = sorted(report_data, key=lambda x: x[0])
 
     # Добавляем итоговую строку
-    data_only_sorted.append(['Итого', '', '', '', '', total_duration, ''])
+    report_data_sorted.append(['Итого', '', '', '', '', total_duration, ''])
 
-    report_data = titles + data_only_sorted
+    report_data = titles + report_data_sorted
 
     # Создание xlsx файла отчета
     report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
@@ -174,7 +174,7 @@ def create_company_elapstime_report(req):
     worklist = workbook.active
 
     for data in report_data:
-        worklist.append(data)
+        worklist.append([data[1]] + data[2:])
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True
     workbook.save(report_name)

@@ -125,22 +125,15 @@ def create_company_elapstime_report(req):
 
         task_id = item.get("TASK_ID")
         task_info = tasks_map.get(task_id, {})
-        '''
-        # группа
-        group_id = str(task_info.get("group_id", ""))
-        group_name = groups_map.get(group_id, "")
-
-        # теги
-        tags = task_info.get("tags", [])
-        tags_str = ", ".join(tags) if tags else ""
-
-        # пользователь
-        user_id = str(item.get("USER_ID"))
-        user_name = users_map.get(user_id, user_id)
-        '''
+        
         created_dt = datetime.fromisoformat(item["CREATED_DATE"])
-        seconds = int(item.get("SECONDS", 0))
 
+        try:
+            group_name = task_info['task']['group']['name']
+        except:
+            group_name = ''
+
+        seconds = int(item.get("SECONDS", 0))
         duration = timedelta(seconds=seconds)
         total_duration += duration
 
@@ -153,7 +146,7 @@ def create_company_elapstime_report(req):
         report_data.append([
             created_dt,
             task_id,
-            task_info['group']['name'],
+            group_name,
             task_info.get('TAGS', []),
             item.get("USER_ID"),
             duration_str,

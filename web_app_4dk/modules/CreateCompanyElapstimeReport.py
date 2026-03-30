@@ -25,23 +25,6 @@ def create_company_elapstime_report(req):
     company_info = b.get_all('crm.company.get', {'ID': company_id})
     company_name = company_info['TITLE']
 
-    titles = [
-
-        [
-            company_name,
-            f'{req["date_start"]} - {req["date_end"]}',
-        ],
-        [],
-        [
-            'Время отнесения трудозатраты',
-            'Id задачи',
-            'Группа',
-            'Теги ',
-            'Автор трудозатраты',
-            'ЧЧ:ММ:СС',
-            'Комментарий',
-        ]
-    ]
     report_data = []
 
     total_duration = timedelta()
@@ -50,7 +33,7 @@ def create_company_elapstime_report(req):
 
     users_info = b.get_all('user.get', {
         'filter': {
-            'UF_DEPARTMENT': ['5', '231'] # ЦС и ЛК
+            'UF_DEPARTMENT': ['5', '231', '235'] # ЦС и ЛК
         }
     })
 
@@ -118,6 +101,24 @@ def create_company_elapstime_report(req):
 
         sleep(0.3)
 
+    titles = [
+
+        [
+            company_name,
+            f'{req["date_start"]} - {end_dt}',
+        ],
+        [],
+        [
+            'Время отнесения трудозатраты',
+            'Id задачи',
+            'Группа',
+            'Теги ',
+            'Автор трудозатраты',
+            'ЧЧ:ММ:СС',
+            'Комментарий',
+        ]
+    ]
+
     for item in all_results:
 
         task_id = str(item.get("TASK_ID"))
@@ -162,7 +163,7 @@ def create_company_elapstime_report(req):
 
 
     report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
-    report_data.append(['Итого', '', '', total_duration])
+    report_data.append(['Итого', '', '', '', '', total_duration])
     report_data = titles + report_data
 
     # Создание xlsx файла отчета

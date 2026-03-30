@@ -49,9 +49,11 @@ def create_company_elapstime_report(req):
 
     users_id = list(map(lambda x: x['ID'], users_info))
 
+    date_task_filter = (datetime.strptime(req['date_start'], "%Y-%m-%d") - timedelta(days=30)).strftime("%Y-%m-%d")
+
     tasks = b.get_all('tasks.task.list', {
         'filter': {
-            '>=CREATED_DATE': req['date_start'],
+            '>=CREATED_DATE': date_task_filter,
             'UF_CRM_TASK': ['CO_' + company_id],
         },
         'select': ['*', 'UF_CRM_TASK', 'TAGS']
@@ -111,7 +113,7 @@ def create_company_elapstime_report(req):
     titles = [
 
         [
-            company_name, '', '',
+            company_name, '',
             f'{req["date_start"]} - {req["date_end"] if req["date_end"] else datetime.now().strftime("%d.%m.%Y")}',
         ],
         [],
@@ -127,7 +129,6 @@ def create_company_elapstime_report(req):
     ]
 
     tasks_map = {t['id']: t for t in tasks}
-    print(tasks[0])
 
     for eltime in all_times:
 

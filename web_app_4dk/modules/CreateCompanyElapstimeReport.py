@@ -105,11 +105,12 @@ def create_company_elapstime_report(req):
         [
             company_name,
             '',
-            f'{req["date_start"]} - {datetime.now()}',
+            '',
+            f'{req["date_start"]} - {req["date_end"] if req["date_end"] else datetime.now()}',
         ],
         [],
         [
-            'Время отнесения трудозатраты',
+            'Время отнесения',
             'Id задачи',
             'Группа',
             'Теги ',

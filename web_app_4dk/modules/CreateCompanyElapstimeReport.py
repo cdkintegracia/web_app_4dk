@@ -183,7 +183,7 @@ def create_company_elapstime_report(req):
     for data in report_data_sorted:
         worklist.append([data[1]] + data[2:])
         # Добавляем итоговую строку
-    worklist.append()
+    worklist.append([])
     worklist.append(['', '', '', '', 'Итого', str(total_duration), ''])
 
     for idx, col in enumerate(worklist.columns, 1):

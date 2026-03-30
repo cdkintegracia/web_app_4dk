@@ -163,7 +163,7 @@ def create_company_elapstime_report(req):
     report_data_sorted = sorted(report_data, key=lambda x: x[0])
 
     # Добавляем итоговую строку
-    report_data_sorted.append(['Итого', '', '', '', '', total_duration, ''])
+    report_data_sorted.append(['Итого', '', '', '', '', '', total_duration, ''])
 
     report_data = titles + report_data_sorted
 

@@ -7,7 +7,6 @@ from time import strptime
 import openpyxl
 from openpyxl.utils import get_column_letter
 from fast_bitrix24 import Bitrix
-import dateutil.parser
 from time import sleep
 
 from web_app_4dk.modules.authentication import authentication
@@ -51,16 +50,18 @@ def create_company_elapstime_report(req):
         },
         'select': ['*', 'UF_CRM_TASK', 'TAGS']
     })
-    tasks_id = list(map(lambda x: {'id': x['id'], 'title': x['title']}, tasks))
+    tasks_id = [x['id'] for x in tasks]
 
     date_start = req['date_start']
     date_end = req.get('date_end')
 
-    start_dt = dateutil.parser.parse(date_start)
-    end_dt = dateutil.parser.parse(date_end) if date_end else datetime.now()
+    start_iso = f"{date_start}T00:00:00"
 
-    start_iso = start_dt.isoformat()
-    end_iso = end_dt.isoformat()
+    if date_end:
+        end_dt = datetime.strptime(date_end, "%Y-%m-%d") + timedelta(days=1)
+        end_iso = end_dt.strftime("%Y-%m-%dT00:00:00")
+    else:
+        end_iso = datetime.now().isoformat()
 
     all_results = []
     page = 1
@@ -120,11 +121,12 @@ def create_company_elapstime_report(req):
         ]
     ]
 
+    tasks_map = {t['id']: t for t in tasks}
+
     for item in all_results:
 
-        task_id = str(item.get("TASK_ID"))
-
-        task_info = tasks.get(task_id, {})
+        task_id = item.get("TASK_ID")
+        task_info = tasks_map.get(task_id, {})
         '''
         # группа
         group_id = str(task_info.get("group_id", ""))
@@ -151,7 +153,7 @@ def create_company_elapstime_report(req):
         duration_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
         report_data.append([
-            dateutil.parser.parse(created_date).strftime("%d.%m.%Y %H:%M:%S"),
+            created_date.strftime("%d.%m.%Y"),
             task_id,
             task_info['group']['name'],
             task_info['TAGS'],

@@ -168,7 +168,10 @@ def create_company_elapstime_report(req):
 
     report_data_for_excel = []
     for row in report_data:
-        created_str = row[0].strftime("%d:%m:%y %H:%M")  # нужный формат времени
+        if isinstance(row[0], datetime):
+            created_str = row[0].strftime("%d:%m:%y %H:%M")
+        else:
+            created_str = str(row[0])  # если это строка или итог
         report_data_for_excel.append([created_str] + row[1:])
 
     for data in report_data_for_excel:

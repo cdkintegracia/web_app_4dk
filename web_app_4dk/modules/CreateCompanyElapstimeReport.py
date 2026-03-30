@@ -22,7 +22,6 @@ def change_sheet_style(sheet) -> None:
         length = max(len(str(cell.value) if cell.value else '') for cell in column_cells)
         sheet.column_dimensions[get_column_letter(column_cells[0].column)].width = length * 1.1
 
-
 def create_company_elapstime_report(req):
 
     # Формирование заголовков отчета
@@ -43,7 +42,7 @@ def create_company_elapstime_report(req):
 
     users_info = b.get_all('user.get', {
         'filter': {
-            'UF_DEPARTMENT': ['5', '231', '235'] # ЦС и ЛК
+            'UF_DEPARTMENT': ['5', '27', '29', '231', '458'] # ЦС и ЛК
         }
     })
 

@@ -156,7 +156,7 @@ def create_company_elapstime_report(req):
     '''основная логика процесса'''
 
 
-    report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
+    #report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
     report_data.append(['Итого', '', '', total_duration])
     report_data = titles + report_data
 

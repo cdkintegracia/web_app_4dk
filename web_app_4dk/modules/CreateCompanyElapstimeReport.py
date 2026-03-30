@@ -19,9 +19,12 @@ def create_company_elapstime_report(req):
 
     # Формирование заголовков отчета
     report_created_time = datetime.now()
-    company_id = req['company_id']
 
-    company_info = b.get_all('crm.company.get', {'ID': company_id})
+    company_id = req['company_id']
+    company_info = b.get_all('crm.company.get', {
+        'ID': company_id,
+        'select': ['TITLE'],
+    })
     company_name = company_info['TITLE']
 
     report_data = []
@@ -37,11 +40,6 @@ def create_company_elapstime_report(req):
     })
 
     users_id = list(map(lambda x: x['ID'], users_info))
-
-    company_info = b.get_all('crm.company.get', {
-        'ID': company_id,
-        'select': ['TITLE'],
-    })
 
     tasks = b.get_all('tasks.task.list', {
         'filter': {
@@ -140,7 +138,7 @@ def create_company_elapstime_report(req):
         user_id = str(item.get("USER_ID"))
         user_name = users_map.get(user_id, user_id)
         '''
-        created_date = item.get("CREATED_DATE")
+        created_dt = datetime.fromisoformat(item["CREATED_DATE"])
         seconds = int(item.get("SECONDS", 0))
 
         duration = timedelta(seconds=seconds)
@@ -153,10 +151,10 @@ def create_company_elapstime_report(req):
         duration_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
         report_data.append([
-            created_date, #.strftime("%d.%m.%Y"),
+            created_dt,
             task_id,
             task_info['group']['name'],
-            task_info['TAGS'],
+            task_info.get('TAGS', []),
             item.get("USER_ID"),
             duration_str,
             item.get("COMMENT_TEXT", "")
@@ -165,7 +163,7 @@ def create_company_elapstime_report(req):
     '''основная логика процесса'''
 
 
-    report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
+    report_data.sort(key=lambda x: x[0])
     report_data.append(['Итого', '', '', '', '', total_duration])
     report_data = titles + report_data
 
@@ -175,7 +173,12 @@ def create_company_elapstime_report(req):
     workbook = openpyxl.Workbook()
     worklist = workbook.active
 
-    for data in report_data:
+    report_data_for_excel = []
+    for row in report_data:
+        created_str = row[0].strftime("%d:%m:%y %H:%M")  # нужный формат времени
+        report_data_for_excel.append([created_str] + row[1:])
+
+    for data in report_data_for_excel:
         worklist.append(data)
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True

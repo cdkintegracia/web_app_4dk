@@ -49,7 +49,7 @@ def create_company_elapstime_report(req):
 
     users_id = list(map(lambda x: x['ID'], users_info))
 
-    date_task_filter = (datetime.strptime(req['date_start'], "%Y-%m-%d") - timedelta(days=30)).strftime("%Y-%m-%d")
+    date_task_filter = (datetime.strptime(req['date_start'], "%d.%m.%Y") - timedelta(days=30)).strftime("%Y-%m-%d")
 
     tasks = b.get_all('tasks.task.list', {
         'filter': {

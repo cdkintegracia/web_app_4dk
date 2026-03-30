@@ -156,9 +156,14 @@ def create_company_elapstime_report(req):
     '''основная логика процесса'''
 
 
-    #report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
-    report_data.append(['Итого', '', '', total_duration])
-    report_data = titles + report_data
+    #titles_count = 3  # строки с заголовками
+    data_only = report_data  # здесь пока только данные без заголовков
+    data_only_sorted = sorted(data_only, key=lambda x: x[0])  # сортировка по datetime
+
+    # Добавляем итоговую строку
+    data_only_sorted.append(['Итого', '', '', '', '', total_duration, ''])
+
+    report_data = titles + data_only_sorted
 
     # Создание xlsx файла отчета
     report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')

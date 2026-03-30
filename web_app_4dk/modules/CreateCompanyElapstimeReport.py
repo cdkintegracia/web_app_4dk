@@ -136,7 +136,7 @@ def create_company_elapstime_report(req):
         created_dt = datetime.fromisoformat(eltime["CREATED_DATE"]).replace(tzinfo=None)
         created_str = created_dt.strftime("%d.%m.%y %H:%M")
 
-        #print(task_info)
+        print(task_info[0])
         try:
             group_name = task_info[0]['group']['name']
         except:
@@ -183,7 +183,8 @@ def create_company_elapstime_report(req):
     for data in report_data_sorted:
         worklist.append([data[1]] + data[2:])
         # Добавляем итоговую строку
-    worklist.append(['Итого', '', '', '', '', '', str(total_duration), ''])
+    worklist.append()
+    worklist.append(['', '', '', '', 'Итого', str(total_duration), ''])
 
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True

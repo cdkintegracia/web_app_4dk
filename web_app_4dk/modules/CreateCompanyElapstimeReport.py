@@ -156,8 +156,8 @@ def create_company_elapstime_report(req):
     '''основная логика процесса'''
 
 
-    report_data.sort(key=lambda x: x[0])
-    report_data.append(['Итого', '', '', '', '', total_duration])
+    report_data = sorted(report_data, key=lambda x: strptime(x[0], "%d.%m.%Y %H:%M:%S"))
+    report_data.append(['Итого', '', '', total_duration])
     report_data = titles + report_data
 
     # Создание xlsx файла отчета
@@ -166,15 +166,7 @@ def create_company_elapstime_report(req):
     workbook = openpyxl.Workbook()
     worklist = workbook.active
 
-    report_data_for_excel = []
-    for row in report_data:
-        if isinstance(row[0], datetime):
-            created_str = row[0].strftime("%d:%m:%y %H:%M")
-        else:
-            created_str = str(row[0])  # если это строка или итог
-        report_data_for_excel.append([created_str] + row[1:])
-
-    for data in report_data_for_excel:
+    for data in report_data:
         worklist.append(data)
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True

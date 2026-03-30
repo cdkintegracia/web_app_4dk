@@ -114,6 +114,8 @@ from web_app_4dk.modules.CountRAReport import count_ra_report
 from web_app_4dk.modules.CA_DownOverTimeReport import ca_downovertime_report
 #2026-02-26 saa
 from web_app_4dk.modules.LimitTariff import elapsed_times_lines
+#2026-03-30 saa
+from web_app_4dk.modules.CreateCompanyElapstimeReport import create_company_elapstime_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -200,6 +202,8 @@ custom_webhooks = {
     'ca_downovertime_report': ca_downovertime_report,
     #2026-02-26 saa
     'elapsed_times_lines': elapsed_times_lines,
+    #2026-03-30 saa
+    'create_company_elapstime_report': create_company_elapstime_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

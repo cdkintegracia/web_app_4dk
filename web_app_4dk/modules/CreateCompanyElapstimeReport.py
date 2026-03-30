@@ -153,7 +153,7 @@ def create_company_elapstime_report(req):
         duration_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
         report_data.append([
-            created_date.strftime("%d.%m.%Y"),
+            created_date, #.strftime("%d.%m.%Y"),
             task_id,
             task_info['group']['name'],
             task_info['TAGS'],

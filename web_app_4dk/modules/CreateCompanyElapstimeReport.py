@@ -136,9 +136,9 @@ def create_company_elapstime_report(req):
         created_dt = datetime.fromisoformat(eltime["CREATED_DATE"]).replace(tzinfo=None)
         created_str = created_dt.strftime("%d.%m.%y %H:%M")
 
-        print(task_info)
+        #print(task_info)
         try:
-            group_name = task_info['task']['group']['name']
+            group_name = task_info[0]['group']['name']
         except:
             group_name = ''
 
@@ -188,7 +188,7 @@ def create_company_elapstime_report(req):
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True
 
-    change_sheet_style(workbook)
+    change_sheet_style(worklist)
     workbook.save(report_name)
 
     # Загрузка отчета в Битрикс

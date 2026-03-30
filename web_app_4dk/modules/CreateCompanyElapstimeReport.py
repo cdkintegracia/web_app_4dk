@@ -15,6 +15,14 @@ from web_app_4dk.modules.authentication import authentication
 webhook = authentication('Bitrix')
 b = Bitrix(webhook)
 
+def change_sheet_style(sheet) -> None:
+
+    # Изменение ширины
+    for column_cells in sheet.columns:
+        length = max(len(str(cell.value) if cell.value else '') for cell in column_cells)
+        sheet.column_dimensions[get_column_letter(column_cells[0].column)].width = length * 1.1
+
+
 def create_company_elapstime_report(req):
 
     # Формирование заголовков отчета
@@ -94,8 +102,8 @@ def create_company_elapstime_report(req):
 
         page += 1 # двигаем страницу
 
-        if page > 100: # защита от возможной бесконечной петли
-            print(f"Прерывание: превышено максимальное число страниц (user_id={user_id})")
+        if page > 500: # защита от возможной бесконечной петли
+            print(f"Прерывание: превышено максимальное число страниц затрат ({company_name})")
             break
 
         sleep(0.3)
@@ -103,10 +111,8 @@ def create_company_elapstime_report(req):
     titles = [
 
         [
-            company_name,
-            '',
-            '',
-            f'{req["date_start"]} - {req["date_end"] if req["date_end"] else datetime.now()}',
+            company_name, '', '',
+            f'{req["date_start"]} - {req["date_end"] if req["date_end"] else datetime.now().strftime('%d-%m-%Y')}',
         ],
         [],
         [
@@ -130,6 +136,7 @@ def create_company_elapstime_report(req):
         created_dt = datetime.fromisoformat(eltime["CREATED_DATE"]).replace(tzinfo=None)
         created_str = created_dt.strftime("%d.%m.%y %H:%M")
 
+        print(task_info['task'])
         try:
             group_name = task_info['task']['group']['name']
         except:
@@ -164,11 +171,6 @@ def create_company_elapstime_report(req):
 
     report_data_sorted = sorted(report_data, key=lambda x: x[0])
 
-    # Добавляем итоговую строку
-    report_data_sorted.append(['Итого', '', '', '', '', '', total_duration, ''])
-
-    #report_data = titles + report_data_sorted
-
     # Создание xlsx файла отчета
     report_name_time = report_created_time.strftime('%d-%m-%Y %H %M %S %f')
     report_name = f'Отчет по трудозатратам {company_name} {report_name_time}.xlsx'.replace(' ', '_')
@@ -180,8 +182,13 @@ def create_company_elapstime_report(req):
 
     for data in report_data_sorted:
         worklist.append([data[1]] + data[2:])
+        # Добавляем итоговую строку
+    worklist.append(['Итого', '', '', '', '', '', str(total_duration), ''])
+
     for idx, col in enumerate(worklist.columns, 1):
         worklist.column_dimensions[get_column_letter(idx)].auto_size = True
+
+    change_sheet_style(workbook)
     workbook.save(report_name)
 
     # Загрузка отчета в Битрикс

@@ -105,6 +105,7 @@ def create_company_elapstime_report(req):
 
         [
             company_name,
+            '',
             f'{req["date_start"]} - {end_dt}',
         ],
         [],

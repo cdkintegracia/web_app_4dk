@@ -133,6 +133,8 @@ def create_company_elapstime_report(req):
         except:
             group_name = ''
 
+        tags_str = ', '.join(task_info.get('TAGS', [])) if task_info.get('TAGS') else ''
+
         seconds = int(item.get("SECONDS", 0))
         duration = timedelta(seconds=seconds)
         total_duration += duration
@@ -147,7 +149,7 @@ def create_company_elapstime_report(req):
             created_dt,
             task_id,
             group_name,
-            task_info.get('TAGS', []),
+            tags_str,
             item.get("USER_ID"),
             duration_str,
             item.get("COMMENT_TEXT", "")

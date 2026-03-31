@@ -65,7 +65,7 @@ def create_company_elapstime_report(req):
     start_iso = f"{date_start}T00:00:00"
 
     if date_end:
-        end_dt = datetime.strptime(date_end, "%Y-%m-%d") + timedelta(days=1)
+        end_dt = datetime.strptime(date_end, "%d.%m.%Y") + timedelta(days=1)
         end_iso = end_dt.strftime("%Y-%m-%dT00:00:00")
     else:
         end_iso = datetime.now().isoformat()

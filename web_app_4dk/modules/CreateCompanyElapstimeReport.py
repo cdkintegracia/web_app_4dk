@@ -133,7 +133,6 @@ def create_company_elapstime_report(req):
 
         task_id = eltime.get("TASK_ID")
         task_info = tasks_map.get(task_id, {})
-        print(task_info)
         
         created_dt = datetime.fromisoformat(eltime["CREATED_DATE"]).replace(tzinfo=None)
         created_str = created_dt.strftime("%d.%m.%y %H:%M")

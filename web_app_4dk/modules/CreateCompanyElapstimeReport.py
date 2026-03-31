@@ -142,7 +142,10 @@ def create_company_elapstime_report(req):
         except:
             group_name = ''
 
-        tags_str = ', '.join(tag['title'] for tag in task_info.get('tags', {}).values())
+        try:
+            tags_str = ', '.join(tag['title'] for tag in task_info.get('tags', {}).values())
+        except:
+            tags_str = ''
 
         user_info = list(filter(lambda x: x['ID'] == eltime['USER_ID'], users_info))[0]
         user_name = f'{user_info["NAME"]} {user_info["LAST_NAME"]}'

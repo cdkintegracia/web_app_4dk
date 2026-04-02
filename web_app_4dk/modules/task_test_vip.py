@@ -13,7 +13,7 @@ def task_test_vip(req):
     })
 
     try:
-        print(task_info['tags'])
+        print(task_info['task']['tags'])
     except:
         print(task_info)
         print(2)

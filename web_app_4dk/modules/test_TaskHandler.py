@@ -178,7 +178,7 @@ def task_registry(task_info, event):
                               'message': f"Была создана новая задача, в которой вы являетесь ответственным:\nhttps://vc4dk.bitrix24.ru/company/personal/user/157/tasks/task/view/{task_info['id']}/"})
 
 
-def task_test_vip(req, event):
+def task_test_vip(req):
     #task_id = req['data[FIELDS_AFTER][ID]']
     task_id = req['task_id']
     task_info = send_bitrix_request('tasks.task.get', { # читаем инфо о задаче

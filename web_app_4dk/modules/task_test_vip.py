@@ -14,18 +14,24 @@ def task_test_vip(req):
 
     tags = task_info['task']['tags']
 
-    try:
-        has_vip = any(tag['title'] == 'VIP' for tag in tags.values())
-        if has_vip:
-            print('Есть тег VIP')
-        else:
+    '''
+    if task_info['groupId']=='1' and task_info['stageId']=='11':
+        try:
+            has_vip = any(tag['title'] == 'VIP' for tag in tags.values())
+            if has_vip:
+                print('Есть тег VIP')
+            else:
+                print('Тега VIP нет')
+        except:
             print('Тега VIP нет')
-    except:
-        print('Тега VIP нет')
+    '''
 
     try:
-        print(tags)
-        #print(task_info['task']['tags'])
+        has_vip = any(tag['title'] == 'VIP' for tag in tags.values())
     except:
-        print(task_info)
-        print(2)
+        has_vip = False
+
+    if has_vip == False:
+        print('Тега VIP нет')
+    else:
+        print('Есть тег VIP')

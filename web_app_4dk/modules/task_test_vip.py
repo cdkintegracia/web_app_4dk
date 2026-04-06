@@ -13,7 +13,13 @@ def task_test_vip(req):
     })
 
     try:
-        print(task_info['task']['tags'])
+        tags_str = ', '.join(tag['title'] for tag in task_info.get('tags', {}).values())
+    except:
+        tags_str = ''
+
+    try:
+        print(tags_str)
+        #print(task_info['task']['tags'])
     except:
         print(task_info)
         print(2)

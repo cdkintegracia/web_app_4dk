@@ -191,7 +191,7 @@ def task_test_vip(req):
     
     task_info = task_info['task']
 
-    task_registry(task_info, event)
+    #task_registry(task_info, event)
     '''
     if task_info['closedDate'] and task_info['ufAuto934103382947'] != '1':
         send_notification(task_info, 'Завершение')
@@ -322,9 +322,9 @@ def task_test_vip(req):
     else:
         company_id = company_crm[0][3:]
 
-
-    if event == 'ONTASKADD':
-        check_similar_tasks_this_hour(task_info, company_id)
+    
+    #if event == 'ONTASKADD':
+        #check_similar_tasks_this_hour(task_info, company_id)
 
     company_info = send_bitrix_request('crm.company.get', { # читаем инфо о найденной компании
         'ID': company_id,
@@ -471,7 +471,7 @@ def task_test_vip(req):
                     'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                     'UF_CRM_TASK': uf_crm_task,
                 }})
-
+    '''
     #перенос функций роботов: (1) уведомление Дениса Сулейманова о новых задачах на ТЛП
     #и (2) уведомление о новых задачах на ТЛП и ЛК для клиентов с типом компании "Закончился ИТС"
     if event == 'ONTASKADD' and company_info['ASSIGNED_BY_ID'] in ['129'] and task_info['groupId'] in ['1']:
@@ -488,6 +488,7 @@ def task_test_vip(req):
         send_bitrix_request('im.notify.system.add',{
             'USER_ID': '169',
             'MESSAGE': f'Для клиента ГО 3 {company_info["TITLE"]} поставлена задача в ОВ https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
+    '''
 
     return task_info
 

@@ -220,6 +220,7 @@ def task_test_vip(req):
                 })
                 if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
                     vipflag = 1
+                    print('поставили вип флаг')
 
         if task_info['groupId']=='7' and task_info['stageId']=='555': #and task_info['ufAuto202422302608']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))

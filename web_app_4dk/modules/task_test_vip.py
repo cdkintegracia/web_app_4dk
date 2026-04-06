@@ -12,6 +12,8 @@ def task_test_vip(req):
         'select': ['*', 'UF_*', 'TAGS']
     })
 
+    tags = task_info['task']['tags']
+
     try:
         tags_str = ', '.join(tag['title'] for tag in task_info.get('tags', {}).values())
     except:
@@ -19,6 +21,7 @@ def task_test_vip(req):
 
     try:
         print(tags_str)
+        print(tags)
         #print(task_info['task']['tags'])
     except:
         print(task_info)

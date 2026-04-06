@@ -201,7 +201,7 @@ def task_test_vip(req):
         return
     
 #2025-07-30 САА VIP
-    tags = task_info['task']['tags']
+    tags = task_info['tags']
     try:
         has_vip = any(tag['title'] == 'VIP' for tag in tags.values())
     except:

@@ -210,17 +210,21 @@ def task_test_vip(req):
     #fields_to_update = {}
     vipflag=0
     try:
-        if task_info['groupId']=='1' and task_info['stageId']=='11' and has_vip == False: #and task_info['ufAuto324910901949']!='1':
-            contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-            if contact_crm:
-                contact_crm = contact_crm[0][2:]
-                contact_info = send_bitrix_request('crm.contact.get', {
-                    'ID': contact_crm,
-                    'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
-                })
-                if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
-                    vipflag = 1
-                    print('поставили вип флаг')
+        if task_info['groupId']=='1' and task_info['stageId']=='11':
+            print('группа и стадия ок') 
+            if has_vip == False: #and task_info['ufAuto324910901949']!='1':
+                print('тег ок') 
+                contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
+                if contact_crm:
+                    print('контакт ок') 
+                    contact_crm = contact_crm[0][2:]
+                    contact_info = send_bitrix_request('crm.contact.get', {
+                        'ID': contact_crm,
+                        'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
+                    })
+                    if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
+                        vipflag = 1
+                        print('поставили вип флаг')
 
         if task_info['groupId']=='7' and task_info['stageId']=='555': #and task_info['ufAuto202422302608']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))

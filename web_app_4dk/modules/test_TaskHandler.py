@@ -235,6 +235,7 @@ def task_test_vip(req):
 
     except Exception as e:
         print(f"Error in VIP: {e}")
+    print(vipflag)
 #2025-07-30 --
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))

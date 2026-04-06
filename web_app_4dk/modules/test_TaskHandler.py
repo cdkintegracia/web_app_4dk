@@ -210,9 +210,7 @@ def task_test_vip(req):
     #fields_to_update = {}
     vipflag=0
     try:
-        if task_info['groupId']=='1' and task_info['stageId']=='11':
-            print('группа и стадия ок') 
-            if has_vip == False: #and task_info['ufAuto324910901949']!='1':
+        if task_info['groupId']=='1' and task_info['stageId']=='11' and has_vip == False: #and task_info['ufAuto324910901949']!='1':
                 print('тег ок') 
                 contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
                 if contact_crm:

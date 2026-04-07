@@ -122,7 +122,6 @@ def calls_lk_limit():
 
         elif entity_type == 'CONTACT': # если звонок привязан к контакту
             contact_id = int(entity_id)
-            print(contact_id)
 
             for cid in contact_company_map.get(contact_id, []):
                 lid = company_limit_map.get(cid)
@@ -133,8 +132,9 @@ def calls_lk_limit():
                     break
 
         if not limit_id:
-            print('нет лимита')
             continue
+        print('лимит есть')
+        print(contact_id)
 
         existing = b.get_all( # проверка дубля в сп списания
             'crm.item.list',

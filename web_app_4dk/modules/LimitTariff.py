@@ -126,13 +126,12 @@ def calls_lk_limit():
 
 
             for cid in contact_company_map.get(contact_id, []):
-                print(cid)
                 lid = company_limit_map.get(cid)
-                print(type(lid), lid)
-                print(valid_limits)
+                
                 if lid in valid_limits:
                     company_id = cid
                     limit_id = lid
+                    print(type(lid), lid)
                     break
 
         if not limit_id:

@@ -20,7 +20,7 @@ def calls_lk_limit():
         if uid != 19 and uid != 117: # исключаем СЮВ и РЕВ
             user_ids_lk.append(uid)
 
-    date_from = (datetime.now() - timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S") # последние 5 часов для того, чтобы учесть длительные звонки
+    date_from = (datetime.now() - timedelta(hours=6)).strftime("%Y-%m-%d %H:%M:%S") # последние 5 часов для того, чтобы учесть длительные звонки TEST
 
     calls = b.get_all(
         'voximplant.statistic.get',
@@ -126,7 +126,7 @@ def calls_lk_limit():
                 lid = company_limit_map.get(cid)
                 if item['ID'] == '1421792':
                     print(company_limit_map)
-                    print(company_id)
+                    print(cid)
                 
                 if lid in valid_limits:
                     company_id = cid

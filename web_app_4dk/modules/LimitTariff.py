@@ -143,6 +143,7 @@ def calls_lk_limit():
         )
 
         if existing:
+            print(f'дубль {item['ID']}')
             continue
 
         # конвертируем время звонка

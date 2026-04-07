@@ -52,6 +52,7 @@ def calls_lk_limit():
             'select': ['ID', 'UF_CRM_1770898836']
         }
     )
+    print(len(companies))
 
     company_limit_map = {
         int(c['ID']): c.get('UF_CRM_1770898836')
@@ -68,13 +69,14 @@ def calls_lk_limit():
 
         company_ids.update(contact_company_map[cid]) # добавим их в общий список компаний
 
-    companies = b.get_all( # # достаем все компании, привязанные к контактам
+    companies = b.get_all( # достаем все компании, привязанные к контактам
         'crm.company.list',
         {
             'filter': {'ID': list(company_ids)},
             'select': ['ID', 'UF_CRM_1770898836']
         }
     )
+    print(len(companies))
 
     company_limit_map = {
         int(c['ID']): c.get('UF_CRM_1770898836')
@@ -82,7 +84,8 @@ def calls_lk_limit():
         if c.get('UF_CRM_1770898836')
     }
 
-    limit_ids = list(set(company_limit_map.values())) # достаем айди всех лимитов, которые если у компаний
+    limit_ids = list(set(company_limit_map.values())) # достаем айди всех лимитов, которые есть у компаний
+    print(len(limit_ids))
 
     limits = b.get_all( # достаем инфу о всех лимитах, которые указаны в компаниях
         'crm.item.list',
@@ -97,6 +100,7 @@ def calls_lk_limit():
         int(l['id']) for l in limits
         if l['stageId'] == "DT1114_128:2"
     }
+    print(len(valid_limits))
 
     # обработка звонков
     for item in calls:
@@ -432,7 +436,7 @@ def process_elapsed_item(item, group_division):
 def elapsed_times_lines(req):
 
     calls_lk_limit() # выгрузка звонков ЛК
-
+    '''
     group_division = { # соответствие айди группы задачи и айди значения поля Подразделение в СП Списания
         1: 2236, # тлп
         7: 2234, # лк
@@ -502,6 +506,7 @@ def elapsed_times_lines(req):
     if not processed:
         #print("Подходящих трудозатрат не найдено")
         return
+    '''
        
 if __name__ == '__main__':
 

@@ -159,6 +159,9 @@ def calls_lk_limit():
                 if dop_comp_lim:
                     company_id, limit_id = dop_comp_lim
 
+        if not limit_id:
+            continue
+
         existing = b.get_all( # проверка дубля в сп списания
             'crm.item.list',
             {

@@ -131,6 +131,7 @@ def calls_lk_limit():
 
             contact_companies = contact_company_map.get(contact_id, [])
 
+            dop_comp_lim = None
             for cid in contact_companies:
                 lid = company_limit_map.get(cid)
 
@@ -146,7 +147,7 @@ def calls_lk_limit():
                     limit_id = lid
                     break
 
-                dop_comp_lim = None
+                
                 add_comp = limit.get('ufCrm94_AddCompSyst') # доп компании по лимиту
                 if add_comp:
                     add_set = set(map(int, add_comp if isinstance(add_comp, list) else str(add_comp).split(',')))

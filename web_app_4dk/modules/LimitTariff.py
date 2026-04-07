@@ -105,8 +105,6 @@ def calls_lk_limit():
 
     # обработка звонков
     for item in calls:
-        print(item)
-        break
         company_id = None
         contact_id = None
         limit_id = None
@@ -126,6 +124,8 @@ def calls_lk_limit():
 
             for cid in contact_company_map.get(contact_id, []):
                 lid = company_limit_map.get(cid)
+                print(type(lid), lid)
+                print(valid_limits)
                 if lid in valid_limits:
                     company_id = cid
                     limit_id = lid

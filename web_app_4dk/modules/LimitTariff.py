@@ -125,8 +125,9 @@ def calls_lk_limit():
             for cid in contact_company_map.get(contact_id, []):
                 lid = company_limit_map.get(cid)
                 if item['ID'] == '1421792':
-                    print(company_limit_map)
+                    print(lid)
                     print(cid)
+                    print(valid_limits)
                 
                 if lid in valid_limits:
                     company_id = cid

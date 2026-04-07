@@ -121,8 +121,10 @@ def calls_lk_limit():
 
         elif entity_type == 'CONTACT': # если звонок привязан к контакту
             contact_id = int(entity_id)
-            if item['ID'] == '1421792':
-                print(item)
+            #if item['ID'] == '1421792':
+                #print(item)
+
+            print(contact_company_map)
 
             for cid in contact_company_map.get(contact_id, []):
                 print(cid)

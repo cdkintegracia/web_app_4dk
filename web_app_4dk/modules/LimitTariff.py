@@ -101,7 +101,7 @@ def calls_lk_limit():
         int(l['id']) for l in limits
         if l['stageId'] == "DT1114_128:2"
     }
-    print(valid_limits)
+    #print(valid_limits)
 
     # обработка звонков
     for item in calls:
@@ -121,8 +121,11 @@ def calls_lk_limit():
 
         elif entity_type == 'CONTACT': # если звонок привязан к контакту
             contact_id = int(entity_id)
+            if item['ID'] == '1421792':
+                print(item)
 
             for cid in contact_company_map.get(contact_id, []):
+                print(cid)
                 lid = company_limit_map.get(cid)
                 print(type(lid), lid)
                 print(valid_limits)

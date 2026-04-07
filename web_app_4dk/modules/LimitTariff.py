@@ -33,68 +33,58 @@ def calls_lk_limit():
             }
         }
     )
-    #print("Найдено звонков:", len(calls))
 
-    # сначала собираем все компании из звонков
-    call_companies = {}
-    all_company_ids = set()
+    company_ids = set()
+    contact_ids = set()
 
     for item in calls:
+        if item.get('CRM_ENTITY_TYPE') == 'COMPANY':
+            company_ids.add(item.get('CRM_ENTITY_ID')) # id всех компаний, к которым привязаны звонки
 
-        crm_id = item.get("CRM_ENTITY_ID")
-        crm_type = item.get("CRM_ENTITY_TYPE")
-
-        if not crm_id:
-            continue
-
-        contact_id = None
-        company_ids = []
-
-        if crm_type == "CONTACT":
-
-            contact_id = crm_id
-
-            companies = b.get_all('crm.contact.company.items.get', {'id': contact_id})
-
-            if companies:
-                for c in companies:
-                    cid = c.get("COMPANY_ID")
-                    if cid:
-                        cid = int(cid)
-                        company_ids.append(cid)
-                        all_company_ids.add(cid)
-
-        elif crm_type == "COMPANY":
-            cid = int(crm_id)
-            company_ids = [cid]
-            all_company_ids.add(cid)
-
-        call_companies[item["ID"]] = {
-            "company_ids": company_ids,
-            "contact_id": contact_id
-        }
+        elif item.get('CRM_ENTITY_TYPE') == 'CONTACT':
+            contact_ids.add(item.get('CRM_ENTITY_ID')) # id всех контактов, к которым привязаны звонки
 
 
-    # получаем все компании сразу
     companies = b.get_all(
         'crm.company.list',
         {
-            'filter': {'ID': list(all_company_ids)},
+            'filter': {'ID': list(company_ids)}, # достаем все компании, у которых есть звонки напрямую
             'select': ['ID', 'UF_CRM_1770898836']
         }
     )
 
-    company_limits = {
-        int(c["ID"]): c.get("UF_CRM_1770898836")
+    company_limit_map = {
+        int(c['ID']): c.get('UF_CRM_1770898836')
         for c in companies
-        if c.get("UF_CRM_1770898836")
+        if c.get('UF_CRM_1770898836')
     }
 
-    limit_ids = list(set(company_limits.values()))
+    contact_company_map = {}
 
+    for cid in contact_ids:
+        rels = b.get_all('crm.contact.company.items.get', {'id': cid}) # достаем все компании, привязанные к контакту
 
-    # получаем все лимиты сразу
-    limits = b.get_all(
+        contact_company_map[cid] = [int(r['COMPANY_ID']) for r in rels]
+
+        company_ids.update(contact_company_map[cid]) # добавим их в общий список компаний
+
+    companies = b.get_all( # # достаем все компании, привязанные к контактам
+        'crm.company.list',
+        {
+            'filter': {'ID': list(company_ids)},
+            'select': ['ID', 'UF_CRM_1770898836']
+        }
+    )
+
+    company_limit_map = {
+        int(c['ID']): c.get('UF_CRM_1770898836')
+        for c in companies
+        if c.get('UF_CRM_1770898836')
+    }
+
+    limit_ids = list(set(company_limit_map.values())) # достаем айди всех лимитов, которые если у компаний
+
+    limits = b.get_all( # достаем инфу о всех лимитах, которые указаны в компаниях
         'crm.item.list',
         {
             'entityTypeId': 1114,
@@ -103,70 +93,86 @@ def calls_lk_limit():
         }
     )
 
-    valid_limits = {
-        int(l['id'])
-        for l in limits
-        if l.get('stageId') == "DT1114_128:2"
+    valid_limits = { # отбираем лимиты только с активной стадией
+        int(l['id']) for l in limits
+        if l['stageId'] == "DT1114_128:2"
     }
 
-
-    # основной цикл обработки звонков
+    # обработка звонков
     for item in calls:
+        company_id = None
+        contact_id = None
+        limit_id = None
 
-        data = call_companies.get(item["ID"])
+        entity_type = item.get('CRM_ENTITY_TYPE')
+        entity_id = item.get('CRM_ENTITY_ID')
 
-        if not data:
+        if entity_type == 'COMPANY': # если звонок привязан к компании
+            cid = int(entity_id)
+            limit_id = company_limit_map.get(cid)
+
+            if limit_id in valid_limits:
+                company_id = cid
+
+        elif entity_type == 'CONTACT': # если звонок привязан к контакту
+            contact_id = int(entity_id)
+
+            for cid in contact_company_map.get(contact_id, []):
+                lid = company_limit_map.get(cid)
+                if lid in valid_limits:
+                    company_id = cid
+                    limit_id = lid
+                    break
+
+        if not limit_id:
             continue
 
-        contact_id = data["contact_id"]
-        company_ids = data["company_ids"]
-
-        for company_id in company_ids:
-
-            limit_id = company_limits.get(company_id)
-
-            if not limit_id or int(limit_id) not in valid_limits:
-                continue
-
-            existing = b.get_all( # проверяем дубли трудозатрат по айди в списаниях
-                'crm.item.list',
-                {
-                    'entityTypeId': 1118,
-                    'filter': {
-                        'ufCrm96_IdElapsedtime': item['ID'],
-                        'ufCrm96_Division': 2234
-                    },
+        existing = b.get_all( # проверка дубля в сп списания
+            'crm.item.list',
+            {
+                'entityTypeId': 1118,
+                'filter': {
+                    'ufCrm96_IdElapsedtime': item['ID'],
+                    'ufCrm96_Division': 2234
                 },
-            )
+            },
+        )
 
-            if existing:
-                continue
+        if existing:
+            continue
 
-            # Конвертация времени
-            duration = int(item['CALL_DURATION']) # длительность в сек
-            hours = duration // 3600
-            minutes = (duration % 3600) // 60
-            secs = duration % 60
-            time_str = f"{hours:02}:{minutes:02}:{secs:02}"
+        # конвертируем время звонка
+        duration = int(item['CALL_DURATION'])
+        hours = duration // 3600
+        minutes = (duration % 3600) // 60
+        secs = duration % 60
+        time_str = f"{hours:02}:{minutes:02}:{secs:02}"
 
-            b.call(
-                'crm.item.add',
-                {
-                    'entityTypeId': 1118,
-                    'fields': {
-                        'ufCrm96_Responsible': item['PORTAL_USER_ID'],
-                        'ufCrm96_DateComplete': item['CALL_START_DATE'],
-                        'ufCrm96_TimeCost': time_str,
-                        'ufCrm96_Division': 2234,
-                        'ufCrm96_TimecostSeconds': duration,
-                        'ufCrm96_Company': company_id,
-                        'ufCrm96_Contact': contact_id,
-                        'parentId1114': limit_id,
-                        'ufCrm96_IdElapsedtime': item['ID'],
-                    },
-                },
-                raw=True,
-            )
+        # поля для элемента в сп списание
+        fields = {
+            'ufCrm96_Responsible': item['PORTAL_USER_ID'],
+            'ufCrm96_DateComplete': item['CALL_START_DATE'],
+            'ufCrm96_TimeCost': time_str,
+            'ufCrm96_Division': 2234,
+            'ufCrm96_TimecostSeconds': duration,
+            'parentId1114': limit_id,
+            'ufCrm96_IdElapsedtime': item['ID'],
+        }
+
+        if contact_id: # если звонок от контакта, то заполняем оба айди сущности
+            fields['ufCrm96_Contact'] = contact_id
+            fields['ufCrm96_Company'] = company_id
+        else: # если звонок от компании, то заполняем только айди компании
+            fields['ufCrm96_Company'] = company_id
+
+        b.call(
+            'crm.item.add',
+            {
+                'entityTypeId': 1118,
+                'fields': fields,
+            },
+            raw=True,
+        )
 
 def resolve_task_division(task, group_division):
     """

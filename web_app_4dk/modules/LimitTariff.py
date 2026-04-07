@@ -130,6 +130,7 @@ def calls_lk_limit():
                     print(valid_limits)
                 
                 if lid in valid_limits:
+                    print('да')
                     company_id = cid
                     limit_id = lid[0]
                     print(limit_id[0])

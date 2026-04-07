@@ -83,6 +83,7 @@ def calls_lk_limit():
         for c in companies
         if c.get('UF_CRM_1770898836')
     }
+    print(company_limit_map)
 
     limit_ids = list(set(company_limit_map.values())) # достаем айди всех лимитов, которые есть у компаний
     #print(len(limit_ids))
@@ -100,7 +101,7 @@ def calls_lk_limit():
         int(l['id']) for l in limits
         if l['stageId'] == "DT1114_128:2"
     }
-    print(len(valid_limits))
+    print(valid_limits)
 
     # обработка звонков
     for item in calls:
@@ -113,9 +114,7 @@ def calls_lk_limit():
 
         if entity_type == 'COMPANY': # если звонок привязан к компании
             cid = int(entity_id)
-            print(cid)
             limit_id = company_limit_map.get(cid)
-            print(limit_id)
 
             if limit_id in valid_limits:
                 company_id = cid
@@ -128,7 +127,6 @@ def calls_lk_limit():
                 if lid in valid_limits:
                     company_id = cid
                     limit_id = lid
-                    print(limit_id)
                     break
 
         if not limit_id:

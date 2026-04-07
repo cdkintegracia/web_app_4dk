@@ -124,7 +124,8 @@ def calls_lk_limit():
             #if item['ID'] == '1421792':
                 #print(item)
 
-            print(contact_company_map)
+            print(contact_company_map.get(contact_id, []))
+
 
             for cid in contact_company_map.get(contact_id, []):
                 print(cid)

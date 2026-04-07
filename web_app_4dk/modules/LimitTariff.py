@@ -20,7 +20,7 @@ def calls_lk_limit():
         if uid != 19 and uid != 117: # исключаем СЮВ и РЕВ
             user_ids_lk.append(uid)
 
-    date_from = (datetime.now() - timedelta(hours=6)).strftime("%Y-%m-%d %H:%M:%S") # последние 5 часов для того, чтобы учесть длительные звонки TEST
+    date_from = (datetime.now() - timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S") # последние 5 часов для того, чтобы учесть длительные звонки TEST
 
     calls = b.get_all(
         'voximplant.statistic.get',
@@ -52,7 +52,6 @@ def calls_lk_limit():
                 'select': ['ID', 'UF_CRM_1770898836']
             }
         )
-        #print(len(companies))
 
         company_limit_map = {
             int(c['ID']): c.get('UF_CRM_1770898836')
@@ -76,24 +75,21 @@ def calls_lk_limit():
             'select': ['ID', 'UF_CRM_1770898836']
         }
     )
-    #print(len(companies))
 
     company_limit_map = {
         int(c['ID']): c.get('UF_CRM_1770898836')
         for c in companies
         if c.get('UF_CRM_1770898836')
     }
-    #print(company_limit_map)
 
     limit_ids = list(set(company_limit_map.values())) # достаем айди всех лимитов, которые есть у компаний
-    #print(len(limit_ids))
 
     limits = b.get_all( # достаем инфу о всех лимитах, которые указаны в компаниях
         'crm.item.list',
         {
             'entityTypeId': 1114,
             'filter': {'id': limit_ids},
-            'select': ['id', 'stageId']
+            'select': ['id', 'stageId', 'companyId', 'ufCrm94_AddCompSyst']
         }
     )
 
@@ -101,7 +97,6 @@ def calls_lk_limit():
         int(l['id']) for l in limits
         if l['stageId'] == "DT1114_128:2"
     }
-    #print(valid_limits)
 
     # обработка звонков
     for item in calls:
@@ -121,18 +116,47 @@ def calls_lk_limit():
 
         elif entity_type == 'CONTACT': # если звонок привязан к контакту
             contact_id = entity_id
-            
+            '''
             for cid in contact_company_map.get(contact_id, []):
                 lid = company_limit_map.get(cid)
                 if lid:
                     if int(lid) in valid_limits:
                         company_id = cid
                         limit_id = lid
-                        print(limit_id)
                         break
 
         if not limit_id:
             continue
+        '''
+
+            contact_companies = contact_company_map.get(contact_id, [])
+
+            for cid in contact_companies:
+                lid = company_limit_map.get(cid)
+
+                if not lid or int(lid) not in valid_limits:
+                    continue
+
+                limit = next((l for l in limits if int(l['id']) == int(lid)), None)
+                if not limit:
+                    continue
+
+                if limit.get('companyId') and int(limit['companyId']) == cid: # основная компания по лимиту
+                    company_id = cid
+                    limit_id = lid
+                    break
+
+                dop_comp_lim = None
+                add_comp = limit.get('ufCrm94_AddCompSyst') # доп компании по лимиту
+                if add_comp:
+                    add_set = set(map(int, add_comp if isinstance(add_comp, list) else str(add_comp).split(',')))
+
+                    if cid in add_set and not dop_comp_lim:
+                        dop_comp_lim = (cid, lid)
+
+            else:
+                if dop_comp_lim:
+                    company_id, limit_id = dop_comp_lim
 
         existing = b.get_all( # проверка дубля в сп списания
             'crm.item.list',
@@ -146,7 +170,6 @@ def calls_lk_limit():
         )
 
         if existing:
-            print(f'дубль {item["ID"]}')
             continue
 
         # конвертируем время звонка

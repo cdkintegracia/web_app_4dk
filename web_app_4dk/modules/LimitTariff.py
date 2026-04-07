@@ -44,21 +44,21 @@ def calls_lk_limit():
         elif item.get('CRM_ENTITY_TYPE') == 'CONTACT':
             contact_ids.add(item.get('CRM_ENTITY_ID')) # id всех контактов, к которым привязаны звонки
 
+    if company_ids:
+        companies = b.get_all(
+            'crm.company.list',
+            {
+                'filter': {'ID': list(company_ids)}, # достаем все компании, у которых есть звонки напрямую
+                'select': ['ID', 'UF_CRM_1770898836']
+            }
+        )
+        #print(len(companies))
 
-    companies = b.get_all(
-        'crm.company.list',
-        {
-            'filter': {'ID': list(company_ids)}, # достаем все компании, у которых есть звонки напрямую
-            'select': ['ID', 'UF_CRM_1770898836']
+        company_limit_map = {
+            int(c['ID']): c.get('UF_CRM_1770898836')
+            for c in companies
+            if c.get('UF_CRM_1770898836')
         }
-    )
-    #print(len(companies))
-
-    company_limit_map = {
-        int(c['ID']): c.get('UF_CRM_1770898836')
-        for c in companies
-        if c.get('UF_CRM_1770898836')
-    }
 
     contact_company_map = {}
 

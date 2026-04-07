@@ -105,6 +105,8 @@ def calls_lk_limit():
 
     # обработка звонков
     for item in calls:
+        print(item)
+        break
         company_id = None
         contact_id = None
         limit_id = None

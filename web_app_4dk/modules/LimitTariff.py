@@ -124,13 +124,8 @@ def calls_lk_limit():
             
             for cid in contact_company_map.get(contact_id, []):
                 lid = company_limit_map.get(cid)
-                if item['ID'] == '1421792':
-                    print(lid)
-                    print(cid)
-                    print(valid_limits)
                 if lid:
                     if int(lid) in valid_limits:
-                        print('да')
                         company_id = cid
                         limit_id = lid
                         print(limit_id)
@@ -138,8 +133,6 @@ def calls_lk_limit():
 
         if not limit_id:
             continue
-        print('лимит есть')
-        print(contact_id)
 
         existing = b.get_all( # проверка дубля в сп списания
             'crm.item.list',

@@ -129,11 +129,11 @@ def calls_lk_limit():
                     print(cid)
                     print(valid_limits)
                 
-                if lid in valid_limits:
+                if int(lid) in valid_limits:
                     print('да')
                     company_id = cid
-                    limit_id = lid[0]
-                    print(limit_id[0])
+                    limit_id = lid
+                    print(limit_id)
                     break
 
         if not limit_id:

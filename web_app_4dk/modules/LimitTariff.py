@@ -52,7 +52,7 @@ def calls_lk_limit():
             'select': ['ID', 'UF_CRM_1770898836']
         }
     )
-    print(len(companies))
+    #print(len(companies))
 
     company_limit_map = {
         int(c['ID']): c.get('UF_CRM_1770898836')
@@ -76,7 +76,7 @@ def calls_lk_limit():
             'select': ['ID', 'UF_CRM_1770898836']
         }
     )
-    print(len(companies))
+    #print(len(companies))
 
     company_limit_map = {
         int(c['ID']): c.get('UF_CRM_1770898836')
@@ -85,7 +85,7 @@ def calls_lk_limit():
     }
 
     limit_ids = list(set(company_limit_map.values())) # достаем айди всех лимитов, которые есть у компаний
-    print(len(limit_ids))
+    #print(len(limit_ids))
 
     limits = b.get_all( # достаем инфу о всех лимитах, которые указаны в компаниях
         'crm.item.list',
@@ -113,22 +113,27 @@ def calls_lk_limit():
 
         if entity_type == 'COMPANY': # если звонок привязан к компании
             cid = int(entity_id)
+            print(cid)
             limit_id = company_limit_map.get(cid)
+            print(limit_id)
 
             if limit_id in valid_limits:
                 company_id = cid
 
         elif entity_type == 'CONTACT': # если звонок привязан к контакту
             contact_id = int(entity_id)
+            print(contact_id)
 
             for cid in contact_company_map.get(contact_id, []):
                 lid = company_limit_map.get(cid)
                 if lid in valid_limits:
                     company_id = cid
                     limit_id = lid
+                    print(limit_id)
                     break
 
         if not limit_id:
+            print('нет лимита')
             continue
 
         existing = b.get_all( # проверка дубля в сп списания

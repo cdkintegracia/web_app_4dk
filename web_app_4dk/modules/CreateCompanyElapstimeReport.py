@@ -42,7 +42,7 @@ def create_company_elapstime_report(req):
 
     users_info = b.get_all('user.get', {
         'filter': {
-            'UF_DEPARTMENT': ['5', '27', '29', '231', '458'] # ЦС и ЛК
+            'UF_DEPARTMENT': ['5', '27', '29', '458'] # ЦС, ЛК '231' не считаются
         }
     })
 

@@ -51,7 +51,7 @@ def activity_report_cs(req):
     users_info = b.get_all('user.get', {
             'filter': {
                 'ACTIVE': 1,
-                'UF_DEPARTMENT': ['5', '27', '29'] #ЦС, ГО3, ГО4
+                'UF_DEPARTMENT': ['5', '27', '29', '458'] #ЦС, ГО3, ГО4, ГР
             }
         })
     except_user = ['91'] #юзеры-исключения: дежурный админ

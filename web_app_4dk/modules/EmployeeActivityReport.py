@@ -109,20 +109,6 @@ def employee_activity_report(req):
         text_message += f'Проведено презентаций: {len(presentation)}\n'
 
         #сбор инфо по трудозатратам внесенным сегодня
-        '''
-        time_spent = b.call('task.elapseditem.getlist', {
-            'order': {
-                'ID': 'asc'
-                },
-            'filter': {
-                'USER_ID': user_info['ID'],
-                '>=CREATED_DATE': report_day}
-            }, raw=True)['result']
-        time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
-        text_message += f'Трудозатрат по задачам: {time_spent} мин\n'
-
-        ''' # батч трз, протестить (убрать потом выше код)
-
         time_spent = []
         page = 1
         page_size = 50
@@ -198,9 +184,9 @@ def employee_activity_report(req):
         #print(text_message)
 
         #рассылка от робота задач
-        notification_users = ['1391']
+        #notification_users = ['1391']
         #notification_users = [user_info['ID'], '1', '1391']
-        #notification_users = ['chat25605']
+        notification_users = ['chat25605']
         for user in notification_users:
             data = {
                 'DIALOG_ID': user,

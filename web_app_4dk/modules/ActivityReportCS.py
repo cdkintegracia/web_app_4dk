@@ -51,7 +51,7 @@ def activity_report_cs(req):
     users_info = b.get_all('user.get', {
             'filter': {
                 'ACTIVE': 1,
-                'UF_DEPARTMENT': ['5', '27', '29', '458'] #ЦС, ГО3, ГО4, ГР
+                'UF_DEPARTMENT': ['5', '27', '29', '458', '235'] #ЦС, ГО3, ГО4, ГР
             }
         })
     except_user = ['91'] #юзеры-исключения: дежурный админ
@@ -65,12 +65,53 @@ def activity_report_cs(req):
 
             #вытаскиваем трудозатраты сотрудника за сегодня
             sec_timespent = 0
+            '''
             results = b.call('task.elapseditem.getlist', {
                 'order': {'ID': 'asc'},
                 'filter': {
                     'USER_ID': user_info['ID'],
                     '>=CREATED_DATE': report_day}
                 }, raw=True)['result']
+            '''
+            
+            # батч трз, протестить (убрать потом выше и ниже код)
+            results = []
+            page = 1
+            page_size = 50
+
+            while True:
+                response = b.call(
+                    'task.elapseditem.getlist',
+                    {
+                        "order": {"ID": "asc"},
+                        "filter": {
+                            "USER_ID": user_info['ID'],
+                            ">=CREATED_DATE": report_day},
+                        "select": ["*"],
+                        "params": {
+                            "NAV_PARAMS": {
+                                "nPageSize": page_size,
+                                "iNumPage": page,
+                            }
+                        },
+                    },
+                    raw=True
+                )
+
+                result = response.get("result", [])
+                if not result:
+                    break # если страницы закончились — прерываем
+
+                results.extend(result)
+
+                page += 1 # двигаем страницу
+
+                if page > 100: # защита от возможной бесконечной петли
+                    print(f"Прерывание: превышено максимальное число страниц (user_id={user_info['ID']})")
+                    break
+
+                sleep(1)
+            '''
 
             if len(results) > 49:
                 users_id = ['1391', '1']
@@ -78,11 +119,12 @@ def activity_report_cs(req):
                     b.call('im.notify.system.add', {
                         'USER_ID': user_id,
                         'MESSAGE': f'У сотрудника [b]{user_name}[/b] количество трудозатрат за день достигло 50 записей.\n Отчет по трудозатратам в чате ЦС некорректен.'})
+            '''
             
             if results:
                 tasks_id = list(map(lambda x: x['TASK_ID'], results)) #список id задач из списка трудозатрат
 
-                task_work_its = b.get_all('tasks.task.list', { #задачи из группы РаботыИТС по которым были трудозатраты
+                task_work_its = b.get_all('tasks.task.list', { #задачи из группы РаботыИТС по которым были трудозатраты и существующие задачи в целом
                 'filter': {
                     'ID': tasks_id,
                     'GROUP_ID': '321'
@@ -152,8 +194,9 @@ def activity_report_cs(req):
     '''
 
     #рассылка от робота задач
+    notification_users = ['1391']
     #notification_users = [user_info['ID'], '1', '1391']
-    notification_users = ['chat18303']
+    #notification_users = ['chat18303']
     for user in notification_users:
         data = {
             'DIALOG_ID': user,

@@ -109,6 +109,7 @@ def employee_activity_report(req):
         text_message += f'Проведено презентаций: {len(presentation)}\n'
 
         #сбор инфо по трудозатратам внесенным сегодня
+        '''
         time_spent = b.call('task.elapseditem.getlist', {
             'order': {
                 'ID': 'asc'
@@ -119,6 +120,60 @@ def employee_activity_report(req):
             }, raw=True)['result']
         time_spent = sum(list(map(lambda x: int(x['MINUTES']), time_spent)))
         text_message += f'Трудозатрат по задачам: {time_spent} мин\n'
+
+        ''' # батч трз, протестить (убрать потом выше код)
+
+        time_spent = []
+        page = 1
+        page_size = 50
+
+        while True:
+            response = b.call(
+                'task.elapseditem.getlist',
+                {
+                    "order": {"ID": "asc"},
+                    "filter": {
+                        "USER_ID": user_info['ID'],
+                        ">=CREATED_DATE": report_day},
+                    "select": ["*"],
+                    "params": {
+                        "NAV_PARAMS": {
+                            "nPageSize": page_size,
+                            "iNumPage": page,
+                        }
+                    },
+                },
+                raw=True
+            )
+
+            result = response.get("result", [])
+            if not result:
+                break # если страницы закончились — прерываем
+
+            time_spent.extend(result)
+
+            page += 1 # двигаем страницу
+
+            if page > 100: # защита от возможной бесконечной петли
+                print(f"Прерывание: превышено максимальное число страниц (user_id={user_info['ID']})")
+                break
+
+            sleep(1)
+
+        if time_spent:
+            tasks_id = list(map(lambda x: x['TASK_ID'], time_spent)) #список id задач из списка трудозатрат
+
+            task_active = b.get_all('tasks.task.list', { # запрашиваем задачи для проверки на существование
+            'filter': {
+                'ID': tasks_id,
+                }})
+            id_task_active = list(map(lambda x: x['id'], task_active)) #id существующих задач с трудозатратами
+
+            timespent_user = list(filter(lambda x: x['TASK_ID'] in id_task_active, time_spent)) #трудозатраты из существующих задач
+
+            time_spent = sum(list(map(lambda x: int(x['MINUTES']), timespent_user)))
+            text_message += f'Трудозатрат по задачам: {time_spent} мин\n'
+        
 
         #сбор инфо по выставленным счетам сегодня
         account_sp = b.get_all('crm.item.list', { #смарт-процесс Выставленные счета (выгружаются из СОУ)
@@ -143,9 +198,9 @@ def employee_activity_report(req):
         #print(text_message)
 
         #рассылка от робота задач
-        #notification_users = ['1391']
+        notification_users = ['1391']
         #notification_users = [user_info['ID'], '1', '1391']
-        notification_users = ['chat25605']
+        #notification_users = ['chat25605']
         for user in notification_users:
             data = {
                 'DIALOG_ID': user,

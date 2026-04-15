@@ -51,7 +51,7 @@ def activity_report_cs(req):
     users_info = b.get_all('user.get', {
             'filter': {
                 'ACTIVE': 1,
-                'UF_DEPARTMENT': ['5', '27', '29', '458', '235'] #ЦС, ГО3, ГО4, ГР
+                'UF_DEPARTMENT': ['5', '27', '29', '458'] #ЦС, ГО3, ГО4, ГР
             }
         })
     except_user = ['91'] #юзеры-исключения: дежурный админ
@@ -65,16 +65,7 @@ def activity_report_cs(req):
 
             #вытаскиваем трудозатраты сотрудника за сегодня
             sec_timespent = 0
-            '''
-            results = b.call('task.elapseditem.getlist', {
-                'order': {'ID': 'asc'},
-                'filter': {
-                    'USER_ID': user_info['ID'],
-                    '>=CREATED_DATE': report_day}
-                }, raw=True)['result']
-            '''
-            
-            # батч трз, протестить (убрать потом выше и ниже код)
+
             results = []
             page = 1
             page_size = 50
@@ -111,15 +102,7 @@ def activity_report_cs(req):
                     break
 
                 sleep(1)
-            '''
 
-            if len(results) > 49:
-                users_id = ['1391', '1']
-                for user_id in users_id:
-                    b.call('im.notify.system.add', {
-                        'USER_ID': user_id,
-                        'MESSAGE': f'У сотрудника [b]{user_name}[/b] количество трудозатрат за день достигло 50 записей.\n Отчет по трудозатратам в чате ЦС некорректен.'})
-            '''
             
             if results:
                 tasks_id = list(map(lambda x: x['TASK_ID'], results)) #список id задач из списка трудозатрат
@@ -143,60 +126,12 @@ def activity_report_cs(req):
                     
     #print(timespent_report)
 
-    # ниже кусок кода, оставленный на случай, если мы упремся в лимит 50 записей о трудозатратах в день
-    ''' 
-    start_of_month = datetime.now()
-    start_of_month = f"{datetime.strftime(start_of_month, '%Y-%m')}-01"
-    start_of_month = start_of_month + 'T00:00:00+03:00' #начало текущего месяца
-
-    #вытаскиваем все задачи за текущий месяц из РаботыИТС
-    task_work_its = b.get_all('tasks.task.list', {
-    'filter': {
-        '>=CREATED_DATE': start_of_month,
-        'GROUP_ID': '321'
-        }})
-    
-    timespent_report = f'[b]Трудозатраты по работам ИТС за {day_title}[/b]\n\n' #заголовок отчета
-
-    for user_info in users_info:
-        if user_info['ID'] not in except_user:
-
-            user_name = get_fio_from_user_info(user_info)
-
-            task_user = list(filter(lambda x: x['responsibleId'] == user_info['ID'], task_work_its)) #все задачи пользователя
-            tasks_id = list(map(lambda x: x['id'], task_user))
-
-            if task_user:
-
-                #вытаскиваем трудозатраты за сегодня из этих задач
-                timespent_user = list()
-                sec_timespent = 0
-                for i in tasks_id:
-                    results = b.call('task.elapseditem.getlist', {
-                        'TASKID': i,
-                        'order': {'ID': 'asc'},
-                        'filter': {
-                            'USER_ID': user_info['ID'],
-                            '>=CREATED_DATE': report_day}
-                        }, raw=True)['result']
-                    
-                    if results:
-                        timespent_user.extend(results)
-                        for t in results:
-                            sec_timespent += int(t['SECONDS'])
-                
-                if sec_timespent > 0:
-                    count_timespent = len(timespent_user) #количество записей о затратах
-                    sum_timespent = str(timedelta(seconds=sec_timespent)) #сумма затрат
-                    timespent_report += f'{user_name} {sum_timespent} / {count_timespent}\n' #строка с показаниями сотрудника
-    
-            sleep(1)
-    '''
 
     #рассылка от робота задач
-    notification_users = ['1391']
+
+    #notification_users = ['1391']
     #notification_users = [user_info['ID'], '1', '1391']
-    #notification_users = ['chat18303']
+    notification_users = ['chat18303']
     for user in notification_users:
         data = {
             'DIALOG_ID': user,

@@ -108,6 +108,7 @@ def employee_activity_report(req):
                 }})
         text_message += f'Проведено презентаций: {len(presentation)}\n'
 
+
         #сбор инфо по трудозатратам внесенным сегодня
         time_spent = []
         page = 1

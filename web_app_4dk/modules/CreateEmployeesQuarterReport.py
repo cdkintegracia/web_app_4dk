@@ -1235,6 +1235,7 @@ def create_employees_quarter_report(req):
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1761298275'],
             'filter': {
                 'ufCrm41_Provider': float(user_info['ID']),
+                '!ufCrm41_1733668627': '1',
                 '>=ufCrm41_1689101272': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
@@ -1242,10 +1243,11 @@ def create_employees_quarter_report(req):
 
         sold_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328'],
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1761298275'],
             'filter': {
                 '!ufCrm41_ProviderId': False,
                 'assignedById': float(user_info['ID']),
+                '!ufCrm41_1733668627': '1',
                 '>=ufCrm41_1689101272': quarter_filters['start_date'].strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': quarter_filters['end_date'].strftime(ddmmyyyy_pattern)
             }
@@ -1254,13 +1256,20 @@ def create_employees_quarter_report(req):
         sum_provide_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), provide_services)))
 
         if provide_services:
-            list_provide_services = ([{'COMPANY': 'Компания', 'TYPE_PAY': 'Вид расчета', 'OPPORTUNITY': 'Сумма'}]) # 'TYPE_PAY': 'Вид расчета', 
+            list_provide_services = ([{'COMPANY': 'Компания', 'TYPE_PAY': 'Вид расчета', 'OPPORTUNITY': 'Сумма'}])
             for pr_service in provide_services:
                 list_provide_services.append({'COMPANY': pr_service['ufCrm41_1690546413'], 
-                                              'TYPE_PAY': pr_service['ufCrm41_1761298275'], # 'TYPE_PAY': pr_service['ufCrm41_1761298275'],
+                                              'TYPE_PAY': pr_service['ufCrm41_1761298275'],
                                               'OPPORTUNITY': pr_service['ufCrm41_1689101328']}) 
 
         sum_sold_services = sum(list(map(lambda x: float(x['ufCrm41_1689101328'] if x['ufCrm41_1689101328'] else 0.0), sold_services)))
+
+        if sold_services:
+            list_sold_services = ([{'COMPANY': 'Компания', 'TYPE_PAY': 'Вид расчета', 'OPPORTUNITY': 'Сумма'}])
+            for s_service in sold_services:
+                list_sold_services.append({'COMPANY': s_service['ufCrm41_1690546413'], 
+                                                'TYPE_PAY': s_service['ufCrm41_1761298275'],
+                                                'OPPORTUNITY': s_service['ufCrm41_1689101328']}) 
         
         worksheet.append(['Разовые услуги, за месяц', 'Оказано услуг', 'Продано услуг'])
         worksheet.append(['Кол-во', len(provide_services), len(sold_services)])
@@ -1268,8 +1277,15 @@ def create_employees_quarter_report(req):
 
         #детализация по оказанным услугам
         if len(provide_services) > 1:
-            worksheet.append(['', 'Выполненные работы', ''])
+            worksheet.append(['', 'Оказанные услуги', ''])
             for service in list_provide_services:
+                worksheet.append([service['TYPE_PAY'], service['COMPANY'], service['OPPORTUNITY']])
+            worksheet.append([])
+
+        #детализация по проданным услугам
+        if len(sold_services) > 1:
+            worksheet.append(['', 'Проданные услуги', ''])
+            for service in list_sold_services:
                 worksheet.append([service['TYPE_PAY'], service['COMPANY'], service['OPPORTUNITY']])
         worksheet.append([])
 

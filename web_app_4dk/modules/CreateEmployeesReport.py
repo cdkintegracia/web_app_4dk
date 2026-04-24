@@ -1602,7 +1602,7 @@ def create_employees_report(req):
 
         sold_services = b.get_all('crm.item.list', {
             'entityTypeId': 161,
-            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413'],
+            'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1761298275'],
             'filter': {
                 '!ufCrm41_ProviderId': False,
                 'assignedById': float(user_info['ID']),

@@ -1595,6 +1595,7 @@ def create_employees_report(req):
             'select': ['assignedById', 'ufCrm41_Provider', 'ufCrm41_1689101328', 'ufCrm41_1690546413', 'ufCrm41_1761298275'],
             'filter': {
                 'ufCrm41_Provider': float(user_info['ID']),
+                '!ufCrm41_1733668627': '1',
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern)
             }
@@ -1606,6 +1607,7 @@ def create_employees_report(req):
             'filter': {
                 '!ufCrm41_ProviderId': False,
                 'assignedById': float(user_info['ID']),
+                '!ufCrm41_1733668627': '1',
                 '>=ufCrm41_1689101272': month_filter_start.strftime(ddmmyyyy_pattern),
                 '<ufCrm41_1689101272': month_filter_end.strftime(ddmmyyyy_pattern)
             }

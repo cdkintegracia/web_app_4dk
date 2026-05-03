@@ -72,11 +72,11 @@ def get_task_company_id(task_info):
 
 def get_task_url(task_info):
     """Формируем ссылку на задачу."""
-    task_id = task_info['id']
-    group_id = task_info.get('groupId')
-    responsible_id = task_info.get('responsibleId')
+    task_id = task_info.get('id') or task_info.get('ID')
+    group_id = task_info.get('groupId') or task_info.get('GROUP_ID')
+    responsible_id = task_info.get('responsibleId') or task_info.get('RESPONSIBLE_ID')
 
-    if group_id and group_id != '0':
+    if group_id and str(group_id) != '0':
         return f'{BITRIX_DOMAIN}/workgroups/group/{group_id}/tasks/task/view/{task_id}/'
 
     return f'{BITRIX_DOMAIN}/company/personal/user/{responsible_id}/tasks/task/view/{task_id}/'
@@ -102,7 +102,7 @@ def get_task_tags(task_id):
 
 def remove_task_tags(task_info, tags_to_remove):
     """Удаляем служебные теги, остальные теги сохраняем."""
-    task_id = task_info['id']
+    task_id = task_info.get('id') or task_info.get('ID')
     current_tags = get_task_tags(task_id)
 
     if not current_tags:
@@ -134,13 +134,43 @@ def get_task(task_id):
     return task_response['task']
 
 
+def normalize_task_list_response(response):
+    """
+    Приводим ответ tasks.task.list к списку задач.
+
+    В разных местах/обертках Bitrix может вернуть:
+    - сразу список задач;
+    - словарь {'tasks': [...], 'total': ...};
+    - словарь {'result': {'tasks': [...]}};
+    - пустой результат.
+    """
+    if not response:
+        return []
+
+    if isinstance(response, list):
+        return response
+
+    if isinstance(response, dict):
+        if isinstance(response.get('tasks'), list):
+            return response.get('tasks')
+
+        result = response.get('result')
+        if isinstance(result, dict) and isinstance(result.get('tasks'), list):
+            return result.get('tasks')
+
+        if isinstance(result, list):
+            return result
+
+    return []
+
+
 def find_blocked_lk_tasks(company_id):
     """
     Ищем отложенные задачи ЛК по компании.
     По тегу здесь не фильтруем, чтобы не зависеть от особенностей фильтра задач Битрикс24.
     Тег проверяем отдельно по каждой найденной задаче.
     """
-    tasks = send_bitrix_request('tasks.task.list', {
+    tasks_response = send_bitrix_request('tasks.task.list', {
         'order': {
             'ID': 'DESC'
         },
@@ -152,12 +182,21 @@ def find_blocked_lk_tasks(company_id):
         'select': ['ID', 'TITLE', 'GROUP_ID', 'STAGE_ID', 'RESPONSIBLE_ID', 'UF_CRM_TASK', 'STATUS']
     })
 
+    tasks = normalize_task_list_response(tasks_response)
+
     if not tasks:
         return []
 
     blocked_tasks = []
     for task in tasks:
-        tags = get_task_tags(task['id'])
+        if not isinstance(task, dict):
+            continue
+
+        task_id = task.get('id') or task.get('ID')
+        if not task_id:
+            continue
+
+        tags = get_task_tags(task_id)
         if TAG_LIMIT_BLOCK in tags:
             blocked_tasks.append(task)
 
@@ -170,7 +209,7 @@ def unlock_lk_task(lk_task, overlimit_task):
     overlimit_url = get_task_url(overlimit_task)
 
     send_bitrix_request('tasks.task.update', {
-        'taskId': lk_task['id'],
+        'taskId': lk_task.get('id') or lk_task.get('ID'),
         'fields': {
             'STAGE_ID': LK_STAGE_NEW
         }
@@ -179,7 +218,7 @@ def unlock_lk_task(lk_task, overlimit_task):
     remove_task_tags(lk_task, [TAG_LIMIT_BLOCK])
 
     add_task_comment(
-        lk_task['id'],
+        lk_task.get('id') or lk_task.get('ID'),
         f'Задача автоматически возвращена в стадию "Новые".\n\n'
         f'По превышению принято решение, стадия задачи превышения: {overlimit_stage_id}.\n'
         f'Задача превышения:\n{overlimit_url}'
@@ -230,7 +269,7 @@ def unlock_lk_tasks_by_overlimit(req):
 
         if unlocked_urls:
             add_task_comment(
-                overlimit_task['id'],
+                overlimit_task.get('id') or overlimit_task.get('ID'),
                 'Автоматически возвращены в работу задачи ЛК:\n' + '\n'.join(unlocked_urls)
             )
 

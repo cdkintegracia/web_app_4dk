@@ -28,6 +28,30 @@ TAG_LIMIT_BLOCK = 'БлокЛимита'
 TAG_FORBID_LK = 'ЗапретЛК'
 
 BITRIX_DOMAIN = 'https://vc4dk.bitrix24.ru'
+LK_LIMIT_DEBUG = True
+
+
+# LK_LIMIT_LOG_PATH не используется: отладка идет через print
+
+
+def lk_limit_log(message, data=None):
+    """Отладочный вывод только для механизма контроля лимитов ЛК.
+    Пишем только в stdout/консоль, без файлов логов.
+    """
+    if not LK_LIMIT_DEBUG:
+        return
+
+    try:
+        log_data = ''
+        if data is not None:
+            try:
+                log_data = ' | data=' + json.dumps(data, ensure_ascii=False, default=str)
+            except Exception:
+                log_data = ' | data=' + str(data)
+
+        print(f"[LK_LIMIT] {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {message}{log_data}", flush=True)
+    except Exception as e:
+        print(f"[LK_LIMIT] Error in lk_limit_log: {e}", flush=True)
 
 
 def has_lk_overlimit(value):
@@ -102,20 +126,37 @@ def get_task_url(task_info):
 
 def add_task_comment(task_id, message):
     """Добавляем комментарий к задаче."""
-    send_bitrix_request('task.commentitem.add', {
+    lk_limit_log('add_task_comment: before request', {'task_id': task_id, 'message_preview': message[:300]})
+    result = send_bitrix_request('task.commentitem.add', {
         'TASKID': task_id,
         'FIELDS': {
             'POST_MESSAGE': message
         }
     })
+    lk_limit_log('add_task_comment: after request', {'task_id': task_id, 'result': result})
+    return result
+
+
+def normalize_tags_response(tags):
+    if not tags:
+        return []
+    if isinstance(tags, list):
+        return tags
+    if isinstance(tags, dict):
+        result = tags.get('result')
+        if isinstance(result, list):
+            return result
+        if isinstance(tags.get('tags'), list):
+            return tags.get('tags')
+    return []
 
 
 def get_task_tags(task_id):
     """Получаем теги задачи. Если получить не удалось, возвращаем пустой список."""
     tags = send_bitrix_request('task.item.gettags', {'taskId': task_id})
-    if not tags:
-        return []
-    return tags
+    normalized_tags = normalize_tags_response(tags)
+    lk_limit_log('get_task_tags', {'task_id': task_id, 'raw': tags, 'normalized': normalized_tags})
+    return normalized_tags
 
 
 def update_task_tags(task_info, tags_to_add):
@@ -127,12 +168,15 @@ def update_task_tags(task_info, tags_to_add):
         if tag not in current_tags:
             current_tags.append(tag)
 
-    send_bitrix_request('tasks.task.update', {
+    lk_limit_log('update_task_tags: before request', {'task_id': task_id, 'tags': current_tags})
+    result = send_bitrix_request('tasks.task.update', {
         'taskId': task_id,
         'fields': {
             'TAGS': current_tags
         }
     })
+    lk_limit_log('update_task_tags: after request', {'task_id': task_id, 'result': result})
+    return result
 
 
 def find_active_overlimit_task(company_id):
@@ -140,7 +184,7 @@ def find_active_overlimit_task(company_id):
     Ищем последнюю незакрытую задачу превышения по компании.
     Закрывающие стадии: Простили, Выставлен счет.
     """
-    overlimit_tasks = send_bitrix_request('tasks.task.list', {
+    request_payload = {
         'order': {
             'ID': 'DESC'
         },
@@ -150,9 +194,27 @@ def find_active_overlimit_task(company_id):
             '!STAGE_ID': list(OVERLIMIT_CLOSED_STAGES)
         },
         'select': ['ID', 'TITLE', 'GROUP_ID', 'STAGE_ID', 'RESPONSIBLE_ID', 'UF_CRM_TASK', 'STATUS', 'CREATED_DATE']
-    })
+    }
+    lk_limit_log('find_active_overlimit_task: before tasks.task.list', request_payload)
 
-    overlimit_tasks = normalize_task_list_response(overlimit_tasks)
+    overlimit_tasks_response = send_bitrix_request('tasks.task.list', request_payload)
+    lk_limit_log('find_active_overlimit_task: raw response', overlimit_tasks_response)
+
+    overlimit_tasks = normalize_task_list_response(overlimit_tasks_response)
+    lk_limit_log('find_active_overlimit_task: normalized', {
+        'company_id': company_id,
+        'count': len(overlimit_tasks),
+        'tasks_short': [
+            {
+                'id': task.get('id') or task.get('ID'),
+                'stageId': task.get('stageId') or task.get('STAGE_ID'),
+                'groupId': task.get('groupId') or task.get('GROUP_ID'),
+                'title': task.get('title') or task.get('TITLE'),
+            }
+            for task in overlimit_tasks[:5]
+            if isinstance(task, dict)
+        ]
+    })
 
     if not overlimit_tasks:
         return None
@@ -166,71 +228,124 @@ def handle_lk_limit_control(task_info, company_id, company_info, event):
     Работает только для группы ЛК и только при отрицательном остатке ЛК в карточке компании.
     """
     try:
+        lk_limit_log('handle_lk_limit_control: start', {
+            'event': event,
+            'task_id': task_info.get('id'),
+            'task_title': task_info.get('title'),
+            'task_group_id': task_info.get('groupId'),
+            'task_stage_id': task_info.get('stageId'),
+            'company_id': company_id,
+            'company_title': company_info.get('TITLE') if isinstance(company_info, dict) else None,
+            'lk_remain': company_info.get(COMPANY_LK_REMAIN_FIELD) if isinstance(company_info, dict) else None,
+            'ufCrmTask': task_info.get('ufCrmTask'),
+        })
+
         if event != 'ONTASKADD':
+            lk_limit_log('handle_lk_limit_control: stop - event is not ONTASKADD', {'event': event})
             return
 
-        if task_info.get('groupId') != GROUP_LK:
+        if str(task_info.get('groupId')) != GROUP_LK:
+            lk_limit_log('handle_lk_limit_control: stop - task group is not LK', {
+                'task_group_id': task_info.get('groupId'),
+                'expected_group_id': GROUP_LK
+            })
             return
 
         if not company_id or not company_info:
+            lk_limit_log('handle_lk_limit_control: stop - no company_id or company_info', {
+                'company_id': company_id,
+                'company_info_exists': bool(company_info)
+            })
             return
 
         lk_remain = company_info.get(COMPANY_LK_REMAIN_FIELD)
         if not has_lk_overlimit(lk_remain):
+            lk_limit_log('handle_lk_limit_control: stop - lk_remain is not negative', {'lk_remain': lk_remain})
             return
 
         overlimit_task = find_active_overlimit_task(company_id)
         if not overlimit_task:
+            lk_limit_log('handle_lk_limit_control: stop - no active overlimit task found', {'company_id': company_id})
             return
 
         overlimit_stage_id = str(overlimit_task.get('stageId') or overlimit_task.get('STAGE_ID') or '')
+        overlimit_task_id = overlimit_task.get('id') or overlimit_task.get('ID')
         lk_task_url = get_task_url(task_info)
         overlimit_task_url = get_task_url(overlimit_task)
         company_title = company_info.get('TITLE', '')
 
+        lk_limit_log('handle_lk_limit_control: active overlimit task found', {
+            'overlimit_task_id': overlimit_task_id,
+            'overlimit_stage_id': overlimit_stage_id,
+            'overlimit_task_url': overlimit_task_url
+        })
+
         if overlimit_stage_id in OVERLIMIT_STAGE_NEW:
+            lk_limit_log('handle_lk_limit_control: action - block LK task to deferred', {
+                'lk_task_id': task_info['id'],
+                'target_stage': LK_STAGE_DEFERRED
+            })
             update_task_tags(task_info, [TAG_LIMIT_BLOCK])
-            send_bitrix_request('tasks.task.update', {
+            update_result = send_bitrix_request('tasks.task.update', {
                 'taskId': task_info['id'],
                 'fields': {
                     'STAGE_ID': LK_STAGE_DEFERRED
                 }
             })
+            lk_limit_log('handle_lk_limit_control: LK task update result', update_result)
             add_task_comment(task_info['id'],
                              f'Задача автоматически переведена в стадию "Отложено".\n\n'
                              f'По клиенту {company_title} зафиксировано превышение лимита ЛК.\n'
                              f'Ожидается решение менеджера по задаче превышения:\n{overlimit_task_url}')
-            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
+            add_task_comment(overlimit_task_id,
                              f'Автоматически заблокирована задача ЛК:\n{lk_task_url}\n\n'
                              f'Причина: задача превышения находится в стадии "Новое".')
 
         elif overlimit_stage_id == OVERLIMIT_STAGE_CONTROL:
-            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
+            lk_limit_log('handle_lk_limit_control: action - log LK task to overlimit task / control', {
+                'lk_task_id': task_info['id']
+            })
+            add_task_comment(overlimit_task_id,
                              f'Создана новая задача ЛК по клиенту {company_title}:\n{lk_task_url}\n\n'
                              f'Текущий режим: На контроле.')
 
         elif overlimit_stage_id == OVERLIMIT_STAGE_PAID_SOON:
-            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
+            lk_limit_log('handle_lk_limit_control: action - log LK task to overlimit task / paid soon', {
+                'lk_task_id': task_info['id']
+            })
+            add_task_comment(overlimit_task_id,
                              f'Создана новая задача ЛК по клиенту {company_title}:\n{lk_task_url}\n\n'
                              f'Текущий режим: Будет платно.')
 
         elif overlimit_stage_id == OVERLIMIT_STAGE_FORBID_LK:
+            lk_limit_log('handle_lk_limit_control: action - close LK task without solution', {
+                'lk_task_id': task_info['id'],
+                'target_stage': LK_STAGE_CLOSED_WITHOUT_SOLUTION
+            })
             update_task_tags(task_info, [TAG_FORBID_LK])
-            send_bitrix_request('tasks.task.update', {
+            update_result = send_bitrix_request('tasks.task.update', {
                 'taskId': task_info['id'],
                 'fields': {
                     'STAGE_ID': LK_STAGE_CLOSED_WITHOUT_SOLUTION
                 }
             })
+            lk_limit_log('handle_lk_limit_control: LK task update result', update_result)
             add_task_comment(task_info['id'],
                              f'Задача автоматически переведена в стадию "Закрыто без решения".\n\n'
                              f'По клиенту {company_title} действует запрет ЛК.\n'
                              f'Задача превышения:\n{overlimit_task_url}')
-            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
+            add_task_comment(overlimit_task_id,
                              f'Автоматически заблокирована задача ЛК:\n{lk_task_url}\n\n'
                              f'Причина: задача превышения находится в стадии "Запрет ЛК".')
 
+        else:
+            lk_limit_log('handle_lk_limit_control: stop - unsupported overlimit stage', {
+                'overlimit_stage_id': overlimit_stage_id,
+                'overlimit_task_id': overlimit_task_id
+            })
+
     except Exception as e:
+        lk_limit_log('handle_lk_limit_control: exception', {'error': str(e)})
         print(f"Error in LK limit control: {e}")
 
 

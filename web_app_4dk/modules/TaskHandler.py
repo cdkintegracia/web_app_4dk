@@ -28,6 +28,8 @@ TAG_LIMIT_BLOCK = 'БлокЛимита'
 TAG_FORBID_LK = 'ЗапретЛК'
 TAG_LIMIT_PROCESSED = 'ЛК_Превышение_Учтено'
 
+LK_CONNECT_TITLE_PREFIX = '1С: Коннект'
+
 BITRIX_DOMAIN = 'https://vc4dk.bitrix24.ru'
 
 
@@ -176,6 +178,14 @@ def handle_lk_limit_control(task_info, company_id, company_info, event):
 
         if str(task_info.get('groupId')) != GROUP_LK:
             return
+
+        # 2026-05-03 Контроль превышения лимитов ЛК -- ИСКЛЮЧЕНИЕ ДЛЯ 1С: КОННЕКТ -- НАЧАЛО
+        # Особая категория задач в группе ЛК: задачи с названием, начинающимся с "1С: Коннект".
+        # Их не трогаем логикой превышения лимитов, чтобы они отрабатывали по старому процессу.
+        task_title = str(task_info.get('title') or '')
+        if task_title.strip().startswith(LK_CONNECT_TITLE_PREFIX):
+            return
+        # 2026-05-03 Контроль превышения лимитов ЛК -- ИСКЛЮЧЕНИЕ ДЛЯ 1С: КОННЕКТ -- КОНЕЦ
 
         task_stage_id = str(task_info.get('stageId') or '')
         task_id = str(task_info.get('id') or '')

@@ -44,6 +44,35 @@ def has_lk_overlimit(value):
     return value.startswith('-')
 
 
+def normalize_task_list_response(response):
+    """
+    В разных обертках Bitrix tasks.task.list может возвращать:
+    - список задач;
+    - {'tasks': [...], 'total': ...};
+    - {'result': {'tasks': [...]}};
+    - {'result': [...]}.
+    Для дальнейшей логики всегда приводим к списку.
+    """
+    if not response:
+        return []
+
+    if isinstance(response, list):
+        return response
+
+    if isinstance(response, dict):
+        if isinstance(response.get('tasks'), list):
+            return response.get('tasks')
+
+        result = response.get('result')
+        if isinstance(result, dict) and isinstance(result.get('tasks'), list):
+            return result.get('tasks')
+
+        if isinstance(result, list):
+            return result
+
+    return []
+
+
 def get_task_company_id(task_info):
     """
     Берем компанию из штатной CRM-привязки задачи.
@@ -61,11 +90,11 @@ def get_task_company_id(task_info):
 
 def get_task_url(task_info):
     """Формируем ссылку на задачу."""
-    task_id = task_info['id']
-    group_id = task_info.get('groupId')
-    responsible_id = task_info.get('responsibleId')
+    task_id = task_info.get('id') or task_info.get('ID')
+    group_id = task_info.get('groupId') or task_info.get('GROUP_ID')
+    responsible_id = task_info.get('responsibleId') or task_info.get('RESPONSIBLE_ID')
 
-    if group_id and group_id != '0':
+    if group_id and str(group_id) != '0':
         return f'{BITRIX_DOMAIN}/workgroups/group/{group_id}/tasks/task/view/{task_id}/'
 
     return f'{BITRIX_DOMAIN}/company/personal/user/{responsible_id}/tasks/task/view/{task_id}/'
@@ -123,6 +152,8 @@ def find_active_overlimit_task(company_id):
         'select': ['ID', 'TITLE', 'GROUP_ID', 'STAGE_ID', 'RESPONSIBLE_ID', 'UF_CRM_TASK', 'STATUS', 'CREATED_DATE']
     })
 
+    overlimit_tasks = normalize_task_list_response(overlimit_tasks)
+
     if not overlimit_tasks:
         return None
 
@@ -152,7 +183,7 @@ def handle_lk_limit_control(task_info, company_id, company_info, event):
         if not overlimit_task:
             return
 
-        overlimit_stage_id = str(overlimit_task.get('stageId', ''))
+        overlimit_stage_id = str(overlimit_task.get('stageId') or overlimit_task.get('STAGE_ID') or '')
         lk_task_url = get_task_url(task_info)
         overlimit_task_url = get_task_url(overlimit_task)
         company_title = company_info.get('TITLE', '')
@@ -169,17 +200,17 @@ def handle_lk_limit_control(task_info, company_id, company_info, event):
                              f'Задача автоматически переведена в стадию "Отложено".\n\n'
                              f'По клиенту {company_title} зафиксировано превышение лимита ЛК.\n'
                              f'Ожидается решение менеджера по задаче превышения:\n{overlimit_task_url}')
-            add_task_comment(overlimit_task['id'],
+            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
                              f'Автоматически заблокирована задача ЛК:\n{lk_task_url}\n\n'
                              f'Причина: задача превышения находится в стадии "Новое".')
 
         elif overlimit_stage_id == OVERLIMIT_STAGE_CONTROL:
-            add_task_comment(overlimit_task['id'],
+            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
                              f'Создана новая задача ЛК по клиенту {company_title}:\n{lk_task_url}\n\n'
                              f'Текущий режим: На контроле.')
 
         elif overlimit_stage_id == OVERLIMIT_STAGE_PAID_SOON:
-            add_task_comment(overlimit_task['id'],
+            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
                              f'Создана новая задача ЛК по клиенту {company_title}:\n{lk_task_url}\n\n'
                              f'Текущий режим: Будет платно.')
 
@@ -195,7 +226,7 @@ def handle_lk_limit_control(task_info, company_id, company_info, event):
                              f'Задача автоматически переведена в стадию "Закрыто без решения".\n\n'
                              f'По клиенту {company_title} действует запрет ЛК.\n'
                              f'Задача превышения:\n{overlimit_task_url}')
-            add_task_comment(overlimit_task['id'],
+            add_task_comment(overlimit_task.get('id') or overlimit_task.get('ID'),
                              f'Автоматически заблокирована задача ЛК:\n{lk_task_url}\n\n'
                              f'Причина: задача превышения находится в стадии "Запрет ЛК".')
 

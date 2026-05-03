@@ -244,14 +244,24 @@ def block_method():
 
 # Обработчик стандартных вебхуков Битрикс
 @app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
+#def default_webhook():
+#    #update_logs("Получен дефолтный вебхук", request.form)
+#    if request.form['event'] == 'ONTASKADD':
+#        default_webhooks[request.form['event']](request.form, event='ONTASKADD')
+#    else:
+#        default_webhooks[request.form['event']](request.form)
+#    return 'OK'
+#2026-05-03 ИБС
+@app.route('/bitrix/default_webhook', methods=['POST', 'HEAD'])
 def default_webhook():
-    #update_logs("Получен дефолтный вебхук", request.form)
-    if request.form['event'] == 'ONTASKADD':
-        default_webhooks[request.form['event']](request.form, event='ONTASKADD')
-    else:
-        default_webhooks[request.form['event']](request.form)
-    return 'OK'
+    event = request.form.get('event')
 
+    if event in ['ONTASKADD', 'ONTASKUPDATE']:
+        default_webhooks[event](request.form, event=event)
+    else:
+        default_webhooks[event](request.form)
+
+    return 'OK'
 
 # Обработчик кастомных вебхуков Битрикс
 @app.route('/bitrix/custom_webhook', methods=['POST', 'HEAD'])

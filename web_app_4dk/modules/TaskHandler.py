@@ -240,16 +240,53 @@ def handle_lk_limit_control(task_info, company_id, company_info, event):
             'ufCrmTask': task_info.get('ufCrmTask'),
         })
 
-        if event != 'ONTASKADD':
-            lk_limit_log('handle_lk_limit_control: stop - event is not ONTASKADD', {'event': event})
+        if event not in ['ONTASKADD', 'ONTASKUPDATE']:
+            lk_limit_log('handle_lk_limit_control: stop - event is not supported', {
+                'event': event
+            })
             return
 
         if str(task_info.get('groupId')) != GROUP_LK:
             lk_limit_log('handle_lk_limit_control: stop - task group is not LK', {
-                'task_group_id': task_info.get('groupId'),
-                'expected_group_id': GROUP_LK
+                'groupId': task_info.get('groupId')
             })
             return
+
+        # 2026-05-03 Контроль превышения лимитов ЛК -- ЗАЩИТА ОТ ПОВТОРНОЙ ОБРАБОТКИ -- НАЧАЛО
+
+        task_stage_id = str(task_info.get('stageId') or '')
+        task_id = str(task_info.get('id') or '')
+
+        # Если задача уже переведена в "Закрыто без решения", повторно ее не трогаем
+        if task_stage_id == LK_STAGE_CLOSED_WITHOUT_SOLUTION:
+            lk_limit_log('handle_lk_limit_control: stop - task already closed without solution', {
+                'task_id': task_id,
+                'stageId': task_stage_id
+            })
+            return
+
+        # Теги читаем только после того, как убедились, что это задача ЛК
+        task_tags = get_task_tags(task_id)
+
+        # Если задача уже отложена из-за блока лимита — повторно не обрабатываем
+        if task_stage_id == LK_STAGE_DEFERRED and TAG_LIMIT_BLOCK in task_tags:
+            lk_limit_log('handle_lk_limit_control: stop - task already blocked by limit', {
+                'task_id': task_id,
+                'stageId': task_stage_id,
+                'tags': task_tags
+            })
+            return
+
+        # Если задача уже помечена как запрет ЛК — повторно не обрабатываем
+        if TAG_FORBID_LK in task_tags:
+            lk_limit_log('handle_lk_limit_control: stop - task already marked as forbidden LK', {
+                'task_id': task_id,
+                'stageId': task_stage_id,
+                'tags': task_tags
+            })
+            return
+
+        # 2026-05-03 Контроль превышения лимитов ЛК -- ЗАЩИТА ОТ ПОВТОРНОЙ ОБРАБОТКИ -- КОНЕЦ
 
         if not company_id or not company_info:
             lk_limit_log('handle_lk_limit_control: stop - no company_id or company_info', {

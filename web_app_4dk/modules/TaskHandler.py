@@ -6,6 +6,205 @@ import json
 from web_app_4dk.tools import send_bitrix_request
 from web_app_4dk.chat_bot.SendMessage import bot_send_message
 
+# 2026-05-03 Контроль превышения лимитов ЛК -- НАЧАЛО
+GROUP_LK = '7'
+GROUP_OVERLIMIT = '87'
+
+LK_STAGE_DEFERRED = '73'
+LK_STAGE_CLOSED_WITHOUT_SOLUTION = '207'
+
+OVERLIMIT_STAGE_NEW = {'0', '1255'}
+OVERLIMIT_STAGE_CONTROL = '2952'
+OVERLIMIT_STAGE_PAID_SOON = '2954'
+OVERLIMIT_STAGE_FORBID_LK = '2956'
+OVERLIMIT_STAGE_INVOICE_SENT = '2958'
+OVERLIMIT_STAGE_FORGIVEN = '1259'
+
+OVERLIMIT_CLOSED_STAGES = {OVERLIMIT_STAGE_INVOICE_SENT, OVERLIMIT_STAGE_FORGIVEN}
+
+COMPANY_LK_REMAIN_FIELD = 'UF_CRM_1769494545'
+
+TAG_LIMIT_BLOCK = 'БлокЛимита'
+TAG_FORBID_LK = 'ЗапретЛК'
+
+BITRIX_DOMAIN = 'https://vc4dk.bitrix24.ru'
+
+
+def has_lk_overlimit(value):
+    """
+    Проверяем поле компании "Остаток ЛК в этом месяце".
+    Поле хранится как строка формата '01:00:00' или '-00:15:30'.
+    Триггеримся только на отрицательное значение.
+    Пустое поле, 00:00:00 и положительные значения считаем нормой.
+    """
+    if not value:
+        return False
+
+    value = str(value).strip()
+    return value.startswith('-')
+
+
+def get_task_company_id(task_info):
+    """
+    Берем компанию из штатной CRM-привязки задачи.
+    Возвращает строковый ID компании без префикса CO_.
+    """
+    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']:
+        return ''
+
+    company_crm = list(filter(lambda x: 'CO_' in x, task_info['ufCrmTask']))
+    if company_crm:
+        return company_crm[0][3:]
+
+    return ''
+
+
+def get_task_url(task_info):
+    """Формируем ссылку на задачу."""
+    task_id = task_info['id']
+    group_id = task_info.get('groupId')
+    responsible_id = task_info.get('responsibleId')
+
+    if group_id and group_id != '0':
+        return f'{BITRIX_DOMAIN}/workgroups/group/{group_id}/tasks/task/view/{task_id}/'
+
+    return f'{BITRIX_DOMAIN}/company/personal/user/{responsible_id}/tasks/task/view/{task_id}/'
+
+
+def add_task_comment(task_id, message):
+    """Добавляем комментарий к задаче."""
+    send_bitrix_request('task.commentitem.add', {
+        'TASKID': task_id,
+        'FIELDS': {
+            'POST_MESSAGE': message
+        }
+    })
+
+
+def get_task_tags(task_id):
+    """Получаем теги задачи. Если получить не удалось, возвращаем пустой список."""
+    tags = send_bitrix_request('task.item.gettags', {'taskId': task_id})
+    if not tags:
+        return []
+    return tags
+
+
+def update_task_tags(task_info, tags_to_add):
+    """Добавляем теги без удаления существующих."""
+    task_id = task_info['id']
+    current_tags = get_task_tags(task_id)
+
+    for tag in tags_to_add:
+        if tag not in current_tags:
+            current_tags.append(tag)
+
+    send_bitrix_request('tasks.task.update', {
+        'taskId': task_id,
+        'fields': {
+            'TAGS': current_tags
+        }
+    })
+
+
+def find_active_overlimit_task(company_id):
+    """
+    Ищем последнюю незакрытую задачу превышения по компании.
+    Закрывающие стадии: Простили, Выставлен счет.
+    """
+    overlimit_tasks = send_bitrix_request('tasks.task.list', {
+        'order': {
+            'ID': 'DESC'
+        },
+        'filter': {
+            'GROUP_ID': GROUP_OVERLIMIT,
+            'UF_CRM_TASK': ['CO_' + company_id],
+            '!STAGE_ID': list(OVERLIMIT_CLOSED_STAGES)
+        },
+        'select': ['ID', 'TITLE', 'GROUP_ID', 'STAGE_ID', 'RESPONSIBLE_ID', 'UF_CRM_TASK', 'STATUS', 'CREATED_DATE']
+    })
+
+    if not overlimit_tasks:
+        return None
+
+    return overlimit_tasks[0]
+
+
+def handle_lk_limit_control(task_info, company_id, company_info, event):
+    """
+    Контроль задач ЛК при превышении лимита.
+    Работает только для группы ЛК и только при отрицательном остатке ЛК в карточке компании.
+    """
+    try:
+        if event != 'ONTASKADD':
+            return
+
+        if task_info.get('groupId') != GROUP_LK:
+            return
+
+        if not company_id or not company_info:
+            return
+
+        lk_remain = company_info.get(COMPANY_LK_REMAIN_FIELD)
+        if not has_lk_overlimit(lk_remain):
+            return
+
+        overlimit_task = find_active_overlimit_task(company_id)
+        if not overlimit_task:
+            return
+
+        overlimit_stage_id = str(overlimit_task.get('stageId', ''))
+        lk_task_url = get_task_url(task_info)
+        overlimit_task_url = get_task_url(overlimit_task)
+        company_title = company_info.get('TITLE', '')
+
+        if overlimit_stage_id in OVERLIMIT_STAGE_NEW:
+            update_task_tags(task_info, [TAG_LIMIT_BLOCK])
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_info['id'],
+                'fields': {
+                    'STAGE_ID': LK_STAGE_DEFERRED
+                }
+            })
+            add_task_comment(task_info['id'],
+                             f'Задача автоматически переведена в стадию "Отложено".\n\n'
+                             f'По клиенту {company_title} зафиксировано превышение лимита ЛК.\n'
+                             f'Ожидается решение менеджера по задаче превышения:\n{overlimit_task_url}')
+            add_task_comment(overlimit_task['id'],
+                             f'Автоматически заблокирована задача ЛК:\n{lk_task_url}\n\n'
+                             f'Причина: задача превышения находится в стадии "Новое".')
+
+        elif overlimit_stage_id == OVERLIMIT_STAGE_CONTROL:
+            add_task_comment(overlimit_task['id'],
+                             f'Создана новая задача ЛК по клиенту {company_title}:\n{lk_task_url}\n\n'
+                             f'Текущий режим: На контроле.')
+
+        elif overlimit_stage_id == OVERLIMIT_STAGE_PAID_SOON:
+            add_task_comment(overlimit_task['id'],
+                             f'Создана новая задача ЛК по клиенту {company_title}:\n{lk_task_url}\n\n'
+                             f'Текущий режим: Будет платно.')
+
+        elif overlimit_stage_id == OVERLIMIT_STAGE_FORBID_LK:
+            update_task_tags(task_info, [TAG_FORBID_LK])
+            send_bitrix_request('tasks.task.update', {
+                'taskId': task_info['id'],
+                'fields': {
+                    'STAGE_ID': LK_STAGE_CLOSED_WITHOUT_SOLUTION
+                }
+            })
+            add_task_comment(task_info['id'],
+                             f'Задача автоматически переведена в стадию "Закрыто без решения".\n\n'
+                             f'По клиенту {company_title} действует запрет ЛК.\n'
+                             f'Задача превышения:\n{overlimit_task_url}')
+            add_task_comment(overlimit_task['id'],
+                             f'Автоматически заблокирована задача ЛК:\n{lk_task_url}\n\n'
+                             f'Причина: задача превышения находится в стадии "Запрет ЛК".')
+
+    except Exception as e:
+        print(f"Error in LK limit control: {e}")
+
+
+# 2026-05-03 Контроль превышения лимитов ЛК -- КОНЕЦ
+
 
 def send_notification(task_info, notification_type):
     users_notification_list = ['339']
@@ -27,7 +226,8 @@ def send_notification(task_info, notification_type):
                 send_bitrix_request('im.notify.system.add', {'USER_ID': '1',
                                                              'MESSAGE': f"Завершена задача, в которой вы являетесь наблюдателем:\nhttps://vc4dk.bitrix24.ru/company/personal/user/{user}/tasks/task/view/{task_id}/"})
                 if not flag:
-                    send_bitrix_request('tasks.task.update', {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
+                    send_bitrix_request('tasks.task.update',
+                                        {'taskId': task_info['id'], 'fields': {'UF_AUTO_934103382947': '1'}})
                     flag = True
 
 
@@ -39,7 +239,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
         '1': 'ТЛП',
         '7': 'ЛК',
     }
-    time_filter = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S') #вычитаем из тек даты 1 час
+    time_filter = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')  # вычитаем из тек даты 1 час
 
     similar_tasks = send_bitrix_request('tasks.task.list', {
         'filter': {
@@ -53,7 +253,9 @@ def check_similar_tasks_this_hour(task_info, company_id):
     if not similar_tasks:
         return
 
-    similar_tasks_url = '\n'.join(tuple(map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/", similar_tasks)))
+    similar_tasks_url = '\n'.join(tuple(
+        map(lambda x: f"https://vc4dk.bitrix24.ru/workgroups/group/{task_info['groupId']}/tasks/task/view/{x['id']}/",
+            similar_tasks)))
     if similar_tasks:
         for user_id in users_id:
             send_bitrix_request('im.notify.system.add', {
@@ -67,7 +269,7 @@ def check_similar_tasks_this_hour(task_info, company_id):
 def task_registry(task_info, event):
     sleep(randint(1, 30))
     task_status = {
-        "2": 343, #поле в реестре задач Статусзадачи, у каждого знч поля есть свой id
+        "2": 343,  # поле в реестре задач Статусзадачи, у каждого знч поля есть свой id
         "-1": 345,
         "-3": 347,
         "3": 349,
@@ -77,17 +279,13 @@ def task_registry(task_info, event):
     }
 
     if task_info['groupId'] and task_info['groupId'] != '0':
-        groupid=task_info['groupId']
-        taskinfo=task_info['id']
+        groupid = task_info['groupId']
+        taskinfo = task_info['id']
         task_url = f'<a href="https://vc4dk.bitrix24.ru/workgroups/group/{groupid}/tasks/task/view/{taskinfo}/">Ссылка на задачу</a>'
     else:
         respid = task_info['responsibleId']
-        taskinfo=task_info['id']
+        taskinfo = task_info['id']
         task_url = f'<a href="https://vc4dk.bitrix24.ru/company/personal/user/{respid}/tasks/task/view/{taskinfo}/">Ссылка на задачу</a>'
-
-
-
-
 
     company_id = ''
     contact_id = ''
@@ -97,30 +295,31 @@ def task_registry(task_info, event):
             company_id = ufCrmCompany[0][3:]
 
         ufCrmContact = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
-        #print(task_info)
+        # print(task_info)
         if ufCrmContact:
             contact_id = ufCrmContact[0][2:]
 
-
-    groups = send_bitrix_request('sonet_group.get', {})  #получили инфо по всем группам, что есть на портале
+    groups = send_bitrix_request('sonet_group.get', {})  # получили инфо по всем группам, что есть на портале
     try:
-        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0]['NAME'] # ищем по id группу и берем ее название
+        group_name = list(filter(lambda x: task_info['groupId'] == x['ID'], groups))[0][
+            'NAME']  # ищем по id группу и берем ее название
     except:
         group_name = ''
 
     tags = send_bitrix_request('task.item.gettags', {'taskId': task_info['id']})
     if tags:
-        tags = ', '.join(tags) #изначально теги в виде листа, а этой операцией мы переделываем в строку с сепаратором ,
+        tags = ', '.join(
+            tags)  # изначально теги в виде листа, а этой операцией мы переделываем в строку с сепаратором ,
     else:
         tags = ''
-    registry_element = send_bitrix_request('lists.element.get', { #получаем элемент списка по ид задачи
+    registry_element = send_bitrix_request('lists.element.get', {  # получаем элемент списка по ид задачи
         'IBLOCK_TYPE_ID': 'lists',
         'IBLOCK_ID': '107',
         'FILTER': {
             'PROPERTY_517': task_info['id'],
         }
     })
-    if registry_element: # если нашли, то обновляем
+    if registry_element:  # если нашли, то обновляем
         registry_element = registry_element[0]
         send_bitrix_request('lists.element.update', {
             "IBLOCK_TYPE_ID": "lists",
@@ -180,14 +379,14 @@ def task_registry(task_info, event):
 
 def fill_task_title(req, event):
     task_id = req['data[FIELDS_AFTER][ID]']
-    task_info = send_bitrix_request('tasks.task.get', { # читаем инфо о задаче
+    task_info = send_bitrix_request('tasks.task.get', {  # читаем инфо о задаче
         'taskId': task_id,
         'select': ['*', 'UF_*']
     })
 
-    if not task_info or 'task' not in task_info or not task_info['task']: # если задача удалена или в иных ситуациях
+    if not task_info or 'task' not in task_info or not task_info['task']:  # если задача удалена или в иных ситуациях
         return
-    
+
     task_info = task_info['task']
 
     task_registry(task_info, event)
@@ -196,14 +395,15 @@ def fill_task_title(req, event):
         send_notification(task_info, 'Завершение')
     '''
 
-    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']: # ufCrmTask - связь с сущностью (список)
+    if 'ufCrmTask' not in task_info or not task_info['ufCrmTask']:  # ufCrmTask - связь с сущностью (список)
         return
-    
-#2025-07-30 САА VIP
-    #fields_to_update = {}
-    vipflag=0
+
+    # 2025-07-30 САА VIP
+    # fields_to_update = {}
+    vipflag = 0
     try:
-        if task_info['groupId']=='1' and (task_info['stageId']=='11' or task_info['stageId']=='0'): #and task_info['ufAuto324910901949']!='1':
+        if task_info['groupId'] == '1' and (task_info['stageId'] == '11' or task_info[
+            'stageId'] == '0'):  # and task_info['ufAuto324910901949']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if contact_crm:
                 contact_crm = contact_crm[0][2:]
@@ -211,10 +411,11 @@ def fill_task_title(req, event):
                     'ID': contact_crm,
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
                 })
-                if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
+                if contact_info['UF_CRM_1752841613'] == '1' and contact_info['UF_CRM_1750926740'] == '1':
                     vipflag = 1
 
-        if task_info['groupId']=='7' and (task_info['stageId']=='555' or task_info['stageId']=='0'): #and task_info['ufAuto202422302608']!='1':
+        if task_info['groupId'] == '7' and (task_info['stageId'] == '555' or task_info[
+            'stageId'] == '0'):  # and task_info['ufAuto202422302608']!='1':
             contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
             if contact_crm:
                 contact_crm = contact_crm[0][2:]
@@ -222,12 +423,12 @@ def fill_task_title(req, event):
                     'ID': contact_crm,
                     'select': ['UF_CRM_1752841613', 'UF_CRM_1750926740']
                 })
-                if contact_info['UF_CRM_1752841613']=='1' and contact_info['UF_CRM_1750926740']=='1':
+                if contact_info['UF_CRM_1752841613'] == '1' and contact_info['UF_CRM_1750926740'] == '1':
                     vipflag = 7
 
     except Exception as e:
         print(f"Error in VIP: {e}")
-#2025-07-30 --
+    # 2025-07-30 --
 
     company_crm = list(filter(lambda x: 'CO' in x, task_info['ufCrmTask']))
     uf_crm_task = []
@@ -236,7 +437,7 @@ def fill_task_title(req, event):
         contact_crm = list(filter(lambda x: 'C_' in x, task_info['ufCrmTask']))
         if not contact_crm:
             return
-#2024-07-19 временно отключим
+        # 2024-07-19 временно отключим
         '''
         # если к задаче прикреплен только контакт
         contact_crm = contact_crm[0][2:]
@@ -281,83 +482,100 @@ def fill_task_title(req, event):
         '''
         contact_crm = contact_crm[0][2:]
 
-
-        contact_companies = list(map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
-        if not contact_companies: # если нет привязанных компаний к контакту
+        contact_companies = list(
+            map(lambda x: x['COMPANY_ID'], send_bitrix_request('crm.contact.company.items.get', {'id': contact_crm})))
+        if not contact_companies:  # если нет привязанных компаний к контакту
             return
-        contact_companies_info = send_bitrix_request('crm.company.list', { # читаем вес сделок всех компаний, привязанных к контакту
-            'select': ['COMPANY_TYPE', 'UF_CRM_1660818061808'],     # Тип компании и Вес сделок
-            'filter': {
-                'ID': contact_companies
-            }
-        })
+        contact_companies_info = send_bitrix_request('crm.company.list',
+                                                     {  # читаем вес сделок всех компаний, привязанных к контакту
+                                                         'select': ['COMPANY_TYPE', 'UF_CRM_1660818061808'],
+                                                         # Тип компании и Вес сделок
+                                                         'filter': {
+                                                             'ID': contact_companies
+                                                         }
+                                                     })
 
-        active_companies = list(filter(lambda x: x['COMPANY_TYPE'] != 'UC_E99TUC', contact_companies_info)) # собираем компании с действующим ИТС
+        active_companies = list(filter(lambda x: x['COMPANY_TYPE'] != 'UC_E99TUC',
+                                       contact_companies_info))  # собираем компании с действующим ИТС
 
-        if active_companies: # если есть привязанные компании с действующим ИТС
+        if active_companies:  # если есть привязанные компании с действующим ИТС
             for i in range(len(active_companies)):
-                if not active_companies[i]['UF_CRM_1660818061808']: # если поле Вес не заполнено, то проставляем 0
+                if not active_companies[i]['UF_CRM_1660818061808']:  # если поле Вес не заполнено, то проставляем 0
                     active_companies[i]['UF_CRM_1660818061808'] = 0
-            best_value_company = list(sorted(active_companies, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
-            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
-            company_id = best_value_company # это для тайтла
+            best_value_company = list(sorted(active_companies, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1][
+                'ID']  # последний элемент в общем списке - с макс value
+            uf_crm_task = ['CO_' + best_value_company,
+                           'C_' + contact_crm]  # нельзя дописать, можно только перезаписать обоими значениями заново
+            company_id = best_value_company  # это для тайтла
 
-        elif contact_companies_info: # если есть привязанные компании с НЕ действующим ИТС
+        elif contact_companies_info:  # если есть привязанные компании с НЕ действующим ИТС
             for i in range(len(contact_companies_info)):
-                if not contact_companies_info[i]['UF_CRM_1660818061808']: # если поле Вес не заполнено, то проставляем 0
+                if not contact_companies_info[i][
+                    'UF_CRM_1660818061808']:  # если поле Вес не заполнено, то проставляем 0
                     contact_companies_info[i]['UF_CRM_1660818061808'] = 0
-            best_value_company = list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1]['ID'] # последний элемент в общем списке - с макс value
-            uf_crm_task = ['CO_' + best_value_company, 'C_' + contact_crm] # нельзя дописать, можно только перезаписать обоими значениями заново
-            company_id = best_value_company # это для тайтла
+            best_value_company = \
+            list(sorted(contact_companies_info, key=lambda x: float(x['UF_CRM_1660818061808'])))[-1][
+                'ID']  # последний элемент в общем списке - с макс value
+            uf_crm_task = ['CO_' + best_value_company,
+                           'C_' + contact_crm]  # нельзя дописать, можно только перезаписать обоими значениями заново
+            company_id = best_value_company  # это для тайтла
 
-#2024-07-19 конец вставки
+    # 2024-07-19 конец вставки
 
     else:
         company_id = company_crm[0][3:]
 
-
     if event == 'ONTASKADD':
         check_similar_tasks_this_hour(task_info, company_id)
 
-    company_info = send_bitrix_request('crm.company.get', { # читаем инфо о найденной компании
+    company_info = send_bitrix_request('crm.company.get', {  # читаем инфо о найденной компании
         'ID': company_id,
     })
 
-    if company_info and company_info['TITLE'].strip() in task_info['title']: # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
-#ИБС VIP
-        if vipflag == 1:  #ИБС 2026-01-03
-            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
-                'taskId': task_id #ИБС 2026-01-03
-            }) #ИБС 2026-01-03
-            tags_massive.append('VIP') #ИБС 2026-01-03
+    # 2026-05-03 Контроль превышения лимитов ЛК -- ВЫЗОВ -- НАЧАЛО
+    try:
+        handle_lk_limit_control(task_info, company_id, company_info, event)
+    except Exception as e:
+        print(f"Error in LK limit control: {e}")
+    # 2026-05-03 Контроль превышения лимитов ЛК -- ВЫЗОВ -- КОНЕЦ
+
+    if company_info and company_info['TITLE'].strip() in task_info[
+        'title']:  # strip() - очищает от пробелов по краям, если есть название компании в тайтле, то возрват
+        # ИБС VIP
+        if vipflag == 1:  # ИБС 2026-01-03
+            tags_massive = send_bitrix_request('task.item.gettags', {  # ИБС 2026-01-03
+                'taskId': task_id  # ИБС 2026-01-03
+            })  # ИБС 2026-01-03
+            tags_massive.append('VIP')  # ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
-                    #'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
+                    # 'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
                     'STAGE_ID': '2367',
-                    'TAGS':tags_massive  #ИБС 2026-01-03
+                    'TAGS': tags_massive  # ИБС 2026-01-03
 
                 }})
-            
+
         if vipflag == 7:
-            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
-                'taskId': task_id #ИБС 2026-01-03
-            }) #ИБС 2026-01-03
-            tags_massive.append('VIP') #ИБС 2026-01-03
+            tags_massive = send_bitrix_request('task.item.gettags', {  # ИБС 2026-01-03
+                'taskId': task_id  # ИБС 2026-01-03
+            })  # ИБС 2026-01-03
+            tags_massive.append('VIP')  # ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
                 'fields': {
-                    #'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
+                    # 'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
                     'STAGE_ID': '2649',
-                    'TAGS': tags_massive #ИБС 2026-01-03
+                    'TAGS': tags_massive  # ИБС 2026-01-03
 
                 }})
-#ИБС ---
+        # ИБС ---
         return
 
-    if not uf_crm_task: #если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять
-        #ВМА
-        if company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129'] and task_info['groupId'] in ['23','9']:
+    if not uf_crm_task:  # если не заполнено CRM - если в задаче уже есть company_id и нам не нужно ее заполнять
+        # ВМА
+        if company_info['ASSIGNED_BY_ID'] in ['169', '177', '185', '131', '135', '355', '181', '175', '129'] and \
+                task_info['groupId'] in ['23', '9']:
             audit = task_info['auditors']
             audit.append('169')
             send_bitrix_request('tasks.task.update', {
@@ -365,45 +583,45 @@ def fill_task_title(req, event):
                 'fields': {
                     'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                     'AUDITORS': audit
-                    }})
+                }})
         else:
             if vipflag == 1:
-                tags_massive = send_bitrix_request('task.item.gettags', { #ИБС 2026-01-03
-                    'taskId': task_id #ИБС 2026-01-03
-                }) #ИБС 2026-01-03
+                tags_massive = send_bitrix_request('task.item.gettags', {  # ИБС 2026-01-03
+                    'taskId': task_id  # ИБС 2026-01-03
+                })  # ИБС 2026-01-03
                 tags_massive.append('VIP')  # ИБС 2026-01-03
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        #'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
+                        # 'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
                         'STAGE_ID': '2367',
                         'TAGS': tags_massive  # ИБС 2026-01-03
 
                     }})
-                
+
             elif vipflag == 7:
-                tags_massive = send_bitrix_request('task.item.gettags', { #ИБС 2026-01-03
-                    'taskId': task_id #ИБС 2026-01-03
-                }) #ИБС 2026-01-03
+                tags_massive = send_bitrix_request('task.item.gettags', {  # ИБС 2026-01-03
+                    'taskId': task_id  # ИБС 2026-01-03
+                })  # ИБС 2026-01-03
                 tags_massive.append('VIP')  # ИБС 2026-01-03
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                        #'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
+                        # 'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
                         'STAGE_ID': '2649',
                         'TAGS': tags_massive  # ИБС 2026-01-03
 
                     }})
-                
+
             else:
                 send_bitrix_request('tasks.task.update', {
                     'taskId': task_id,
                     'fields': {
                         'TITLE': f"{task_info['title']} {company_info['TITLE']}",
-                     }})
-    #2024-01-21
+                    }})
+    # 2024-01-21
     elif "Пропущен звонок от клиента" in task_info["title"]:
         instead = task_info['auditors']
         send_bitrix_request('tasks.task.update', {
@@ -415,8 +633,9 @@ def fill_task_title(req, event):
                 'CREATED_BY': '173',
                 'RESPONSIBLE_ID': task_info['auditors'][0]
             }})
-    #добавление ВМА как наблюдателя
-    elif company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129'] and task_info['groupId'] in ['23','9']:
+    # добавление ВМА как наблюдателя
+    elif company_info['ASSIGNED_BY_ID'] in ['169', '177', '185', '131', '135', '355', '181', '175', '129'] and \
+            task_info['groupId'] in ['23', '9']:
         audit = task_info['auditors']
         audit.append('169')
         send_bitrix_request('tasks.task.update', {
@@ -428,9 +647,9 @@ def fill_task_title(req, event):
             }})
     else:
         if vipflag == 1:
-            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
-                'taskId': task_id #ИБС 2026-01-03
-            }) #ИБС 2026-01-03
+            tags_massive = send_bitrix_request('task.item.gettags', {  # ИБС 2026-01-03
+                'taskId': task_id  # ИБС 2026-01-03
+            })  # ИБС 2026-01-03
             tags_massive.append('VIP')  # ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
@@ -438,14 +657,14 @@ def fill_task_title(req, event):
                     'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                     'UF_CRM_TASK': uf_crm_task,
                     'STAGE_ID': '2367',
-                    #'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
+                    # 'UF_AUTO_324910901949': 1, #ИБС 2026-01-03
                     'TAGS': tags_massive  # ИБС 2026-01-03
                 }})
-            
+
         elif vipflag == 7:
-            tags_massive = send_bitrix_request('task.item.gettags',{ #ИБС 2026-01-03
-                'taskId': task_id #ИБС 2026-01-03
-            }) #ИБС 2026-01-03
+            tags_massive = send_bitrix_request('task.item.gettags', {  # ИБС 2026-01-03
+                'taskId': task_id  # ИБС 2026-01-03
+            })  # ИБС 2026-01-03
             tags_massive.append('VIP')  # ИБС 2026-01-03
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
@@ -453,10 +672,10 @@ def fill_task_title(req, event):
                     'TITLE': f"{task_info['title']} {company_info['TITLE']}",
                     'UF_CRM_TASK': uf_crm_task,
                     'STAGE_ID': '2649',
-                    #'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
+                    # 'UF_AUTO_202422302608': 1, #ИБС 2026-01-03
                     'TAGS': tags_massive  # ИБС 2026-01-03
                 }})
-            
+
         else:
             send_bitrix_request('tasks.task.update', {
                 'taskId': task_id,
@@ -465,20 +684,22 @@ def fill_task_title(req, event):
                     'UF_CRM_TASK': uf_crm_task,
                 }})
 
-    #перенос функций роботов: (1) уведомление Дениса Сулейманова о новых задачах на ТЛП
-    #и (2) уведомление о новых задачах на ТЛП и ЛК для клиентов с типом компании "Закончился ИТС"
+    # перенос функций роботов: (1) уведомление Дениса Сулейманова о новых задачах на ТЛП
+    # и (2) уведомление о новых задачах на ТЛП и ЛК для клиентов с типом компании "Закончился ИТС"
     if event == 'ONTASKADD' and company_info['ASSIGNED_BY_ID'] in ['129'] and task_info['groupId'] in ['1']:
-        send_bitrix_request('im.notify.system.add',{
+        send_bitrix_request('im.notify.system.add', {
             'USER_ID': company_info['ASSIGNED_BY_ID'],
             'MESSAGE': f'Для вашего клиента {company_info["TITLE"]} поставлена задача на ТЛП https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
-    if event == 'ONTASKADD' and company_info['COMPANY_TYPE'] in ['UC_E99TUC'] and task_info['groupId'] in ['1', '7'] :
+    if event == 'ONTASKADD' and company_info['COMPANY_TYPE'] in ['UC_E99TUC'] and task_info['groupId'] in ['1', '7']:
         send_bitrix_request('im.notify.system.add', {
-            #'USER_ID': company_info['ASSIGNED_BY_ID'],
+            # 'USER_ID': company_info['ASSIGNED_BY_ID'],
             'USER_ID': '1',
             'MESSAGE': f'Для клиента без ИТС {company_info["TITLE"]} поставлена задача https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
-    #уведомление для ВМА при постановке задач ее по ее клиентам и включение в наблюдатели
-    if event == 'ONTASKADD' and company_info['ASSIGNED_BY_ID'] in ['169','177','185','131','135','355','181','175','129'] and task_info['groupId'] in ['23','9']:
-        send_bitrix_request('im.notify.system.add',{
+    # уведомление для ВМА при постановке задач ее по ее клиентам и включение в наблюдатели
+    if event == 'ONTASKADD' and company_info['ASSIGNED_BY_ID'] in ['169', '177', '185', '131', '135', '355', '181',
+                                                                   '175', '129'] and task_info['groupId'] in ['23',
+                                                                                                              '9']:
+        send_bitrix_request('im.notify.system.add', {
             'USER_ID': '169',
             'MESSAGE': f'Для клиента ГО 3 {company_info["TITLE"]} поставлена задача в ОВ https://vc4dk.bitrix24.ru/workgroups/group/1/tasks/task/view/{task_info["id"]}/'})
 

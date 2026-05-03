@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2609ce68-fb26-4316-8d85-461e6853c66e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/flask.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flask.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/speech30.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/speech30.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/modules/TaskHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/modules/TaskHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app_4dk/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app_4dk/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +60,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Полина/Documents/GitHub/autorun_4dk&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/USER/Documents/GitHub/web_app_4dk/web_app_4dk/modules&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -79,11 +82,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Documents\GitHub\web_app_4dk\web_app_4dk\modules" />
       <recent name="C:\Users\Максим\Documents\GitHub\web_app_4dk\web_app_4dk\modules" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk\modules" />
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk\web_app_4dk" />
       <recent name="C:\Users\mok\Documents\GitHub\web_app_4dk\web_app_4dk\static\logs" />
-      <recent name="C:\Users\mok\Documents\GitHub\web_app_4dk\web_app_4dk" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Полина\Documents\GitHub\web_app_4dk\web_app_4dk\modules" />
@@ -93,7 +96,7 @@
       <recent name="C:\Users\esmec\Documents\GitHub\web_app_4dk" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CreateEmployeesReport">
+  <component name="RunManager" selected="Python.EmployeeActivityReport_test">
     <configuration name="CreateEmployeesReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -116,7 +119,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="CreateImplementationDepartmentReport" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="CreateRevenueListElements" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -129,7 +132,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateImplementationDepartmentReport.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/CreateRevenueListElements.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -138,7 +141,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="GetEmailsFromContactsAndCompanies" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="EmployeeActivityReport_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -151,7 +154,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\Максим\Documents\GitHub\web_app_4dk\web_app_4dk\modules\GetEmailsFromContactsAndCompanies.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/EmployeeActivityReport_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -160,20 +163,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="dsadad" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="HZ" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="flask" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\USER\Documents\GitHub\web_app_4dk\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app_4dk/modules" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/dsadad.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app_4dk/modules/HZ.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -228,19 +231,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.web_app_4dk" />
+      <item itemvalue="Python.EmployeeActivityReport_test" />
+      <item itemvalue="Python.CreateRevenueListElements" />
+      <item itemvalue="Python.HZ" />
       <item itemvalue="Python.hdfghdfg" />
-      <item itemvalue="Python.CreateImplementationDepartmentReport" />
-      <item itemvalue="Python.dsadad" />
-      <item itemvalue="Python.GetEmailsFromContactsAndCompanies" />
       <item itemvalue="Python.CreateEmployeesReport" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.EmployeeActivityReport_test" />
+        <item itemvalue="Python.CreateRevenueListElements" />
+        <item itemvalue="Python.HZ" />
         <item itemvalue="Python.CreateEmployeesReport" />
         <item itemvalue="Python.hdfghdfg" />
-        <item itemvalue="Python.CreateImplementationDepartmentReport" />
-        <item itemvalue="Python.dsadad" />
-        <item itemvalue="Python.GetEmailsFromContactsAndCompanies" />
       </list>
     </recent_temporary>
   </component>
@@ -438,6 +441,32 @@
       <workItem from="1751296602392" duration="1625000" />
       <workItem from="1751300759063" duration="2561000" />
       <workItem from="1757479536545" duration="1534000" />
+      <workItem from="1766588119571" duration="39000" />
+      <workItem from="1767095611165" duration="752000" />
+      <workItem from="1767215060371" duration="12000" />
+      <workItem from="1767455521828" duration="5317000" />
+      <workItem from="1767555139836" duration="616000" />
+      <workItem from="1767614305679" duration="9215000" />
+      <workItem from="1768397605304" duration="1231000" />
+      <workItem from="1768454078476" duration="594000" />
+      <workItem from="1768674708639" duration="12000" />
+      <workItem from="1768676735922" duration="1722000" />
+      <workItem from="1768739662212" duration="31000" />
+      <workItem from="1768815325962" duration="1889000" />
+      <workItem from="1768844462247" duration="1608000" />
+      <workItem from="1769164145617" duration="608000" />
+      <workItem from="1769350040991" duration="2771000" />
+      <workItem from="1769426249125" duration="142000" />
+      <workItem from="1769688530172" duration="990000" />
+      <workItem from="1769709261758" duration="5332000" />
+      <workItem from="1769751715014" duration="55000" />
+      <workItem from="1770295099554" duration="602000" />
+      <workItem from="1771162166986" duration="38000" />
+      <workItem from="1774027604449" duration="1804000" />
+      <workItem from="1774848917037" duration="108000" />
+      <workItem from="1775302000605" duration="657000" />
+      <workItem from="1775392265820" duration="2008000" />
+      <workItem from="1777825102968" duration="306000" />
     </task>
     <servers />
   </component>
@@ -456,7 +485,10 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/web_app_4dk$CreateRevenueListElements.coverage" NAME="CreateRevenueListElements Coverage Results" MODIFIED="1769712972493" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$HZ.coverage" NAME="HZ Coverage Results" MODIFIED="1767459027291" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$CreateCurrentMonthDealsDataFile.coverage" NAME="CreateCurrentMonthDealsDataFile Coverage Results" MODIFIED="1745913639167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
     <SUITE FILE_PATH="coverage/web_app_4dk$callback.coverage" NAME="callback Coverage Results" MODIFIED="1757053700118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
+    <SUITE FILE_PATH="coverage/web_app_4dk$EmployeeActivityReport_test.coverage" NAME="EmployeeActivityReport_test Coverage Results" MODIFIED="1774028735161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app_4dk/modules" />
   </component>
 </project>

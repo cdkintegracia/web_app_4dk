@@ -118,6 +118,8 @@ from web_app_4dk.modules.LimitTariff import elapsed_times_lines
 from web_app_4dk.modules.CreateCompanyElapstimeReport import create_company_elapstime_report
 #2026-05-03
 from web_app_4dk.modules.UnlockLKTasksByOverlimit import unlock_lk_tasks_by_overlimit
+#2026-05-06
+from web_app_4dk.modules.CreateManagerReport import create_manager_report_auto
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -206,8 +208,10 @@ custom_webhooks = {
     'elapsed_times_lines': elapsed_times_lines,
     #2026-03-30 saa
     'create_company_elapstime_report': create_company_elapstime_report,
-    #2026-03-30 ИБС
+    #2026-05-03 ИБС
     'unlock_lk_tasks_by_overlimit': unlock_lk_tasks_by_overlimit,
+    #2026-05-06 ИБС
+    'create_manager_report_auto': create_manager_report_auto,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

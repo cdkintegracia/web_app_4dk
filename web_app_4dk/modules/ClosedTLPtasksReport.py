@@ -220,7 +220,7 @@ def closed_tlp_tasks(req=None):
             f'({spent_time})\n'
         )
 
-    print(report)
+    #print(report)
 
     # ---------------------------------------------------
     # ОТПРАВКА

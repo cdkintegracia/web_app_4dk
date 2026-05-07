@@ -120,6 +120,8 @@ from web_app_4dk.modules.CreateCompanyElapstimeReport import create_company_elap
 from web_app_4dk.modules.UnlockLKTasksByOverlimit import unlock_lk_tasks_by_overlimit
 #2026-05-06
 from web_app_4dk.modules.CreateManagerReport import create_manager_report_auto
+#2026-05-07 saa
+from web_app_4dk.modules.ClosedTLPtasksReport import closed_tasks_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -212,6 +214,8 @@ custom_webhooks = {
     'unlock_lk_tasks_by_overlimit': unlock_lk_tasks_by_overlimit,
     #2026-05-06 ИБС
     'create_manager_report_auto': create_manager_report_auto,
+    #2026-05-07 saa
+    'closed_tasks_report': closed_tasks_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

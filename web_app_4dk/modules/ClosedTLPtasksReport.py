@@ -28,7 +28,7 @@ def seconds_to_hms(seconds: int) -> str:
     return str(timedelta(seconds=seconds))
 
 
-def closed_tlp_tasks(req):
+def closed_tlp_tasks(req=None):
 
     now = datetime.now()
 
@@ -86,37 +86,40 @@ def closed_tlp_tasks(req):
     # ---------------------------------------------------
 
     elapsed_items = []
-    page = 1
-    page_size = 50
 
-    while True:
+    if closed_task_ids:
 
-        response = b.call(
-            'task.elapseditem.getlist',
-            {
-                "order": {"ID": "asc"},
-                "filter": {
-                    "TASK_ID": closed_task_ids
+        page = 1
+        page_size = 50
+
+        while True:
+
+            response = b.call(
+                'task.elapseditem.getlist',
+                {
+                    "order": {"ID": "asc"},
+                    "filter": {
+                        "TASK_ID": closed_task_ids
+                    },
+                    "select": ["*"],
+                    "params": {
+                        "NAV_PARAMS": {
+                            "nPageSize": page_size,
+                            "iNumPage": page,
+                        }
+                    },
                 },
-                "select": ["*"],
-                "params": {
-                    "NAV_PARAMS": {
-                        "nPageSize": page_size,
-                        "iNumPage": page,
-                    }
-                },
-            },
-            raw=True
-        )
+                raw=True
+            )
 
-        result = response.get("result", [])
+            result = response.get("result", [])
 
-        if not result:
-            break
+            if not result:
+                break
 
-        elapsed_items.extend(result)
+            elapsed_items.extend(result)
 
-        page += 1
+            page += 1
 
     # ---------------------------------------------------
     # СТАТИСТИКА ПО СОТРУДНИКАМ
@@ -124,6 +127,9 @@ def closed_tlp_tasks(req):
 
     user_stat = {}
 
+    total_seconds = 0
+
+    # считаем задачи
     for task in closed_tasks:
 
         user_id = str(task['responsibleId'])
@@ -139,7 +145,7 @@ def closed_tlp_tasks(req):
 
         user_stat[user_id]['count'] += 1
 
-    # суммируем трудозатраты
+    # считаем трудозатраты
     for item in elapsed_items:
 
         user_id = str(item['USER_ID'])
@@ -150,7 +156,11 @@ def closed_tlp_tasks(req):
         if user_id not in user_stat:
             continue
 
-        user_stat[user_id]['seconds'] += int(item['SECONDS'])
+        seconds = int(item['SECONDS'])
+
+        user_stat[user_id]['seconds'] += seconds
+
+        total_seconds += seconds
 
     # ---------------------------------------------------
     # ПОЛУЧАЕМ СОТРУДНИКОВ
@@ -174,10 +184,18 @@ def closed_tlp_tasks(req):
     # ФОРМИРУЕМ ОТЧЕТ
     # ---------------------------------------------------
 
-    report = f'[b]Отчет по задачам за {day_title}[/b]\n\n'
+    total_spent_time = seconds_to_hms(total_seconds)
+
+    report = (
+        f'[b]Отчет по задачам за {day_title} '
+        f'(Кол-во / Время)[/b]\n\n'
+    )
 
     report += f'Всего поступило: {total_created}\n'
-    report += f'Всего завершено: {total_closed}\n\n'
+    report += (
+        f'Всего завершено: '
+        f'{total_closed} ({total_spent_time})\n\n'
+    )
 
     report += '[b]Статистика по исполнителям:[/b]\n\n'
 
@@ -189,7 +207,10 @@ def closed_tlp_tasks(req):
 
     for user_id, stat in sorted_users:
 
-        user_name = users_map.get(user_id, f'Пользователь {user_id}')
+        user_name = users_map.get(
+            user_id,
+            f'Пользователь {user_id}'
+        )
 
         spent_time = seconds_to_hms(stat['seconds'])
 

@@ -226,7 +226,8 @@ def closed_tlp_tasks(req=None):
     # ОТПРАВКА
     # ---------------------------------------------------
 
-    notification_users = ['1391']
+    #notification_users = ['1391']
+    notification_users = ['chat21']
 
     for user in notification_users:
 

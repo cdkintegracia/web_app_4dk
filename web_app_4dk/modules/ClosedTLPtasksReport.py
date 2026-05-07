@@ -28,7 +28,7 @@ def seconds_to_hms(seconds: int) -> str:
     return str(timedelta(seconds=seconds))
 
 
-def closed_tasks_report():
+def closed_tlp_tasks():
 
     now = datetime.now()
 
@@ -221,4 +221,4 @@ def closed_tasks_report():
 
 
 if __name__ == '__main__':
-    closed_tasks_report()
+    closed_tlp_tasks()

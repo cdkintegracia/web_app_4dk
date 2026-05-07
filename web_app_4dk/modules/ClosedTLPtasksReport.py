@@ -28,7 +28,7 @@ def seconds_to_hms(seconds: int) -> str:
     return str(timedelta(seconds=seconds))
 
 
-def closed_tlp_tasks():
+def closed_tlp_tasks(req):
 
     now = datetime.now()
 

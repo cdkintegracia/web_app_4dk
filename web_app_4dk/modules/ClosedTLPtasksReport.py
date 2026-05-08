@@ -5,8 +5,8 @@ from web_app_4dk.modules.authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
-GROUP_ID = '1'
-EXCEPT_USER_ID = '173'
+GROUP_ID = '1' # id группы ТЛП
+EXCEPT_USER_ID = '173' # id Робота Задач
 
 
 def get_fio_from_user_info(user_info: dict) -> str:
@@ -37,10 +37,8 @@ def closed_tlp_tasks(req=None):
     start_day = now.strftime('%Y-%m-%d') + 'T00:00:00+03:00'
     end_day = now.strftime('%Y-%m-%d') + 'T23:59:59+03:00'
 
-    # ---------------------------------------------------
-    # ВСЕГО СОЗДАНО
-    # ---------------------------------------------------
 
+    # всего создано задач за сегодня
     created_tasks = b.get_all(
         'tasks.task.list',
         {
@@ -52,13 +50,9 @@ def closed_tlp_tasks(req=None):
             'select': ['ID']
         }
     )
-
     total_created = len(created_tasks)
 
-    # ---------------------------------------------------
-    # ЗАКРЫТЫЕ ЗАДАЧИ ЗА СЕГОДНЯ
-    # ---------------------------------------------------
-
+    # всего закрыто задач за сегодня
     closed_tasks = b.get_all(
         'tasks.task.list',
         {
@@ -75,16 +69,13 @@ def closed_tlp_tasks(req=None):
             ]
         }
     )
-
     total_closed = len(closed_tasks)
 
     # список id закрытых задач
     closed_task_ids = [task['id'] for task in closed_tasks]
 
-    # ---------------------------------------------------
-    # ТРУДОЗАТРАТЫ
-    # ---------------------------------------------------
 
+    # все трудозатраты из закрытых задач
     elapsed_items = []
 
     if closed_task_ids:
@@ -121,15 +112,12 @@ def closed_tlp_tasks(req=None):
 
             page += 1
 
-    # ---------------------------------------------------
-    # СТАТИСТИКА ПО СОТРУДНИКАМ
-    # ---------------------------------------------------
 
+    # статистика по сотрудникам
     user_stat = {}
-
     total_seconds = 0
 
-    # считаем задачи
+    # считаем задачи по каждому сотруднику
     for task in closed_tasks:
 
         user_id = str(task['responsibleId'])
@@ -145,7 +133,7 @@ def closed_tlp_tasks(req=None):
 
         user_stat[user_id]['count'] += 1
 
-    # считаем трудозатраты
+    # считаем трудозатраты по каждому сотруднику
     for item in elapsed_items:
 
         user_id = str(item['USER_ID'])
@@ -162,10 +150,8 @@ def closed_tlp_tasks(req=None):
 
         total_seconds += seconds
 
-    # ---------------------------------------------------
-    # ПОЛУЧАЕМ СОТРУДНИКОВ
-    # ---------------------------------------------------
 
+    # получам ФИ сотрудников
     users = b.get_all(
         'user.get',
         {
@@ -180,10 +166,8 @@ def closed_tlp_tasks(req=None):
     for user in users:
         users_map[user['ID']] = get_fio_from_user_info(user)
 
-    # ---------------------------------------------------
-    # ФОРМИРУЕМ ОТЧЕТ
-    # ---------------------------------------------------
 
+    # собираем отчет
     total_spent_time = seconds_to_hms(total_seconds)
 
     report = (
@@ -209,7 +193,7 @@ def closed_tlp_tasks(req=None):
 
         user_name = users_map.get(
             user_id,
-            f'Пользователь {user_id}'
+            f'Пользователь {user_id}' # если у сотрудника полностью нет ФИ, что в целом невозможно
         )
 
         spent_time = seconds_to_hms(stat['seconds'])
@@ -222,12 +206,12 @@ def closed_tlp_tasks(req=None):
 
     #print(report)
 
-    # ---------------------------------------------------
-    # ОТПРАВКА
-    # ---------------------------------------------------
+
+    # отправка отчета
 
     #notification_users = ['1391']
-    notification_users = ['chat21']
+    #notification_users = ['chat21']
+    notification_users = ['chat21', '159', '1391']
 
     for user in notification_users:
 

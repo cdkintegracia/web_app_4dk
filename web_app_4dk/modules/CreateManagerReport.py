@@ -189,7 +189,8 @@ def create_sales_check_task(responsible_id: int, report_month: int, report_year:
     Создает задачу ответственному пользователю и прикрепляет к ней отчет.
     """
 
-    deadline = datetime.now().replace(hour=23, minute=59, second=59, microsecond=0)
+    #deadline = datetime.now().replace(hour=23, minute=59, second=59, microsecond=0)
+    deadline = (datetime.now() + timedelta(days=1)).replace(hour=23, minute=59, second=59, microsecond=0)
     task_title = f'Проверьте данные по продажам за {MONTH_NAMES[report_month]} {report_year}'
 
     disk_object_id = uploaded_file.get('ID')

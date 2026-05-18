@@ -1,6 +1,6 @@
 import base64
 from fast_bitrix24 import Bitrix
-from web_app_4dk.modules.authentication import authentication
+from authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -21,11 +21,9 @@ def get_user_name(user_id):
 
     if user:
 
-        user_data = user[0]
-
         user_name = (
-            f'{user_data.get("LAST_NAME", "")} '
-            f'{user_data.get("NAME", "")}'
+            f'{user.get("LAST_NAME", "")} '
+            f'{user.get("NAME", "")}'
         ).strip()
 
     else:

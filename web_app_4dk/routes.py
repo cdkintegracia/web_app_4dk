@@ -122,6 +122,8 @@ from web_app_4dk.modules.UnlockLKTasksByOverlimit import unlock_lk_tasks_by_over
 from web_app_4dk.modules.CreateManagerReport import create_manager_report_auto
 #2026-05-07 saa
 from web_app_4dk.modules.ClosedTLPtasksReport import closed_tlp_tasks
+#2026-05-19 saa
+from web_app_4dk.modules.CreatePaidTasksReport import report_paid_tasks
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -216,6 +218,8 @@ custom_webhooks = {
     'create_manager_report_auto': create_manager_report_auto,
     #2026-05-07 saa
     'closed_tlp_tasks': closed_tlp_tasks,
+    #2026-05-19 saa
+    'report_paid_tasks': report_paid_tasks,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

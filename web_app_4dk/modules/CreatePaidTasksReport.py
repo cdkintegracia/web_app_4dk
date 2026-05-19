@@ -100,12 +100,13 @@ def report_paid_tasks(req):
                 'ID',
                 'RESPONSIBLE_ID',
                 'CLOSED_DATE',
-                'UF_AUTO_210185778353',
-                'UF_AUTO_324696461819',
+                'UF_AUTO_210185778353', # Оплачено
+                'UF_AUTO_324696461819', # Номер реализации
                 'UF_CRM_TASK'
             ]
         }
     )
+
 
     # номера реализаций из задач
     task_keys = set()
@@ -130,10 +131,10 @@ def report_paid_tasks(req):
             if str(link).startswith('CO_'):
                 company_ids.add(str(link).replace('CO_', ''))
 
+
     # соответствующие номера в долгах
     numbers = list({key[1] for key in task_keys})
     debts = []
-
     if numbers:
 
         debts = b.get_all(
@@ -142,21 +143,20 @@ def report_paid_tasks(req):
                 'entityTypeId': 161,
                 'select': [
                     'id',
-                    'ufCrm41_Provider',
-                    'ufCrm41_1689101328',
-                    'ufCrm41_1689101306',
-                    'ufCrm41_1690546413',
-                    'ufCrm41_1689101272'
+                    'ufCrm41_Provider', # Исполнитель услуги
+                    'ufCrm41_1689101328', # Сумма документа
+                    'ufCrm41_1689101306', # Номер в 1С
+                    'ufCrm41_1690546413', # Компания (название)
+                    'ufCrm41_1689101272' # Дата создания
                 ],
                 'filter': {
-                    '@ufCrm41_1689101306': numbers,
-                    '!ufCrm41_1733668627': '1'
+                    '@ufCrm41_1689101306': numbers, # Номер в 1С
+                    '!ufCrm41_1733668627': '1' # СтатусНомераВРеестре
                 }
             }
         )
 
-    # долги в заданном периоде
-
+    # долги с датой создания в заданном периоде
     extra_debts = b.get_all(
         'crm.item.list',
         {
@@ -177,82 +177,59 @@ def report_paid_tasks(req):
         }
     )
 
-    # СОБИРАЕМ ID
-
+    # собираем id исполнителей и id компаний
     for debt in debts + extra_debts:
 
         provider = debt.get('ufCrm41_Provider')
-
         if provider:
-
             user_ids.add(str(int(float(provider))))
 
         company = debt.get('ufCrm41_1690546413')
-
         if company:
             company_ids.add(str(company))
 
 
-    # ПОЛЬЗОВАТЕЛИ
+    # собираем фио исполнителей
     users = {}
-
     if user_ids:
-
-        users_data = b.get_all(
-            'user.get',
-            {
-                'ID': list(user_ids)
-            }
-        )
+        users_data = b.get_all('user.get', {'ID': list(user_ids)})
 
         for user in users_data:
-
             users[str(user['ID'])] = (f"{user['NAME']} {user['LAST_NAME']}")
 
 
-    # КОМПАНИИ
+    # собираем названия компаний
     companies = {}
-
     if company_ids:
-
         companies_data = b.get_all(
             'crm.company.list',
             {
-                'filter': {
-                    'ID': list(company_ids)
-                },
+                'filter': {'ID': list(company_ids)},
                 'select': ['ID', 'TITLE']
             }
         )
 
         for company in companies_data:
-
             companies[str(company['ID'])] = company['TITLE']
 
 
-    # ПРЕОБРАЗУЕМ СОУ
-
+    # приводим к ок виду данные из соу
     debts_dict = {}
 
     def add_debt(debt):
 
         number = normalize_number(debt.get('ufCrm41_1689101306'))
-
         if not number:
             return
 
         act_date = debt.get('ufCrm41_1689101272')
-
         year = get_year(act_date)
 
         key = (year, number)
 
         provider = debt.get('ufCrm41_Provider')
-
         provider_id = ''
-
         if provider:
-
             provider_id = str(int(float(provider)))
 
         debts_dict[key] = {
@@ -267,30 +244,25 @@ def report_paid_tasks(req):
     for debt in debts:
         add_debt(debt)
 
-    # ДОП ДОЛГИ БЕЗ ЗАДАЧ
 
+    # долги по докам без задач
     for debt in extra_debts:
 
         number = normalize_number(debt.get('ufCrm41_1689101306'))
-
         if not number:
             continue
 
         act_date = debt.get('ufCrm41_1689101272')
-
         year = get_year(act_date)
 
         key = (year, number)
-
         if key in debts_dict:
             continue
 
         provider = debt.get('ufCrm41_Provider')
-
         provider_id = ''
 
         if provider:
-
             provider_id = str(int(float(provider)))
 
         if provider_id not in department_user_ids:
@@ -302,8 +274,7 @@ def report_paid_tasks(req):
         add_debt(debt)
 
 
-    # ПРЕОБРАЗУЕМ ЗАДАЧИ
-
+    # преобразуем задачи
     tasks_dict = {}
     tasks_without_number = []
 
@@ -312,13 +283,10 @@ def report_paid_tasks(req):
         number = normalize_number(task.get('ufAuto324696461819'))
 
         closed_date = task.get('closedDate')
-
         year = get_year(closed_date)
 
         company_name = ''
-
         for link in task.get('ufCrmTask', []):
-
             if str(link).startswith('CO_'):
                 company_name = companies.get(str(link).replace('CO_', ''), '')
                 break
@@ -339,8 +307,7 @@ def report_paid_tasks(req):
         tasks_dict[(year, number)] = task_data
 
 
-    # ТАБЛИЦЫ
-
+    # таблицы
     matched_rows = []
     no_debt_rows = []
     no_task_rows = []
@@ -353,8 +320,7 @@ def report_paid_tasks(req):
         debt = debts_dict.get(key)
         task = tasks_dict.get(key)
 
-        # ЕСТЬ И ТАМ И ТАМ
-
+        # есть везде
         if debt and task:
 
             matched_rows.append([
@@ -374,8 +340,7 @@ def report_paid_tasks(req):
             ])
 
 
-        # НЕТ В ДОЛГАХ
-
+        # нет в долгах
         elif task and not debt:
 
             no_debt_rows.append([
@@ -387,8 +352,7 @@ def report_paid_tasks(req):
                 task['date']
             ])
 
-        # НЕТ В ЗАДАЧАХ
-
+        # нет в задачах
         elif debt and not task:
 
             no_task_rows.append([
@@ -400,8 +364,7 @@ def report_paid_tasks(req):
                 debt['date']
             ])
 
-    # БЕЗ НОМЕРА
-
+    # задачи без номера
     for task in tasks_without_number:
 
         no_number_rows.append([
@@ -413,7 +376,7 @@ def report_paid_tasks(req):
         ])
 
 
-    # 1. ЕСТЬ И ТАМ И ТАМ
+    # формируем таблицы
 
     write_table(
         ws,
@@ -432,8 +395,6 @@ def report_paid_tasks(req):
         matched_rows
     )
 
-    # 2. НЕТ В ДОЛГАХ
-
     write_table(
         ws,
         'Работа не найдена в СОУ',
@@ -448,8 +409,6 @@ def report_paid_tasks(req):
         no_debt_rows
     )
 
-    # 3. НЕТ В ЗАДАЧАХ
-
     write_table(
         ws,
         'Работа не найдена в задачах',
@@ -463,8 +422,6 @@ def report_paid_tasks(req):
         ],
         no_task_rows
     )
-
-    # 4. БЕЗ НОМЕРА
 
     write_table(
         ws,
@@ -503,8 +460,9 @@ def report_paid_tasks(req):
 
 if __name__ == '__main__':
 
-    report_paid_tasks({
+    report_paid_tasks(
+        '''{
         'date_from': '2026-05-01',
         'date_to': '2026-05-31',
         'user_id': 'user_1391'
-    })
+    }''')

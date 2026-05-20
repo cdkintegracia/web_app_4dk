@@ -318,7 +318,18 @@ def report_paid_tasks(req):
                 tasks_without_number.append(task_data)
             continue
 
-        tasks_dict[(year, number)] = task_data
+        #tasks_dict[(year, number)] = task_data
+        key = (year, number)
+
+        closed_date_obj = datetime.fromisoformat(closed_date).date()
+
+        is_period_task = (datetime.strptime(date_from, '%d.%m.%Y').date()
+            <= closed_date_obj
+            <= datetime.strptime(date_to, '%d.%m.%Y').date())
+
+        # задачи периода всегда приоритетнее
+        if (key not in tasks_dict or is_period_task):
+            tasks_dict[key] = task_data
 
 
     # таблицы
@@ -335,12 +346,6 @@ def report_paid_tasks(req):
         task = tasks_dict.get(key)
 
         # есть везде
-        '''if debt and task:
-            task_date = datetime.strptime(task['date'], '%d.%m.%Y').date()
-
-            if not (datetime.strptime(date_from, '%d.%m.%Y').date() <= task_date <= datetime.strptime(date_to, '%d.%m.%Y').date()):
-                continue
-        '''
         if (debt and task and key in period_task_keys):
 
             matched_rows.append([

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 import os
 
@@ -72,6 +72,9 @@ def report_paid_tasks(req):
     date_from = req['date_from']
     date_to = req['date_to']
 
+    extended_date_from = (datetime.fromisoformat(date_from) - timedelta(days=31)).strftime('%Y-%m-%d')
+    extended_date_to = (datetime.fromisoformat(date_to) + timedelta(days=31)).strftime('%Y-%m-%d')
+
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = 'Сверка'
@@ -93,8 +96,8 @@ def report_paid_tasks(req):
         {
             'filter': {
                 'GROUP_ID': 408,
-                '>=CLOSED_DATE': date_from,
-                '<=CLOSED_DATE': date_to
+                '>=CLOSED_DATE': extended_date_from,
+                '<=CLOSED_DATE': extended_date_to
             },
             'select': [
                 'ID',
@@ -110,6 +113,8 @@ def report_paid_tasks(req):
 
     # номера реализаций из задач
     task_keys = set()
+    period_task_keys = set()
+
     user_ids = set()
     company_ids = set()
 
@@ -119,7 +124,12 @@ def report_paid_tasks(req):
         year = get_year(task.get('closedDate'))
 
         if number and year:
-            task_keys.add((year, number))
+
+            task_keys.add((year, number)) # Все задачи для проверки существования
+            closed_date_obj = datetime.fromisoformat(task.get('closedDate')) # Только задачи внутри периода отчета
+
+            if (datetime.fromisoformat(date_from) <= closed_date_obj <= datetime.fromisoformat(date_to)):
+                period_task_keys.add((year, number))
 
         responsible = task.get('responsibleId')
 
@@ -313,7 +323,7 @@ def report_paid_tasks(req):
     no_task_rows = []
     no_number_rows = []
 
-    all_keys = set(debts_dict.keys()) | set(tasks_dict.keys())
+    all_keys = set(debts_dict.keys()) | set(period_task_keys)
 
     for key in sorted(all_keys):
 

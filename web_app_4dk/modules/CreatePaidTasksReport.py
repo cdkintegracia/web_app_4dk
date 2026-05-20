@@ -338,7 +338,8 @@ def report_paid_tasks(req):
         if debt and task:
             task_date = datetime.strptime(task['date'], '%d.%m.%Y').date()
 
-        if not (datetime.strptime(date_from, '%d.%m.%Y').date() <= task_date <= datetime.strptime(date_to, '%d.%m.%Y').date()):
+            if not (datetime.strptime(date_from, '%d.%m.%Y').date() <= task_date <= datetime.strptime(date_to, '%d.%m.%Y').date()):
+                continue
 
             matched_rows.append([
                 debt['number'],

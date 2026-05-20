@@ -338,15 +338,15 @@ def report_paid_tasks(req):
     no_task_rows = []
     no_number_rows = []
 
-    all_keys = set(debts_dict.keys()) | set(period_task_keys)
+    #all_keys = set(debts_dict.keys()) | set(period_task_keys)
 
-    for key in sorted(all_keys):
+    for key in sorted(period_task_keys):
 
         debt = debts_dict.get(key)
         task = tasks_dict.get(key)
 
         # есть везде
-        if (debt and task and key in period_task_keys):
+        if debt and task:
 
             matched_rows.append([
                 debt['number'],

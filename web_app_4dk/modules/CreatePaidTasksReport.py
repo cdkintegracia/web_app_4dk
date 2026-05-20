@@ -126,7 +126,7 @@ def report_paid_tasks(req):
         if number and year:
 
             task_keys.add((year, number)) # Все задачи для проверки существования
-            closed_date_obj = datetime.fromisoformat(task.get('closedDate')) # Только задачи внутри периода отчета
+            closed_date_obj = datetime.fromisoformat(task.get('closedDate')).date() # Только задачи внутри периода отчета
 
             if (datetime.strptime(date_from, '%d.%m.%Y').date() <= closed_date_obj <= datetime.strptime(date_to, '%d.%m.%Y').date()):
                 period_task_keys.add((year, number))

@@ -311,7 +311,11 @@ def report_paid_tasks(req):
         }
 
         if not number:
-            tasks_without_number.append(task_data)
+            closed_date_obj = datetime.fromisoformat(closed_date).date()
+            if (datetime.strptime(date_from, '%d.%m.%Y').date() 
+                <= closed_date_obj 
+                <= datetime.strptime(date_to, '%d.%m.%Y').date()):
+                tasks_without_number.append(task_data)
             continue
 
         tasks_dict[(year, number)] = task_data
@@ -331,7 +335,7 @@ def report_paid_tasks(req):
         task = tasks_dict.get(key)
 
         # есть везде
-        if debt and task:
+        if (debt and task and key in period_task_keys):
 
             matched_rows.append([
                 debt['number'],

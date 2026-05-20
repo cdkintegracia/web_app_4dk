@@ -128,7 +128,7 @@ def report_paid_tasks(req):
             task_keys.add((year, number)) # Все задачи для проверки существования
             closed_date_obj = datetime.fromisoformat(task.get('closedDate')) # Только задачи внутри периода отчета
 
-            if (datetime.fromisoformat(date_from) <= closed_date_obj <= datetime.fromisoformat(date_to)):
+            if (datetime.strptime(date_from, '%d.%m.%Y') <= closed_date_obj <= datetime.strptime(date_to, '%d.%m.%Y')):
                 period_task_keys.add((year, number))
 
         responsible = task.get('responsibleId')

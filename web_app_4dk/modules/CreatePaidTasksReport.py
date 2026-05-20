@@ -335,11 +335,13 @@ def report_paid_tasks(req):
         task = tasks_dict.get(key)
 
         # есть везде
-        if debt and task:
+        '''if debt and task:
             task_date = datetime.strptime(task['date'], '%d.%m.%Y').date()
 
             if not (datetime.strptime(date_from, '%d.%m.%Y').date() <= task_date <= datetime.strptime(date_to, '%d.%m.%Y').date()):
                 continue
+        '''
+        if (debt and task and key in period_task_keys):
 
             matched_rows.append([
                 debt['number'],

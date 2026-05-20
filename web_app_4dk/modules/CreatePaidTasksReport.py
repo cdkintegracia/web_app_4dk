@@ -72,8 +72,8 @@ def report_paid_tasks(req):
     date_from = req['date_from']
     date_to = req['date_to']
 
-    extended_date_from = (datetime.fromisoformat(date_from) - timedelta(days=31)).strftime('%Y-%m-%d')
-    extended_date_to = (datetime.fromisoformat(date_to) + timedelta(days=31)).strftime('%Y-%m-%d')
+    extended_date_from = (datetime.strptime(date_from, '%d.%m.%Y') - timedelta(days=31)).strftime('%Y-%m-%d')
+    extended_date_to = (datetime.strptime(date_from, '%d.%m.%Y') + timedelta(days=31)).strftime('%Y-%m-%d')
 
     wb = openpyxl.Workbook()
     ws = wb.active

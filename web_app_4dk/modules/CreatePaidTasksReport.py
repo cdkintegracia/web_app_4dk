@@ -377,17 +377,21 @@ def report_paid_tasks(req):
                 task['date']
             ])
 
-        # нет в задачах
-        elif debt and not task:
+    # нет в задачах
+    for key, debt in debts_dict.items():
 
-            no_task_rows.append([
-                debt['number'],
-                debt['id'],
-                debt['executor'],
-                debt['company'],
-                debt['amount'],
-                debt['date']
-            ])
+        # если задача существует даже вне периода, то долг НЕ выводим
+        if key in task_keys:
+            continue
+
+        no_task_rows.append([
+            debt['number'],
+            debt['id'],
+            debt['executor'],
+            debt['company'],
+            debt['amount'],
+            debt['date']
+        ])
 
     # задачи без номера
     for task in tasks_without_number:

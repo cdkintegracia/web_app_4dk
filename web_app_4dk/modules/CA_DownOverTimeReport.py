@@ -138,7 +138,7 @@ def ca_downovertime_report(req):
             '<ufCrm85_Day': end_week
             }})
     
-    log_time(f'week_absent user={user_info["ID"]}', t) #210526
+    log_time(f'week_calendar', t) #210526
     
     calendar_by_day_week = {
         item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
@@ -156,7 +156,7 @@ def ca_downovertime_report(req):
             '>=ufCrm85_Day': start_month,
             '<ufCrm85_Day': last_day_month
             }})
-    log_time(f'week_absent user={user_info["ID"]}', t) #210526
+    log_time(f'month_calendar', t) #210526
     
     calendar_by_day_month = {
         item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
@@ -200,7 +200,7 @@ def ca_downovertime_report(req):
                 '>=ufCrm87_Day': start_month,
                 '<ufCrm87_Day': last_day_month
                 }})
-        log_time(f'week_absent user={user_info["ID"]}', t) #210526
+        log_time(f'month_absent user={user_info["ID"]}', t) #210526
         
         absent_by_day_month = {
             item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
@@ -237,7 +237,7 @@ def ca_downovertime_report(req):
             start_iso=start_week,
             end_iso=end_week
         )
-        log_time(f'week_absent user={user_info["ID"]}', t) #210526
+        log_time(f'time_spent_week_list user={user_info["ID"]}', t) #210526
         #time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
 
         #print('Записей за неделю:', len(time_spent_week_list))
@@ -265,7 +265,7 @@ def ca_downovertime_report(req):
                 },
                 'select': ['ID', 'TITLE']
             })
-            log_time(f'week_absent user={user_info["ID"]}', t) #210526
+            log_time(f'task_ids_week user={user_info["ID"]}', t) #210526
 
             # собираем только реально существующие задачи
             for task in tasks:
@@ -317,7 +317,7 @@ def ca_downovertime_report(req):
             start_iso=start_month,
             end_iso=last_day_month
         )
-        log_time(f'week_absent user={user_info["ID"]}', t) #210526
+        log_time(f'time_spent_month_list user={user_info["ID"]}', t) #210526
         time_spent_month = sum(int(x['MINUTES']) for x in time_spent_month_list)
 
         #print('Записей за месяц:', len(time_spent_month_list))
@@ -346,7 +346,7 @@ def ca_downovertime_report(req):
                 },
                 'select': ['ID', 'TITLE']
             })
-            log_time(f'week_absent user={user_info["ID"]}', t) #210526
+            log_time(f'task_ids_month user={user_info["ID"]}', t) #210526
 
             # собираем только реально существующие задачи
             for task in tasks:

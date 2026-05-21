@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from time import sleep
+from time import sleep, time #210526
 import base64
 import requests
 from fast_bitrix24 import Bitrix
@@ -90,6 +90,8 @@ def get_time_spent_for_period(b, user_id, start_iso, end_iso, page_size=50):
 
     return all_results
 
+def log_time(label, start_time): #210526
+    print(f'{label}: {round(time() - start_time, 2)} сек')
 
 def ca_downovertime_report(req):
 
@@ -123,19 +125,8 @@ def ca_downovertime_report(req):
     start_month = datetime.strftime(start_month, '%Y-%m-%d') + 'T00:00:00+03:00'
     end_month = datetime.strftime(end_month, '%Y-%m-%d') + 'T00:00:00+03:00'
     last_day_month = datetime.strftime(last_day_month, '%Y-%m-%d') + 'T00:00:00+03:00'
-    '''
-    start_week = '2025-11-24T00:00:00+03:00'
-    end_week = '2025-12-01T00:00:00+03:00'
-    start_month = '2025-11-01T00:00:00+03:00'
-    end_month = '2025-11-30T00:00:00+03:00'
-    last_day_month = '2025-11-30T00:00:00+03:00'
 
-    print(start_week)
-    print(end_week)
-    print(start_month)
-    print(end_month)
-    print(last_day_month)
-    '''
+    t = time() #210526
 
     #собираем общие данные по рабочим часам за неделю и месяц
     week_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
@@ -147,6 +138,8 @@ def ca_downovertime_report(req):
             '<ufCrm85_Day': end_week
             }})
     
+    log_time(f'week_absent user={user_info["ID"]}', t) #210526
+    
     calendar_by_day_week = {
         item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
         for item in week_calendar
@@ -154,6 +147,7 @@ def ca_downovertime_report(req):
 
     week_calendar = sum(list(map(lambda x: int(x['ufCrm85_Hours']), week_calendar)))
 
+    t = time() #210526
     month_calendar = b.get_all('crm.item.list', { #смарт-процесс Производственный календарь
         'entityTypeId': '1098',
         'select': ['ufCrm85_Day', 'ufCrm85_Hours'],
@@ -162,6 +156,7 @@ def ca_downovertime_report(req):
             '>=ufCrm85_Day': start_month,
             '<ufCrm85_Day': last_day_month
             }})
+    log_time(f'week_absent user={user_info["ID"]}', t) #210526
     
     calendar_by_day_month = {
         item['ufCrm85_Day']: int(item['ufCrm85_Hours'])
@@ -177,7 +172,7 @@ def ca_downovertime_report(req):
         user_name = get_fio_from_user_info(user_info)
         text_message = f'[b]{user_name}[/b]\n\nСобачка-ищейка по кличке Загрузка обнаружила ваши трудозатраты:\n\n'
 
-
+        t = time() #210526
         #собираем персональные данные по рабочим часам за неделю и месяц
         week_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за неделю
             'entityTypeId': '1102',
@@ -188,14 +183,14 @@ def ca_downovertime_report(req):
                 '>=ufCrm87_Day': start_week,
                 '<ufCrm87_Day': end_week
                 }})
-        
+        log_time(f'week_absent user={user_info["ID"]}', t) #210526
         absent_by_day_week = {
             item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
             for item in week_absent
         }
 
         week_absent = sum(list(map(lambda x: int(x['ufCrm87_Hours']), week_absent)))
-
+        t = time() #210526
         month_absent = b.get_all('crm.item.list', { #смарт-процесс Отсутствия за месяц
             'entityTypeId': '1102',
             'select': ['ufCrm87_Day', 'ufCrm87_Hours'],
@@ -205,6 +200,7 @@ def ca_downovertime_report(req):
                 '>=ufCrm87_Day': start_month,
                 '<ufCrm87_Day': last_day_month
                 }})
+        log_time(f'week_absent user={user_info["ID"]}', t) #210526
         
         absent_by_day_month = {
             item['ufCrm87_Day']: int(item['ufCrm87_Hours'])
@@ -233,6 +229,7 @@ def ca_downovertime_report(req):
         #total_hours_month = month_calendar - month_absent # всего рабочих часов за месяц
 
         sleep(1)
+        t = time() #210526
         # делаем запрос трудозатрат за неделю
         time_spent_week_list = get_time_spent_for_period(
             b=b,
@@ -240,6 +237,7 @@ def ca_downovertime_report(req):
             start_iso=start_week,
             end_iso=end_week
         )
+        log_time(f'week_absent user={user_info["ID"]}', t) #210526
         #time_spent_week = sum(int(x['MINUTES']) for x in time_spent_week_list)
 
         #print('Записей за неделю:', len(time_spent_week_list))
@@ -260,12 +258,14 @@ def ca_downovertime_report(req):
         task_titles = {}
 
         if task_ids_week:
+            t = time() #210526 
             tasks = b.get_all('tasks.task.list', {
                 'filter': {
                     'ID': task_ids_week
                 },
                 'select': ['ID', 'TITLE']
             })
+            log_time(f'week_absent user={user_info["ID"]}', t) #210526
 
             # собираем только реально существующие задачи
             for task in tasks:
@@ -309,7 +309,7 @@ def ca_downovertime_report(req):
         else: text_message += f'[i][b]Вы переработали:[/b][/i] {abs(downovertime_week)} ч, Загрузка обеспокоена вашей переработкой и хочет поделиться вкусняшкой :o ;)'
         
         sleep(1)
-                
+        t = time() #210526        
         # делаем запрос трудозатрат за месяц
         time_spent_month_list = get_time_spent_for_period(
             b=b,
@@ -317,6 +317,7 @@ def ca_downovertime_report(req):
             start_iso=start_month,
             end_iso=last_day_month
         )
+        log_time(f'week_absent user={user_info["ID"]}', t) #210526
         time_spent_month = sum(int(x['MINUTES']) for x in time_spent_month_list)
 
         #print('Записей за месяц:', len(time_spent_month_list))
@@ -336,14 +337,16 @@ def ca_downovertime_report(req):
         # запрашиваем по получившимся task_id названия задач
         task_ids_month = list(task_month.keys())
         task_titles = {}
-
+         
         if task_ids_month:
+            t = time() #210526 
             tasks = b.get_all('tasks.task.list', {
                 'filter': {
                     'ID': task_ids_month
                 },
                 'select': ['ID', 'TITLE']
             })
+            log_time(f'week_absent user={user_info["ID"]}', t) #210526
 
             # собираем только реально существующие задачи
             for task in tasks:
@@ -391,8 +394,8 @@ def ca_downovertime_report(req):
         sleep(1)
 
         #рассылка от робота задач
-        #notification_users = ['1391']
-        notification_users = [user_info['ID'], '159', '1391', '1']
+        notification_users = ['1391']
+        #notification_users = [user_info['ID'], '159', '1391', '1']
 
         for user in notification_users:
             data = {

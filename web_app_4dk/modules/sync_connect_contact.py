@@ -174,21 +174,27 @@ def _field_by_possible_names(row: Mapping[str, Any], names: Iterable[str]) -> st
 
 
 def _candidate_id(row: Mapping[str, Any]) -> str:
+    if row.get("user_id"):
+        return str(row["user_id"]).strip()
+
     direct = _field_by_possible_names(row, [
         "id", "user_id", "userid", "userId", "connect_id", "author_id", "client_user_id", "ClientUserID"
     ])
     if direct:
         return direct
 
-    # Запасной вариант: ищем похожий UUID/числовой ID среди скалярных значений.
     for value in _iter_scalar_values(row):
         value = value.strip()
         if re.fullmatch(r"[0-9a-fA-F\-]{8,}", value) or re.fullmatch(r"\d{3,}", value):
             return value
+
     return ""
 
 
 def _candidate_email_blob(row: Mapping[str, Any]) -> str:
+    if row.get("email"):
+        return str(row["email"]).strip().lower()
+
     direct = _field_by_possible_names(row, [
         "email", "e_mail", "mail", "Email", "EMail", "login", "Login"
     ])
@@ -201,13 +207,20 @@ def _candidate_email_blob(row: Mapping[str, Any]) -> str:
 
 
 def _candidate_name(row: Mapping[str, Any]) -> str:
+    surname = str(row.get("surname") or "").strip()
+    name = str(row.get("name") or "").strip()
+    patronymic = str(row.get("patronymic") or "").strip()
+
+    full_name = " ".join(x for x in [surname, name, patronymic] if x).strip()
+    if full_name:
+        return full_name
+
     direct = _field_by_possible_names(row, [
-        "name", "full_name", "fullName", "display_name", "displayName", "fio", "title", "Name"
+        "full_name", "fullName", "display_name", "displayName", "fio", "title", "Name"
     ])
     if direct:
         return direct
 
-    # Если явного поля ФИО нет, собираем весь объект в строку.
     return " ".join(_iter_scalar_values(row))
 
 

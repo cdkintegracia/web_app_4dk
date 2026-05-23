@@ -124,6 +124,8 @@ from web_app_4dk.modules.CreateManagerReport import create_manager_report_auto
 from web_app_4dk.modules.ClosedTLPtasksReport import closed_tlp_tasks
 #2026-05-19 saa
 from web_app_4dk.modules.CreatePaidTasksReport import report_paid_tasks
+#2026-05-23
+from web_app_4dk.modules.sync_connect_contact import sync_connect_contact_job
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -220,6 +222,8 @@ custom_webhooks = {
     'closed_tlp_tasks': closed_tlp_tasks,
     #2026-05-19 saa
     'report_paid_tasks': report_paid_tasks,
+    #2026-05-23 ibs
+    'sync_connect_contact': sync_connect_contact_job
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

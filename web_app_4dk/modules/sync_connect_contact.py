@@ -65,7 +65,7 @@ CONNECT_API_PASSWORD = authentication("ConnectPassword")
 # Для поля "Есть в коннекте".
 # Если в Битрикс24 это поле типа "список", сюда надо положить ID варианта "да".
 CONTACT_IN_CONNECT_FIELD = "UF_CRM_1666098408"
-CONTACT_IN_CONNECT_VALUE = os.getenv("BITRIX_CONNECT_YES_VALUE", "да")
+CONTACT_IN_CONNECT_VALUE = os.getenv("BITRIX_CONNECT_YES_VALUE", "Y")
 
 CONTACT_CONNECT_ID_FIELD = "UF_CRM_1666338025722"
 COMPANY_INN_FIELD = "UF_CRM_1656070716"

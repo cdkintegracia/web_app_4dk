@@ -72,7 +72,7 @@ connect_codes = {
 
 def connect_1c():
     session = Session()
-    session.auth = HTTPBasicAuth('bitrix', 'SekXd4')
+    session.auth = HTTPBasicAuth(authentication("ConnectLogin"),authentication("ConnectPassword"))
     client = Client('https://cus.buhphone.com/cus/ws/PartnerWebAPI2?wsdl',
                     transport=Transport(session=session))
     return client
@@ -790,7 +790,10 @@ def add_ip():
     }
 
     response = requests.post('https://push.1c-connect.com/v1/hook/', headers=headers, json=json_data,
-                             auth=('bitrix', 'SekXd4'))
+                             auth=(
+                                 authentication("ConnectLogin"),
+                                 authentication("ConnectPassword")
+                             ))
     print(response)
 
 

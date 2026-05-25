@@ -97,7 +97,8 @@ def report_paid_tasks(req):
             'filter': {
                 'GROUP_ID': 408,
                 '>=CLOSED_DATE': extended_date_from,
-                '<=CLOSED_DATE': extended_date_to
+                '<=CLOSED_DATE': extended_date_to,
+                '!STAGE_ID': 2944
             },
             'select': [
                 'ID',

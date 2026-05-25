@@ -46,7 +46,7 @@ def create_company_elapstime_report(req):
         }
     })
 
-    users_id = list(map(lambda x: x['ID'], users_info))
+    users_id = list(map(lambda x: x['ID'], filter(lambda x: x['ID'] != '173', users_info))) # исключен Робот Задач
 
     date_task_filter = (datetime.strptime(req['date_start'], "%d.%m.%Y") - timedelta(days=30)).strftime("%Y-%m-%d")
 

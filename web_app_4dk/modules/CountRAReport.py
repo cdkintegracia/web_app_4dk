@@ -55,7 +55,7 @@ def count_ra_report(req):
         users_info_cs = b.get_all('user.get', {
                 'filter': {
                     'ACTIVE': 1,
-                    'UF_DEPARTMENT': ['5', '27', '29'] #ЦС, ГО3, ГО4
+                    'UF_DEPARTMENT': ['5', '27', '29', '458'] #ЦС, ГО3, ГО4, ГР
                 }
             })
         users_id_cs = list(set(map(lambda x: int(x['ID']), users_info_cs)))

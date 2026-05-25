@@ -15,10 +15,10 @@ b = Bitrix(authentication('Bitrix'))
 def create_consultline_task_report(req):
     users_info = b.get_all('user.get', {
         'filter': {
-            'UF_DEPARTMENT': ['231'] #обновлен айди отдела
+            'UF_DEPARTMENT': ['231'] # ЛК
         }
     })
-    users_id = list(map(lambda x: x['ID'], users_info))
+    users_id = list(map(lambda x: x['ID'], filter(lambda x: x['ID'] != '173', users_info))) # исключен Робот Задач
     company_info = b.get_all('crm.company.get', {
         'ID': req['company_id'],
         'select': ['TITLE'],

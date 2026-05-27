@@ -217,6 +217,7 @@ def create_employees_report(req):
             all_timespent = []
             start = 0
             seen_starts = set()
+            last_ids = set()
 
             while True:
                 all_response = b.call(

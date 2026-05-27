@@ -287,15 +287,25 @@ def create_employees_report(req):
             }
         })
         days_duty_amount = len(days_duty)
-        print(days_duty_amount)
+
 
         print(pu_tasks)
+        test = b.call(
+                    'task.elapseditem.getlist',
+                    {
+                        'order': {'ID': 'asc'},
+                        'filter': {
+                            'TASK_ID': 557140, 
+                            #'>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                            #'<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+                        },
+                        'start': 0
+                    },
+                    raw=True
+                )
+        for item in test['result']:
+            print(item)
 
-
-        found = list(filter(lambda x: str(x['TASK_ID']) == '557140', all_timespent))
-        print(found)
-
-        print(all_timespent[0])
 
         worksheet.append(['Закрытые задачи', 'ТЛП', 'РаботыИТС', 'Платные работы', 'Остальные', 'Всего'])
         worksheet.append(['Кол-во', len(tlp_tasks), len(worksits_tasks), len(pu_tasks), len(others_tasks), len(all_tasks)])

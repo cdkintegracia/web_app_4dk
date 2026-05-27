@@ -247,6 +247,15 @@ def create_employees_report(req):
                 seen_starts.add(next_start)
                 start = next_start
 
+            print('TOTAL ELAPSED:', len(all_timespent))
+            print('LAST START:', start)
+            print('LAST NEXT:', next_start)
+            
+            task_ids_in_elapsed = set(map(lambda x: x['TASK_ID'], all_timespent))
+
+            print('557140' in task_ids_in_elapsed)
+            print(len(task_ids_in_elapsed))
+
         # фильтрация трудозатрат по группам
         tlp_timespent = list(filter(lambda x: x['TASK_ID'] in tlp_ids, all_timespent))
         worksits_timespent = list(filter(lambda x: x['TASK_ID'] in worksits_ids, all_timespent))

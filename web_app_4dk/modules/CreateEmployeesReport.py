@@ -236,6 +236,9 @@ def create_employees_report(req):
 
                 all_result = all_response.get('result', [])
                 all_timespent.extend(all_result)
+                for item in all_result:
+                    if item['TASK_ID'] == '557140':
+                        print('FOUND IN ALL_RESULT:', item)
 
                 next_start = all_response.get('next')
                 # нет next — конец
@@ -289,7 +292,7 @@ def create_employees_report(req):
         days_duty_amount = len(days_duty)
 
 
-        print(pu_tasks)
+        print('user_info ID:', user_info['ID'], type(user_info['ID']))
         test = b.call(
                     'task.elapseditem.getlist',
                     {

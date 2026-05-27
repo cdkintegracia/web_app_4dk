@@ -1675,6 +1675,7 @@ def create_employees_report(req):
 
         all_tasks = list(filter(lambda x: x['status'] == '5', tasks))
         all_ids = list(set(map(lambda x: x['id'], all_tasks)))
+        print(len(all_ids))
     
         if all_ids:
             all_timespent = []
@@ -1753,13 +1754,7 @@ def create_employees_report(req):
         days_duty_amount = len(days_duty)
         print(days_duty_amount)
 
-        print(len(pu_tasks))
-        print(pu_ids[:10])
-        print(len(pu_timespent))
-        print(pu_timespent[:3])
-        print(type(pu_ids[0]))
-        print(type(all_timespent[0]['TASK_ID']))
-
+        print('557140' in list(map(lambda x: x['TASK_ID'], all_timespent)))
 
         worksheet.append(['Закрытые задачи', 'ТЛП', 'РаботыИТС', 'Платные работы', 'Остальные', 'Всего'])
         worksheet.append(['Кол-во', len(tlp_tasks), len(worksits_tasks), len(pu_tasks), len(others_tasks), len(all_tasks)])

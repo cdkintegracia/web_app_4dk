@@ -1650,7 +1650,7 @@ def create_employees_report(req):
         worksheet.append([])
         
 
-        # Задачи
+        # Закрытые задачи
         tasks = b.get_all('tasks.task.list', {
             'filter': {
                 'RESPONSIBLE_ID': user_info['ID'],
@@ -1660,29 +1660,35 @@ def create_employees_report(req):
             'select': ['ID', 'GROUP_ID', 'STATUS', 'UF_AUTO_177856763915']
         })
 
-        #completed_tasks = list(filter(lambda x: x['status'] == '5', tasks))
-        #service_tasks = list(filter(lambda x: x['groupId'] == '71', tasks))
-        #completed_service_tasks = list(filter(lambda x: x['status'] == '5', service_tasks))
-        #completed_other_tasks = list(filter(lambda x: x['status'] == '5' and x['groupId'] != '71', tasks))
-        #non_completed_other_tasks = list(filter(lambda x: x['status'] != '5' and x['groupId'] != '71', tasks))
 
-        # кол-во и затраты по задачам тлп
-        completed_tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
-        tlp_ids = list(set(map(lambda x: x['id'], completed_tlp_tasks)))
+        tlp_tasks = list(filter(lambda x: x['groupId'] == '1' and x['status'] == '5', tasks))
+        tlp_ids = list(set(map(lambda x: x['id'], tlp_tasks)))
+
+        worksits_tasks = list(filter(lambda x: x['groupId'] == '321' and x['status'] == '5', tasks))
+        worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks)))
+
+        pu_tasks = list(filter(lambda x: x['groupId'] == '408' and x['status'] == '5', tasks))
+        pu_ids = list(set(map(lambda x: x['id'], pu_tasks)))
+
+        others_tasks = list(filter(lambda x: x['groupId'] not in ['1', '321', '408'] and x['status'] == '5', tasks))
+        others_ids = list(set(map(lambda x: x['id'], others_tasks)))
+
+        all_tasks = list(filter(lambda x: x['status'] == '5', tasks))
+        all_ids = list(set(map(lambda x: x['id'], tlp_tasks)))
     
-        if tlp_ids:
-            tlp_timespent = []
+        if all_ids:
+            all_timespent = []
             start = 0
             seen_starts = set()
 
             while True:
-                tlp_response = b.call(
+                all_response = b.call(
                     'task.elapseditem.getlist',
                     {
                         'order': {'ID': 'asc'},
                         'filter': {
                             'USER_ID': user_info['ID'],
-                            'TASK_ID': tlp_ids, 
+                            'TASK_ID': all_ids, 
                             '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
                             '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
                         },
@@ -1691,10 +1697,10 @@ def create_employees_report(req):
                     raw=True
                 )
 
-                tlp_result = tlp_response.get('result', [])
-                tlp_timespent.extend(tlp_result)
+                all_result = all_response.get('result', [])
+                all_timespent.extend(all_result)
 
-                next_start = tlp_response.get('next')
+                next_start = all_response.get('next')
                 # нет next — конец
                 if next_start is None:
                     break
@@ -1704,67 +1710,36 @@ def create_employees_report(req):
                 seen_starts.add(start)
                 start = next_start
 
-            tlp_total_seconds = sum(int(item.get('SECONDS', 0)) for item in tlp_timespent)
-            tlp_hours = tlp_total_seconds // 3600
-            tlp_minutes = (tlp_total_seconds % 3600) // 60
-        else:
-            tlp_hours = 0
-            tlp_minutes = 0
+        # фильтрация трудозатрат по группам
+        tlp_timespent = list(filter(lambda x: x['TASK_ID'] in tlp_ids, all_timespent))
+        worksits_timespent = list(filter(lambda x: x['TASK_ID'] in worksits_ids, all_timespent))
+        pu_timespent = list(filter(lambda x: x['TASK_ID'] in pu_ids, all_timespent))
+        others_timespent = list(filter(lambda x: x['TASK_ID'] in others_ids, all_timespent))
 
-        #средняя оценка
-        tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, completed_tlp_tasks))
+        def calc_timespent(timespent): # функция для подсчета времени
+            total_seconds = sum(int(item.get('SECONDS', 0)) for item in timespent)
+
+            hours = total_seconds // 3600
+            minutes = (total_seconds % 3600) // 60
+
+            return hours, minutes
+
+        # итог время
+        tlp_hours, tlp_minutes = calc_timespent(tlp_timespent)
+        worksits_hours, worksits_minutes = calc_timespent(worksits_timespent)
+        pu_hours, pu_minutes = calc_timespent(pu_timespent)
+        others_hours, others_minutes = calc_timespent(others_timespent)
+        all_hours, all_minutes = calc_timespent(all_timespent)
+
+        # средняя оценка
+        tasks_ratings = list(map(lambda x: int(x['ufAuto177856763915']) if x['ufAuto177856763915'] else 0, tlp_tasks))
         tasks_ratings = list(filter(lambda x: x != 0, tasks_ratings))
         try:
             average_tasks_ratings = round(sum(tasks_ratings) / len(tasks_ratings), 2)
         except ZeroDivisionError:
             average_tasks_ratings = '-'
 
-        # кол-во и затраты по работам итс
-        worksits_tasks = list(filter(lambda x: x['groupId'] == '321', tasks))
-        worksits_ids = list(set(map(lambda x: x['id'], worksits_tasks))) 
-    
-        if worksits_ids:
-            worksits_timespent = []
-            start = 0
-            seen_starts = set()
-
-            while True:
-                wi_response = b.call(
-                    'task.elapseditem.getlist',
-                    {
-                        'order': {'ID': 'asc'},
-                        'filter': {
-                            'USER_ID': user_info['ID'],
-                            'TASK_ID': worksits_ids, 
-                            '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
-                            '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
-                        },
-                        'start': start
-                    },
-                    raw=True
-                )
-
-                wi_result = wi_response.get('result', [])
-                worksits_timespent.extend(wi_result)
-
-                next_start = wi_response.get('next')
-                # нет next — конец
-                if next_start is None:
-                    break
-                # next не двигается — защита от вечного цикла
-                if next_start == start or next_start in seen_starts:
-                    break
-                seen_starts.add(start)
-                start = next_start
-
-            wi_total_seconds = sum(int(item.get('SECONDS', 0)) for item in worksits_timespent)
-            wi_hours = wi_total_seconds // 3600
-            wi_minutes = (wi_total_seconds % 3600) // 60
-        else:
-            wi_hours = 0
-            wi_minutes = 0
-
-        #Попытка Дежурства
+        # попытка Дежурства
         days_duty = b.get_all('lists.element.get', {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '301',
@@ -1777,19 +1752,16 @@ def create_employees_report(req):
         days_duty_amount = len(days_duty)
         print(days_duty_amount)
 
-        #worksheet.append(['', 'Незакрытых (и созд. в этом мес)', 'Всего создано в месяце'])
-        #worksheet.append(['Незакрытые задачи', len(tasks) - len(completed_tasks), len(tasks)])
-        #worksheet.append(['СВ', len(service_tasks) - len(completed_service_tasks), len(service_tasks)])
-        #worksheet.append(['Остальные', len(non_completed_other_tasks), len(completed_other_tasks) + len(non_completed_other_tasks)])
-        #worksheet.append([])
-        worksheet.append(['Закрытые задачи ТЛП', len(completed_tlp_tasks)])
-        worksheet.append(['Трудозатраты ТЛП', f'{tlp_hours} ч {tlp_minutes} мин'])
+
+        worksheet.append(['Закрытые задачи', 'ТЛП', 'РаботыИТС', 'Платные работы', 'Остальные', 'Всего'])
+        worksheet.append(['Кол-во', len(tlp_tasks), len(worksits_tasks), len(pu_tasks), len(others_tasks), len(all_tasks)])
+        worksheet.append(['Трудозатраты', f'{tlp_hours} ч {tlp_minutes} мин', f'{worksits_hours} ч {worksits_minutes} мин', 
+                          f'{pu_hours} ч {pu_minutes} мин', f'{others_hours} ч {others_minutes} мин', f'{all_hours} ч {all_minutes} мин'])
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
-        worksheet.append(['Всего задач РаботыИТС', len(worksits_tasks)])
-        worksheet.append(['Трудозатраты РаботыИТС', f'{wi_hours} ч {wi_minutes} мин'])
-        worksheet.append([])
+
+        # Звонки и письма
 
         
         # ЭДО

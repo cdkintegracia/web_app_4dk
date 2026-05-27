@@ -1675,7 +1675,6 @@ def create_employees_report(req):
 
         all_tasks = list(filter(lambda x: x['status'] == '5', tasks))
         all_ids = list(set(map(lambda x: x['id'], all_tasks)))
-        print(len(all_ids))
     
         if all_ids:
             all_timespent = []
@@ -1689,8 +1688,8 @@ def create_employees_report(req):
                         'order': {'ID': 'asc'},
                         'filter': {
                             'USER_ID': user_info['ID'],
-                            'TASK_ID': all_ids, 
-                            #'>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                            #'TASK_ID': all_ids, 
+                            '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
                             #'<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
                         },
                         'start': start
@@ -1715,7 +1714,6 @@ def create_employees_report(req):
         tlp_timespent = list(filter(lambda x: x['TASK_ID'] in tlp_ids, all_timespent))
         worksits_timespent = list(filter(lambda x: x['TASK_ID'] in worksits_ids, all_timespent))
         pu_timespent = list(filter(lambda x: x['TASK_ID'] in pu_ids, all_timespent))
-        print(pu_ids)
         others_timespent = list(filter(lambda x: x['TASK_ID'] in others_ids, all_timespent))
 
         def calc_timespent(timespent): # функция для подсчета времени
@@ -1753,8 +1751,6 @@ def create_employees_report(req):
         })
         days_duty_amount = len(days_duty)
         print(days_duty_amount)
-
-        print('557140' in list(map(lambda x: x['TASK_ID'], all_timespent)))
 
         worksheet.append(['Закрытые задачи', 'ТЛП', 'РаботыИТС', 'Платные работы', 'Остальные', 'Всего'])
         worksheet.append(['Кол-во', len(tlp_tasks), len(worksits_tasks), len(pu_tasks), len(others_tasks), len(all_tasks)])

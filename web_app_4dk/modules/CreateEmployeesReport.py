@@ -1714,6 +1714,7 @@ def create_employees_report(req):
         tlp_timespent = list(filter(lambda x: x['TASK_ID'] in tlp_ids, all_timespent))
         worksits_timespent = list(filter(lambda x: x['TASK_ID'] in worksits_ids, all_timespent))
         pu_timespent = list(filter(lambda x: x['TASK_ID'] in pu_ids, all_timespent))
+        print(pu_ids)
         others_timespent = list(filter(lambda x: x['TASK_ID'] in others_ids, all_timespent))
 
         def calc_timespent(timespent): # функция для подсчета времени

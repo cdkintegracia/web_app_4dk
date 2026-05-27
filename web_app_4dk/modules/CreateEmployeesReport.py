@@ -236,18 +236,15 @@ def create_employees_report(req):
 
                 all_result = all_response.get('result', [])
                 all_timespent.extend(all_result)
-                for item in all_result:
-                    if item['TASK_ID'] == '557140':
-                        print('FOUND IN ALL_RESULT:', item)
 
                 next_start = all_response.get('next')
                 # нет next — конец
                 if next_start is None:
                     break
                 # next не двигается — защита от вечного цикла
-                if next_start == start or next_start in seen_starts:
+                if next_start == start in seen_starts:
                     break
-                seen_starts.add(start)
+                seen_starts.add(next_start)
                 start = next_start
 
         # фильтрация трудозатрат по группам
@@ -290,58 +287,6 @@ def create_employees_report(req):
             }
         })
         days_duty_amount = len(days_duty)
-
-        # только USER_ID
-        test_user = b.call(
-            'task.elapseditem.getlist',
-            {
-                'order': {'ID': 'asc'},
-                'filter': {
-                    'USER_ID': user_info['ID'],
-                },
-                'start': 0
-            },
-            raw=True
-        )
-
-        for item in test_user['result']:
-            if item['TASK_ID'] == '557140':
-                print('FOUND USER')
-
-        # только дата
-        test_date = b.call(
-            'task.elapseditem.getlist',
-            {
-                'order': {'ID': 'asc'},
-                'filter': {
-                    '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
-                },
-                'start': 0
-            },
-            raw=True
-        )
-
-        for item in test_date['result']:
-            if item['TASK_ID'] == '557140':
-                print('FOUND DATE')
-
-        # USER_ID + дата
-        test_both = b.call(
-            'task.elapseditem.getlist',
-            {
-                'order': {'ID': 'asc'},
-                'filter': {
-                    'USER_ID': user_info['ID'],
-                    '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
-                },
-                'start': 0
-            },
-            raw=True
-        )
-
-        for item in test_both['result']:
-            if item['TASK_ID'] == '557140':
-                print('FOUND BOTH')
 
 
         worksheet.append(['Закрытые задачи', 'ТЛП', 'РаботыИТС', 'Платные работы', 'Остальные', 'Всего'])

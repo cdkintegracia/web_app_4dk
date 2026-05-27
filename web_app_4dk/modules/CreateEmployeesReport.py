@@ -235,26 +235,14 @@ def create_employees_report(req):
                 )
 
                 all_result = all_response.get('result', [])
+                if not all_result:
+                    break
                 all_timespent.extend(all_result)
 
-                next_start = all_response.get('next')
-                # нет next — конец
-                if next_start is None:
-                    break
-                # next не двигается — защита от вечного цикла
-                if next_start == start in seen_starts:
-                    break
-                seen_starts.add(next_start)
-                start = next_start
+                print(start, len(all_result))
 
-            print('TOTAL ELAPSED:', len(all_timespent))
-            print('LAST START:', start)
-            print('LAST NEXT:', next_start)
-            
-            task_ids_in_elapsed = set(map(lambda x: x['TASK_ID'], all_timespent))
+                start += 50
 
-            print('557140' in task_ids_in_elapsed)
-            print(len(task_ids_in_elapsed))
 
         # фильтрация трудозатрат по группам
         tlp_timespent = list(filter(lambda x: x['TASK_ID'] in tlp_ids, all_timespent))

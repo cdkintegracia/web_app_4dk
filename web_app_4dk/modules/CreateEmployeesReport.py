@@ -290,17 +290,7 @@ def create_employees_report(req):
         print(days_duty_amount)
 
         print(pu_tasks)
-        test = b.call(
-            'task.elapseditem.getlist',
-            {
-                'filter': {
-                    'TASK_ID': '557140'
-                }
-            },
-            raw=True
-        )
 
-        print(test['result'])
 
         found = list(filter(lambda x: str(x['TASK_ID']) == '557140', all_timespent))
         print(found)

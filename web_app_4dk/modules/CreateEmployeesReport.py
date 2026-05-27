@@ -325,7 +325,7 @@ def create_employees_report(req):
         worksheet.append(['Общее время звонков'])
         worksheet.append(['Отправлено писем', len(emails)])
 
-        
+        '''
         # ЭДО
         all_its = list(filter(lambda x: 'ГРМ' not in x['Тип'], its_deals_last_month))
         count_its_unigue = len(set(x['Компания'] for x in all_its))
@@ -495,6 +495,7 @@ def create_employees_report(req):
         
         worksheet.append(['Сверка 2.0'])
         worksheet.append(['Подключено', len(company_sverka)])
+        '''
 
         change_sheet_style(worksheet)
         

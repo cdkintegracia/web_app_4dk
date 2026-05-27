@@ -5,7 +5,7 @@ import os
 
 import openpyxl
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import PatternFill, Font
+from openpyxl.styles import PatternFill, Font, Alignment
 from fast_bitrix24 import Bitrix
 
 from web_app_4dk.modules.authentication import authentication
@@ -1674,7 +1674,7 @@ def create_employees_report(req):
         others_ids = list(set(map(lambda x: x['id'], others_tasks)))
 
         all_tasks = list(filter(lambda x: x['status'] == '5', tasks))
-        all_ids = list(set(map(lambda x: x['id'], tlp_tasks)))
+        all_ids = list(set(map(lambda x: x['id'], all_tasks)))
     
         if all_ids:
             all_timespent = []
@@ -1757,6 +1757,9 @@ def create_employees_report(req):
         worksheet.append(['Кол-во', len(tlp_tasks), len(worksits_tasks), len(pu_tasks), len(others_tasks), len(all_tasks)])
         worksheet.append(['Трудозатраты', f'{tlp_hours} ч {tlp_minutes} мин', f'{worksits_hours} ч {worksits_minutes} мин', 
                           f'{pu_hours} ч {pu_minutes} мин', f'{others_hours} ч {others_minutes} мин', f'{all_hours} ч {all_minutes} мин'])
+        row = worksheet.max_row
+        for col in range(2, 7):
+            worksheet.cell(row=row, column=col).alignment = Alignment(horizontal='right') # выравнивание по правому краю
         worksheet.append(['Средняя оценка', average_tasks_ratings])
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])

@@ -237,6 +237,14 @@ def create_employees_report(req):
                 all_result = all_response.get('result', [])
                 if not all_result:
                     break
+                current_ids = set(map(lambda x: x['ID'], all_result))
+
+                # если пришла та же самая страница
+                if current_ids == last_ids:
+                    break
+
+                last_ids = current_ids
+
                 all_timespent.extend(all_result)
 
                 print(start, len(all_result))

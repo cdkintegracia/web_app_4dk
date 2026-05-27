@@ -1689,8 +1689,8 @@ def create_employees_report(req):
                         'filter': {
                             'USER_ID': user_info['ID'],
                             'TASK_ID': all_ids, 
-                            '>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
-                            '<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+                            #'>=CREATED_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                            #'<CREATED_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
                         },
                         'start': start
                     },

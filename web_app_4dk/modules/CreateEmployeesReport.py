@@ -1807,11 +1807,12 @@ def create_employees_report(req):
                 'DIRECTION': '2'
                 }})
 
-        worksheet.append([])
         worksheet.append(['Входящих звонков (> 10 сек)', len(incalls)])
         worksheet.append(['Исходящих звонков (> 10 сек)', len(outcalls)])
         worksheet.append(['Общее время звонков', f'{duration_hours} ч {duration_minutes} мин'])
+        worksheet.cell(worksheet.max_row, 2).alignment = Alignment(horizontal='right')
         worksheet.append(['Отправлено писем', len(emails)])
+        worksheet.append([])
 
         
         # ЭДО

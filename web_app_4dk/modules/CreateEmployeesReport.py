@@ -306,7 +306,38 @@ def create_employees_report(req):
         worksheet.append(['Дней дежурства', days_duty_amount])
         worksheet.append([])
 
+
         # Звонки и письма
+
+        # сбор инфо по входящим более 10 секунд за день
+        incalls = b.get_all('voximplant.statistic.get', {
+            'filter': {
+                'CALL_TYPE': 2,
+                'PORTAL_USER_ID': user_info['ID'],
+                '>CALL_DURATION': 10,
+                '>=CALL_START_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<CALL_START_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+                'CALL_FAILED_CODE': '200',
+            }})
+
+        # сбор инфо по исходящим более 10 секунд за день
+        outcalls = b.get_all('voximplant.statistic.get', {
+            'filter': {
+                'CALL_TYPE': 1,
+                'PORTAL_USER_ID': user_info['ID'],
+                '>CALL_DURATION': 10,
+                '>=CALL_START_DATE': month_filter_start.strftime(ddmmyyyy_pattern),
+                '<CALL_START_DATE': month_filter_end.strftime(ddmmyyyy_pattern),
+                'CALL_FAILED_CODE': '200',
+            }})
+        
+        #duration_in = sum(list(map(lambda x: int(x['CALL_DURATION']), incalls)))
+        #duration_out = sum(list(map(lambda x: int(x['CALL_DURATION']), outcalls)))
+        #duration = duration_in + duration_out
+        total_seconds = (sum(int(x['CALL_DURATION']) for x in incalls) + sum(int(x['CALL_DURATION']) for x in outcalls))
+        duration_hours = total_seconds // 3600
+        duration_minutes = (total_seconds % 3600) // 60
+
         #сбор инфо по исходящим письмам с привязкой к сущностям
         emails = b.get_all('crm.activity.list', {
             'filter': {
@@ -318,9 +349,9 @@ def create_employees_report(req):
                 }})
 
         worksheet.append([])
-        worksheet.append(['Входящих звонков (> 10 сек)'])
-        worksheet.append(['Исходящих звонков (> 10 сек)'])
-        worksheet.append(['Общее время звонков'])
+        worksheet.append(['Входящих звонков (> 10 сек)', len(incalls)])
+        worksheet.append(['Исходящих звонков (> 10 сек)', len(outcalls)])
+        worksheet.append(['Общее время звонков', f'{duration_hours} ч {duration_minutes} мин'])
         worksheet.append(['Отправлено писем', len(emails)])
 
         '''

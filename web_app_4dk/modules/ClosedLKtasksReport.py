@@ -234,23 +234,24 @@ def closed_lk_tasks(req=None):
     #print(report)
 
 
-    # отправка отчета
-
-    notification_users = ['1391']
-    #notification_users = ['159', '1391']
-
+    #отправка отчета по ЛК для СЮВ, ИБС и САА
+    notification_users = ['1', '1391', '19']
+    #notification_users = ['1391']
     for user in notification_users:
 
-        data = {
+        data_lk = {
             'DIALOG_ID': user,
             'MESSAGE': report,
         }
 
-        requests.post(
-            url=f'{authentication("user_173").strip()}im.message.add',
-            json=data
-        )
+        requests.post(url=f'{authentication("user_173").strip()}im.message.add', json=data_lk)
 
+    #отправка отчета по ЛК от службы качества чдк для СНА 157
+    data = {
+        'DIALOG_ID': '157',
+        'MESSAGE': report,
+    }
+    r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data) 
 
 if __name__ == '__main__':
     closed_lk_tasks()

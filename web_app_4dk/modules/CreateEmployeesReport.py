@@ -144,10 +144,14 @@ def get_edo_norm_enum_value_id(field_definition: dict, wanted_value: str) -> int
 
 def get_edo_norm_items(report_month: int, report_year: int, month_name: str) -> list:
     """Получает все элементы смарт-процесса "Норматив ЭДО" за отчетный месяц."""
-    fields_result = b.call('crm.item.fields', {
-        'entityTypeId': EDO_NORM_ENTITY_TYPE_ID,
-        'useOriginalUfNames': 'N',
-    })
+    fields_result = b.call(
+        'crm.item.fields',
+        {
+            'entityTypeId': EDO_NORM_ENTITY_TYPE_ID,
+            'useOriginalUfNames': 'N',
+        },
+        raw=True
+    )
 
     fields = {}
     if isinstance(fields_result, dict):

@@ -50,10 +50,37 @@ def read_elapsed(api,tid):
         page+=1
 
 
-def journal(api,c):
-    return api.pages('crm.item.list',{'entityTypeId':c['entity_type_id'],
-        'useOriginalUfNames':'Y','filter':{'categoryId':c['category_id']},
-        'order':{'id':'ASC'},'select':['id','title','companyId','categoryId']+list(c['fields'].values())},'items')
+def journal(api, c):
+    rows = api.pages(
+        'crm.item.list',
+        {
+            'entityTypeId': c['entity_type_id'],
+            'useOriginalUfNames': 'Y',
+            'filter': {'categoryId': c['category_id']},
+            'order': {'id': 'ASC'},
+            'select': ['*'],
+        },
+        'items',
+    )
+
+    for row in rows:
+        LOG.warning(
+            'ЧТЕНИЕ ЖУРНАЛА: id=%r; ID=%r; '
+            'companyId=%r; COMPANY_ID=%r',
+            row.get('id'),
+            row.get('ID'),
+            row.get('companyId'),
+            row.get('COMPANY_ID'),
+        )
+
+        if row.get('id') is None or row.get('companyId') is None:
+            LOG.warning('ИМЕНА ПОЛЕЙ: %s', sorted(row.keys()))
+            raise RuntimeError(
+                'В ответе журнала отсутствует id или companyId; '
+                'обработка остановлена до изменения данных'
+            )
+
+    return rows
 
 
 def index_journal(items,c):

@@ -4,6 +4,7 @@
 APPLY = True  # False: только проверка. True: запись в Битрикс24.
 COMPANY_ID = None  # Первая проверка. Для всех компаний установите None.
 TASK_LOOKBACK_DAYS = 3  # До начала текущего месяца, а не до сегодняшнего дня.
+NOTIFY_USER_ID = 1  # Получатель итогового уведомления в Битрикс24.
 
 # Исключения ЭПД относятся только к группе 1 и точному тегу «ЭПД».
 EPD_GROUP_ID = 1
@@ -398,6 +399,30 @@ def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
     return errors
 
 
+def notify_completed(api, c, added, updated, errors, company_filter=None):
+    """После подтверждения записей и публикации итогов. Ошибка доставки не отменяет загрузку."""
+    status = ('Загрузка трудозатрат ЭПД завершена с ошибками.' if errors
+              else 'Трудозатраты ЭПД успешно загружены.')
+    scope = 'Все компании' if not company_filter else 'Компания %s' % company_filter
+    message = (f'{status}\n'
+               f'{scope}. Период: {c["_run_period"]}.\n'
+               f'Журнал: обновлено {updated}, добавлено {added}.\n'
+               f'Ошибки: {len(errors)}.')
+    if errors:
+        message += ' Подробности в журнале Flask.'
+    try:
+        # Тот же метод, который уже используется в FillActDocumentSmartProcess.
+        # Без автоматического повтора при тайм-ауте: уведомление могло дойти.
+        reply = api.call('im.notify.system.add',
+                         {'USER_ID': NOTIFY_USER_ID, 'MESSAGE': message}, write=True)
+        if not reply.get('result'):
+            raise RuntimeError('Битрикс24 не подтвердил отправку уведомления')
+        LOG.info('Итоговое уведомление отправлено пользователю %s', NOTIFY_USER_ID)
+    except Exception:
+        LOG.exception('Не удалось подтвердить доставку уведомления пользователю %s; '
+                      'результат загрузки сохранён', NOTIFY_USER_ID)
+
+
 def main():
     from types import SimpleNamespace
     args = SimpleNamespace(apply=APPLY, company=COMPANY_ID)
@@ -433,6 +458,8 @@ def main():
         errors+=publish(api,c,target,blocked,args.apply,args.company,billing)
         for msg in errors:LOG.warning(msg)
         LOG.info('Завершено. Исключений: %s',len(errors))
+        if args.apply:
+            notify_completed(api,c,new_count,edit_count,errors,args.company)
         return 2 if errors else 0
 
 

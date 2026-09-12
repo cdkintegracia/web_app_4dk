@@ -1,7 +1,7 @@
 """Журнал трудозатрат Б24. По умолчанию только проверка; запись при APPLY = True."""
 
 # НАСТРОЙКИ ЗАПУСКА — ключи командной строки не нужны.
-APPLY = True  # False: только проверка. True: запись в Битрикс24.
+APPLY = False  # False: только проверка. True: запись в Битрикс24.
 COMPANY_ID = 1475  # Первая проверка. Для всех компаний установите None.
 
 
@@ -149,9 +149,28 @@ def normalized(v):
     return '' if v is None else str(v)
 
 
-def diff(old,new,c):
-    fields=['title','companyId','categoryId']+list(c['fields'].values())
-    return {k:new[k] for k in fields if k in new and normalized(old.get(k))!=normalized(new[k])}
+def diff(old, new, c):
+    fields = ['title', 'companyId', 'categoryId']
+    fields += list(c['fields'].values())
+
+    changes = {
+        field: new[field]
+        for field in fields
+        if field in new
+        and normalized(old.get(field)) != normalized(new[field])
+    }
+
+    for field, expected in changes.items():
+        LOG.warning(
+            'РАСХОЖДЕНИЕ: элемент=%s; поле=%s; '
+            'ожидалось=%s; получено=%s',
+            old.get('id'),
+            field,
+            repr(expected)[:300],
+            repr(old.get(field))[:300],
+        )
+
+    return changes
 
 
 def sync_journal(api,c,old,target):

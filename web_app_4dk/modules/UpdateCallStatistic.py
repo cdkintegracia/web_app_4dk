@@ -67,6 +67,13 @@ for employee in allowed_departments:
     allowed_numbers.append(employee['WORK_PHONE'])
 
 
+if __package__:
+    from .worklog_common import serialized, config, current_period, month_name
+else:
+    from worklog_common import serialized, config, current_period, month_name
+
+
+@serialized
 def update_call_statistic(req):
     """
     :param req: request.form
@@ -80,7 +87,7 @@ def update_call_statistic(req):
     client_number = req['data[PHONE_NUMBER]']
     call_duration_seconds = req['data[CALL_DURATION]']
     call_duration = gmtime(int(req['data[CALL_DURATION]']))
-    current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
+    current_date = month_name(current_period(config()))
 
     # ID контакта через номер телефона
 
@@ -104,6 +111,8 @@ def update_call_statistic(req):
             }
         }
         list_elements = send_bitrix_request('lists.element.get', request_data)
+        if len(list_elements) > 1:
+            raise ValueError('Дубли месячных элементов компании: ' + str(company['COMPANY_ID']))
 
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 

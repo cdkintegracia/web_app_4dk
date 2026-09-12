@@ -1,17 +1,8 @@
 from datetime import datetime
-
-from fast_bitrix24 import Bitrix
-
-try:
-    from authentication import authentication
-    from field_values import month_int_names
-except ModuleNotFoundError:
-    from web_app_4dk.modules.authentication import authentication
-    from web_app_4dk.modules.field_values import month_int_names
-
-
-b = Bitrix(authentication('Bitrix'))
-
+if __package__:
+    from .worklog_common import API, config, effective_seconds, hms
+else:
+    from worklog_common import API, config, effective_seconds, hms
 
 def find_top_deal_type(deals):
     sort_1 = [
@@ -48,56 +39,40 @@ def find_top_deal_type(deals):
 
 
 def add_calls_amount_to_task(req):
-    task_id = req['task_id']
-    company_id = req['company_id']
-    deals = b.get_all('crm.deal.list', {
-        'select': ['COMPANY_ID', 'CLOSEDATE', 'TYPE_ID', 'UF_CRM_1638100416'],
-        #2025-11-30 ИБС
-        'filter': {'UF_CRM_1657878818384': '859', 'COMPANY_ID': company_id, 'CATEGORY_ID': '1','!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
-        #'filter': {'UF_CRM_1657878818384': '859', 'COMPANY_ID': company_id, '!STAGE_ID': ['C1:WON', 'C1:LOSE']}})
-    deal_info = find_top_deal_type(deals)
-
-    if not deal_info:
-        return
-    closedate = datetime.fromisoformat(deal_info['CLOSEDATE'])
-    filter_month = closedate.month
-    filter_year = closedate.year
-    month_range = int(deal_info['UF_CRM_1638100416'])
-    filter_names = []
-    for i in range(0, month_range - 1):
-        filter_month -= 1
-        if filter_month == 0:
-            filter_month = 12
-            filter_year -= 1
-        filter_names.append(f'{month_int_names[filter_month]} {filter_year}')
-    elements = b.get_all('lists.element.get', {
-        'IBLOCK_TYPE_ID': 'lists',
-        'IBLOCK_ID': '175',
-        'filter': {
-            'NAME': filter_names,
-            'PROPERTY_1299': company_id
-        }
-    })
-    task = b.get_all('tasks.task.get', {'taskId': task_id})['task']
-    if elements:
-        calls_sum = None
-        for element in elements:
-            call_value = list(element['PROPERTY_1303'].values())[0]
-            call_value = datetime.strptime(call_value, '%H:%M:%S')
-            call_value = (call_value.hour * 3600) + (call_value.minute * 60) + (call_value.second)
-            if not calls_sum:
-                calls_sum = call_value
-            else:
-                calls_sum += call_value
-        hours = calls_sum // 3600
-        minutes = (calls_sum % 3600) // 60
-        seconds = (calls_sum % 3600) % 60
-        calls_sum = f"{hours}:{minutes}:{seconds}"
-        if len(str(filter_month)) == 1:
-            filter_month = '0' + str(filter_month)
-        b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nРасход с начала договора (01.{filter_month}.{filter_year}) = {calls_sum}"}})
+    api=API(config())
+    task_id=int(req['task_id']);company_id=int(req['company_id'])
+    deals=api.pages('crm.deal.list', {
+        'select':['COMPANY_ID','CLOSEDATE','TYPE_ID','UF_CRM_1638100416'],
+        'filter':{'UF_CRM_1657878818384':'859','COMPANY_ID':company_id,
+                  'CATEGORY_ID':'1','!STAGE_ID':['C1:WON','C1:LOSE']}})
+    deal=find_top_deal_type(deals)
+    if not deal:return
+    # Сохраняем исходный диапазон договора: отдельное изменение его границ
+    # не смешиваем с подключением трудозатрат.
+    end=datetime.fromisoformat(deal['CLOSEDATE'])
+    month,year=end.month,end.year
+    names=[]
+    if __package__:
+        from .worklog_common import MONTHS
     else:
-        b.call('tasks.task.update', {'taskId': task_id, 'fields': {'DESCRIPTION': f"{task['description']}\n\nВ Б24 сделка начинается позже текущей даты, поэтому посчитайте суммарное время самостоятельно"}})
-
-
-
+        from worklog_common import MONTHS
+    for _ in range(int(deal['UF_CRM_1638100416'])-1):
+        month-=1
+        if not month:month=12;year-=1
+        names.append(f'{MONTHS[month-1]} {year}')
+    elements=api.pages('lists.element.get',dict(api.list_params(),FILTER={
+        'PROPERTY_1299':company_id,'NAME':names})) if names else []
+    if elements:
+        total=sum(effective_seconds(r,api.c) for r in elements)
+        text=f'Расход консультаций с начала договора (01.{month:02d}.{year}) = {hms(total)}. Включены звонки и учтённые трудозатраты по задачам.'
+    else:
+        text='За выбранный диапазон договора не найдены месячные элементы. Проверьте даты сделки и детализацию расхода.'
+    task=api.call('tasks.task.get',{'taskId':task_id,'select':['ID','DESCRIPTION']})['result']['task']
+    # Собственный блок заменяется при повторном вызове, не дописывается второй раз.
+    begin='[WORKLOG_TOTAL_BEGIN]';finish='[WORKLOG_TOTAL_END]'
+    import re
+    description=task.get('description') or ''
+    description=re.sub(re.escape(begin)+r'.*?'+re.escape(finish),'',description,flags=re.S).rstrip()
+    description+='\n\n'+begin+'\n'+text+'\n'+finish
+    if description!=task.get('description'):
+        api.call('tasks.task.update',{'taskId':task_id,'fields':{'DESCRIPTION':description}},write=True)

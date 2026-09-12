@@ -4,7 +4,7 @@ from time import gmtime
 from time import strptime
 from datetime import timedelta
 
-from web_app_4dk.tools import *
+
 
 
 
@@ -66,7 +66,7 @@ def sort_types(company_id):
             ]
         }
     }
-    deals = send_bitrix_request('crm.deal.list', request_data)
+    deals = _api().pages('crm.deal.list', request_data)
     types = list(map(lambda x: x['TYPE_ID'], deals))
     level_1 = ['UC_HT9G9H',                         # ПРОФ Земля
                'UC_XIYCTV',                         # ПРОФ Земля+Помощник
@@ -191,243 +191,102 @@ def sort_types(company_id):
     return '2355'
 
 
-def create_element(company_id, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False):
-    current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
+# Общий модуль установлен отдельно (pip install из приложенного пакета).
+if __package__:
+    from .worklog_common import API, config, serialized, scalar, duration, hms, current_period, month_name
+else:
+    from worklog_common import API, config, serialized, scalar, duration, hms, current_period, month_name
 
-    request_data = {
-        'select': ['ASSIGNED_BY_ID'],
-        'filter': {'ID': company_id}}
-    responsible = send_bitrix_request('crm.company.list', request_data)[0]['ASSIGNED_BY_ID']
 
-    lk_call_count = '0'
-    string_call_duration = '00:00:00'
-    if call_duration:
-        lk_call_count = '1'
-        string_call_duration = strftime("%H:%M:%S", call_duration)
+def _api():
+    return API(config())
 
-    request_data = {
-        'IBLOCK_TYPE_ID': 'lists',
-        'IBLOCK_ID': '175',
-        'ELEMENT_CODE': time(),
-        'fields': {
-            'NAME': current_date,  # Название == месяц и год
-            'PROPERTY_1303': string_call_duration,  # Продолжительность звонка
-            'PROPERTY_1299': company_id,  # Привязка к компании
-            'PROPERTY_1305': str(lk_call_count),  # Количество звонков
-            'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
-            'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
-            'PROPERTY_1355': responsible,
-            'PROPERTY_1359': int(outgoing_email),  # Исходящие письма
-            'PROPERTY_1361': '1',  # Всего взаимодействий
-            'PROPERTY_1365': int(connect_treatment),  # Обращений в 1С:Коннект
-            'PROPERTY_1369': int(incoming_call),   # Входящие звонки
-            'PROPERTY_1375': int(outgoing_call_other),   # Исходящие (остальные)
-            'PROPERTY_1377': sort_types(company_id)      # Топ сделка
-        }
+
+def _increments(outgoing_email, connect_treatment, call_duration, incoming_call, outgoing_call_other):
+    seconds = duration(call_duration)
+    return seconds, {
+        'PROPERTY_1305': int(bool(call_duration)),
+        'PROPERTY_1359': int(outgoing_email),
+        'PROPERTY_1365': int(connect_treatment),
+        'PROPERTY_1369': int(incoming_call),
+        'PROPERTY_1375': int(outgoing_call_other),
+        'PROPERTY_1361': 1,
     }
-    element = send_bitrix_request('lists.element.add', request_data)
-    return str(element)
 
 
+@serialized
+def create_element(company_id, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False, responsible=None, period=None, count_interaction=True):
+    api = _api()
+    api.validate_fields()
+    period = period or current_period(api.c)
+    existing = api.find_element(company_id, period)
+    if existing:
+        if not count_interaction:
+            return str(existing['ID'])
+        update_element(company_id, existing, outgoing_email, connect_treatment,
+                       call_duration, incoming_call, outgoing_call_other)
+        return str(existing['ID'])
+    seconds, increments = _increments(outgoing_email, connect_treatment,
+                                      call_duration, incoming_call, outgoing_call_other)
+    if not responsible:
+        responsible = api.call('crm.company.get', {'id':company_id})['result']['ASSIGNED_BY_ID']
+    if not count_interaction:
+        increments['PROPERTY_1361'] = 0
+    year, month = period.split('-')
+    fields = {
+        'NAME':month_name(period), 'PROPERTY_1299':company_id,
+        'PROPERTY_1303':hms(seconds),
+        'PROPERTY_1339':month_codes[month], 'PROPERTY_1341':year_codes[year],
+        'PROPERTY_1355':responsible, 'PROPERTY_1377':sort_types(company_id),
+    }
+    fields.update({k:str(v) for k,v in increments.items()})
+    fields.update(api.totals({},fields))
+    # Тот же принцип создания, что в старом коде; тариф/лимит здесь не назначаем.
+    result = api.call('lists.element.add',dict(api.list_params(),
+        ELEMENT_CODE=f'company-{company_id}-{period}', FIELDS=fields),write=True)['result']
+    return str(result)
+
+
+@serialized
 def rewrite_element(element_data, calls_duration, calls_count):
-    property_1583 = calls_duration
-    property_1585 = calls_count
-    if 'PROPERTY_1303' not in element_data:
-        property_1303 = '00:00:00'
-    else:
-        property_1303 = list(element_data['PROPERTY_1303'].values())[0]
-    if 'PROPERTY_1305' not in element_data:
-        property_1305 = '0'
-    else:
-        property_1305 = list(element_data['PROPERTY_1305'].values())[0]
-    if 'PROPERTY_1307' not in element_data:
-        property_1307 = '00:00:00'
-    else:
-        property_1307 = list(element_data['PROPERTY_1307'].values())[0]
-    if 'PROPERTY_1315' not in element_data:
-        property_1315 = ''
-    else:
-        property_1315 = list(element_data['PROPERTY_1315'].values())[0]
-    if 'PROPERTY_1317' not in element_data:
-        property_1317 = ''
-    else:
-        property_1317 = list(element_data['PROPERTY_1317'].values())[0]
-    property_1299 = list(element_data['PROPERTY_1299'].values())[0]
-    property_1339 = list(element_data['PROPERTY_1339'].values())[0]
-    property_1341 = list(element_data['PROPERTY_1341'].values())[0]
-    if 'PROPERTY_1355' not in element_data:
-        property_1355 = ''
-    else:
-        property_1355 = list(element_data['PROPERTY_1355'].values())[0]
-    if 'PROPERTY_1359' not in element_data:
-        property_1359 = '0'
-    else:
-        property_1359 = list(element_data['PROPERTY_1359'].values())[0]
-    if 'PROPERTY_1365' not in element_data:
-        property_1365 = '0'
-    else:
-        property_1365 = list(element_data['PROPERTY_1365'].values())[0]
-    if 'PROPERTY_1369' not in element_data:
-        property_1369 = '0'
-    else:
-        property_1369 = list(element_data['PROPERTY_1369'].values())[0]
-    if 'PROPERTY_1375' not in element_data:
-        property_1375 = '0'
-    else:
-        property_1375 = list(element_data['PROPERTY_1375'].values())[0]
-    if 'PROPERTY_1377' not in element_data:
-        property_1377 = ''
-    else:
-        property_1377 = list(element_data['PROPERTY_1377'].values())[0]
-    if 'PROPERTY_1663' not in element_data:
-        property_1663 = ''
-    else:
-        property_1663 = list(element_data['PROPERTY_1663'].values())[0]
-    property_1361 = int(property_1359) + int(property_1365) + int(property_1369) + int(property_1375) + int(property_1305)
-    request_data = {
-        'IBLOCK_TYPE_ID': 'lists',
-        'IBLOCK_ID': '175',
-        'ELEMENT_ID': element_data['ID'],
-        'fields': {
-            'NAME': element_data['NAME'],  # Название == месяц и год
-            'PROPERTY_1299': property_1299,  # Привязка к компании
-            'PROPERTY_1303': property_1303,  # Продолжительность звонка
-            'PROPERTY_1305': property_1305,  # Количество звонков
-            'PROPERTY_1307': property_1307,
-            'PROPERTY_1315': property_1315,
-            'PROPERTY_1317': property_1317,
-            'PROPERTY_1339': property_1339,  # Месяц
-            'PROPERTY_1341': property_1341,  # Год
-            'PROPERTY_1355': property_1355,
-            'PROPERTY_1359': property_1359,  # Исходящие письма
-            'PROPERTY_1361': property_1361,  # Всего взаимодействий
-            'PROPERTY_1365': property_1365,  # Обращений в 1С:Коннект
-            'PROPERTY_1369': property_1369,  # Входящие звонки
-            'PROPERTY_1375': property_1375,  # Исходящие (остальные)
-            'PROPERTY_1377': property_1377,  # Топ сделка
-            'PROPERTY_1583': property_1583,  # Продолжительность исх. зв. (Мегафон)
-            'PROPERTY_1585': property_1585,  # Кол-во исх. зв. (Мегафон),
-            'PROPERTY_1663': property_1663,
-        }
-    }
-    element = send_bitrix_request('lists.element.update', request_data)
+    api = _api()
+    row = api.get_element(element_data['ID'])
+    count_fields = ('PROPERTY_1359','PROPERTY_1365','PROPERTY_1369','PROPERTY_1375','PROPERTY_1305')
+    changes = {'PROPERTY_1583':calls_duration, 'PROPERTY_1585':calls_count,
+               'PROPERTY_1361':str(sum(int(scalar(row,k,'0') or 0) for k in count_fields))}
+    return api.update_element(row, changes)
 
 
+@serialized
 def update_element(company_id=None, element=None, outgoing_email=False, connect_treatment=False, call_duration=False, incoming_call=False, outgoing_call_other=False):
-    lk_call_count = 0
-    total_interactions_bool = True
-    if call_duration:
-        lk_call_count = 1
-    if not element and company_id:
-        current_date = f'{month_string[strftime("%m")]} {strftime("%Y")}'
-        request_data = {
-            'IBLOCK_TYPE_ID': 'lists',
-            'IBLOCK_ID': '175',
-            'filter': {
-                'PROPERTY_1299': company_id,
-                'NAME': current_date,
-            }}
-        element = send_bitrix_request('lists.element.get', request_data)
-        if element:
-            element = element[0]
-        else:
-            create_element(company_id)
-            total_interactions_bool = False
-            element = send_bitrix_request('lists.element.get', request_data)[0]
-    for field_value in element['PROPERTY_1303']:
-        element_duration = element['PROPERTY_1303'][field_value]
-    for field_value in element['PROPERTY_1305']:
-        element_call_count = element['PROPERTY_1305'][field_value]
-    for field_value in element['PROPERTY_1307']:
-        limit_duration = element['PROPERTY_1307'][field_value]
-    if 'PROPERTY_1355' in element:
-        for field_value in element['PROPERTY_1355']:
-            responsible = element['PROPERTY_1355'][field_value]
+    api = _api()
+    if element:
+        # Переданный вызывающим кодом снимок мог устареть: перечитываем под блокировкой.
+        row = api.get_element(element['ID'])
     else:
-        request_data = {
-            'select': ['ASSIGNED_BY_ID'],
-            'filter': {'ID': company_id}}
-        responsible = send_bitrix_request('crm.company.list', request_data)[0]['ASSIGNED_BY_ID']
-    try:
-        for field_value in element['PROPERTY_1315']:
-            first_break_limit = element['PROPERTY_1315'][field_value]
-    except:
-        first_break_limit = '2207'
-    try:
-        for field_value in element['PROPERTY_1317']:
-            second_break_limit = element['PROPERTY_1317'][field_value]
-    except:
-        second_break_limit = '2209'
-    try:
-        for field_value in element['PROPERTY_1359']:
-            sent_emails = element['PROPERTY_1359'][field_value]
-    except:
-        sent_emails = '0'
-    try:
-        for field_value in element['PROPERTY_1361']:
-            total_interactions = element['PROPERTY_1361'][field_value]
-    except:
-        total_interactions = '0'
-    try:
-        for field_value in element['PROPERTY_1365']:
-            connect_treatment_count = element['PROPERTY_1365'][field_value]
-    except:
-        connect_treatment_count = '0'
-    try:
-        for field_value in element['PROPERTY_1367']:
-            top_deal = element['PROPERTY_1367'][field_value]
-    except:
-        top_deal = sort_types(company_id)
-    try:
-        for field_value in element['PROPERTY_1369']:
-            incoming_calls = element['PROPERTY_1369'][field_value]
-    except:
-        incoming_calls = '0'
-    try:
-        for field_value in element['PROPERTY_1375']:
-            outgoing_calls_others = element['PROPERTY_1375'][field_value]
-    except:
-        outgoing_calls_others = '0'
-    try:
-        for field_value in element['PROPERTY_1663']:
-            company_name = element['PROPERTY_1663'][field_value]
-    except:
-        company_name = ''
-
-    # Форматирование времени в секунды и суммирование с длительностью звонка
-
-    element_time = strptime(element_duration, "%H:%M:%S")
-    element_seconds = timedelta(
-        hours=element_time.tm_hour,
-        minutes=element_time.tm_min,
-        seconds=element_time.tm_sec
-    ).seconds
-    new_seconds = int(element_seconds) + int(call_duration)
-    new_time = gmtime(new_seconds)
-
-    request_data = {
-        'IBLOCK_TYPE_ID': 'lists',
-        'IBLOCK_ID': '175',
-        'ELEMENT_ID': element['ID'],
-        'fields': {
-            'NAME': element['NAME'],
-            'PROPERTY_1303': strftime("%H:%M:%S", new_time),  # Продолжительность звонков
-            'PROPERTY_1299': company_id,  # Привязка к компании
-            'PROPERTY_1305': str(int(element_call_count) + lk_call_count),  # Количество звонков
-            'PROPERTY_1307': limit_duration,  # Лимит продолжительности звонков
-            'PROPERTY_1315': first_break_limit,  # Превышение лимита
-            'PROPERTY_1317': second_break_limit,  # Превышение лимита x2
-            'PROPERTY_1339': month_codes[strftime("%m")],  # Месяц
-            'PROPERTY_1341': year_codes[strftime('%Y')],  # Год
-            'PROPERTY_1355': responsible,
-            'PROPERTY_1359': str(int(sent_emails) + outgoing_email),  # Исходящие письма
-            'PROPERTY_1361': str(int(total_interactions) + total_interactions_bool),  # Всего взаимодействий
-            'PROPERTY_1365': str(int(connect_treatment_count) + connect_treatment),  # Обращений в 1С:Коннект
-            'PROPERTY_1369': str(int(incoming_calls) + incoming_call),     # Входящие звонки
-            'PROPERTY_1375': str(int(outgoing_calls_others) + outgoing_call_other),     # Исходящие (остальные)
-            'PROPERTY_1377': top_deal,  # Топ сделка
-            'PROPERTY_1663': company_name,
-        }
-    }
-    send_bitrix_request('lists.element.update', request_data)
-
+        if not company_id:
+            raise ValueError('Нужна компания или элемент списка')
+        row = api.find_element(company_id,current_period(api.c))
+        if row is None:
+            return create_element(company_id,outgoing_email,connect_treatment,
+                                  call_duration,incoming_call,outgoing_call_other)
+    seconds, increments = _increments(outgoing_email,connect_treatment,
+                                      call_duration,incoming_call,outgoing_call_other)
+    changes = {k:str(int(scalar(row,k,'0') or 0)+v) for k,v in increments.items()}
+    changes['PROPERTY_1303'] = hms(duration(scalar(row,'PROPERTY_1303'))+seconds)
+    # Сохраняем поведение исходного обработчика для старых/неполных элементов.
+    actual_company = scalar(row, 'PROPERTY_1299') or company_id
+    if not actual_company:
+        raise ValueError('У элемента не указана компания')
+    if not scalar(row, 'PROPERTY_1355'):
+        changes['PROPERTY_1355'] = api.call('crm.company.get', {
+            'id': actual_company})['result']['ASSIGNED_BY_ID']
+    # В исходнике читалось PROPERTY_1367, которого нет в схеме списка 175,
+    # поэтому при обновлениях фактически вызывался sort_types(). Сохраняем этот расчёт.
+    changes['PROPERTY_1377'] = sort_types(actual_company)
+    if not scalar(row, 'PROPERTY_1315'):
+        changes['PROPERTY_1315'] = '2207'  # Нет: первое превышение
+    if not scalar(row, 'PROPERTY_1317'):
+        changes['PROPERTY_1317'] = '2209'  # Нет: двойное превышение
+    # Компания, месяц, год, лимит, признаки превышения и остальные поля сохраняются.
+    return api.update_element(row,changes)

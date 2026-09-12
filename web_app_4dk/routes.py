@@ -128,6 +128,8 @@ from web_app_4dk.modules.CreatePaidTasksReport import report_paid_tasks
 from web_app_4dk.modules.sync_connect_contact import sync_connect_contact_job
 #2026-06-01 saa
 from web_app_4dk.modules.ClosedLKtasksReport import closed_lk_tasks
+#2026-09-10
+from web_app_4dk.modules.sync_worklog import sync_worklog
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -341,6 +343,10 @@ def route_send_request_fill_document_smart_process():
     fill_act_document_smart_process({'user_id': 'user_1'})
     return 'OK'
 
+#2026-09-10
+@app.route('/send_request_sync_worklog', methods=['GET'])
+def route_send_request_sync_worklog():
+    return sync_worklog()
 
 @login_required
 @app.route('/', methods=['GET', 'POST'])

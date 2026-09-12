@@ -8,7 +8,7 @@ import time
 from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+#from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import errno
 if os.name == 'nt':
     import msvcrt
@@ -39,14 +39,10 @@ def lock_file(file, unlock=False):
 
 
 def accounting_timezone(name):
-    try:
-        return ZoneInfo(name)
-    except ZoneInfoNotFoundError:
-        # Для нашего периода учёта (с сентября 2026) Москва — UTC+3.
-        # На Windows база IANA может отсутствовать; дополнительные пакеты не нужны.
-        if name == 'Europe/Moscow':
-            return timezone(timedelta(hours=3), 'Europe/Moscow')
-        raise
+    if name == 'Europe/Moscow':
+        return timezone(timedelta(hours=3), 'Europe/Moscow')
+
+    raise ValueError('Неподдерживаемый часовой пояс: ' + str(name))
 
 
 def config():

@@ -1,8 +1,9 @@
 """Журнал трудозатрат Б24. По умолчанию только проверка; запись при APPLY = True."""
 
 # НАСТРОЙКИ ЗАПУСКА — ключи командной строки не нужны.
-APPLY = False  # False: только проверка. True: запись в Битрикс24.
-COMPANY_ID = 1475  # Первая проверка. Для всех компаний установите None.
+APPLY = True  # False: только проверка. True: запись в Битрикс24.
+COMPANY_ID = None  # Первая проверка. Для всех компаний установите None.
+TASK_LOOKBACK_DAYS = 3  # До начала текущего месяца, а не до сегодняшнего дня.
 
 # Исключения ЭПД относятся только к группе 1 и точному тегу «ЭПД».
 EPD_GROUP_ID = 1
@@ -16,14 +17,22 @@ import logging
 import re
 import sys
 from collections import defaultdict
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from pathlib import Path
 if __package__:
-    from .worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone
+    from .worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name
 else:
-    from worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone
+    from worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name
 
 LOG = logging.getLogger('worklog')
+
+
+def month_window(c):
+    """Единый месяц всего прохода, границы в часовом поясе учёта."""
+    period = c.get('_run_period') or current_period(c)
+    start = datetime.fromisoformat(period + '-01').replace(tzinfo=accounting_timezone(c['timezone']))
+    end = (start.replace(day=28) + timedelta(days=4)).replace(day=1)
+    return period, start, end, start - timedelta(days=TASK_LOOKBACK_DAYS)
 
 
 def work_date(row, c):
@@ -57,6 +66,9 @@ def read_elapsed(api,tid):
 
 
 def journal(api, c):
+    # История журнала нужна для глобальной уникальности ключей, в том числе
+    # когда дату существующей записи перенесли из другого месяца в текущий.
+    # Исторические задачи по этим строкам повторно не опрашиваем.
     rows = api.pages(
         'crm.item.list',
         {
@@ -152,19 +164,47 @@ def prepare(api,c,old,company_filter=None,billing=None):
     f=c['fields'];selected={};rule_hits=defaultdict(list)
     if billing is None:billing={}
     company_cache={}
-    for rule in c['rules']:
-        tasks=api.pages('tasks.task.list',{'filter':{'GROUP_ID':rule['group_id'],'TAG':rule['tag']},
-            'order':{'ID':'ASC'},'select':['ID','GROUP_ID','UF_CRM_TASK','STAGE_ID']},'tasks')
+    period, month_start, month_end, task_start = month_window(c)
+    previous=defaultdict(list)
+    for key,row in old.items():
+        if (str(row.get(f['source']))==str(c['source_id'])
+                and row.get(f['period'])==period
+                and (not company_filter or str(row.get('companyId'))==str(company_filter))):
+            previous[str(row.get(f['task']))].append((key,row))
+
+    def collect(rule, extra_filter, expected_ids=None):
+        query={'GROUP_ID':rule['group_id'],'TAG':rule['tag']}
+        query.update(extra_filter)
+        tasks=api.pages('tasks.task.list',{'filter':query,
+            'order':{'ID':'ASC'},'select':['ID','GROUP_ID','UF_CRM_TASK','STAGE_ID','CREATED_DATE']},'tasks')
         for task in tasks:
             tid=str(task['id'])
             if str(task.get('groupId'))!=str(rule['group_id']):
                 raise ValueError('Ответ задачи не соответствует фильтру группы')
-            selected[tid]=task;rule_hits[tid].append(rule)
+            if expected_ids is not None:
+                if tid not in expected_ids:raise ValueError('Ответ задачи не соответствует фильтру ID')
+            else:
+                created=work_date({'CREATED_DATE':task['createdDate']},c)
+                if not task_start<=created<month_end:
+                    raise ValueError('Ответ задачи не соответствует фильтру даты создания')
+            selected[tid]=task
+            if rule not in rule_hits[tid]:rule_hits[tid].append(rule)
+
+    for rule in c['rules']:
+        collect(rule,{'>=CREATED_DATE':task_start.isoformat(),'<CREATED_DATE':month_end.isoformat()})
+    recent_count=len(selected)
+    # Только задачи из журнала ТЕКУЩЕГО месяца, не попавшие в отбор по дате.
+    # Проверяем группу/тег заново, не принимаем сохранённые в журнале признаки за актуальные.
+    missing=sorted(set(previous)-set(selected),key=int)
+    for offset in range(0,len(missing),50):
+        chunk=missing[offset:offset+50]
+        for rule in c['rules']:
+            collect(rule,{'ID':[int(tid) for tid in chunk]},set(chunk))
+    LOG.info('Отбор %s: задачи созданы с %s до %s (не включая); по дате=%s; '
+             'дополнительно из журнала=%s; не найдены=%s',
+             period,task_start.isoformat(),month_end.isoformat(),recent_count,
+             len(selected)-recent_count,len(set(previous)-set(selected)))
     target=copy.deepcopy(old);blocked=set();errors=[];processed=set()
-    previous=defaultdict(list)
-    for key,row in old.items():
-        if str(row.get(f['source']))==str(c['source_id']):
-            previous[str(row.get(f['task']))].append((key,row))
     for tid in sorted(set(selected)|set(previous),key=int):
         old_rows=previous[tid]
         old_companies={str(r.get('companyId')) for _,r in old_rows}
@@ -209,17 +249,19 @@ def prepare(api,c,old,company_filter=None,billing=None):
         processed.add(tid);seen=set()
         for entry in rows:
             dt=work_date(entry,c);key=f'b24-task:{tid}:{entry["ID"]}';seen.add(key)
-            if dt.date()<date.fromisoformat(c['start_date']):
-                if key in target:
+            if not month_start<=dt<month_end or dt.date()<date.fromisoformat(c['start_date']):
+                if key in target and target[key].get(f['period'])==period:
                     target[key][f['state']]=c['review_state']
                     target[key][f['seconds']]=0
                     target[key][f['date']]=dt.isoformat()
-                    # Старый period оставлен для объяснения корректировки; сбор не учитывает дату до X.
+                    # Работа перенесена за границу месяца/до старта учёта: возвращаем
+                    # списание текущего месяца. Старые месячные итоги не изменяем.
                 continue
             fields=wanted_entry(tid,comp,entry,rule,c)
             target[key]=dict(target.get(key,{}),**fields)
         for key,r in old_rows:
             if key not in seen:target[key][f['state']]=c['deleted_state']
+    LOG.info('Опрошено задач с трудозатратами: %s; месяц работ=%s',len(processed),period)
     return target,blocked,errors
 
 
@@ -274,7 +316,9 @@ def sync_journal(api,c,old,target):
 
 def aggregate(items,c,blocked,billing=None,company_filter=None):
     f=c['fields'];sums=defaultdict(int);companies=set()
+    period,month_start,month_end,_=month_window(c)
     for row in items.values():
+        if row.get(f['period'])!=period:continue
         comp=str(row.get('companyId') or '')
         if not comp:continue
         if company_filter and comp!=str(company_filter):continue
@@ -298,8 +342,8 @@ def aggregate(items,c,blocked,billing=None,company_filter=None):
                 LOG.info('Не включено в лимит: запись журнала=%s; задача=%s; секунд=%s; причина=%s',
                          row.get('id'), tid, row.get(f['seconds']), billing[tid])
                 continue
-        dt=datetime.fromisoformat(str(row[f['date']]).replace('Z','+00:00'))
-        if dt.date()<date.fromisoformat(c['start_date']):continue
+        dt=work_date({'CREATED_DATE':str(row[f['date']])},c)
+        if not month_start<=dt<month_end or dt.date()<date.fromisoformat(c['start_date']):continue
         seconds=int(row[f['seconds']])
         if seconds<0:raise ValueError('Отрицательные секунды в журнале')
         sums[(comp,str(row[f['period']]))]+=seconds
@@ -308,27 +352,27 @@ def aggregate(items,c,blocked,billing=None,company_filter=None):
 
 def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
     f=c['fields'];sums,companies=aggregate(items,c,blocked,billing,company_filter);errors=[]
+    run_period,_,_,_=month_window(c)
     for comp in sorted(companies,key=int):
         if company_filter and comp!=str(company_filter):continue
         if comp in blocked:
             LOG.warning('Компания %s: суммы заморожены до разбора задачи',comp);continue
-        # Читаем историю только затронутых компаний: это восстанавливает старый месяц
-        # после переноса даты, даже если прошлый запуск оборвался после изменения журнала.
-        rows=api.pages('lists.element.get',dict(api.list_params(),FILTER={'PROPERTY_1299':comp}))
+        # История списка не пересчитывается. Строки текущего месяца с прежней
+        # ненулевой суммой нужны и тогда, когда все трудозатраты теперь исключены.
+        rows=api.pages('lists.element.get',dict(api.list_params(),FILTER={'PROPERTY_1299':comp,'NAME':month_name(run_period)}))
         by_period={}
         for r in rows:
             period=period_of(r)
+            if period!=run_period:continue
             if period in by_period:raise ValueError(f'Дубли элементов {comp}/{period}')
             by_period[period]=r
         periods={p for co,p in sums if co==comp}
         periods.update(p for p,r in by_period.items() if duration(scalar(r,c['tasks_field']))>0)
         for period in sorted(periods):
-            # В исходных БП остаток компании не привязан к месяцу, а годовой учёт
-            # использует один LAST_DURATIONS. Автопубликация старого месяца способна
-            # повредить текущий остаток. Такие записи остаются в журнале до доработки БП.
+            # Долгий проход мог пересечь полночь первого числа. Его результаты
+            # нельзя публиковать как расход нового месяца.
             if apply and period != current_period(c):
-                errors.append(f'Отложено {comp}/{period}: публикация другого месяца требует отдельной сверки месячного/годового остатка')
-                continue
+                raise RuntimeError('Во время сбора сменился месяц; повторите запуск')
             if period not in by_period:
                 errors.append(f'Нет месячного элемента {comp}/{period}; ' + ('часы сохранены в журнале' if apply else 'только проверка, записи не выполнялись'));continue
             with list_lock():
@@ -360,7 +404,8 @@ def main():
     logging.basicConfig(level=logging.INFO,format='%(asctime)s %(levelname)s %(message)s')
     LOG.setLevel(logging.INFO)
     LOG.info('Режим: %s; компания: %s', 'ЗАПИСЬ' if APPLY else 'ПРОВЕРКА БЕЗ ЗАПИСИ', COMPANY_ID or 'все')
-    c=config();api=API(c);api.validate_fields();date.fromisoformat(c['start_date'])
+    c=config();c['_run_period']=current_period(c)
+    api=API(c);api.validate_fields();date.fromisoformat(c['start_date'])
     schema=api.call('crm.item.fields',{'entityTypeId':c['entity_type_id'],'useOriginalUfNames':'Y'})['result']['fields']
     for key in c['fields'].values():
         if key not in schema:raise ValueError('Отсутствует поле журнала '+key)
@@ -377,6 +422,8 @@ def main():
         LOG.info('Журнал: новых=%s, изменений=%s, дата начала=%s',new_count,edit_count,c['start_date'])
         for msg in errors:LOG.warning(msg)
         if args.apply:
+            if current_period(c)!=c['_run_period']:
+                raise RuntimeError('Во время сбора сменился месяц; повторите запуск')
             sync_journal(api,c,old,target)
             actual=index_journal(journal(api,c),c)
             for key,row in target.items():

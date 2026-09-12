@@ -1,8 +1,14 @@
 """Журнал трудозатрат Б24. По умолчанию только проверка; запись при APPLY = True."""
 
 # НАСТРОЙКИ ЗАПУСКА — ключи командной строки не нужны.
-APPLY = True  # False: только проверка. True: запись в Битрикс24.
+APPLY = False  # False: только проверка. True: запись в Битрикс24.
 COMPANY_ID = 1475  # Первая проверка. Для всех компаний установите None.
+
+# Исключения ЭПД относятся только к группе 1 и точному тегу «ЭПД».
+EPD_GROUP_ID = 1
+EPD_TAG = 'ЭПД'
+EXCLUDED_STAGE_IDS = {1767}  # «Завершена без решения», по диагностике группы 1.
+COMPANY_EXCLUDE_FIELD = 'UF_CRM_1789223269972'  # «Не списывать ЭПД из лимита ЛК».
 
 
 import copy
@@ -111,12 +117,44 @@ def wanted_entry(tid,company,entry,rule,c):
     return fields
 
 
-def prepare(api,c,old,company_filter=None):
+def is_epd(group, tag):
+    return str(group) == str(EPD_GROUP_ID) and tag == EPD_TAG
+
+
+def company_excludes_epd(api, company, cache):
+    """Кэш только одного прохода. Отсутствие поля/ошибка чтения — остановка."""
+    if company not in cache:
+        row = api.call('crm.company.get', {'id': int(company)})['result']
+        if not isinstance(row, dict) or str(row.get('ID')) != str(company):
+            raise RuntimeError('Не подтверждена компания ' + str(company))
+        if COMPANY_EXCLUDE_FIELD not in row:
+            raise RuntimeError('Компания %s: не получено поле %s' %
+                               (company, COMPANY_EXCLUDE_FIELD))
+        value = row[COMPANY_EXCLUDE_FIELD]
+        # Пустое значение штатного поля «Да/Нет» означает, что отметка не стоит.
+        if value is None or value is False or value == '' or type(value) is int and value == 0:
+            excluded = False
+        elif value is True or type(value) is int and value == 1:
+            excluded = True
+        elif isinstance(value, str) and value.strip().upper() in ('0', 'N', 'FALSE'):
+            excluded = False
+        elif isinstance(value, str) and value.strip().upper() in ('1', 'Y', 'TRUE'):
+            excluded = True
+        else:
+            raise RuntimeError('Компания %s: некорректное значение поля %s' %
+                               (company, COMPANY_EXCLUDE_FIELD))
+        cache[company] = excluded
+    return cache[company]
+
+
+def prepare(api,c,old,company_filter=None,billing=None):
     """Полный сбор до первой записи. Сеть/невалидная дата прерывает весь проход."""
     f=c['fields'];selected={};rule_hits=defaultdict(list)
+    if billing is None:billing={}
+    company_cache={}
     for rule in c['rules']:
         tasks=api.pages('tasks.task.list',{'filter':{'GROUP_ID':rule['group_id'],'TAG':rule['tag']},
-            'order':{'ID':'ASC'},'select':['ID','GROUP_ID','UF_CRM_TASK']},'tasks')
+            'order':{'ID':'ASC'},'select':['ID','GROUP_ID','UF_CRM_TASK','STAGE_ID']},'tasks')
         for task in tasks:
             tid=str(task['id'])
             if str(task.get('groupId'))!=str(rule['group_id']):
@@ -154,6 +192,19 @@ def prepare(api,c,old,company_filter=None):
             errors.append(f'Задача {tid}: {exc}')
             for key,r in old_rows:target[key][f['state']]=c['review_state']
             continue
+        # Не исключаем стадию из отбора задач: журнал хранит фактические записи,
+        # а решение о списании заново принимается даже без изменения трудозатрат.
+        if is_epd(rule['group_id'], rule['tag']):
+            stage = task.get('stageId')
+            if stage is None or not re.fullmatch(r'\d+', str(stage)):
+                raise RuntimeError('Задача %s: не получена корректная стадия' % tid)
+            company_excluded = company_excludes_epd(api, comp, company_cache)
+            reasons = []
+            if int(stage) in EXCLUDED_STAGE_IDS:
+                reasons.append('стадия «Завершена без решения» (%s)' % stage)
+            if company_excluded:
+                reasons.append('отметка компании %s' % comp)
+            billing[tid] = '; '.join(reasons)
         rows=read_elapsed(api,tid)
         processed.add(tid);seen=set()
         for entry in rows:
@@ -221,11 +272,12 @@ def sync_journal(api,c,old,target):
                     'useOriginalUfNames':'Y','fields':changes},write=True)
 
 
-def aggregate(items,c,blocked):
+def aggregate(items,c,blocked,billing=None,company_filter=None):
     f=c['fields'];sums=defaultdict(int);companies=set()
     for row in items.values():
         comp=str(row.get('companyId') or '')
         if not comp:continue
+        if company_filter and comp!=str(company_filter):continue
         companies.add(comp)
         if comp in blocked:continue
         if str(row.get(f['kind']))!=str(c['general_kind']):continue
@@ -238,6 +290,14 @@ def aggregate(items,c,blocked):
                 row.get(f['seconds']),
             )
             continue
+        if str(row.get(f['source'])) == str(c['source_id']) and is_epd(row.get(f['group']), row.get(f['tag'])):
+            tid = str(row.get(f['task']))
+            if billing is None or tid not in billing:
+                raise RuntimeError('Задача %s: условия списания не проверены; публикация остановлена' % tid)
+            if billing[tid]:
+                LOG.info('Не включено в лимит: запись журнала=%s; задача=%s; секунд=%s; причина=%s',
+                         row.get('id'), tid, row.get(f['seconds']), billing[tid])
+                continue
         dt=datetime.fromisoformat(str(row[f['date']]).replace('Z','+00:00'))
         if dt.date()<date.fromisoformat(c['start_date']):continue
         seconds=int(row[f['seconds']])
@@ -246,8 +306,8 @@ def aggregate(items,c,blocked):
     return sums,companies
 
 
-def publish(api,c,items,blocked,apply,company_filter=None):
-    f=c['fields'];sums,companies=aggregate(items,c,blocked);errors=[]
+def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
+    f=c['fields'];sums,companies=aggregate(items,c,blocked,billing,company_filter);errors=[]
     for comp in sorted(companies,key=int):
         if company_filter and comp!=str(company_filter):continue
         if comp in blocked:
@@ -310,7 +370,8 @@ def main():
         except BlockingIOError:
             LOG.info('Предыдущий сборщик ещё работает');return 3
         old=index_journal(journal(api,c),c)
-        target,blocked,errors=prepare(api,c,old,args.company)
+        billing={}
+        target,blocked,errors=prepare(api,c,old,args.company,billing)
         new_count=sum(k not in old for k in target)
         edit_count=sum(bool(diff(old[k],v,c)) for k,v in target.items() if k in old)
         LOG.info('Журнал: новых=%s, изменений=%s, дата начала=%s',new_count,edit_count,c['start_date'])
@@ -322,7 +383,7 @@ def main():
                 if key not in actual or diff(actual[key],row,c):
                     raise RuntimeError('Журнал не подтвердил записанные данные; публикация отложена')
             target=actual
-        errors+=publish(api,c,target,blocked,args.apply,args.company)
+        errors+=publish(api,c,target,blocked,args.apply,args.company,billing)
         for msg in errors:LOG.warning(msg)
         LOG.info('Завершено. Исключений: %s',len(errors))
         return 2 if errors else 0

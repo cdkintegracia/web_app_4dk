@@ -230,6 +230,14 @@ def aggregate(items,c,blocked):
         if comp in blocked:continue
         if str(row.get(f['kind']))!=str(c['general_kind']):continue
         if str(row.get(f['state']))!=str(c['active_state']):continue
+        if str(row.get(f['employee'])) == '173':
+            LOG.info(
+                'Не включено в лимит: запись журнала=%s; '
+                'сотрудник=173; секунд=%s',
+                row.get('id'),
+                row.get(f['seconds']),
+            )
+            continue
         dt=datetime.fromisoformat(str(row[f['date']]).replace('Z','+00:00'))
         if dt.date()<date.fromisoformat(c['start_date']):continue
         seconds=int(row[f['seconds']])

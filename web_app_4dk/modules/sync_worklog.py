@@ -1,8 +1,8 @@
 """Журнал трудозатрат Б24. По умолчанию только проверка; запись при APPLY = True."""
 
 # НАСТРОЙКИ ЗАПУСКА — ключи командной строки не нужны.
-APPLY = True  # False: только проверка. True: запись в Битрикс24.
-COMPANY_ID = None  # Первая проверка. Для всех компаний установите None.
+APPLY = False  # False: только проверка. True: запись в Битрикс24.
+COMPANY_ID = 1475  # Первая проверка. Для всех компаний установите None.
 TASK_LOOKBACK_DAYS = 3  # До начала текущего месяца, а не до сегодняшнего дня.
 NOTIFY_USER_ID = 1  # Получатель итогового уведомления в Битрикс24.
 
@@ -26,6 +26,12 @@ else:
     from worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name
 
 LOG = logging.getLogger('worklog')
+LOG.setLevel(logging.INFO)
+LOG.propagate = False  # Сообщения ЭПД не передаются общему журналу приложения.
+if not LOG.handlers:
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter('[ЭПД] %(message)s'))
+    LOG.addHandler(handler)
 
 
 def month_window(c):
@@ -426,8 +432,6 @@ def notify_completed(api, c, added, updated, errors, company_filter=None):
 def main():
     from types import SimpleNamespace
     args = SimpleNamespace(apply=APPLY, company=COMPANY_ID)
-    logging.basicConfig(level=logging.INFO,format='%(asctime)s %(levelname)s %(message)s')
-    LOG.setLevel(logging.INFO)
     LOG.info('Режим: %s; компания: %s', 'ЗАПИСЬ' if APPLY else 'ПРОВЕРКА БЕЗ ЗАПИСИ', COMPANY_ID or 'все')
     c=config();c['_run_period']=current_period(c)
     api=API(c);api.validate_fields();date.fromisoformat(c['start_date'])
@@ -481,5 +485,5 @@ def sync_worklog(req=None):
 if __name__=='__main__':
     try:sys.exit(main())
     except Exception as exc:
-        logging.error('%s: %s',type(exc).__name__,exc)
+        LOG.error('%s: %s',type(exc).__name__,exc)
         sys.exit(1)

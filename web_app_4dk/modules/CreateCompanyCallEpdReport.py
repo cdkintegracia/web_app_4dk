@@ -365,7 +365,12 @@ def _load_tasks(api, task_ids):
             {
                 'filter': {'ID': [int(task_id) for task_id in chunk]},
                 'order': {'ID': 'ASC'},
-                'select': ['ID', 'TITLE', 'STAGE_ID'],
+                'select': [
+                    'ID',
+                    'TITLE',
+                    'STAGE_ID',
+                    'UF_CRM_TASK',
+                ],
             },
             'tasks',
         )
@@ -404,7 +409,75 @@ def _task_title(task, task_id):
         or task.get('TITLE')
         or f'Задача {task_id}'
     )
+def _task_contact_ids(task):
+    """Возвращает ID контактов, привязанных к задаче через UF_CRM_TASK."""
+    bindings = task.get('ufCrmTask')
 
+    if bindings is None:
+        bindings = task.get('UF_CRM_TASK')
+
+    if bindings is None:
+        return []
+
+    if not isinstance(bindings, (list, tuple, set)):
+        bindings = [bindings]
+
+    contact_ids = set()
+
+    for binding in bindings:
+        match = re.fullmatch(r'C_(\d+)', str(binding))
+        if match:
+            contact_ids.add(match.group(1))
+
+    return sorted(contact_ids, key=int)
+
+
+def _load_contact_names(contact_ids):
+    """Получает все контакты пакетами, а не отдельным запросом по каждому."""
+    contact_ids = sorted(
+        {str(contact_id) for contact_id in contact_ids},
+        key=int,
+    )
+
+    if not contact_ids:
+        return {}
+
+    result = {}
+
+    # Ограничиваем пакет, чтобы не получить слишком длинный REST-запрос.
+    for offset in range(0, len(contact_ids), 50):
+        chunk = contact_ids[offset:offset + 50]
+
+        contacts = b.get_all(
+            'crm.contact.list',
+            {
+                'filter': {
+                    '@ID': [int(contact_id) for contact_id in chunk],
+                },
+                'select': [
+                    'ID',
+                    'NAME',
+                    'SECOND_NAME',
+                    'LAST_NAME',
+                ],
+            },
+        )
+
+        for contact in contacts:
+            contact_id = str(contact.get('ID') or '')
+            if not contact_id:
+                continue
+
+            parts = [
+                str(contact.get('LAST_NAME') or '').strip(),
+                str(contact.get('NAME') or '').strip(),
+                str(contact.get('SECOND_NAME') or '').strip(),
+            ]
+
+            name = ' '.join(part for part in parts if part)
+            result[contact_id] = name or 'Не указан'
+
+    return result
 
 def _collect_epd_worklogs(
     company_id,
@@ -539,6 +612,16 @@ def _collect_epd_worklogs(
     )
     tasks = _load_tasks(api, task_ids)
 
+    task_contact_ids = {}
+    all_contact_ids = set()
+
+    for task_id, task in tasks.items():
+        contact_ids = _task_contact_ids(task)
+        task_contact_ids[task_id] = contact_ids
+        all_contact_ids.update(contact_ids)
+
+    contact_names = _load_contact_names(all_contact_ids)
+
     result = []
 
     for row in candidates:
@@ -547,14 +630,27 @@ def _collect_epd_worklogs(
         # Такое же исключение, как в aggregate() сборщика.
         if _task_stage(task) in EXCLUDED_STAGE_IDS:
             continue
+        contact_ids = task_contact_ids.get(row['task_id'], [])
 
+        task_contacts = [
+            contact_names[contact_id]
+            for contact_id in contact_ids
+            if contact_id in contact_names
+        ]
+
+        contact_name = (
+            '; '.join(task_contacts)
+            if task_contacts
+            else 'Не указан'
+        )
         result.append(
             {
                 'date': row['date'],
-                'date_text': row['date'].strftime('%d.%m.%Y %H:%M:%S'),
+                'date_text': row['date'].strftime(
+                    '%d.%m.%Y %H:%M:%S'
+                ),
                 'task_id': row['task_id'],
-                'task_title': _task_title(task, row['task_id']),
-                'description': row['description'],
+                'contact': contact_name,
                 'duration': timedelta(seconds=row['seconds']),
                 'employee': _user_name(
                     row['employee_id'],
@@ -692,7 +788,7 @@ def _create_workbook(
     worklist.append([])
 
     summary_title_row = worklist.max_row + 1
-    worklist.append(['Использование лимита за период'])
+    worklist.append(['Использование линий поддержки'])
     worklist.merge_cells(
         start_row=summary_title_row,
         start_column=1,
@@ -780,8 +876,7 @@ def _create_workbook(
         [
             'Дата работы',
             '№ задачи',
-            'Название задачи',
-            'Комментарий к трудозатрате',
+            'Контакт',
             'Хронометраж',
             'Специалист',
         ]
@@ -794,8 +889,7 @@ def _create_workbook(
                 [
                     row['date_text'],
                     row['task_id'],
-                    row['task_title'],
-                    row['description'],
+                    row['contact'],
                     row['duration'],
                     row['employee'],
                 ]
@@ -817,7 +911,7 @@ def _create_workbook(
 
     tasks_total_row = worklist.max_row + 1
     worklist.append(
-        ['Итого по задачам ЭПД', '', '', '', task_total]
+        ['Итого по задачам ЭПД', '', '', task_total]
     )
     total_rows.append(tasks_total_row)
 

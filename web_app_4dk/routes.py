@@ -22,7 +22,7 @@ from web_app_4dk.modules.UpdateUserStatistics import update_user_statistics
 from web_app_4dk.modules.UpdateContactPhoto import update_contact_photo
 from web_app_4dk.modules.RewriteCallStatistic import rewrite_call_statistic
 from web_app_4dk.modules.CreateDealsRpd import create_deals_rpd
-from web_app_4dk.modules.CreateCompanyCallReport import create_company_call_report
+from web_app_4dk.modules.CreateCompanyCallEpdReport import create_company_call_report
 from web_app_4dk.modules.ReviseAccountingDeals import revise_accounting_deals
 from web_app_4dk.modules.FillContract import fill_contract
 from web_app_4dk.modules.CreateLineConsultationReport import create_line_consultation_report

@@ -68,9 +68,9 @@ for employee in allowed_departments:
 
 
 if __package__:
-    from .worklog_common import serialized, config, current_period, month_name
+    from .worklog_common import API, serialized, config, current_period, month_name
 else:
-    from worklog_common import serialized, config, current_period, month_name
+    from worklog_common import API, serialized, config, current_period, month_name
 
 
 @serialized
@@ -87,12 +87,16 @@ def update_call_statistic(req):
     client_number = req['data[PHONE_NUMBER]']
     call_duration_seconds = req['data[CALL_DURATION]']
     call_duration = gmtime(int(req['data[CALL_DURATION]']))
-    current_date = month_name(current_period(config()))
+    settings = config()
+    api = API(settings)
+    current_date = month_name(current_period(settings))
 
     # ID контакта через номер телефона
 
     request_data = {'PHONE_NUMBER': client_number}
-    contact = send_bitrix_request('telephony.externalCall.searchCrmEntities', request_data)
+    contact = api.call('telephony.externalCall.searchCrmEntities', request_data)['result']
+    if not isinstance(contact, list):
+        raise RuntimeError('telephony.externalCall.searchCrmEntities: ожидался список, обработка звонка остановлена')
     if not contact:
         return
     contact_id = contact[0]['CRM_ENTITY_ID']
@@ -100,8 +104,18 @@ def update_call_statistic(req):
     # Компании, связанные с контактом | заполнение УС "Статистика звонков"
 
     request_data = {'id': contact_id}
-    companies = send_bitrix_request('crm.contact.company.items.get', request_data)
+    companies = api.call('crm.contact.company.items.get', request_data)['result']
+    if not isinstance(companies, list):
+        raise RuntimeError('crm.contact.company.items.get: ожидался список, обработка звонка остановлена')
+    # Сначала читаем все месячные элементы, затем выполняем записи. Ошибка
+    # чтения второй компании не должна оставлять первую уже обновлённой.
+    prepared = []
+    seen_companies = set()
     for company in companies:
+        company_key = str(company['COMPANY_ID'])
+        if company_key in seen_companies:
+            raise ValueError('Повтор компании в CRM-привязках контакта: ' + company_key)
+        seen_companies.add(company_key)
         request_data = {
             'IBLOCK_TYPE_ID': 'lists',
             'IBLOCK_ID': '175',
@@ -110,9 +124,14 @@ def update_call_statistic(req):
                 'NAME': current_date,
             }
         }
-        list_elements = send_bitrix_request('lists.element.get', request_data)
+        # pages проверяет тип result, обрабатывает пагинацию и не превращает
+        # ошибку REST в пустой список. Пустой список допустим только при успехе.
+        list_elements = api.pages('lists.element.get', request_data)
         if len(list_elements) > 1:
             raise ValueError('Дубли месячных элементов компании: ' + str(company['COMPANY_ID']))
+        prepared.append((company, list_elements))
+
+    for company, list_elements in prepared:
 
         # Если нет элемента списка для компании на текущую дату - создается новый элемент
 
@@ -139,7 +158,6 @@ def update_call_statistic(req):
                     update_element(element=element, company_id=company['COMPANY_ID'], call_duration=call_duration_seconds)
 
                 elif req['data[CALL_TYPE]'] == '1':
-                    update_element(company_id=company['COMPANY_ID'], outgoing_call_other=True)
-
+                    update_element(element=element, company_id=company['COMPANY_ID'], outgoing_call_other=True)
 
 

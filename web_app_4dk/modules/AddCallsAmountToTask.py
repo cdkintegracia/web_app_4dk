@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 if __package__:
     from .worklog_common import API, config, effective_seconds, hms
 else:
@@ -38,6 +39,32 @@ def find_top_deal_type(deals):
                 return deal
 
 
+TOTAL_HEADING = '[b]Использование лимита консультаций[/b]'
+NO_ELEMENTS_TEXT = ('За выбранный диапазон договора не найдены месячные элементы. '
+                    'Проверьте даты сделки и детализацию расхода.')
+
+
+def update_total_description(description, text):
+    """Заменяет только наш итог, сохраняя остальное описание и заметки менеджера."""
+    description = description or ''
+    # Старые произвольные BBCode-метки Битрикс мог перевести в нижний регистр
+    # и дополнить закрывающими тегами. Удаляем и блок, и оставшиеся метки.
+    description = re.sub(r'\[worklog_total_begin\].*?\[worklog_total_end\]',
+                         '', description, flags=re.I | re.S)
+    description = re.sub(r'\[/?worklog_total_(?:begin|end)\]',
+                         '', description, flags=re.I)
+    # В новом оформлении нет скрытых/неизвестных тегов. Узнаём наш блок по
+    # заголовку и точному формату строки, а не удаляем всё после заголовка.
+    total_line = (r'Расход консультаций с начала договора '
+                  r'\(01\.\d{2}\.\d{4}\) = \d+:[0-5]\d:[0-5]\d\. '
+                  r'Включены звонки и учтённые трудозатраты по задачам\.')
+    block = (r'^' + re.escape(TOTAL_HEADING) + r'\r?\n(?:' + total_line +
+             '|' + re.escape(NO_ELEMENTS_TEXT) + r')(?=\r?$)')
+    description = re.sub(block, '', description, flags=re.I | re.M).rstrip()
+    section = TOTAL_HEADING + '\n' + text
+    return description + '\n\n' + section if description else section
+
+
 def add_calls_amount_to_task(req):
     api=API(config())
     task_id=int(req['task_id']);company_id=int(req['company_id'])
@@ -66,13 +93,8 @@ def add_calls_amount_to_task(req):
         total=sum(effective_seconds(r,api.c) for r in elements)
         text=f'Расход консультаций с начала договора (01.{month:02d}.{year}) = {hms(total)}. Включены звонки и учтённые трудозатраты по задачам.'
     else:
-        text='За выбранный диапазон договора не найдены месячные элементы. Проверьте даты сделки и детализацию расхода.'
+        text=NO_ELEMENTS_TEXT
     task=api.call('tasks.task.get',{'taskId':task_id,'select':['ID','DESCRIPTION']})['result']['task']
-    # Собственный блок заменяется при повторном вызове, не дописывается второй раз.
-    begin='[WORKLOG_TOTAL_BEGIN]';finish='[WORKLOG_TOTAL_END]'
-    import re
-    description=task.get('description') or ''
-    description=re.sub(re.escape(begin)+r'.*?'+re.escape(finish),'',description,flags=re.S).rstrip()
-    description+='\n\n'+begin+'\n'+text+'\n'+finish
+    description=update_total_description(task.get('description'),text)
     if description!=task.get('description'):
         api.call('tasks.task.update',{'taskId':task_id,'fields':{'DESCRIPTION':description}},write=True)

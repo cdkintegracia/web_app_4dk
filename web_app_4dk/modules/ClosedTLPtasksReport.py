@@ -225,8 +225,8 @@ def closed_tlp_tasks(req=None):
     )
 
     # Единое сообщение пользователю 159 и в чат chat21.
-    #for dialog_id in ('159', 'chat21'):
-    for dialog_id in ('1'):
+    for dialog_id in ('159', 'chat21'):
+    #for dialog_id in ('1'):
         requests.post(
             url=f'{authentication("user_173").strip()}im.message.add',
             json={'DIALOG_ID': dialog_id, 'MESSAGE': report},

@@ -1,11 +1,17 @@
 from datetime import datetime, timedelta
 import requests
 from fast_bitrix24 import Bitrix
-from web_app_4dk.modules.authentication import authentication
+if __package__:
+    # Импорт при работе внутри приложения на сервере.
+    from .authentication import authentication
+else:
+    # Прямой запуск файла локально.
+    from authentication import authentication
 
 b = Bitrix(authentication('Bitrix'))
 
 GROUP_ID = '1' # id группы ТЛП
+PAID_GROUP_ID = '408' # id группы платных работ
 EXCEPT_USER_ID = '173' # id Робота Задач
 
 
@@ -28,22 +34,20 @@ def seconds_to_hms(seconds: int) -> str:
     return str(timedelta(seconds=seconds))
 
 
-def closed_tlp_tasks(req=None):
+def build_group_report(group_id, title, start_day, end_day):
+    """Время за все даты по закрытым сегодня задачам выбранной группы.
 
-    now = datetime.now()
-
-    day_title = now.strftime('%d.%m.%Y')
-
-    start_day = now.strftime('%Y-%m-%d') + 'T00:00:00+03:00'
-    end_day = now.strftime('%Y-%m-%d') + 'T23:59:59+03:00'
-
-
+    Сохранено правило: время учитывается только для сотрудников,
+    у которых есть закрытая сегодня задача в этой же группе.
+    Пользователь 173 исключается из статистики сотрудников, но его
+    задачи остаются в общем количестве поступивших и завершённых.
+    """
     # всего создано задач за сегодня
     created_tasks = b.get_all(
         'tasks.task.list',
         {
             'filter': {
-                'GROUP_ID': GROUP_ID,
+                'GROUP_ID': group_id,
                 '>=CREATED_DATE': start_day,
                 '<=CREATED_DATE': end_day,
             },
@@ -57,7 +61,7 @@ def closed_tlp_tasks(req=None):
         'tasks.task.list',
         {
             'filter': {
-                'GROUP_ID': GROUP_ID,
+                'GROUP_ID': group_id,
                 'REAL_STATUS': '5',
                 '>=CLOSED_DATE': start_day,
                 '<=CLOSED_DATE': end_day,
@@ -159,21 +163,18 @@ def closed_tlp_tasks(req=None):
                 'ID': list(user_stat.keys())
             }
         }
-    )
+    ) if user_stat else []
 
     users_map = {}
 
     for user in users:
-        users_map[user['ID']] = get_fio_from_user_info(user)
+        users_map[str(user['ID'])] = get_fio_from_user_info(user)
 
 
     # собираем отчет
     total_spent_time = seconds_to_hms(total_seconds)
 
-    report = (
-        f'[b]Отчет по задачам за {day_title} '
-        f'(Кол-во / Время)[/b]\n\n'
-    )
+    report = f'[b]{title}[/b]\n\n'
 
     report += f'Всего поступило: {total_created}\n'
     report += (
@@ -204,25 +205,31 @@ def closed_tlp_tasks(req=None):
             f'({spent_time})\n'
         )
 
-    #print(report)
+    return report.rstrip()
 
 
-    # отправка отчета
+def closed_tlp_tasks(req=None):
+    now = datetime.now()
+    day_title = now.strftime('%d.%m.%Y')
+    start_day = now.strftime('%Y-%m-%d') + 'T00:00:00+03:00'
+    end_day = now.strftime('%Y-%m-%d') + 'T23:59:59+03:00'
 
-    #notification_users = ['1391']
-    #notification_users = ['chat21']
-    notification_users = ['chat21', '159', '1391']
+    blocks = [
+        build_group_report(GROUP_ID, 'ТЛП', start_day, end_day),
+        build_group_report(PAID_GROUP_ID, 'Платные работы', start_day, end_day),
+    ]
+    report = (
+        f'[b]Отчет по задачам за {day_title} '
+        f'(Кол-во / Время)[/b]\n\n'
+        + '\n\n'.join(blocks)
+    )
 
-    for user in notification_users:
-
-        data = {
-            'DIALOG_ID': user,
-            'MESSAGE': report,
-        }
-
+    # Единое сообщение пользователю 159 и в чат chat21.
+    #for dialog_id in ('159', 'chat21'):
+    for dialog_id in ('1'):
         requests.post(
             url=f'{authentication("user_173").strip()}im.message.add',
-            json=data
+            json={'DIALOG_ID': dialog_id, 'MESSAGE': report},
         )
 
 

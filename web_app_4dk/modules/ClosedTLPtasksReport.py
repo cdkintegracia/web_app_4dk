@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from time import sleep
 import requests
 from fast_bitrix24 import Bitrix
 if __package__:
@@ -13,6 +14,9 @@ b = Bitrix(authentication('Bitrix'))
 GROUP_ID = '1' # id группы ТЛП
 PAID_GROUP_ID = '408' # id группы платных работ
 EXCEPT_USER_ID = '173' # id Робота Задач
+ITS_GROUP_ID = '321'
+ITS_DEPARTMENT_IDS = ['5', '27', '29', '458']
+ITS_EXCEPT_USER_IDS = {'91', '173'}
 
 
 def get_fio_from_user_info(user_info: dict) -> str:
@@ -208,6 +212,73 @@ def build_group_report(group_id, title, start_day, end_day):
     return report.rstrip()
 
 
+def build_its_report(start_day, end_day):
+    """Записи трудозатрат, созданные сегодня, независимо от статуса задачи.
+
+    Количество — число записей о времени, а не уникальных задач.
+    Состав сотрудников и порядок строк сохранены из ActivityReportCS.
+    """
+    users_info = b.get_all('user.get', {
+        'filter': {'ACTIVE': 1, 'UF_DEPARTMENT': ITS_DEPARTMENT_IDS}
+    })
+    lines = ['[b]Трудозатраты по работам ИТС (Время / Кол-во)[/b]', '']
+
+    for user_info in users_info:
+        user_id = str(user_info['ID'])
+        if user_id in ITS_EXCEPT_USER_IDS:
+            continue
+
+        results = []
+        page = 1
+        while True:
+            response = b.call('task.elapseditem.getlist', {
+                'order': {'ID': 'asc'},
+                'filter': {
+                    'USER_ID': user_id,
+                    '>=CREATED_DATE': start_day,
+                    '<=CREATED_DATE': end_day,
+                },
+                'select': ['*'],
+                'params': {'NAV_PARAMS': {'nPageSize': 50, 'iNumPage': page}},
+            }, raw=True)
+            if response.get('error'):
+                raise RuntimeError(
+                    f"Ошибка получения трудозатрат ИТС: {response['error']}"
+                )
+            result = response.get('result', [])
+            if not result:
+                break
+            # Не отправляем неполный отчёт при превышении лимита страниц.
+            if page > 100:
+                raise RuntimeError(
+                    f'Более 100 страниц трудозатрат ИТС: user_id={user_id}'
+                )
+            results.extend(result)
+            page += 1
+            sleep(1)
+
+        if not results:
+            continue
+
+        task_ids = list(dict.fromkeys(str(item['TASK_ID']) for item in results))
+        its_tasks = b.get_all('tasks.task.list', {
+            'filter': {'ID': task_ids, 'GROUP_ID': ITS_GROUP_ID},
+            'select': ['ID'],
+        })
+        its_task_ids = {str(task['id']) for task in its_tasks}
+        elapsed_items = [
+            item for item in results if str(item['TASK_ID']) in its_task_ids
+        ]
+        seconds = sum(int(item['SECONDS']) for item in elapsed_items)
+        if seconds > 0:
+            name = get_fio_from_user_info(user_info)
+            lines.append(f'{name} {seconds_to_hms(seconds)} / {len(elapsed_items)}')
+
+    if len(lines) == 2:
+        lines.append('За сегодня трудозатраты не зарегистрированы.')
+    return '\n'.join(lines)
+
+
 def closed_tlp_tasks(req=None):
     now = datetime.now()
     day_title = now.strftime('%d.%m.%Y')
@@ -215,12 +286,12 @@ def closed_tlp_tasks(req=None):
     end_day = now.strftime('%Y-%m-%d') + 'T23:59:59+03:00'
 
     blocks = [
-        build_group_report(GROUP_ID, 'ТЛП', start_day, end_day),
-        build_group_report(PAID_GROUP_ID, 'Платные работы', start_day, end_day),
+        build_group_report(GROUP_ID, 'ТЛП (Кол-во / Время)', start_day, end_day),
+        build_group_report(PAID_GROUP_ID, 'Платные работы (Кол-во / Время)', start_day, end_day),
+        build_its_report(start_day, end_day),
     ]
     report = (
-        f'[b]Отчет по задачам за {day_title} '
-        f'(Кол-во / Время)[/b]\n\n'
+        f'[b]Отчет по задачам за {day_title}[/b]\n\n'
         + '\n\n'.join(blocks)
     )
 

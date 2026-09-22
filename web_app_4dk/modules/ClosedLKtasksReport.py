@@ -1,7 +1,13 @@
 from datetime import datetime, timedelta
 import requests
 from fast_bitrix24 import Bitrix
-from web_app_4dk.modules.authentication import authentication
+if __package__:
+    # Импорт при работе внутри приложения на сервере.
+    from .authentication import authentication
+else:
+    # Прямой запуск файла локально.
+    from authentication import authentication
+
 
 b = Bitrix(authentication('Bitrix'))
 
@@ -235,8 +241,8 @@ def closed_lk_tasks(req=None):
 
 
     #отправка отчета по ЛК для СЮВ, ИБС и САА
-    notification_users = ['1', '1391', '19']
-    #notification_users = ['1391']
+    notification_users = ['1', '19']
+    #notification_users = ['1']
     for user in notification_users:
 
         data_lk = {
@@ -251,7 +257,6 @@ def closed_lk_tasks(req=None):
         'DIALOG_ID': '157',
         'MESSAGE': report,
     }
-    r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data) 
-
+    r = requests.post(url=f'{authentication("user_639").strip()}im.message.add', json=data)   
 if __name__ == '__main__':
     closed_lk_tasks()

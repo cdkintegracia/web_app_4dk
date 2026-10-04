@@ -14,6 +14,7 @@
 фактического номера, с которого был сделан вызов.
 """
 
+import asyncio
 import base64
 import json
 import re
@@ -98,6 +99,15 @@ def parse_user_id(value):
     if not match:
         raise ValueError('Некорректный user_id запускающего БП')
     return int(match.group(1))
+
+
+def create_bitrix_client():
+    """fast_bitrix24 нужен цикл asyncio в потоке обработчика Flask (Python 3.8)."""
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
+    return Bitrix(authentication('Bitrix'))
 
 
 def get_record(bitrix, method, object_id):
@@ -245,7 +255,7 @@ def create_contact_consultation_calls_report(req):
     month, year, start, end = parse_bp_period(req)
     user_id = parse_user_id(req['user_id']) if req.get('user_id') else None
 
-    bitrix = Bitrix(authentication('Bitrix'))
+    bitrix = create_bitrix_client()
     calls = collect_calls(bitrix, contact_ids, month, year, start, end)
     report_name = (
         f'Звонки_ЛК_контакты_{year}-{month:02d}_'
@@ -281,7 +291,7 @@ def create_contact_consultation_calls_report(req):
 def main():
     contact_ids = parse_contact_ids(input('ID контактов через запятую: '))
     month, year, start, end = parse_period(input('Месяц и год (например, 09 2026): '))
-    bitrix = Bitrix(authentication('Bitrix'))
+    bitrix = create_bitrix_client()
     calls = collect_calls(bitrix, contact_ids, month, year, start, end)
     filename = f'Звонки_ЛК_контакты_{year}-{month:02d}_{datetime.now():%Y%m%d_%H%M%S}.xlsx'
     output_path = Path.cwd() / filename

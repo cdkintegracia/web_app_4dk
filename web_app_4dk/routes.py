@@ -130,6 +130,8 @@ from web_app_4dk.modules.sync_connect_contact import sync_connect_contact_job
 from web_app_4dk.modules.ClosedLKtasksReport import closed_lk_tasks
 #2026-09-10
 from web_app_4dk.modules.sync_worklog import sync_worklog
+#2026-10-04
+from web_app_4dk.modules.CreateContactConsultationCallsReport import create_contact_consultation_calls_report
 
 
 # Словарь функций для вызова из кастомного запроса
@@ -230,6 +232,8 @@ custom_webhooks = {
     'sync_connect_contact': sync_connect_contact_job,
     #2026-06-01 saa
     'closed_lk_tasks': closed_lk_tasks,
+    #2026-10-04
+    'create_contact_consultation_calls_report': create_contact_consultation_calls_report,
 }
 
 # Словарь функций для вызова из запроса со стандартным методом

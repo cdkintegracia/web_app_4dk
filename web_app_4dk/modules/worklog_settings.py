@@ -3,6 +3,7 @@ from pathlib import Path
 
 # Начало учёта по дате выполненной работы, включительно.
 START_DATE = "2026-09-10"
+KS_START_DATE = "2026-10-01"
 TIMEZONE = "Europe/Moscow"
 # Общая папка блокировок для Flask и загрузчика. По умолчанию рядом с этим файлом.
 # Запускайте загрузчик от того же пользователя сервера, что и Flask.
@@ -10,6 +11,7 @@ LOCK_DIRECTORY = Path(__file__).resolve().parent / "worklog_locks"
 
 SETTINGS = {'list_id': '175',
  'tasks_field': 'PROPERTY_2106',
+ 'ks_tasks_field': 'PROPERTY_2120',
  'total_field': 'PROPERTY_2108',
  'total_seconds_field': 'PROPERTY_2110',
  'entity_type_id': 1146,
@@ -37,5 +39,14 @@ SETTINGS = {'list_id': '175',
  'deleted_state': 2336,
  'review_state': 2338,
  'general_kind': 2328,
- 'rules': [{'group_id': 1, 'tag': 'ЭПД', 'direction_id': 2326, 'kind_id': 2328}]}
+ 'rules': [
+     {'group_id': 1, 'tag': 'ЭПД', 'direction_id': 2326, 'kind_id': 2328,
+      'label': 'ЭПД', 'start_date': START_DATE, 'total_field': 'PROPERTY_2106',
+      'exclude_company_field': 'UF_CRM_1789223269972', 'excluded_stage_ids': [1767]},
+     {'group_id': 1, 'tag': 'КС_Поддержка', 'direction_id': None, 'kind_id': 2328,
+      # ID находим по точному названию в crm.item.fields до первой записи.
+      'direction_name': 'Кабинет сотрудника', 'label': 'Кабинет сотрудника',
+      'start_date': KS_START_DATE, 'total_field': 'PROPERTY_2120',
+      'exclude_company_field': 'UF_CRM_1791539662886', 'excluded_stage_ids': [1767]},
+ ]}
 SETTINGS.update(start_date=START_DATE, timezone=TIMEZONE)

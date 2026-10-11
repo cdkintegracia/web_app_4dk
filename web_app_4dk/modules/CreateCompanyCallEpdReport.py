@@ -1,4 +1,4 @@
-"""Отчёт по использованию лимита консультаций: звонки и задачи ЭПД."""
+"""Отчёт по использованию лимита консультаций: звонки, задачи ЭПД и Кабинета сотрудника."""
 
 import base64
 import re
@@ -15,7 +15,7 @@ from openpyxl.utils import get_column_letter
 from web_app_4dk.modules.authentication import authentication
 
 if __package__:
-    from .worklog_common import API, accounting_timezone, config
+    from .worklog_common import API, accounting_timezone, config, rule_for, billing_reason, company_excluded
     from .sync_worklog import (
         COMPANY_EXCLUDE_FIELD,
         EPD_GROUP_ID,
@@ -23,7 +23,7 @@ if __package__:
         EXCLUDED_STAGE_IDS,
     )
 else:
-    from worklog_common import API, accounting_timezone, config
+    from worklog_common import API, accounting_timezone, config, rule_for, billing_reason, company_excluded
     from sync_worklog import (
         COMPANY_EXCLUDE_FIELD,
         EPD_GROUP_ID,
@@ -314,44 +314,7 @@ def _journal_datetime(value, settings):
 
 
 def _company_excludes_epd(company):
-    if COMPANY_EXCLUDE_FIELD not in company:
-        raise RuntimeError(
-            f'В компании не получено поле {COMPANY_EXCLUDE_FIELD}'
-        )
-
-    value = company[COMPANY_EXCLUDE_FIELD]
-
-    if isinstance(value, list):
-        if len(value) > 1:
-            raise RuntimeError(
-                f'Некорректное значение поля {COMPANY_EXCLUDE_FIELD}: {value}'
-            )
-        value = value[0] if value else None
-
-    if value is None or value is False or value == '':
-        return False
-
-    if type(value) is int:
-        if value == 0:
-            return False
-        if value == 1:
-            return True
-
-    if isinstance(value, str):
-        normalized = value.strip().upper()
-
-        if normalized in {'0', 'N', 'FALSE'}:
-            return False
-
-        if normalized in {'1', 'Y', 'TRUE'}:
-            return True
-
-    if value is True:
-        return True
-
-    raise RuntimeError(
-        f'Некорректное значение поля {COMPANY_EXCLUDE_FIELD}: {value!r}'
-    )
+    return company_excluded(company, COMPANY_EXCLUDE_FIELD)
 
 
 def _load_tasks(api, task_ids):
@@ -479,7 +442,7 @@ def _load_contact_names(contact_ids):
 
     return result
 
-def _collect_epd_worklogs(
+def _collect_support_worklogs(
     company_id,
     company,
     period,
@@ -509,7 +472,6 @@ def _collect_epd_worklogs(
 
     candidates = []
     seen_keys = set()
-    accounting_start = date.fromisoformat(settings['start_date'])
 
     for row in journal_rows:
         if str(row.get('companyId') or '') != str(company_id):
@@ -521,14 +483,10 @@ def _collect_epd_worklogs(
         ):
             continue
 
-        if not _field_matches(
-            row.get(fields['group']),
-            EPD_GROUP_ID,
-        ):
+        rule = rule_for(settings, row.get(fields['group']), row.get(fields['tag']))
+        if rule is None:
             continue
-
-        if str(row.get(fields['tag']) or '') != EPD_TAG:
-            continue
+        accounting_start = date.fromisoformat(rule['start_date'])
 
         if not _field_matches(
             row.get(fields['kind']),
@@ -586,6 +544,7 @@ def _collect_epd_worklogs(
 
         candidates.append(
             {
+                'rule': rule,
                 'journal_id': row.get('id'),
                 'task_id': task_id,
                 'entry_id': row.get(fields['entry']),
@@ -598,13 +557,9 @@ def _collect_epd_worklogs(
             }
         )
 
+    result = {rule['tag']: [] for rule in settings['rules']}
     if not candidates:
-        return []
-
-    # Если компания целиком исключена из списания ЭПД,
-    # её трудозатраты не должны попадать в расход лимита.
-    if _company_excludes_epd(company):
-        return []
+        return result
 
     task_ids = sorted(
         {row['task_id'] for row in candidates},
@@ -622,13 +577,11 @@ def _collect_epd_worklogs(
 
     contact_names = _load_contact_names(all_contact_ids)
 
-    result = []
-
     for row in candidates:
         task = tasks[row['task_id']]
 
         # Такое же исключение, как в aggregate() сборщика.
-        if _task_stage(task) in EXCLUDED_STAGE_IDS:
+        if billing_reason(company, _task_stage(task), row['rule']):
             continue
         contact_ids = task_contact_ids.get(row['task_id'], [])
 
@@ -643,7 +596,7 @@ def _collect_epd_worklogs(
             if task_contacts
             else 'Не указан'
         )
-        result.append(
+        result[row['rule']['tag']].append(
             {
                 'date': row['date'],
                 'date_text': row['date'].strftime(
@@ -659,13 +612,14 @@ def _collect_epd_worklogs(
             }
         )
 
-    return sorted(
-        result,
-        key=lambda row: (
-            row['date'],
-            int(row['task_id']),
-        ),
-    )
+    return {
+        tag: sorted(rows, key=lambda row: (row['date'], int(row['task_id'])))
+        for tag, rows in result.items()
+    }
+
+
+def _collect_epd_worklogs(company_id, company, period, user_cache):
+    return _collect_support_worklogs(company_id, company, period, user_cache).get(EPD_TAG, [])
 
 
 def _safe_filename_part(value):
@@ -752,7 +706,9 @@ def _create_workbook(
     report_created_time,
     calls,
     task_rows,
+    ks_task_rows=None,
 ):
+    ks_task_rows = ks_task_rows or []
     workbook = openpyxl.Workbook()
     worklist = workbook.active
     worklist.title = 'Расход лимита'
@@ -765,7 +721,8 @@ def _create_workbook(
         (row['duration'] for row in task_rows),
         timedelta(),
     )
-    overall_total = call_total + task_total
+    ks_total = sum((row['duration'] for row in ks_task_rows), timedelta())
+    overall_total = call_total + task_total + ks_total
 
     header_rows = []
     section_rows = []
@@ -803,6 +760,7 @@ def _create_workbook(
 
     worklist.append(['Исходящие звонки', call_total])
     worklist.append(['Работы по задачам ЭПД', task_total])
+    worklist.append(['Работы по задачам Кабинета сотрудника', ks_total])
 
     summary_total_row = worklist.max_row + 1
     worklist.append(['Всего израсходовано', overall_total])
@@ -861,59 +819,64 @@ def _create_workbook(
 
     worklist.append([])
 
-    tasks_title_row = worklist.max_row + 1
-    worklist.append(['Работы по задачам ЭПД'])
-    worklist.merge_cells(
-        start_row=tasks_title_row,
-        start_column=1,
-        end_row=tasks_title_row,
-        end_column=6,
-    )
-    section_rows.append(tasks_title_row)
-
-    tasks_header_row = worklist.max_row + 1
-    worklist.append(
-        [
-            'Дата работы',
-            '№ задачи',
-            'Контакт',
-            'Хронометраж',
-            'Специалист',
-        ]
-    )
-    header_rows.append(tasks_header_row)
-
-    if task_rows:
-        for row in task_rows:
-            worklist.append(
-                [
-                    row['date_text'],
-                    row['task_id'],
-                    row['contact'],
-                    row['duration'],
-                    row['employee'],
-                ]
-            )
-    else:
-        empty_row = worklist.max_row + 1
-        worklist.append(
-            [
-                'За выбранный период учтённых '
-                'трудозатрат по задачам ЭПД нет'
-            ]
-        )
+    for direction_label, direction_rows, direction_total in (
+        ('ЭПД', task_rows, task_total),
+        ('Кабинета сотрудника', ks_task_rows, ks_total),
+    ):
+        tasks_title_row = worklist.max_row + 1
+        worklist.append(['Работы по задачам ' + direction_label])
         worklist.merge_cells(
-            start_row=empty_row,
+            start_row=tasks_title_row,
             start_column=1,
-            end_row=empty_row,
+            end_row=tasks_title_row,
             end_column=6,
         )
+        section_rows.append(tasks_title_row)
 
-    tasks_total_row = worklist.max_row + 1
-    worklist.append(
-        ['Итого по задачам ЭПД', '', '', task_total]
-    )
-    total_rows.append(tasks_total_row)
+        tasks_header_row = worklist.max_row + 1
+        worklist.append(
+            [
+                'Дата работы',
+                '№ задачи',
+                'Контакт',
+                'Хронометраж',
+                'Специалист',
+            ]
+        )
+        header_rows.append(tasks_header_row)
+
+        if direction_rows:
+            for row in direction_rows:
+                worklist.append(
+                    [
+                        row['date_text'],
+                        row['task_id'],
+                        row['contact'],
+                        row['duration'],
+                        row['employee'],
+                    ]
+                )
+        else:
+            empty_row = worklist.max_row + 1
+            worklist.append(
+                [
+                    'За выбранный период учтённых '
+                    f'трудозатрат по задачам {direction_label} нет'
+                ]
+            )
+            worklist.merge_cells(
+                start_row=empty_row,
+                start_column=1,
+                end_row=empty_row,
+                end_column=6,
+            )
+
+        tasks_total_row = worklist.max_row + 1
+        worklist.append(
+            ['Итого по задачам ' + direction_label, '', '', direction_total]
+        )
+        total_rows.append(tasks_total_row)
+        worklist.append([])
 
     _format_workbook(
         worklist,
@@ -961,7 +924,7 @@ def create_company_call_report(req):
         user_cache=user_cache,
     )
 
-    task_rows = _collect_epd_worklogs(
+    support_rows = _collect_support_worklogs(
         company_id=company_id,
         company=company,
         period=period,
@@ -974,7 +937,8 @@ def create_company_call_report(req):
         year=year,
         report_created_time=report_created_time,
         calls=calls,
-        task_rows=task_rows,
+        task_rows=support_rows.get(EPD_TAG, []),
+        ks_task_rows=support_rows.get('КС_Поддержка', []),
     )
 
     timestamp = report_created_time.strftime(

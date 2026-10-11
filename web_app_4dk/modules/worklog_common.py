@@ -1,4 +1,4 @@
-"""Общий REST-клиент и последовательная запись списка. Python 3.9+, Windows/Linux."""
+"""Общий REST-клиент и последовательная запись списка. Python 3.8+, Windows/Linux."""
 import functools
 import json
 import os
@@ -6,7 +6,7 @@ import re
 import threading
 import time
 from contextlib import contextmanager
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 #from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import errno
@@ -116,6 +116,79 @@ def month_name(period):
 
 def current_period(c):
     return datetime.now(accounting_timezone(c['timezone'])).strftime('%Y-%m')
+
+
+def task_total_fields(c):
+    """Поля направлений: участвуют в сумме и сохраняются при любом звонке."""
+    return [c['tasks_field'], c['ks_tasks_field']]
+
+
+def rule_for(c, group, tag):
+    matches = [r for r in c['rules']
+               if str(r['group_id']) == str(group) and r['tag'] == tag]
+    if len(matches) > 1:
+        raise ValueError('Повтор правила группы и тега')
+    return matches[0] if matches else None
+
+
+def company_excluded(company, field):
+    if field not in company:
+        raise RuntimeError('В компании не получено поле ' + field)
+    value = scalar(company, field, None)
+    if value is None or value is False or value == '':
+        return False
+    if value is True:
+        return True
+    if type(value) is int and value in (0, 1):
+        return bool(value)
+    if isinstance(value, str):
+        if value.strip().upper() in ('0', 'N', 'FALSE'):
+            return False
+        if value.strip().upper() in ('1', 'Y', 'TRUE'):
+            return True
+    raise RuntimeError('Некорректное значение поля ' + field)
+
+
+def billing_reason(company, stage, rule):
+    """Одинаковые исключения для загрузки и клиентского отчёта."""
+    if stage is None or not re.fullmatch(r'\d+', str(stage)):
+        raise RuntimeError('Не получена корректная стадия задачи')
+    excluded = company_excluded(company, rule['exclude_company_field'])
+    reasons = []
+    if int(stage) in rule['excluded_stage_ids']:
+        reasons.append('стадия «Завершено без решения» (%s)' % stage)
+    if excluded:
+        reasons.append('отметка компании ' + rule['exclude_company_field'])
+    return '; '.join(reasons)
+
+
+def resolve_rule_directions(c, schema):
+    """Проверка правил и определение ID КС по существующему значению списка."""
+    for key in c['fields'].values():
+        if key not in schema:
+            raise ValueError('Отсутствует поле журнала ' + key)
+    meta = schema[c['fields']['direction']]
+    if meta.get('type') != 'enumeration' or meta.get('isMultiple'):
+        raise ValueError('Направление: нужен одиночный список')
+    items = meta.get('items')
+    if not isinstance(items, list):
+        raise ValueError('Не получены значения списка «Направление»')
+    seen = set()
+    for rule in c['rules']:
+        signature = (str(rule['group_id']), rule['tag'])
+        if signature in seen:
+            raise ValueError('Повтор правила группы и тега')
+        seen.add(signature)
+        date.fromisoformat(rule['start_date'])
+        if rule['total_field'] not in task_total_fields(c):
+            raise ValueError('Не настроено поле суммы направления')
+        if rule.get('direction_id') is None:
+            matches = [v for v in items if v.get('VALUE') == rule['direction_name']]
+        else:
+            matches = [v for v in items if str(v.get('ID')) == str(rule['direction_id'])]
+        if len(matches) != 1 or not str(matches[0].get('ID', '')).isdigit():
+            raise ValueError('Не найдено единственное направление: ' + rule['label'])
+        rule['direction_id'] = int(matches[0]['ID'])
 
 
 @contextmanager
@@ -235,10 +308,10 @@ class API:
 
     def validate_fields(self):
         schema = self.fields()
-        wanted = [self.c['tasks_field'], self.c['total_field'], self.c['total_seconds_field']]
-        if len(set(wanted)) != 3 or any(k in ('PROPERTY_1303','PROPERTY_1307','PROPERTY_1299') for k in wanted):
-            raise ValueError('Новые поля должны иметь три отдельных ID')
-        for key, typ in zip(wanted, ('S','S','N')):
+        wanted = task_total_fields(self.c) + [self.c['total_field'], self.c['total_seconds_field']]
+        if len(set(wanted)) != len(wanted) or any(k in ('PROPERTY_1303','PROPERTY_1307','PROPERTY_1299') for k in wanted):
+            raise ValueError('Поля направлений и общих итогов должны иметь отдельные ID')
+        for key, typ in zip(wanted, ('S','S','S','N')):
             if key not in schema:
                 raise ValueError('В списке нет поля '+key)
             meta = schema[key]
@@ -280,10 +353,13 @@ class API:
     def totals(self, row, changes):
         out = dict(changes)
         calls = duration(out.get('PROPERTY_1303', scalar(row,'PROPERTY_1303')))
-        epd = duration(out.get(self.c['tasks_field'], scalar(row,self.c['tasks_field'])))
-        out[self.c['tasks_field']] = hms(epd)
-        out[self.c['total_field']] = hms(calls+epd)
-        out[self.c['total_seconds_field']] = str(calls+epd)
+        total = calls
+        for field in task_total_fields(self.c):
+            seconds = duration(out.get(field, scalar(row, field)))
+            out[field] = hms(seconds)
+            total += seconds
+        out[self.c['total_field']] = hms(total)
+        out[self.c['total_seconds_field']] = str(total)
         return out
 
     def update_element(self, row, changes):
@@ -303,7 +379,8 @@ def effective_seconds(row, c):
         if not number.is_finite() or number < 0 or number != number.to_integral_value():
             raise ValueError('Некорректный общий расход в секундах')
         return int(number)
-    return duration(scalar(row, 'PROPERTY_1303'))
+    return duration(scalar(row, 'PROPERTY_1303')) + sum(
+        duration(scalar(row, field)) for field in task_total_fields(c))
 
 
 def period_of(row):

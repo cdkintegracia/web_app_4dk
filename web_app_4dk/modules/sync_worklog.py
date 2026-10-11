@@ -1,4 +1,4 @@
-"""Журнал трудозатрат Б24. По умолчанию только проверка; запись при APPLY = True."""
+"""Журнал трудозатрат ЭПД и КС. Только проверка; запись при APPLY = True."""
 
 # НАСТРОЙКИ ЗАПУСКА — ключи командной строки не нужны.
 APPLY = True # False: только проверка. True: запись в Битрикс24.
@@ -6,7 +6,8 @@ COMPANY_ID = None  # Первая проверка. Для всех компан
 TASK_LOOKBACK_DAYS = 3  # До начала текущего месяца, а не до сегодняшнего дня.
 NOTIFY_USER_ID = 1  # Получатель итогового уведомления в Битрикс24.
 
-# Исключения ЭПД относятся только к группе 1 и точному тегу «ЭПД».
+# Константы ЭПД сохранены для совместимости внешних импортов.
+# Правила обоих направлений и исключения задаются в worklog_settings.py.
 EPD_GROUP_ID = 1
 EPD_TAG = 'ЭПД'
 EXCLUDED_STAGE_IDS = {1767}  # «Завершена без решения», по диагностике группы 1.
@@ -21,16 +22,16 @@ from collections import defaultdict
 from datetime import datetime, date, timedelta
 from pathlib import Path
 if __package__:
-    from .worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name
+    from .worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name, task_total_fields, rule_for, billing_reason, company_excluded, resolve_rule_directions
 else:
-    from worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name
+    from worklog_common import API, config, values, scalar, duration, hms, list_lock, period_of, current_period, lock_file, accounting_timezone, month_name, task_total_fields, rule_for, billing_reason, company_excluded, resolve_rule_directions
 
 LOG = logging.getLogger('worklog')
 LOG.setLevel(logging.INFO)
 LOG.propagate = False  # Сообщения ЭПД не передаются общему журналу приложения.
 if not LOG.handlers:
     handler = logging.StreamHandler()
-    handler.setFormatter(logging.Formatter('[ЭПД] %(message)s'))
+    handler.setFormatter(logging.Formatter('[Трудозатраты] %(message)s'))
     LOG.addHandler(handler)
 
 
@@ -140,30 +141,18 @@ def is_epd(group, tag):
     return str(group) == str(EPD_GROUP_ID) and tag == EPD_TAG
 
 
-def company_excludes_epd(api, company, cache):
-    """Кэш только одного прохода. Отсутствие поля/ошибка чтения — остановка."""
+def company_for_billing(api, company, cache):
     if company not in cache:
         row = api.call('crm.company.get', {'id': int(company)})['result']
         if not isinstance(row, dict) or str(row.get('ID')) != str(company):
             raise RuntimeError('Не подтверждена компания ' + str(company))
-        if COMPANY_EXCLUDE_FIELD not in row:
-            raise RuntimeError('Компания %s: не получено поле %s' %
-                               (company, COMPANY_EXCLUDE_FIELD))
-        value = row[COMPANY_EXCLUDE_FIELD]
-        # Пустое значение штатного поля «Да/Нет» означает, что отметка не стоит.
-        if value is None or value is False or value == '' or type(value) is int and value == 0:
-            excluded = False
-        elif value is True or type(value) is int and value == 1:
-            excluded = True
-        elif isinstance(value, str) and value.strip().upper() in ('0', 'N', 'FALSE'):
-            excluded = False
-        elif isinstance(value, str) and value.strip().upper() in ('1', 'Y', 'TRUE'):
-            excluded = True
-        else:
-            raise RuntimeError('Компания %s: некорректное значение поля %s' %
-                               (company, COMPANY_EXCLUDE_FIELD))
-        cache[company] = excluded
+        cache[company] = row
     return cache[company]
+
+
+def company_excludes_epd(api, company, cache):
+    # Совместимость для внешних импортов прежнего помощника.
+    return company_excluded(company_for_billing(api, company, cache), COMPANY_EXCLUDE_FIELD)
 
 
 def prepare(api,c,old,company_filter=None,billing=None):
@@ -241,22 +230,13 @@ def prepare(api,c,old,company_filter=None,billing=None):
             continue
         # Не исключаем стадию из отбора задач: журнал хранит фактические записи,
         # а решение о списании заново принимается даже без изменения трудозатрат.
-        if is_epd(rule['group_id'], rule['tag']):
-            stage = task.get('stageId')
-            if stage is None or not re.fullmatch(r'\d+', str(stage)):
-                raise RuntimeError('Задача %s: не получена корректная стадия' % tid)
-            company_excluded = company_excludes_epd(api, comp, company_cache)
-            reasons = []
-            if int(stage) in EXCLUDED_STAGE_IDS:
-                reasons.append('стадия «Завершена без решения» (%s)' % stage)
-            if company_excluded:
-                reasons.append('отметка компании %s' % comp)
-            billing[tid] = '; '.join(reasons)
+        billing[tid] = billing_reason(
+            company_for_billing(api, comp, company_cache), task.get('stageId'), rule)
         rows=read_elapsed(api,tid)
         processed.add(tid);seen=set()
         for entry in rows:
             dt=work_date(entry,c);key=f'b24-task:{tid}:{entry["ID"]}';seen.add(key)
-            if not month_start<=dt<month_end or dt.date()<date.fromisoformat(c['start_date']):
+            if not month_start<=dt<month_end or dt.date()<date.fromisoformat(rule['start_date']):
                 if key in target and target[key].get(f['period'])==period:
                     target[key][f['state']]=c['review_state']
                     target[key][f['seconds']]=0
@@ -329,6 +309,9 @@ def aggregate(items,c,blocked,billing=None,company_filter=None):
         comp=str(row.get('companyId') or '')
         if not comp:continue
         if company_filter and comp!=str(company_filter):continue
+        if str(row.get(f['source'])) != str(c['source_id']):continue
+        rule = rule_for(c, row.get(f['group']), row.get(f['tag']))
+        if rule is None:continue
         companies.add(comp)
         if comp in blocked:continue
         if str(row.get(f['kind']))!=str(c['general_kind']):continue
@@ -341,7 +324,7 @@ def aggregate(items,c,blocked,billing=None,company_filter=None):
                 row.get(f['seconds']),
             )
             continue
-        if str(row.get(f['source'])) == str(c['source_id']) and is_epd(row.get(f['group']), row.get(f['tag'])):
+        if rule is not None:
             tid = str(row.get(f['task']))
             if billing is None or tid not in billing:
                 raise RuntimeError('Задача %s: условия списания не проверены; публикация остановлена' % tid)
@@ -350,10 +333,10 @@ def aggregate(items,c,blocked,billing=None,company_filter=None):
                          row.get('id'), tid, row.get(f['seconds']), billing[tid])
                 continue
         dt=work_date({'CREATED_DATE':str(row[f['date']])},c)
-        if not month_start<=dt<month_end or dt.date()<date.fromisoformat(c['start_date']):continue
+        if not month_start<=dt<month_end or dt.date()<date.fromisoformat(rule['start_date']):continue
         seconds=int(row[f['seconds']])
         if seconds<0:raise ValueError('Отрицательные секунды в журнале')
-        sums[(comp,str(row[f['period']]))]+=seconds
+        sums[(comp,str(row[f['period']]),rule['total_field'])]+=seconds
     return sums,companies
 
 
@@ -373,8 +356,9 @@ def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
             if period!=run_period:continue
             if period in by_period:raise ValueError(f'Дубли элементов {comp}/{period}')
             by_period[period]=r
-        periods={p for co,p in sums if co==comp}
-        periods.update(p for p,r in by_period.items() if duration(scalar(r,c['tasks_field']))>0)
+        periods={p for co,p,field in sums if co==comp}
+        periods.update(p for p,r in by_period.items()
+                       if any(duration(scalar(r,field))>0 for field in task_total_fields(c)))
         for period in sorted(periods):
             # Долгий проход мог пересечь полночь первого числа. Его результаты
             # нельзя публиковать как расход нового месяца.
@@ -384,12 +368,13 @@ def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
                 errors.append(f'Нет месячного элемента {comp}/{period}; ' + ('часы сохранены в журнале' if apply else 'только проверка, записи не выполнялись'));continue
             with list_lock():
                 row=api.get_element(by_period[period]['ID'])
-                want=api.totals(row,{c['tasks_field']:hms(sums.get((comp,period),0))})
+                want=api.totals(row,{field:hms(sums.get((comp,period,field),0))
+                                     for field in task_total_fields(c)})
                 api.preserved_fields(row)
                 changed=any(normalized(scalar(row,k))!=normalized(v) for k,v in want.items())
-                LOG.info('%s company=%s month=%s element=%s calls=%s tasks=%s total=%s changed=%s',
+                LOG.info('%s company=%s month=%s element=%s calls=%s epd=%s ks=%s total=%s changed=%s',
                     'APPLY' if apply else 'PREVIEW',comp,period,row['ID'],scalar(row,'PROPERTY_1303'),
-                    want[c['tasks_field']],want[c['total_field']],changed)
+                    want[c['tasks_field']],want[c['ks_tasks_field']],want[c['total_field']],changed)
                 if apply and changed:
                     api.update_element(row,want)
                     check=api.get_element(row['ID'])
@@ -398,7 +383,10 @@ def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
             if apply:
                 receiver=f'list:{c["list_id"]}:{row["ID"]}'
                 for item in items.values():
-                    if str(item.get('companyId'))==comp and item.get(f['period'])==period and str(item.get(f['kind']))==str(c['general_kind']):
+                    if (str(item.get('companyId'))==comp and item.get(f['period'])==period
+                            and str(item.get(f['kind']))==str(c['general_kind'])
+                            and str(item.get(f['source']))==str(c['source_id'])
+                            and rule_for(c,item.get(f['group']),item.get(f['tag'])) is not None):
                         if item.get(f['receiver'])!=receiver:
                             api.call('crm.item.update',{'entityTypeId':c['entity_type_id'],'useOriginalUfNames':'Y',
                                 'id':item['id'],'fields':{f['receiver']:receiver}},write=True)
@@ -407,8 +395,8 @@ def publish(api,c,items,blocked,apply,company_filter=None,billing=None):
 
 def notify_completed(api, c, added, updated, errors, company_filter=None):
     """После подтверждения записей и публикации итогов. Ошибка доставки не отменяет загрузку."""
-    status = ('Загрузка трудозатрат ЭПД завершена с ошибками.' if errors
-              else 'Трудозатраты ЭПД успешно загружены.')
+    status = ('Загрузка трудозатрат ЭПД и КС завершена с ошибками.' if errors
+              else 'Трудозатраты ЭПД и КС успешно загружены.')
     scope = 'Все компании' if not company_filter else 'Компания %s' % company_filter
     message = (f'{status}\n'
                f'{scope}. Период: {c["_run_period"]}.\n'
@@ -436,8 +424,10 @@ def main():
     c=config();c['_run_period']=current_period(c)
     api=API(c);api.validate_fields();date.fromisoformat(c['start_date'])
     schema=api.call('crm.item.fields',{'entityTypeId':c['entity_type_id'],'useOriginalUfNames':'Y'})['result']['fields']
-    for key in c['fields'].values():
-        if key not in schema:raise ValueError('Отсутствует поле журнала '+key)
+    resolve_rule_directions(c, schema)
+    for rule in c['rules']:
+        LOG.info('Направление %s: ID=%s; дата начала=%s',
+                 rule['label'],rule['direction_id'],rule['start_date'])
     path=Path(c['sync_lock_path']);path.parent.mkdir(parents=True,exist_ok=True)
     with path.open('a+b') as lock:
         try:lock_file(lock)

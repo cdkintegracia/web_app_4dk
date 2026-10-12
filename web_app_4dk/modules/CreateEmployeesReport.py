@@ -1820,7 +1820,7 @@ def create_employees_report(req):
                             list_of_sales.append(
                                 {'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                         except:
-                            users_id = ['1391', '1']  # , '1'
+                            users_id = ['1']  # , '1'
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
@@ -1848,7 +1848,7 @@ def create_employees_report(req):
                                 {'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company,
                                  'OPPORTUNITY': oldsale['opportunity']})
                         except:
-                            users_id = ['1391', '1']
+                            users_id = ['1']
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,

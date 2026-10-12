@@ -307,7 +307,7 @@ def get_new_elapsed_items(user_ids, last_id=None):
         page += 1
 
         if page > 100: # ограничение по кол-ву забираемых трудозатрат в 5000 штук
-            notification_users = ['1391'] #, '1']
+            notification_users = ['1']
             for user in notification_users:
                 b.call('im.notify.system.add', {
                                     'USER_ID': user,

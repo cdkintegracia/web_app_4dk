@@ -1179,7 +1179,7 @@ def create_employees_quarter_report(req):
                             title_company = list(set(map(lambda x: x['TITLE'], list(filter(lambda x: int(x['ID']) == sale['companyId'], company_titles)))))[0]
                             list_of_sales.append({'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                     except:
-                        users_id = ['1391', '1']
+                        users_id = ['1']
                         for user_id in users_id:
                             b.call('im.notify.system.add', {
                                 'USER_ID': user_id,

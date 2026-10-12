@@ -131,7 +131,7 @@ def count_ra_report(req):
                 text_message_lk += f'Подключений за текущий день не найдено'
 
             #отправка отчета по ЛК для СЮВ, ИБС и САА 19
-            notification_users = ['1391', '19', '1']
+            notification_users = ['19', '1']
             #notification_users = ['1391']
             for user in notification_users:
                 data_lk = {
@@ -151,7 +151,7 @@ def count_ra_report(req):
         #print(text_message_lk)       
     
     else:
-        users_id = ['1391', '1'] #, '1'
+        users_id = ['1'] #, '1'
         for user_id in users_id:
             b.call('im.notify.system.add', {
                 'USER_ID': user_id,

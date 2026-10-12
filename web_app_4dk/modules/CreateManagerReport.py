@@ -379,7 +379,7 @@ def create_manager_report(req):
                             list_of_sales.append(
                                 {'NAME_DEAL': title_deal, 'COMPANY': title_company, 'OPPORTUNITY': sale['opportunity']})
                         except:
-                            users_id = ['1391', '1']  # , '1'
+                            users_id = ['1']  # , '1'
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
@@ -407,7 +407,7 @@ def create_manager_report(req):
                                 {'DATE_SALE': date_sale, 'NAME_DEAL': title_deal, 'COMPANY': title_company,
                                  'OPPORTUNITY': oldsale['opportunity']})
                         except:
-                            users_id = ['1391', '1']
+                            users_id = [ '1']
                             for user_id in users_id:
                                 b.call('im.notify.system.add', {
                                     'USER_ID': user_id,
@@ -537,7 +537,7 @@ def create_manager_report_auto(req=None):
         except Exception as error:
             # Уведомляем администраторов, но продолжаем цикл по следующему руководителю.
             error_message = f'Ошибка при автоматическом формировании отчета по продажам для пользователя {manager_id}: {error}'
-            for admin_user_id in ['1391', '1']:
+            for admin_user_id in [ '1']:
                 b.call('im.notify.system.add', {
                     'USER_ID': admin_user_id,
                     'MESSAGE': error_message,
